@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Bs.Calendar.Models.User>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="container">
+    
+    <h1>Пользователи</h1>
+
+    @foreach (var user in Model)
+    {
+        <div class="row">
+            @user.Email
+        </div>
+    }
+</div>
