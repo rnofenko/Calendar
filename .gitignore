@@ -1,0 +1,10 @@
+Dll/
+Deploy/
+bin/
+obj/
+tmp/
+_ReSharper*/
+_NCrunch*/
+*.suo
+*.ncrunchsolution
+*.DotSettings.user
