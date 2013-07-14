@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D87F2A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bs.Calendar.Core", "Bs.Calendar.Core\Bs.Calendar.Core.csproj", "{23E3A5FC-0CCB-4789-AD85-E2491AB288D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bs.Calendar.Tests.Unit", "Bs.Calendar.Tests.Unit\Bs.Calendar.Tests.Unit.csproj", "{2C15FBA8-3995-4ACB-8286-68C9C06B7085}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bs.Calendar.Tests.Int", "Bs.Calendar.Tests.Int\Bs.Calendar.Tests.Int.csproj", "{5189BF4A-4847-4AFC-BC9C-8758CF0A0B3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,14 @@ Global
 		{23E3A5FC-0CCB-4789-AD85-E2491AB288D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23E3A5FC-0CCB-4789-AD85-E2491AB288D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23E3A5FC-0CCB-4789-AD85-E2491AB288D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C15FBA8-3995-4ACB-8286-68C9C06B7085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C15FBA8-3995-4ACB-8286-68C9C06B7085}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C15FBA8-3995-4ACB-8286-68C9C06B7085}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C15FBA8-3995-4ACB-8286-68C9C06B7085}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5189BF4A-4847-4AFC-BC9C-8758CF0A0B3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5189BF4A-4847-4AFC-BC9C-8758CF0A0B3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5189BF4A-4847-4AFC-BC9C-8758CF0A0B3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5189BF4A-4847-4AFC-BC9C-8758CF0A0B3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
