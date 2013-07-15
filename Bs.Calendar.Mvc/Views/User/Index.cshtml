@@ -1,0 +1,42 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.UserViewModel 
+@{
+    ViewBag.Title = "User Page";
+}
+
+<div class="container">
+    
+    <h1>Пользователи</h1>
+
+    <table >
+        <tr>
+            <th>Id</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>E-mail</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (var user in Model.Users) {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.FristName</td>
+                <td>@user.LastName</td>
+                <td>@user.Email</td>
+                <td>           
+                        @using (Html.BeginForm("Add", "User")) {
+                            @Html.Hidden("UserID", user.Id)
+                            <input type="submit" value="Add"/>
+                        }
+                        @using (Html.BeginForm("Edit", "User")) {
+                            @Html.Hidden("UserID", user.Id)
+                            <input type="submit" value="Edit"/>
+                        }
+                        @using (Html.BeginForm("Delete", "User")) {
+                            @Html.Hidden("UserID", user.Id)
+                            <input type="submit" value="Delete"/>
+                        }
+                    
+                </td>
+            </tr>
+        }
+    </table>
+</div>

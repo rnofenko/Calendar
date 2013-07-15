@@ -8,6 +8,12 @@ namespace Bs.Calendar.Models
         [StringLength(200)]
         public string Email { get; set; }
 
+        [StringLength(20)]
+        public string FristName { get; set; }
+
+        [StringLength(20)]
+        public string LastName { get; set; }
+
         public Roles Role { get; set; }
     }
 }
