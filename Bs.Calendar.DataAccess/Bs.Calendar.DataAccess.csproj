@@ -52,6 +52,7 @@
     <Compile Include="Bases\IRepository.cs" />
     <Compile Include="Bases\RepoUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoomRepository.cs" />
     <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>

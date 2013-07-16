@@ -52,6 +52,14 @@ namespace Bs.Calendar.Mvc.ViewModels
                        };
         }
 
+        public static implicit operator RoomEditVm(Room rRoom)
+        {
+            return new RoomEditVm(
+                rRoom.Name,
+                rRoom.NumberOfPlaces,
+                Color.FromArgb(rRoom.Color));
+        }
+
 #endregion
 
 #region constructors
@@ -65,6 +73,10 @@ namespace Bs.Calendar.Mvc.ViewModels
             this.NumberOfPlaces = iNumberOfPlaces;
             this.Color          = cColor;
         }
+
+        public RoomEditVm()
+            : this(string.Empty,0)
+        {}
 
 #endregion
     }
