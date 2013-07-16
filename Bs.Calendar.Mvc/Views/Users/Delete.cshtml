@@ -1,0 +1,22 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.UserEditVm
+
+@{
+    var fullName = string.Format("{0} {1}", Model.FirstName, Model.LastName);
+    ViewBag.Title = string.Concat("Delete ",fullName);
+}
+
+<h1>Are you sure want to delete @fullName</h1>
+
+<h2>Info:</h2>
+<h3>@fullName</h3> @Model.Role
+<p>@Model.Email</p>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("UserId", Model.UserId)
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back", "Index")
+    </p>
+}
