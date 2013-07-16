@@ -5,7 +5,7 @@ namespace Bs.Calendar.Mvc.ViewModels
 {
     public class UserEditVm
     {
-        public UserEditVm(int userId,string firstName,string lastName, string email, Roles role)
+        public UserEditVm(int userId, string firstName, string lastName, string email, Roles role)
         {
             UserId = userId;
             FirstName = firstName;

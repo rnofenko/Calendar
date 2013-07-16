@@ -4,60 +4,55 @@ using System.Linq;
 using System.Net.Mail;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
+using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Services
 {
     public class UserService
     {
+        private readonly RepoUnit _unit;
+
+        public UserService(RepoUnit unit)
+        {
+            _unit = unit;
+        }
+
         public User GetUser(int userId)
         {
-            using (var unit = new RepoUnit())
-            {
-                return unit.User.Load().FirstOrDefault(u => u.Id == userId);
-            }
+            return _unit.User.Get(userId);
         }
 
         public IEnumerable<User> GetAllUsers()
         {
-            using (var unit = new RepoUnit())
-            {
-                return unit.User.Load().ToList();
-            }
+            return _unit.User.Load().ToList();
         }
 
-        public void SaveUser(string firstName, string lastName, string email, Roles role)
+        public void SaveUser(UserEditVm userModel)
         {
             var user = new User
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                Role = role
-            };
-            using (var unit = new RepoUnit())
-            {                
-                unit.User.Save(user);
-            }            
+                {
+                    FirstName = userModel.FirstName,
+                    LastName = userModel.LastName,
+                    Email = userModel.Email,
+                    Role = userModel.Role
+                };
+            _unit.User.Save(user);
         }
 
         public void DeleteUser(int id)
         {
-            using (var unit = new RepoUnit())
-            {
-                unit.User.Delete(GetUser(id));
-            }
+            _unit.User.Delete(_unit.User.Get(id));
+
         }
 
-        public void EditUser(string firstName, string lastName, string email, Roles role, int id)
+        public void EditUser(UserEditVm userModel)
         {
-            using (var unit = new RepoUnit())
-            {
-                var userToEdit = GetUser(id);
-                userToEdit.FirstName = firstName;
-                userToEdit.LastName = lastName;
-                userToEdit.Email = email;
-                unit.User.Save(userToEdit);
-            }
+            var userToEdit = GetUser(userModel.UserId);
+                userToEdit.FirstName = userToEdit.FirstName;
+                userToEdit.LastName = userModel.LastName;
+                userToEdit.Email = userModel.Email;
+                userToEdit.Role = userModel.Role;
+            _unit.User.Save(userToEdit);
         }
 
         public bool IsValidEmailAddress(string emailaddress)

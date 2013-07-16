@@ -38,7 +38,7 @@ namespace Bs.Calendar.Mvc.Controllers
             {
                 if (_service.IsValidEmailAddress(model.Email))
                 {
-                    _service.SaveUser(model.FirstName, model.LastName, model.Email, model.Role);
+                    _service.SaveUser(model);
                     return RedirectToAction("Index");
                 }
                 return View(model);
@@ -66,7 +66,7 @@ namespace Bs.Calendar.Mvc.Controllers
             {
                 if (_service.IsValidEmailAddress(model.Email))
                 {
-                    _service.EditUser(model.FirstName, model.LastName,model.Email,model.Role, model.UserId);
+                    _service.EditUser(model);
                     return RedirectToAction("Index");
                 }
                 return View(model);
