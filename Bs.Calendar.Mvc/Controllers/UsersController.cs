@@ -111,30 +111,21 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Find(string text)
+        public ActionResult Find(string searchStr)
         {
-            if (string.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(searchStr))
                 return RedirectToAction("Index");
 
-            //Delete extra whitespaces
-            text = Regex.Replace(text.Trim(), @"\s+", " ");     
-            
-            var users = _service.GetAllUsers();
-            if (text.Contains('@'))
-            {
-                users = users.Where(user => user.Email.Equals(text, StringComparison.InvariantCulture));
-            }
-            else
-            {
-                var arrName = text.Split();
-                users = users.Where(
-                    user => user.FirstName.Equals(arrName[0], StringComparison.InvariantCulture));
+            return View("Index", _service.Find(searchStr));
+        }
 
-                if (arrName.Length == 2)
-                    users = users.Where(
-                        user => user.LastName.Equals(arrName[1], StringComparison.InvariantCulture));
-            }
-            return View("Index", new UsersVm { Users = users.ToList() });
+        public ActionResult FindAjax(string searchStr)
+        {
+            if (string.IsNullOrEmpty(searchStr))
+                return PartialView("UserList", 
+                    new UsersVm { Users = _service.GetAllUsers() });
+
+            return PartialView("UserList", _service.Find(searchStr));
         }
     }
 }

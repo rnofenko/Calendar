@@ -44,7 +44,6 @@ namespace Bs.Calendar.DataAccess.Bases
 
         public void Delete(T entity)
         {
-            _context.Set<T>().Attach(entity);
             _context.Set<T>().Remove(entity);
             _context.SaveChanges();
         }

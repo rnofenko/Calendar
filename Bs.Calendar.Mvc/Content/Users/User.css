@@ -2,9 +2,8 @@
     float: left;
 }
 
-input[type="submit"]
-{
-    font-size: 10pt;
+button {
+    font-size: 11pt;
 }
 
 div #container {
