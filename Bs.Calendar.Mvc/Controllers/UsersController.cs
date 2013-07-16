@@ -22,7 +22,7 @@ namespace Bs.Calendar.Mvc.Controllers
         public ActionResult Details(int id)
         {
             var user = _service.GetUser(id);
-            return View(user);
+            return View(new UserEditVm(user));
         }
 
         public ActionResult Create()
@@ -55,7 +55,7 @@ namespace Bs.Calendar.Mvc.Controllers
             var user = _service.GetUser(id);
             return user != null
                        ? (ActionResult)
-                         View(new UserEditVm(user.Id, user.FirstName, user.LastName, user.Email, user.Role))
+                         View(new UserEditVm(user))
                        : HttpNotFound();
         }
 
@@ -84,7 +84,7 @@ namespace Bs.Calendar.Mvc.Controllers
             {
                 return HttpNotFound();
             }
-            return View(new UserEditVm(user.Id, user.FirstName, user.LastName, user.Email, user.Role));
+            return View(new UserEditVm(user));
         }
 
         [HttpPost]
@@ -98,7 +98,7 @@ namespace Bs.Calendar.Mvc.Controllers
             catch
             {
                 var user = _service.GetUser(model.UserId);
-                return View(new UserEditVm(user.Id, user.FirstName, user.LastName, user.Email, user.Role));
+                return View(new UserEditVm(user));
             }
         }
     }
