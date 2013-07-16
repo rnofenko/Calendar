@@ -6,7 +6,7 @@ using Bs.Calendar.Models;
 
 namespace Bs.Calendar.Mvc.ViewModels
 {
-    public class UserViewModel
+    public class UsersVm
     {
         public IEnumerable<User> Users { get; set; }
     }

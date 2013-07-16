@@ -1,36 +1,38 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.UserViewModel 
+﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm 
 @{
     ViewBag.Title = "User Page";
 }
 
-<div class="container">
+<div id="container">
     
     <h1>Пользователи</h1>
+    @using (Html.BeginForm("Add", "Users")) {
+        <input type="submit" value="Add User"/>
+    }
 
+    @using (Html.BeginForm("Find", "Users")) {
+        <input type="text" name="text" value="Find User" onfocus="if (this.value=='Find User') {this.value=''}"
+                                                         onblur="if (this.value=='') {this.value='Find User'}"/>
+    }
+    
     <table >
         <tr>
             <th>Id</th>
             <th>Имя</th>
-            <th>Фамилия</th>
             <th>E-mail</th>
             <th>Actions</th>
         </tr>
         @foreach (var user in Model.Users) {
             <tr>
                 <td>@user.Id</td>
-                <td>@user.FristName</td>
-                <td>@user.LastName</td>
+                <td>@user.FirstName @user.LastName</td>      
                 <td>@user.Email</td>
                 <td>           
-                        @using (Html.BeginForm("Add", "User")) {
-                            @Html.Hidden("UserID", user.Id)
-                            <input type="submit" value="Add"/>
-                        }
-                        @using (Html.BeginForm("Edit", "User")) {
+                        @using (Html.BeginForm("Edit", "Users")) {
                             @Html.Hidden("UserID", user.Id)
                             <input type="submit" value="Edit"/>
                         }
-                        @using (Html.BeginForm("Delete", "User")) {
+                        @using (Html.BeginForm("Delete", "Users")) {
                             @Html.Hidden("UserID", user.Id)
                             <input type="submit" value="Delete"/>
                         }

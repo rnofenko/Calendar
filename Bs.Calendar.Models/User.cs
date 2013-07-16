@@ -9,7 +9,7 @@ namespace Bs.Calendar.Models
         public string Email { get; set; }
 
         [StringLength(20)]
-        public string FristName { get; set; }
+        public string FirstName { get; set; }
 
         [StringLength(20)]
         public string LastName { get; set; }

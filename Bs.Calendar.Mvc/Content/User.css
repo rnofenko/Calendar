@@ -1,3 +1,12 @@
 ﻿td > form {
-    float: left;   
+    float: left; 
+}
+
+input[type="submit"]
+{
+    font-size: 10pt;
+}
+
+div #container {
+    padding: .9em;
 }
