@@ -1,11 +1,11 @@
-п»ї@model Bs.Calendar.Mvc.ViewModels.UsersVm 
+@model Bs.Calendar.Mvc.ViewModels.UsersVm 
 @{
     ViewBag.Title = "User Page";
 }
 
 <div id="container">
     
-    <h1>РџРѕР»СЊР·РѕРІР°С‚РµР»Рё</h1>
+    <h1>Пользователи</h1>
     @using (Html.BeginForm("Add", "Users")) {
         <input type="submit" value="Add User"/>
     }
@@ -18,7 +18,7 @@
     <table >
         <tr>
             <th>Id</th>
-            <th>РРјСЏ</th>
+            <th>Имя</th>
             <th>E-mail</th>
             <th>Actions</th>
         </tr>

@@ -14,6 +14,11 @@ namespace Bs.Calendar.Models
         [StringLength(20)]
         public string LastName { get; set; }
 
+        public string UserLogin
+        {
+            get { return Email; }
+        }
+
         public Roles Role { get; set; }
     }
 }
