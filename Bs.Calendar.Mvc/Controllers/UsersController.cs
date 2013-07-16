@@ -119,7 +119,7 @@ namespace Bs.Calendar.Mvc.Controllers
             //Delete extra whitespaces
             text = Regex.Replace(text.Trim(), @"\s+", " ");     
             
-            var users = _service.LoadUsers();
+            var users = _service.GetAllUsers();
             if (text.Contains('@'))
             {
                 users = users.Where(user => user.Email.Equals(text, StringComparison.InvariantCulture));
