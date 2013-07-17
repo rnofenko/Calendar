@@ -8,3 +8,4 @@ _NCrunch*/
 *.suo
 *.ncrunchsolution
 *.DotSettings.user
+Bs.Calendar.Mvc/*.config
