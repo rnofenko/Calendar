@@ -10,14 +10,23 @@ namespace Bs.Calendar.Mvc.Controllers
 {
     public class RoomController : Controller
     {
+        private RoomService Service { get; set; }
+
+        public RoomController()
+        {
+            Service = new RoomService();  /* Инициализация сервиса */
+        }
+
         //
         // GET: /Room/
         public ActionResult Index()
         {
-            RoomService rsService = new RoomService();  /* Инициализация сервиса */
-
-            return View(rsService.CreateView());
+            return View(Service.CreateView());
         }
-
+        
+        public ActionResult List()
+        {
+            return View(Service.List());
+        }
     }
 }
