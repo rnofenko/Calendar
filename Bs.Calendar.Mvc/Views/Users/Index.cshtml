@@ -1,41 +1,24 @@
-﻿@model IEnumerable<Bs.Calendar.Models.User>
-
+﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "User Page";
 }
 
-<h2>Index</h2>
+<div id="container">
+    
+    <h1>Users</h1>
+    <button>@Html.ActionLink("Create", "Create")</button>
 
-<table>
-    <tr>
-        <th>Name</th>        
-        <th>
-            @Html.DisplayNameFor(user => user.Role)
-        </th>
-        <th>
-            @Html.DisplayNameFor(user => user.Email)
-        </th>
-        <th>...</th>
-    </tr>
+    @using (Ajax.BeginForm("Find", new AjaxOptions {UpdateTargetId = "user-table"})) 
+    {
+        <input type="text" name="searchStr" value="Find User"/>
+    }
 
-@foreach (var user in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => user.FirstName) 
-            @Html.DisplayFor(modelItem => user.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => user.Role)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => user.Email)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=user.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=user.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=user.Id })
-        </td>
-    </tr>
+    <table id="user-table">
+        @Html.Partial("UserList", Model)
+    </table>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryajax")
+    @Scripts.Render("~/bundles/jqueryuser")
 }
-
-</table>

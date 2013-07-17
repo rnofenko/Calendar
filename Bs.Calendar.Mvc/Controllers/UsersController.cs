@@ -1,4 +1,4 @@
-﻿using System.Web.Mvc;
+using System.Web.Mvc;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 
@@ -16,8 +16,9 @@ namespace Bs.Calendar.Mvc.Controllers
         public ActionResult Index()
         {
             var users = _service.GetAllUsers();
-            return View(users);
+            return View(new UsersVm { Users = users });
         }
+
 
         public ActionResult Details(int id)
         {
@@ -29,6 +30,7 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             return View();
         }
+
 
         [HttpPost,
         ValidateAntiForgeryToken]
@@ -49,13 +51,12 @@ namespace Bs.Calendar.Mvc.Controllers
             }
         }
 
-        
+
         public ActionResult Edit(int id)
         {
             var user = _service.GetUser(id);
             return user != null
-                       ? (ActionResult)
-                         View(new UserEditVm(user))
+                       ? (ActionResult)View(new UserEditVm(user))
                        : HttpNotFound();
         }
 
@@ -100,6 +101,19 @@ namespace Bs.Calendar.Mvc.Controllers
                 var user = _service.GetUser(model.UserId);
                 return View(new UserEditVm(user));
             }
+        }
+
+        [HttpPost]
+        public ActionResult Find(string searchStr)
+        {
+            var users = _service.GetAllUsers();
+
+            if (string.IsNullOrEmpty(searchStr))
+                return PartialView("UserList",
+                    new UsersVm { Users = users });
+
+            var usersVm = new UsersVm { Users = _service.Find(users, searchStr) };
+            return PartialView("UserList", usersVm);
         }
     }
 }

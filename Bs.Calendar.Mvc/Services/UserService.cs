@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Text.RegularExpressions;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
@@ -42,16 +43,15 @@ namespace Bs.Calendar.Mvc.Services
         public void DeleteUser(int id)
         {
             _unit.User.Delete(_unit.User.Get(id));
-
         }
 
         public void EditUser(UserEditVm userModel)
         {
             var userToEdit = GetUser(userModel.UserId);
-                userToEdit.FirstName = userToEdit.FirstName;
-                userToEdit.LastName = userModel.LastName;
-                userToEdit.Email = userModel.Email;
-                userToEdit.Role = userModel.Role;
+            userToEdit.FirstName = userModel.FirstName;
+            userToEdit.LastName = userModel.LastName;
+            userToEdit.Email = userModel.Email;
+            userToEdit.Role = userModel.Role;
             _unit.User.Save(userToEdit);
         }
 
@@ -66,6 +66,43 @@ namespace Bs.Calendar.Mvc.Services
             {
                 return false;
             }
+        }
+
+        public IEnumerable<User> Find(IEnumerable<User> users, string searchStr)
+        {
+            //Delete extra whitespaces
+            searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ");
+
+            if (searchStr.Contains('@') && IsValidEmailAddress(searchStr))
+            {
+                users = FindByEmail(users, searchStr);
+            }
+            else if (searchStr.Length != 0)
+            {
+                users = FindByName(users, searchStr);
+            }
+
+            return users.ToList();
+        }
+
+        private IEnumerable<User> FindByName(IEnumerable<User> users, string searchStr)
+        {
+            var arrName = searchStr.Split();
+
+            var filteredUsers = users.Where(
+                user => user.FirstName.Equals(arrName[0], StringComparison.InvariantCulture));
+
+            if (arrName.Length == 2)
+                filteredUsers = filteredUsers.Where(
+                    user => user.LastName.Equals(arrName[1], StringComparison.InvariantCulture));
+
+            return filteredUsers;
+        }
+
+        private IEnumerable<User> FindByEmail(IEnumerable<User> users, string searchStr)
+        {
+            return users.Where(user => user.Email.Equals(
+                searchStr, StringComparison.InvariantCulture));
         }
     }
 }
