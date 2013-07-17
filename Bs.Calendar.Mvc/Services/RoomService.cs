@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Linq;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
