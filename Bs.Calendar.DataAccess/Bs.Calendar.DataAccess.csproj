@@ -50,8 +50,10 @@
     <Compile Include="Bases\BaseRepository.cs" />
     <Compile Include="Bases\CalendarContext.cs" />
     <Compile Include="Bases\IRepository.cs" />
+    <Compile Include="Bases\RepoTeam.cs" />
     <Compile Include="Bases\RepoUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TeamRepository.cs" />
     <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
