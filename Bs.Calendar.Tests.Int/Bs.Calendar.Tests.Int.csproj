@@ -30,8 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,6 +44,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserFrameTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bs.Calendar.DataAccess\Bs.Calendar.DataAccess.csproj">
+      <Project>{67610384-762c-4176-861d-2189c4ae80bb}</Project>
+      <Name>Bs.Calendar.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bs.Calendar.Models\Bs.Calendar.Models.csproj">
+      <Project>{9ebc5d85-6739-452c-ac72-f9377dae9cd6}</Project>
+      <Name>Bs.Calendar.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bs.Calendar.Mvc\Bs.Calendar.Mvc.csproj">
+      <Project>{2eecd851-ffb3-4c7e-ad69-ba824041377b}</Project>
+      <Name>Bs.Calendar.Mvc</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
