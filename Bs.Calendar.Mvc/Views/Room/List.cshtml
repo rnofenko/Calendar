@@ -5,7 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<table>
+<button class="btn">
+    <i class="icon-plus">Add</i>
+</button>
+<table class="table-striped" width="50%">            
     <thead>
         <tr>
             <th>Room name</th>
@@ -24,12 +27,12 @@
                 <td> @Room.Color </td>
                 <td>
                     <button class="btn">
-                        <i class="icon-search">Edit</i>
+                        <i class="icon-pencil">Edit</i>
                     </button>
                 </td>
                 <td>
                     <button class="btn">
-                        <i class="icon-search">Delete</i>
+                        <i class="icon-remove">Delete</i>
                     </button>
                 </td>
             </tr>
