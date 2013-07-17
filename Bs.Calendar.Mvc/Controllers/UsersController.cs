@@ -37,22 +37,17 @@ namespace Bs.Calendar.Mvc.Controllers
             return View();
         }
 
-        
+
         [HttpPost,
         ValidateAntiForgeryToken]
-        public ActionResult Create(UserEditVm model)
-        {
-            try
-            {
-                if (_service.IsValidEmailAddress(model.Email))
-                {
-                    _service.SaveUser(model.FirstName, model.LastName, model.Email, model.Role);
+        public ActionResult Create(UserEditVm model) {
+            try {
+                if (_service.IsValidEmailAddress(model.Email)) {
+                    _service.SaveUser(model);
                     return RedirectToAction("Index");
                 }
                 return View(model);
-            }
-            catch
-            {
+            } catch {
                 return View(model);
             }
         }
@@ -68,19 +63,15 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(UserEditVm model)
-        {
-            try
-            {
-                if (_service.IsValidEmailAddress(model.Email))
+        public ActionResult Edit(UserEditVm model) {
+            try {
+                if (_service.IsValidEmailAddress(model.Email)) 
                 {
-                    _service.EditUser(model.FirstName, model.LastName,model.Email,model.Role, model.UserId);
+                    _service.EditUser(model);
                     return RedirectToAction("Index");
                 }
                 return View(model);
-            }
-            catch
-            {
+            } catch {
                 return View(model);
             }
         }
@@ -113,19 +104,14 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpPost]
         public ActionResult Find(string searchStr)
         {
+            var users = _service.GetAllUsers();
+
             if (string.IsNullOrEmpty(searchStr))
-                return RedirectToAction("Index");
+                return PartialView("UserList",
+                    new UsersVm { Users = users});
 
-            return View("Index", _service.Find(searchStr));
-        }
-
-        public ActionResult FindAjax(string searchStr)
-        {
-            if (string.IsNullOrEmpty(searchStr))
-                return PartialView("UserList", 
-                    new UsersVm { Users = _service.GetAllUsers() });
-
-            return PartialView("UserList", _service.Find(searchStr));
+            var usersVm = new UsersVm {Users = _service.Find(users, searchStr)};
+            return PartialView("UserList", usersVm);
         }
     }
 }

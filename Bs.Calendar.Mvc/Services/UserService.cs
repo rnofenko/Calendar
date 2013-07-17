@@ -11,76 +11,59 @@ namespace Bs.Calendar.Mvc.Services
 {
     public class UserService
     {
-        public User GetUser(int userId)
-        {
-            using (var unit = new RepoUnit())
-            {
-                return unit.User.Load().FirstOrDefault(u => u.Id == userId);
-            }
+        private readonly RepoUnit _unit;
+
+        public UserService(RepoUnit unit) {
+            _unit = unit;
         }
 
-        public IEnumerable<User> GetAllUsers()
-        {
-            using (var unit = new RepoUnit())
-            {
-                return unit.User.Load().ToList();
-            }
+        public User GetUser(int userId) {
+            return _unit.User.Get(userId);
         }
 
-        public void SaveUser(string firstName, string lastName, string email, Roles role)
-        {
-            var user = new User
+        public IEnumerable<User> GetAllUsers() {
+            return _unit.User.Load().ToList();
+        }
+
+        public void SaveUser(UserEditVm userModel) {
+            var user = new User 
             {
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                Role = role
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                Email = userModel.Email,
+                Role = userModel.Role
             };
-            using (var unit = new RepoUnit())
-            {                
-                unit.User.Save(user);
-            }            
+            _unit.User.Save(user);
         }
 
-        public void DeleteUser(int id)
-        {
-            using (var unit = new RepoUnit())
-            {
-                unit.User.Delete(GetUser(id));
-            }
+        public void DeleteUser(int id) {
+            _unit.User.Delete(_unit.User.Get(id));
+
         }
 
-        public void EditUser(string firstName, string lastName, string email, Roles role, int id)
-        {
-            using (var unit = new RepoUnit())
-            {
-                var userToEdit = GetUser(id);
-                userToEdit.FirstName = firstName;
-                userToEdit.LastName = lastName;
-                userToEdit.Email = email;
-                unit.User.Save(userToEdit);
-            }
+        public void EditUser(UserEditVm userModel) {
+            var userToEdit = GetUser(userModel.UserId);
+            userToEdit.FirstName = userModel.FirstName;
+            userToEdit.LastName = userModel.LastName;
+            userToEdit.Email = userModel.Email;
+            userToEdit.Role = userModel.Role;
+            _unit.User.Save(userToEdit);
         }
 
-        public bool IsValidEmailAddress(string emailaddress)
-        {
-            try
-            {
+        public bool IsValidEmailAddress(string emailaddress) {
+            try {
                 var email = new MailAddress(emailaddress);
                 return true;
-            }
-            catch (FormatException)
-            {
+            } catch (FormatException) {
                 return false;
             }
         }
 
-        public UsersVm Find(string searchStr)
+        public IEnumerable<User> Find(IEnumerable<User> users, string searchStr)
         {
             //Delete extra whitespaces
             searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ");
-            
-            var users = GetAllUsers();
+
             if (searchStr.Contains('@') && IsValidEmailAddress(searchStr))
             {
                 users = FindByEmail(users, searchStr);
@@ -90,7 +73,7 @@ namespace Bs.Calendar.Mvc.Services
                 users = FindByName(users, searchStr);
             }
 
-            return new UsersVm { Users = users.ToList() };
+            return users.ToList();
         }
 
         private IEnumerable<User> FindByName(IEnumerable<User> users, string searchStr)

@@ -8,11 +8,7 @@
     <h1>Users</h1>
     <button>@Html.ActionLink("Create", "Create")</button>
 
-    @using (Ajax.BeginForm("Find", new AjaxOptions 
-                                    {
-                                        Url = Url.Action("FindAjax"),
-                                        UpdateTargetId = "user-table"
-                                    })) 
+    @using (Ajax.BeginForm("Find", new AjaxOptions {UpdateTargetId = "user-table"})) 
     {
         <input type="text" name="searchStr" value="Find User"/>
     }
