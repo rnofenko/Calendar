@@ -12,13 +12,6 @@ namespace Bs.Calendar.DataAccess.Bases
             get { return _user ?? (_user = new UserRepository(getContext())); }
         }
 
-        private RoomRepository  _room;
-
-        public RoomRepository Room
-        {
-            get { return _room ?? (_room = new RoomRepository(getContext())); }
-        }
-
         private CalendarContext getContext()
         {
             return _context ?? (_context = new CalendarContext());
