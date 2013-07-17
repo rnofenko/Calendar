@@ -10,7 +10,7 @@ namespace Bs.Calendar.Mvc.Controllers
 {
     public class RoomController : Controller
     {
-        private RoomService Service { get; set; }
+        private RoomService Service;
 
         public RoomController()
         {
