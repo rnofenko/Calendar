@@ -7,9 +7,13 @@
 
 <table>
     <thead>
-        <th>Room name</th>
-        <th>Number of places</th>
-        <th>Color</th>
+        <tr>
+            <th>Room name</th>
+            <th>Number of places</th>
+            <th>Color</th>
+            <th></th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
         @foreach (var Room in Model.Rooms)
@@ -18,6 +22,16 @@
                 <td> @Room.Name </td>
                 <td> @Room.NumberOfPlaces </td>
                 <td> @Room.Color </td>
+                <td>
+                    <button class="btn">
+                        <i class="icon-search">Edit</i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn">
+                        <i class="icon-search">Delete</i>
+                    </button>
+                </td>
             </tr>
         }
     </tbody>
