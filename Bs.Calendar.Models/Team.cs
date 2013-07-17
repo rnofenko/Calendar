@@ -5,7 +5,7 @@ namespace Bs.Calendar.Models
 {
     public class Team : BaseEntity
     {
-        public int TeamID { get; set; }
+        [StringLength(200)]
         public string name { get; set; }
     }
 }
