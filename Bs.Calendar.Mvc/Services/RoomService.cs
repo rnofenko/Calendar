@@ -129,6 +129,15 @@ namespace Bs.Calendar.Mvc.Services
                 ruUnit.Room.Delete(revRoom);
         }
 
+        public RoomsVm List()
+        {
+            using (var unit = new RepoUnit())
+            {
+                var rooms = unit.Room.Load().ToList();
+                return new RoomsVm() { Rooms = rooms };
+            }
+        }
+
         #endregion
     }
 }
