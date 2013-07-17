@@ -198,6 +198,7 @@
     <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
+    <Compile Include="ViewModels\RoomsVm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker.css" />
@@ -323,6 +324,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Room\Index.cshtml" />
+    <Content Include="Views\Room\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
