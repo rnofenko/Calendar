@@ -5,15 +5,16 @@ namespace Bs.Calendar.Models
 {
     public class User : BaseEntity
     {
-        [StringLength(200)]
+        [StringLength(LENGTH_NAME)]
         public string Email { get; set; }
 
-        [StringLength(20)]
+        [StringLength(LENGTH_NAME)]
         public string FirstName { get; set; }
 
-        [StringLength(20)]
+        [StringLength(LENGTH_NAME)]
         public string LastName { get; set; }
 
+#warning remove
         public string UserLogin
         {
             get { return Email; }

@@ -12,6 +12,7 @@ namespace Bs.Calendar.Mvc.Controllers
 {
     public class RoomController : Controller
     {
+#warning style
         private RoomService Service;
 
         public RoomController()

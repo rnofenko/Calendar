@@ -10,6 +10,7 @@ namespace Bs.Calendar.Models
         /// <summary>
         /// The name of the room
         /// </summary>
+#warning put normal length
         [StringLength(byte.MaxValue)]
         public string Name { get; set; }
 

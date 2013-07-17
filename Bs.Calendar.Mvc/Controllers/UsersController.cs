@@ -108,6 +108,7 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             var users = _service.GetAllUsers();
 
+#warning style
             if (string.IsNullOrEmpty(searchStr))
                 return PartialView("UserList",
                     new UsersVm { Users = users });
