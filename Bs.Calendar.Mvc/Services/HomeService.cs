@@ -15,7 +15,7 @@ namespace Bs.Calendar.Mvc.Services
 
                 if (!users.Any())
                 {
-                    unit.User.Save(new User {Email = "rnofenko@gmail.com", Role = Roles.Admin, FirstName = "Roman", LastName = "Nofenko"});
+                    unit.User.Save(new User {Email = "rnofenko@gmail.com", Role = Roles.Admin});
                     users = unit.User.Load().ToList();
                 }
 

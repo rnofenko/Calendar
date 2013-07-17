@@ -1,26 +1,13 @@
-﻿using System.Collections;
+﻿using System.ComponentModel.DataAnnotations;
 using Bs.Calendar.Models.Bases;
 
 namespace Bs.Calendar.Models
 {
-    public class User : BaseEntity, IEnumerable
+    public class User : BaseEntity
     {
-        public string FirstName { get; set; }
-
-        public string LastName  { get; set; }
-        
+        [StringLength(200)]
         public string Email { get; set; }
 
-        public string UserLogin
-        {
-            get { return Email; }
-        }
-
         public Roles Role { get; set; }
-
-        public IEnumerator GetEnumerator()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

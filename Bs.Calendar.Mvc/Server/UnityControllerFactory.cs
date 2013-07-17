@@ -13,6 +13,7 @@ namespace Bs.Calendar.Mvc.Server
             {
                 result = Core.Resolver.Resolve(controllerType) as IController;
             }
+
             return result;
         }
     }
