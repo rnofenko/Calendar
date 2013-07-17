@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Web;
-using System.Web.Mvc;
 
-using System.Drawing;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
-
-using System.Linq;
-using Bs.Calendar.DataAccess;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -19,16 +12,23 @@ namespace Bs.Calendar.Mvc.Services
     public class RoomService
     {
         #region fields and properties
-/*
+
+        private RoomEditVm _revRoom;
+
         /// <summary>
-        /// Allows to get edited Room instance
+        /// Allows to get the edited room instance
         /// </summary>
         public RoomEditVm Room
         {
-            get;
-            protected set;
+            get { return _revRoom; }
+            protected set
+            {
+                if(value == null)
+                    throw new ArgumentNullException("reference to the edited instance cannot be null");
+
+                _revRoom = value;
+            }
         }
-*/
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public RoomService()
         {
-//            Room = new RoomEditVm();
+            Room = new RoomEditVm();
         }
 
         #endregion
@@ -84,15 +84,7 @@ namespace Bs.Calendar.Mvc.Services
             RoomEditVm revRoom = null;
 
             using (var ruUnit = new RepoUnit())
-            {
-                IList<Room> ilRooms = ruUnit.Room.Load(rRoom => rRoom.Id == iId).ToList();  /* 
-                                                                                             * Select all rooms with matched id
-                                                                                             * (actually, there should be 0 or 1 of them at all)
-                                                                                             */
-
-                if (ilRooms.Any())
-                    revRoom = ilRooms.First();
-            }
+                revRoom = ruUnit.Room.Get(iId);
 
             return revRoom;
         }
@@ -107,16 +99,10 @@ namespace Bs.Calendar.Mvc.Services
              * Use this instead of just this.Load() for achieving some kind of performance
              */
             {
-                IList<Room> ilRooms = ruUnit.Room.Load(rRoom => rRoom.Id == iId).ToList();  /* 
-                                                                                             * Select all rooms with matched id
-                                                                                             * (actually, there should be 0 or 1 of them at all)
-                                                                                             */
-
-                if (ilRooms.Any())
-                {
-                    RoomEditVm revRoom = ilRooms.First();
-                    ruUnit.Room.Delete(revRoom);
-                }
+                Room rRoom = ruUnit.Room.Get(iId);
+                
+                if(rRoom != null)
+                    this.Delete(rRoom);
             }
         }
 

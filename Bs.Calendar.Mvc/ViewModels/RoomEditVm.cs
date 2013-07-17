@@ -44,6 +44,9 @@ namespace Bs.Calendar.Mvc.ViewModels
 
         public static implicit operator Room(RoomEditVm revRoomViewModel)
         {
+            if (revRoomViewModel == null)
+                throw new ArgumentNullException("reference to the converted instance cannot be null");
+
             return new Room()
                        {
                            Name             = revRoomViewModel.Name,
@@ -54,6 +57,9 @@ namespace Bs.Calendar.Mvc.ViewModels
 
         public static implicit operator RoomEditVm(Room rRoom)
         {
+            if(rRoom == null)
+                throw new ArgumentNullException("reference to the converted instance cannot be null");
+
             return new RoomEditVm(
                 rRoom.Name,
                 rRoom.NumberOfPlaces,

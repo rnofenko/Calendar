@@ -11,14 +11,16 @@ namespace Bs.Calendar.Models
         /// The name of the room
         /// </summary>
         [StringLength(byte.MaxValue)]
-        public string   Name;
+        public string Name { get; set; }
+
         /// <summary>
         /// Total count of available places in the room
         /// </summary>
-        public int      NumberOfPlaces;
+        public int NumberOfPlaces { get; set; }
+
         /// <summary>
         /// Unique color for room distinguishing
         /// </summary>
-        public int      Color;
+        public int Color { get; set; }
     }
 }
