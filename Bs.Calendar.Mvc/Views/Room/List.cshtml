@@ -1,0 +1,41 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.RoomsVm
+
+@{
+    ViewBag.Title = "Rooms List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<button class="btn">
+    <i class="icon-plus">Add</i>
+</button>
+<table class="table-striped" width="50%">            
+    <thead>
+        <tr>
+            <th>Room name</th>
+            <th>Number of places</th>
+            <th>Color</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Room in Model.Rooms)
+        {
+            <tr>
+                <td> @Room.Name </td>
+                <td> @Room.NumberOfPlaces </td>
+                <td> @Room.Color </td>
+                <td>
+                    <button class="btn">
+                        <i class="icon-pencil">Edit</i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn">
+                        <i class="icon-remove">Delete</i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> 
