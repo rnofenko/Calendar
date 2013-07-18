@@ -19,7 +19,6 @@ namespace Bs.Calendar.Mvc.Controllers
             return View(new UsersVm { Users = users });
         }
 
-
         public ActionResult Details(int id)
         {
             var user = _service.GetUser(id);
@@ -28,9 +27,8 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            return View("Edit", null);
         }
-
 
         [HttpPost,
         ValidateAntiForgeryToken]
@@ -43,14 +41,13 @@ namespace Bs.Calendar.Mvc.Controllers
                     _service.SaveUser(model);
                     return RedirectToAction("Index");
                 }
-                return View(model);
+                return View("Edit", model);
             }
             catch
             {
-                return View(model);
+                return View("Edit", model);
             }
         }
-
 
         public ActionResult Edit(int id)
         {
