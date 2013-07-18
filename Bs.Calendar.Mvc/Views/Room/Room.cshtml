@@ -1,7 +1,6 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.RoomEditVm
 
 @{
-    ViewBag.Title = "Room";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -16,13 +15,15 @@
 
 <h2>Room</h2>
 
-<table class="color_picker_table">
-    <tr>
-        <td id="pick_color" class="color_picker_cell"></td>
-    </tr>
+<div>
+    <table class="color_picker_table">
+        <tr>
+            <td id="pick_color" class="color_picker_cell"></td>
+        </tr>
 
-</table>
-<div id="color_picker_container"></div>
+    </table>
+    <div id="color_picker_container"></div>
+</div>
 
 <div>
     @Html.ActionLink("Accept", "List")

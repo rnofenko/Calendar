@@ -36,9 +36,27 @@ namespace Bs.Calendar.Mvc.Controllers
             return List();
         }
 
-        public ActionResult AddRoom()
+        [HttpPost]
+        public ActionResult Add(RoomEditVm room)
         {
-            var room = new RoomEditVm();
+            return View("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Update(RoomEditVm room)
+        {
+            return View("Index");
+        }
+
+        public ActionResult AddPage()
+        {
+            var room = _service.CreateViewModel();
+
+            return View("Room", room);
+        }
+
+        public ActionResult UpdatePage(RoomEditVm room)
+        {
             return View("Room", room);
         }
 
