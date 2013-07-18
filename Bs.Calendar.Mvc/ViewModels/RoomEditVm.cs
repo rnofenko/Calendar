@@ -1,89 +1,62 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 
 using Bs.Calendar.Models;
 
 namespace Bs.Calendar.Mvc.ViewModels
 {
-    /// <summary>
-    /// Data associated with view for Room model
-    /// </summary>
     public class RoomEditVm
     {
-#region fields & properties
+        public int Id { get; set; }
 
-        protected string _sName;
+        [StringLength(Models.Bases.BaseEntity.LENGTH_NAME),
+        Required(ErrorMessage = "The name of the room must be specified")]
+        public string Name { get; set; }
 
-        /// <summary>
-        /// Allows to set or get the name of the edited room
-        /// </summary>
-        public string Name
+        public int NumberOfPlaces { get; set; }
+        public Color Color { get; set; }
+
+        public RoomEditVm(
+            int id,
+            string name,
+            int numberOfPlaces,
+            Color color = default(Color))
         {
-            get { return _sName; }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("Reference to the name string cannot be null");
-
-                _sName = value;
-            }
+            this.Id = id;
+            this.Name = name;
+            this.NumberOfPlaces = numberOfPlaces;
+            this.Color = color;
         }
 
-        /// <summary>
-        /// Allows to get or set number of places to be used in the room.
-        /// </summary>
-        public int     NumberOfPlaces;
-        /// <summary>
-        /// Allows to get or set the marking color for the room
-        /// </summary>
-        public Color    Color;
+        public RoomEditVm()
+            : this(0, string.Empty, 0)
+        {}
 
-#endregion
-
-#region conversions
-
-        public static implicit operator Room(RoomEditVm revRoomViewModel)
+        public static implicit operator Room(RoomEditVm roomViewModel)
         {
-            if (revRoomViewModel == null)
+            if (roomViewModel == null)
                 throw new ArgumentNullException("reference to the converted instance cannot be null");
 
             return new Room()
                        {
-                           Name             = revRoomViewModel.Name,
-                           NumberOfPlaces   = revRoomViewModel.NumberOfPlaces,
-                           Color            = revRoomViewModel.Color.ToArgb()
+                           Id = roomViewModel.Id,
+                           Name = roomViewModel.Name,
+                           NumberOfPlaces = roomViewModel.NumberOfPlaces,
+                           Color = roomViewModel.Color.ToArgb()
                        };
         }
 
-        public static implicit operator RoomEditVm(Room rRoom)
+        public static implicit operator RoomEditVm(Room room)
         {
-            if(rRoom == null)
+            if(room == null)
                 throw new ArgumentNullException("reference to the converted instance cannot be null");
 
             return new RoomEditVm(
-                rRoom.Name,
-                rRoom.NumberOfPlaces,
-                Color.FromArgb(rRoom.Color));
+                room.Id,
+                room.Name,
+                room.NumberOfPlaces,
+                Color.FromArgb(room.Color));
         }
-
-#endregion
-
-#region constructors
-
-        public RoomEditVm(
-            string  sName,
-            int     iNumberOfPlaces,
-            Color   cColor              = default(Color))
-        {
-            this.Name           = sName;
-            this.NumberOfPlaces = iNumberOfPlaces;
-            this.Color          = cColor;
-        }
-
-        public RoomEditVm()
-            : this(string.Empty,0)
-        {}
-
-#endregion
     }
 }
