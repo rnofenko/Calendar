@@ -9,7 +9,7 @@ using Bs.Calendar.Mvc.ViewModels;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Bs.Calendar.Tests.Unit
+namespace Bs.Calendar.Tests.Int
 {
     [TestFixture]
     class UsersControllerTest
@@ -51,7 +51,7 @@ namespace Bs.Calendar.Tests.Unit
             _userService.SaveUser(new UserEditVm(user));
 
             // assert
-            Assert.AreEqual(_userService.GetAllUsers().Count(), quantaty + 1);
+            _userService.GetAllUsers().Count().Should().Be(quantaty + 1);
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace Bs.Calendar.Tests.Unit
                     u.Email == user.Email &&
                     u.Role == user.Role
                 ));
-            savedUser.Id.ShouldBeEquivalentTo(user.Id);
+            savedUser.Id.Should().Be(user.Id);
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace Bs.Calendar.Tests.Unit
             var viewResult = new UsersController(_userService).Delete(new UserEditVm(userToDelete));
 
             // assert
-            Assert.IsNull(_unit.User.Get(userToDelete.Id));
+            _unit.User.Get(userToDelete.Id).Should().Be(null);
         }
 
         [TestFixtureTearDown]
