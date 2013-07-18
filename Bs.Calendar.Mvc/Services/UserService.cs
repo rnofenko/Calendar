@@ -13,35 +13,40 @@ namespace Bs.Calendar.Mvc.Services
     {
         private readonly RepoUnit _unit;
 
-        public UserService(RepoUnit unit) {
+        public UserService(RepoUnit unit)
+        {
             _unit = unit;
         }
 
-        public User GetUser(int userId) {
+        public User GetUser(int userId)
+        {
             return _unit.User.Get(userId);
         }
 
-        public IEnumerable<User> GetAllUsers() {
+        public IEnumerable<User> GetAllUsers()
+        {
             return _unit.User.Load().ToList();
         }
 
-        public void SaveUser(UserEditVm userModel) {
-            var user = new User 
-            {
-                FirstName = userModel.FirstName,
-                LastName = userModel.LastName,
-                Email = userModel.Email,
-                Role = userModel.Role
-            };
+        public void SaveUser(UserEditVm userModel)
+        {
+            var user = new User
+                {
+                    FirstName = userModel.FirstName,
+                    LastName = userModel.LastName,
+                    Email = userModel.Email,
+                    Role = userModel.Role
+                };
             _unit.User.Save(user);
         }
 
-        public void DeleteUser(int id) {
+        public void DeleteUser(int id)
+        {
             _unit.User.Delete(_unit.User.Get(id));
-
         }
 
-        public void EditUser(UserEditVm userModel) {
+        public void EditUser(UserEditVm userModel)
+        {
             var userToEdit = GetUser(userModel.UserId);
             userToEdit.FirstName = userModel.FirstName;
             userToEdit.LastName = userModel.LastName;
@@ -50,11 +55,15 @@ namespace Bs.Calendar.Mvc.Services
             _unit.User.Save(userToEdit);
         }
 
-        public bool IsValidEmailAddress(string emailaddress) {
-            try {
+        public bool IsValidEmailAddress(string emailaddress)
+        {
+            try
+            {
                 var email = new MailAddress(emailaddress);
                 return true;
-            } catch (FormatException) {
+            }
+            catch (FormatException)
+            {
                 return false;
             }
         }
@@ -67,7 +76,7 @@ namespace Bs.Calendar.Mvc.Services
             if (searchStr.Contains('@') && IsValidEmailAddress(searchStr))
             {
                 users = FindByEmail(users, searchStr);
-            } 
+            }
             else if (searchStr.Length != 0)
             {
                 users = FindByName(users, searchStr);
@@ -88,12 +97,12 @@ namespace Bs.Calendar.Mvc.Services
                     user => user.LastName.Equals(arrName[1], StringComparison.InvariantCulture));
 
             return filteredUsers;
-        } 
+        }
 
         private IEnumerable<User> FindByEmail(IEnumerable<User> users, string searchStr)
         {
             return users.Where(user => user.Email.Equals(
                 searchStr, StringComparison.InvariantCulture));
-        }   
+        }
     }
 }

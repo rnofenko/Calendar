@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
-using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 
@@ -19,17 +13,17 @@ namespace Bs.Calendar.Mvc.Controllers
             _service = service;
         }
 
-        public ActionResult Index() 
+        public ActionResult Index()
         {
             var users = _service.GetAllUsers();
-            return View(new UsersVm {Users = users});
+            return View(new UsersVm { Users = users });
         }
 
-        
+
         public ActionResult Details(int id)
         {
             var user = _service.GetUser(id);
-            return View(user);
+            return View(new UserEditVm(user));
         }
 
         public ActionResult Create()
@@ -40,38 +34,46 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpPost,
         ValidateAntiForgeryToken]
-        public ActionResult Create(UserEditVm model) {
-            try {
-                if (_service.IsValidEmailAddress(model.Email)) {
+        public ActionResult Create(UserEditVm model)
+        {
+            try
+            {
+                if (_service.IsValidEmailAddress(model.Email))
+                {
                     _service.SaveUser(model);
                     return RedirectToAction("Index");
                 }
                 return View(model);
-            } catch {
+            }
+            catch
+            {
                 return View(model);
             }
         }
 
-        
+
         public ActionResult Edit(int id)
         {
             var user = _service.GetUser(id);
             return user != null
-                       ? (ActionResult)
-                         View(new UserEditVm(user.Id, user.FirstName, user.LastName, user.Email, user.Role))
+                       ? (ActionResult)View(new UserEditVm(user))
                        : HttpNotFound();
         }
 
         [HttpPost]
-        public ActionResult Edit(UserEditVm model) {
-            try {
-                if (_service.IsValidEmailAddress(model.Email)) 
+        public ActionResult Edit(UserEditVm model)
+        {
+            try
+            {
+                if (_service.IsValidEmailAddress(model.Email))
                 {
                     _service.EditUser(model);
                     return RedirectToAction("Index");
                 }
                 return View(model);
-            } catch {
+            }
+            catch
+            {
                 return View(model);
             }
         }
@@ -83,7 +85,7 @@ namespace Bs.Calendar.Mvc.Controllers
             {
                 return HttpNotFound();
             }
-            return View(new UserEditVm(user.Id, user.FirstName, user.LastName, user.Email, user.Role));
+            return View(new UserEditVm(user));
         }
 
         [HttpPost]
@@ -97,7 +99,7 @@ namespace Bs.Calendar.Mvc.Controllers
             catch
             {
                 var user = _service.GetUser(model.UserId);
-                return View(new UserEditVm(user.Id, user.FirstName, user.LastName, user.Email, user.Role));
+                return View(new UserEditVm(user));
             }
         }
 
@@ -106,11 +108,12 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             var users = _service.GetAllUsers();
 
+#warning style
             if (string.IsNullOrEmpty(searchStr))
                 return PartialView("UserList",
-                    new UsersVm { Users = users});
+                    new UsersVm { Users = users });
 
-            var usersVm = new UsersVm {Users = _service.Find(users, searchStr)};
+            var usersVm = new UsersVm { Users = _service.Find(users, searchStr) };
             return PartialView("UserList", usersVm);
         }
     }

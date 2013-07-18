@@ -14,6 +14,15 @@ namespace Bs.Calendar.Mvc.ViewModels
             Role = role;
         }
 
+        public UserEditVm(User user)
+        {
+            UserId = user.Id;
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            Email = user.Email;
+            Role = user.Role;
+        }
+        
         public UserEditVm()
         {
         }
