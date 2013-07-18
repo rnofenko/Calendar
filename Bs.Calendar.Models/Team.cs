@@ -6,6 +6,6 @@ namespace Bs.Calendar.Models
     public class Team : BaseEntity
     {
         [StringLength(200)]
-        public string name { get; set; }
+        public string Name { get; set; }
     }
 }

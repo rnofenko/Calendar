@@ -1,0 +1,21 @@
+﻿@{
+    // Hope it's what it supposed to be for the first time
+}
+
+
+@model IEnumerable<Bs.Calendar.Models.Team>
+@{
+    ViewBag.Title = "Team Page";
+}
+
+<div class="container">
+    
+    <h1>Teams</h1>
+
+    @foreach (var team in Model)
+    {
+        <div class="row">
+            @team.Name
+        </div>
+    }
+</div>

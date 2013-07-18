@@ -7,6 +7,7 @@ namespace Bs.Calendar.DataAccess.Bases
     public class CalendarContext : DbContext
     {
         public IDbSet<User> Users { get; set; }
+        public IDbSet<Team> Teams { get; set; }
 
         public CalendarContext()
             : base(getConnectionName())

@@ -1,19 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using Bs.Calendar.DataAccess.Bases;
+using Bs.Calendar.Models;
 
 namespace Bs.Calendar.Mvc.Services
 {
-    public class TeamService : Controller
+    public class TeamService
     {
-        //
-        // GET: /TeamService/
 
-        public ActionResult Index()
+        public IEnumerable<Team> LoadTeams()
         {
-            return View();
+            using (var team = new RepoTeam())
+            {
+                var teams = team.Team.Load().ToList();
+
+                if (!teams.Any())
+                {
+                    team.Team.Save(new Team { Name = "Team #1" });
+                    teams = team.Team.Load().ToList();
+                }
+
+                return teams;
+            }
         }
 
     }
