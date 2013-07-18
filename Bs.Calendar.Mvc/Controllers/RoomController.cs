@@ -36,28 +36,42 @@ namespace Bs.Calendar.Mvc.Controllers
             return List();
         }
 
-        [HttpPost]
-        public ActionResult Add(RoomEditVm room)
-        {
-            return View("Index");
-        }
-
+        /// <summary>
+        /// Method is used both to create and to update room records
+        /// </summary>
         [HttpPost]
         public ActionResult Update(RoomEditVm room)
         {
-            return View("Index");
+            if (_service.IsValid(room))
+            {
+                _service.Save(room);
+            }
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult AddPage()
         {
             var room = _service.CreateViewModel();
 
-            return View("Room", room);
+            room.Extra.ViewTitle = "Add room";
+            room.Extra.CallAction = "Update";
+            room.Extra.CallController = "Room";
+
+            return View("EditRoom", room);
         }
 
-        public ActionResult UpdatePage(RoomEditVm room)
+        public ActionResult UpdatePage()
         {
-            return View("Room", room);
+            var room = _service.CreateViewModel();
+
+            room.Extra.ViewTitle = "Update room";
+            room.Extra.CallAction = "Update";
+            room.Extra.CallController = "Room";
+
+            room.Color = System.Drawing.Color.Blue;
+
+            return View("EditRoom", room);
         }
 
         //

@@ -1,0 +1,68 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.RoomEditVm
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts
+{
+    @Scripts.Render(
+            "~/bundles/jquery",
+            "~/bundles/roomjs")
+
+    @Styles.Render("~/Content/roomcss")
+}
+
+<h2>@Model.Extra.ViewTitle</h2>
+
+<form action="@string.Format("/{0}/{1}", Model.Extra.CallController, Model.Extra.CallAction)" method="post">
+    {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Room</legend>
+
+        <div>
+            @Html.LabelFor(room => room.Name)
+        </div>
+        <div>
+            @Html.EditorFor(room => room.Name)
+            @Html.ValidationMessageFor(room => room.Name)
+        </div>
+
+        <div>
+            @Html.LabelFor(room => room.NumberOfPlaces)
+        </div>
+        <div>
+            @Html.EditorFor(room => room.NumberOfPlaces)
+            @Html.ValidationMessageFor(room => room.NumberOfPlaces)
+        </div>
+
+        <div>
+            @Html.LabelFor(room => room.Color)
+        </div>
+        <div>
+            <table class="color_picker_table">
+                <tr>
+                    <td id="pick_color" class="color_picker_cell"></td>
+                </tr>
+            </table>
+            <div id="color_picker_container"></div>
+        </div>
+        <p>
+            <input type="submit" value="Update" />
+        </p>
+    </fieldset>
+</form>
+
+<div>
+    @Html.ActionLink("Accept", "List")
+    @Html.ActionLink("Back", "List")
+</div>
+
+<script>
+    @*alert("");
+    $("document").ready(function (){$("#pick_color").css("background-color", "rgb(255, 0, 0)"));
+        @string.Format("rgb({0},{1},{2})", Model.Color.R, Model.Color.G, Model.Color.B)*@
+</script>
