@@ -24,12 +24,22 @@ namespace Bs.Calendar.Mvc.Controllers
         // GET: /Room/
         public ActionResult List()
         {
-            return View(_service.List());
+            var rooms = _service.List();
+
+            return View("List", rooms);
         }
 
+        //
+        // GET: /Room/
         public ActionResult Index()
         {
-            return View(_service.CreateViewModel());
+            return List();
+        }
+
+        public ActionResult AddRoom()
+        {
+            var room = new RoomEditVm();
+            return View("Room", room);
         }
 
         //
