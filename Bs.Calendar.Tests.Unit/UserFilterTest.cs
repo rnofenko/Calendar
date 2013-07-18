@@ -1,10 +1,11 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Bs.Calendar.DataAccess;
+using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
+using Moq;
 using NUnit.Framework;
 
 namespace Bs.Calendar.Tests.Unit
@@ -30,10 +31,14 @@ namespace Bs.Calendar.Tests.Unit
         [Test]
         public void CanFilterByEmail()
         {
+            //arrange
+            var moq = new Mock<RepoUnit>();
+            moq.Setup(m => m.User).Returns(new UserRepository(null));
+
             //act
-            var userService = new UserService(null);
-            var filteredUsers = userService.Find(_users, "bondinis@gmail.com").ToList();
-            var result = filteredUsers[0];
+            var userService = new UserService(moq.Object);
+            var filteredUsers = userService.Find("bondinis@gmail.com");
+            var result = filteredUsers.Users.First();
 
             //assert
             Assert.AreEqual("bondinis@gmail.com", result.Email);
@@ -46,8 +51,8 @@ namespace Bs.Calendar.Tests.Unit
         {
             //act
             var userService = new UserService(null);
-            var filteredUsers = userService.Find(_users, "Jango Rossi").ToList();
-            var result = filteredUsers[0];
+            var filteredUsers = userService.Find("Jango Rossi");
+            var result = filteredUsers.Users.First();
 
             //assert
             Assert.AreEqual("jango@gmail.com", result.Email);
@@ -60,20 +65,20 @@ namespace Bs.Calendar.Tests.Unit
         {
             //act
             var userService = new UserService(null);
-            var filteredUsers = userService.Find(_users, "").ToList();
+            var filteredUsers = userService.Find("");
 
             //assert
-            Assert.AreEqual(3, filteredUsers.Count);
+            Assert.AreEqual(3, filteredUsers.Users.Count());
         }
 
         [Test]
         public void CanFilterByNonexistentUser() {
             //act
             var userService = new UserService(null);
-            var filteredUsers = userService.Find(_users, "Oleg Beloy").ToList();
+            var filteredUsers = userService.Find("Oleg Beloy");
 
             //assert
-            Assert.AreEqual(0, filteredUsers.Count);
+            Assert.AreEqual(0, filteredUsers.Users.Count());
         }
     }
 }

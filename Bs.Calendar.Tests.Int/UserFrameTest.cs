@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
@@ -41,8 +38,10 @@ namespace Bs.Calendar.Tests.Int
         [Test]
         public void CanDisplayUsers()
         {
+            //arrange
+            var usersController = Core.Resolver.Resolve<UsersController>();
+
             //act
-            var usersController = new UsersController(new UserService(_unit));
             var usersView = usersController.Index() as ViewResult;
             var users = (UsersVm)usersView.Model;
 
@@ -51,9 +50,12 @@ namespace Bs.Calendar.Tests.Int
         }
 
         [Test]
-        public void CanFilterUsers() {
+        public void CanFilterUsers() 
+        {
+            //arrange
+            var usersController = Core.Resolver.Resolve<UsersController>();
+
             //act
-            var usersController = new UsersController(new UserService(_unit));
             var usersView = usersController.Find("ccc@ddd.com") as PartialViewResult;
             
             var users = (UsersVm)usersView.Model;
