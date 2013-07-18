@@ -14,12 +14,6 @@ namespace Bs.Calendar.Models
         [StringLength(LENGTH_NAME)]
         public string LastName { get; set; }
 
-#warning remove
-        public string UserLogin
-        {
-            get { return Email; }
-        }
-
         public Roles Role { get; set; }
     }
 }

@@ -9,3 +9,8 @@ _NCrunch*/
 *.ncrunchsolution
 *.DotSettings.user
 .Cache
+.nupkg
+.nuspec
+.xml
+.pdb
+.dll
