@@ -187,8 +187,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Rooms\ColorPicker.css" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Content Include="Scripts\Rooms\ColorPicker.js" />
+    <Content Include="Scripts\Rooms\SetupEvents.js" />
     <Compile Include="Server\BundleConfig.cs" />
     <Compile Include="Server\DiMvc.cs" />
     <Compile Include="Server\FilterConfig.cs" />
@@ -335,13 +338,14 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Room\List.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Delete.cshtml" />
     <Content Include="Views\Users\UserList.cshtml" />
+    <Content Include="Views\Room\Room.cshtml" />
+    <Content Include="Views\Room\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

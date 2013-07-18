@@ -11,119 +11,50 @@ namespace Bs.Calendar.Mvc.Services
     /// </summary>
     public class RoomService
     {
-        #region fields and properties
+        private readonly RepoUnit _repoUnit;
 
-        private RoomEditVm _revRoom;
-
-        /// <summary>
-        /// Allows to get the edited room instance
-        /// </summary>
-        public RoomEditVm Room
+        public RoomService(RepoUnit repository)
         {
-            get { return _revRoom; }
-            protected set
-            {
-                if(value == null)
-                    throw new ArgumentNullException("reference to the edited instance cannot be null");
-
-                _revRoom = value;
-            }
+            _repoUnit = repository;
         }
 
-        #endregion
-
-        #region constructors
-
-        public RoomService()
-        {
-            Room = new RoomEditVm();
-        }
-
-        #endregion
-
-        #region methods
-
-        /// <summary>
-        /// Creates new instance if edited room view model
-        /// </summary>
-        public RoomEditVm CreateView()
+        public RoomEditVm CreateViewModel()
         {
             return new RoomEditVm();
         }
 
-        /// <summary>
-        /// Saves edited room instance in the database
-        /// </summary>
-        /// <returns>true if save operation succeded, false - if any error occured</returns>
-        public bool Save(RoomEditVm revRoom)
+        public void Save(RoomEditVm room)
         {
-            bool bResult = true;
+            _repoUnit.Room.Save(room);
+        }
 
-#region validating edited room fields' data
+        public RoomEditVm Load(int id)
+        {
+            return _repoUnit.Room.Get(id);
+        }
 
-            if (revRoom.NumberOfPlaces <= 0)
+        public void Delete(RoomEditVm room)
+        {
+            if(room == null)
             {
-                bResult = false;
-                return bResult;
+                throw new ArgumentNullException("reference to the deleted instance cannot be null");
             }
 
-#endregion
-
-            using (var ruRepository = new RepoUnit())
-            /* Connecting to the database and trying to save new record */
-                ruRepository.Room.Save(revRoom);
-
-            return bResult;
+            _repoUnit.Room.Delete(room);
         }
 
-        /// <summary>
-        /// Searches for the room record by its id in the database
-        /// </summary>
-        public RoomEditVm Load(int iId)
+        public void Delete(int id)
         {
-            RoomEditVm revRoom = null;
+            var room = _repoUnit.Room.Get(id);
 
-            using (var ruUnit = new RepoUnit())
-                revRoom = ruUnit.Room.Get(iId);
-
-            return revRoom;
-        }
-
-        /// <summary>
-        /// Removes edit room instance from database. Instance is searched by it's ID
-        /// </summary>
-        public void Delete(int iId)
-        {
-            using (var ruUnit = new RepoUnit())
-            /*
-             * Use this instead of just this.Load() for achieving some kind of performance
-             */
-            {
-                Room rRoom = ruUnit.Room.Get(iId);
-                
-                if(rRoom != null)
-                    this.Delete(rRoom);
-            }
-        }
-
-        /// <summary>
-        /// Removes edit room instance from database.
-        /// </summary>
-        public void Delete(RoomEditVm revRoom)
-        {
-            using (var ruUnit = new RepoUnit())
-                ruUnit.Room.Delete(revRoom);
+            Delete(room);
         }
 
         public RoomsVm List()
         {
-            using (var unit = new RepoUnit())
-            {
-                var rooms = unit.Room.Load().ToList();
-                return new RoomsVm() { Rooms = rooms };
-            }
-        }
+            var rooms = _repoUnit.Room.Load().ToList();
 
-        #endregion
+            return new RoomsVm() { Rooms = rooms };
+        }
     }
 }
