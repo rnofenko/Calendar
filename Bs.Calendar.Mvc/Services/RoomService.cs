@@ -28,6 +28,12 @@ namespace Bs.Calendar.Mvc.Services
             _repoUnit.Room.Save(room);
         }
 
+        public bool IsValid(RoomEditVm room)
+        {
+            return room.Name != string.Empty &&
+                   room.NumberOfPlaces > 0;
+        }
+
         public RoomEditVm Load(int id)
         {
             return _repoUnit.Room.Get(id);
