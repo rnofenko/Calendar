@@ -47,12 +47,12 @@ namespace Bs.Calendar.Tests.Int
                     Email = "newuser@gmail.com",
                     Role = Roles.Simple
                 };
-            
+
             // act
             Action action = () => _userService.SaveUser(new UserEditVm(userToAdd));
 
             // assert
-            action.ShouldThrow<WarningException>().WithMessage("User with email {0} already exists", userToAdd.Email);
+            action.ShouldThrow<WarningException>().WithMessage(string.Format("User with email {0} already exists", userToAdd.Email));
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace Bs.Calendar.Tests.Int
             var model = viewResult.Model as UserEditVm;
 
             // assert
-            model.ShouldBeEquivalentTo(new UserEditVm(user));
+            model.ShouldBeEquivalentTo(new UserEditVm(user));            
         }
 
         [Test]

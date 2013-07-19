@@ -48,11 +48,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FluentAssertions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsersControllerTest.cs" />
     <Compile Include="UserFrameTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bs.Calendar.Core\Bs.Calendar.Core.csproj">
+      <Project>{23e3a5fc-0ccb-4789-ad85-e2491ab288d7}</Project>
+      <Name>Bs.Calendar.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Bs.Calendar.DataAccess\Bs.Calendar.DataAccess.csproj">
       <Project>{67610384-762c-4176-861d-2189c4ae80bb}</Project>
       <Name>Bs.Calendar.DataAccess</Name>
