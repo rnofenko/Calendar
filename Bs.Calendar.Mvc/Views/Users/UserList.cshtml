@@ -14,9 +14,12 @@
         <td>@user.FirstName @user.LastName</td>      
         <td>@user.Email</td>
         <td>           
-            <button>@Html.ActionLink("Edit", "Edit", new {id = user.Id})</button>
-            <button>@Html.ActionLink("Delete", "Delete", new {id = user.Id})</button>
-            <button>@Html.ActionLink("Details", "Details", new {id = user.Id})</button>
+            @*<button>@Html.ActionLink("Edit", "Edit", new {id = user.Id})</button>*@
+            <i class="icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</i>
+            @*<button>@Html.ActionLink("Delete", "Delete", new {id = user.Id})</button>*@
+            <i class="icon-trash">@Html.ActionLink("Delete", "Delete", new {id = user.Id})</i>
+            @*<button>@Html.ActionLink("Details", "Details", new {id = user.Id})</button>*@
+            <i class="icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</i>
         </td>
     </tr>
 }

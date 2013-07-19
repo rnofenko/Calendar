@@ -4,16 +4,17 @@
     var isThereAnyUsers = Model.Users.Any();
 }
 
-<div id="container">
-    
-    <h1>Users</h1>
-    <button>@Html.ActionLink("Create", "Create")</button>
+<div class ="row" id="container">
+    <fieldset class="ten-columns">
+    <legend class="large"> Users </legend>
+    @*<h1>Users</h1>*@
+    <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
     @if (isThereAnyUsers)
     {
         using (Ajax.BeginForm("Find", new AjaxOptions {UpdateTargetId = "user-table"}))
-         {
-             <input type="text" name="searchStr" value="Find User"/>
-         }
+        {
+             <input class="text input" type="text" name="searchStr" placeholder="Find user"/>
+        }
 
         <table id="user-table">
             @Html.Partial("UserList", Model)
@@ -23,6 +24,7 @@
     {
         <p>There is no users yet...</p> 
     }
+        </fieldset>
 </div>
 
 @section Scripts {
