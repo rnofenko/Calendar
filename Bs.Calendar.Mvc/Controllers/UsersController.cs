@@ -37,12 +37,8 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             try
             {
-                if (_service.IsValidEmailAddress(model.Email))
-                {
-                    _service.SaveUser(model);
-                    return RedirectToAction("Index");
-                }
-                return View("Edit", model);
+                _service.SaveUser(model);
+                return RedirectToAction("Index");
             }
             catch
             {

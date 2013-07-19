@@ -31,6 +31,14 @@ namespace Bs.Calendar.Mvc.Services
 
         public void SaveUser(UserEditVm userModel)
         {
+            if (!IsValidEmailAddress(userModel.Email))
+            {
+                throw new WarningException("{0} - is not valid email address", userModel.Email);
+            }
+            if (_unit.User.Get(u => u.Email == userModel.Email) != null)
+            {
+                throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
+            }
             var user = new User
                 {
                     FirstName = userModel.FirstName,
