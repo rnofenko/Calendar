@@ -22,8 +22,16 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Details(int id)
         {
-            var user = _service.GetUser(id);
-            return View(new UserEditVm(user));
+            try
+            {
+                var user = _service.GetUser(id);
+                return View(new UserEditVm(user));
+            }
+            catch (WarningException exception)
+            {
+                ModelState.AddModelError("WrongId", exception.Message);
+                return RedirectToAction("Index");
+            }            
         }
 
         public ActionResult Create()
@@ -40,7 +48,7 @@ namespace Bs.Calendar.Mvc.Controllers
                 _service.SaveUser(model);
                 return RedirectToAction("Index");
             }
-            catch(WarningException exception)
+            catch (WarningException exception)
             {
                 ModelState.AddModelError("IncorrectEmail", exception.Message);
                 return View("Edit", model);
@@ -49,10 +57,16 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Edit(int id)
         {
-            var user = _service.GetUser(id);
-            return user != null
-                       ? (ActionResult)View(new UserEditVm(user))
-                       : HttpNotFound();
+            try
+            {
+                var user = _service.GetUser(id);
+                return View(new UserEditVm(user));
+            }
+            catch (WarningException exception)
+            {
+                ModelState.AddModelError("UserNotFound", exception.Message);
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpPost]
@@ -72,12 +86,16 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Delete(int id)
         {
-            var user = _service.GetUser(id);
-            if (user == null)
+            try
             {
-                return HttpNotFound();
+                var user = _service.GetUser(id);            
+                return View(new UserEditVm(user));
             }
-            return View(new UserEditVm(user));
+            catch (WarningException exception)
+            {
+                ModelState.AddModelError("UserNotFound", exception.Message);
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpPost]
@@ -99,12 +117,9 @@ namespace Bs.Calendar.Mvc.Controllers
         public ActionResult Find(string searchStr)
         {
             var users = _service.GetAllUsers();
-
-#warning style
             if (string.IsNullOrEmpty(searchStr))
                 return PartialView("UserList",
                     new UsersVm { Users = users });
-
             var usersVm = new UsersVm { Users = _service.Find(users, searchStr) };
             return PartialView("UserList", usersVm);
         }

@@ -21,7 +21,10 @@ namespace Bs.Calendar.Mvc.Services
 
         public User GetUser(int userId)
         {
-            return _unit.User.Get(userId);
+            var user = _unit.User.Get(userId);
+            if (user != null)
+                return user;
+            throw new WarningException(string.Format("User with id = {0} not found", userId));
         }
 
         public IEnumerable<User> GetAllUsers()
