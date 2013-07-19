@@ -22,9 +22,7 @@ namespace Bs.Calendar.Mvc.Services
         public User GetUser(int userId)
         {
             var user = _unit.User.Get(userId);
-            if (user != null)
-                return user;
-            throw new WarningException(string.Format("User with id = {0} not found", userId));
+            return user;
         }
 
         public IEnumerable<User> GetAllUsers()
@@ -59,11 +57,15 @@ namespace Bs.Calendar.Mvc.Services
 
         public void EditUser(UserEditVm userModel)
         {
+            var userToEdit = GetUser(userModel.UserId);
             if (!IsValidEmailAddress(userModel.Email))
             {
                 throw new WarningException("{0} - is not valid email address", userModel.Email);
             }
-            var userToEdit = GetUser(userModel.UserId);
+            if(userToEdit.Email != userModel.Email && _unit.User.Get(u => u.Email == userModel.Email) != null)
+            {
+                throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
+            }            
             userToEdit.FirstName = userModel.FirstName;
             userToEdit.LastName = userModel.LastName;
             userToEdit.Email = userModel.Email;

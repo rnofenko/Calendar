@@ -22,16 +22,8 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Details(int id)
         {
-            try
-            {
-                var user = _service.GetUser(id);
-                return View(new UserEditVm(user));
-            }
-            catch (WarningException exception)
-            {
-                ModelState.AddModelError("WrongId", exception.Message);
-                return RedirectToAction("Index");
-            }            
+            var user = _service.GetUser(id);
+            return user != null ? (ActionResult)View(new UserEditVm(user)) : HttpNotFound();
         }
 
         public ActionResult Create()
@@ -50,23 +42,15 @@ namespace Bs.Calendar.Mvc.Controllers
             }
             catch (WarningException exception)
             {
-                ModelState.AddModelError("IncorrectEmail", exception.Message);
+                ModelState.AddModelError("", exception.Message);
                 return View("Edit", model);
             }
         }
 
         public ActionResult Edit(int id)
         {
-            try
-            {
-                var user = _service.GetUser(id);
-                return View(new UserEditVm(user));
-            }
-            catch (WarningException exception)
-            {
-                ModelState.AddModelError("UserNotFound", exception.Message);
-                return RedirectToAction("Index");
-            }
+            var user = _service.GetUser(id);
+            return user != null ? (ActionResult)View(new UserEditVm(user)) : HttpNotFound();
         }
 
         [HttpPost]
@@ -79,7 +63,7 @@ namespace Bs.Calendar.Mvc.Controllers
             }
             catch (WarningException exception)
             {
-                ModelState.AddModelError("IncorrectEmail", exception.Message);
+                ModelState.AddModelError("", exception.Message);
                 return View(model);
             }
         }
@@ -88,7 +72,7 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             try
             {
-                var user = _service.GetUser(id);            
+                var user = _service.GetUser(id);
                 return View(new UserEditVm(user));
             }
             catch (WarningException exception)

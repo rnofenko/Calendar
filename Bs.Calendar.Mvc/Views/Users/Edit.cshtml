@@ -3,10 +3,12 @@
     
     var userRoles = (from object role in Enum.GetValues(typeof(Bs.Calendar.Models.Roles)) select role.ToString()).ToList();
     var userId = 0;
-    if (Model != null)
+    var btnName = "Create";
+    if (Model != null && Model.UserId != 0)
     {
         userId = Model.UserId;
         ViewBag.Title = "Edit current user";
+        btnName = "Update";
     }
     else
     {
@@ -57,7 +59,7 @@
         </div>
                 
         <p>
-            <input type="submit" value="Update" /> | @Html.ActionLink("Back to the list", "Index")
+            <input type="submit" value=@btnName /> | @Html.ActionLink("Back to the list", "Index")
         </p>
     </fieldset>
 }
