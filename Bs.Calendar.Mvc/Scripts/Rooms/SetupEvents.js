@@ -2,7 +2,8 @@
  *	Setup events and listeners
  */
 function SetupEvents() {
-    
+
+    var hiddenField = $("#Extra_Color");
     var dRootCell = $("#pick_color");	/* Cell used to display current color */
     var dColorContainer = $("#color_picker_container"); /* Container DOM element used to attach color picker control to */
 
@@ -25,7 +26,18 @@ function SetupEvents() {
 
     $(dColorContainer).hide();  /* Intially hide container for the color picker control */
 
+    dRootCell.css("background-color", hiddenField.attr("value"));
+
     /* Setup events */
+
+    $("#submit_button").click(function (event)
+    {
+        //event.preventDefault(); /* Disable default behaviour (don't submit data) */
+        
+        var color = dRootCell.css("background-color");
+
+        hiddenField.attr("value", new ColorUtilities().RgbToHex(color));
+    });
 
     var colorPickerContainerToggle = function () { dColorContainer.toggle(); };
 
@@ -33,4 +45,6 @@ function SetupEvents() {
     dColorContainer.hover(colorPickerContainerToggle);
 }
 
-$(document).ready(SetupEvents);
+var docElement = $(document);
+
+docElement.ready(SetupEvents);

@@ -24,6 +24,7 @@ namespace Bs.Calendar.Mvc
                         "~/Scripts/Users/user.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/roomjs").Include(
+                        "~/Scripts/Rooms/Utilities.js",
                         "~/Scripts/Rooms/ColorPicker.js",
                         "~/Scripts/Rooms/SetupEvents.js"));
 

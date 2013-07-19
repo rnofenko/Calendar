@@ -1,0 +1,70 @@
+﻿@using System.Drawing
+@model Bs.Calendar.Mvc.ViewModels.RoomEditVm
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    string color = ColorTranslator.ToHtml(Model.Color);
+}
+
+@section Scripts
+{
+    @Scripts.Render(
+            "~/bundles/jquery",
+            "~/bundles/roomjs")
+
+    @Styles.Render("~/Content/roomcss")
+}
+
+<h2>@Model.Extra.ViewTitle</h2>
+
+@using (Html.BeginForm(
+    @Model.Extra.CallAction,
+    @Model.Extra.CallController,
+    FormMethod.Post,
+    new {id = "input_form"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Room</legend>
+
+        <div>
+            @Html.LabelFor(room => room.Name)
+        </div>
+        <div>
+            @Html.EditorFor(room => room.Name)
+            @Html.ValidationMessageFor(room => room.Name)
+        </div>
+
+        <div>
+            @Html.LabelFor(room => room.NumberOfPlaces)
+        </div>
+        <div>
+            @Html.EditorFor(room => room.NumberOfPlaces)
+            @Html.ValidationMessageFor(room => room.NumberOfPlaces)
+        </div>
+
+        <div>
+            @Html.LabelFor(room => room.Color)
+        </div>
+        <input data-val="true" id="Extra_Color" name="Extra.Color" type="hidden" value="@ColorTranslator.ToHtml(Model.Color)">
+        <div>
+            <table class="color_picker_table">
+                <tr>
+                    <td id="pick_color" class="color_picker_cell"></td>
+                </tr>
+            </table>
+            <div id="color_picker_container"></div>
+        </div>
+        <p>
+            <input id="submit_button" type="submit" value="Update" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Accept", "List")
+    @Html.ActionLink("Back", "List")
+</div>
