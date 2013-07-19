@@ -6,13 +6,19 @@ namespace Bs.Calendar.DataAccess.Bases
     {
         private CalendarContext _context;
         private UserRepository _user;
+        private TeamRepository _team;
 
         public UserRepository User
         {
-            get { return _user ?? (_user = new UserRepository(getContext())); }
+            get { return _user ?? (_user = new UserRepository(GetContext())); }
         }
 
-        private CalendarContext getContext()
+        public TeamRepository Team
+        {
+            get { return _team ?? (_team = new TeamRepository(GetContext())); }
+        }
+
+        private CalendarContext GetContext()
         {
             return _context ?? (_context = new CalendarContext());
         }

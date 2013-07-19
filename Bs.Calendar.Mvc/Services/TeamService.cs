@@ -10,7 +10,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public IEnumerable<Team> LoadTeams()
         {
-            using (var team = new RepoTeam())
+            using (var team = new RepoUnit())
             {
                 var teams = team.Team.Load().ToList();
 
