@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
 using Bs.Calendar.DataAccess.Bases;
@@ -32,6 +34,25 @@ namespace Bs.Calendar.Tests.Int
                     Role = Roles.Simple
                 };
             _userService.SaveUser(new UserEditVm(_user));
+        }
+
+        [Test]
+        public void CanNotAddNewUserWithExistingInTheDbEmail()
+        {
+            // arrange
+            var userToAdd = new User
+                {
+                    FirstName = "Same",
+                    LastName = "Email",
+                    Email = "newuser@gmail.com",
+                    Role = Roles.Simple
+                };
+            
+            // act
+            Action action = () => _userService.SaveUser(new UserEditVm(userToAdd));
+
+            // assert
+            action.ShouldThrow<WarningException>().WithMessage("User with email {0} already exists", userToAdd.Email);
         }
 
         [Test]
