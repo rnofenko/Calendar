@@ -40,8 +40,9 @@ namespace Bs.Calendar.Mvc.Controllers
                 _service.SaveUser(model);
                 return RedirectToAction("Index");
             }
-            catch
+            catch(WarningException exception)
             {
+                ModelState.AddModelError("IncorrectEmail", exception.Message);
                 return View("Edit", model);
             }
         }
