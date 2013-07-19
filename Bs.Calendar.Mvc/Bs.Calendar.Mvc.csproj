@@ -190,6 +190,7 @@
     <Content Include="Scripts\Rooms\ColorPicker.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
     <Content Include="Scripts\Rooms\Utilities.js" />
+    <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Server\BundleConfig.cs" />
     <Compile Include="Server\DiMvc.cs" />
     <Compile Include="Server\FilterConfig.cs" />
@@ -209,6 +210,8 @@
     <Compile Include="ViewModels\UsersVm.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="ViewModels\UserEditVm.cs" />
+    <Compile Include="Services\TeamService.cs" />
+    <Compile Include="ViewModels\TeamsVm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
@@ -264,6 +267,7 @@
     <Content Include="Views\Users\UserList.cshtml" />
     <Content Include="Views\Room\EditRoom.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
+	<Content Include="Views\Team\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
