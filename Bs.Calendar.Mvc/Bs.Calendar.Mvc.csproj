@@ -188,6 +188,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Scripts\Rooms\ColorPicker.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
+    <Content Include="Scripts\Rooms\Utilities.js" />
     <Compile Include="Server\BundleConfig.cs" />
     <Compile Include="Server\DiMvc.cs" />
     <Compile Include="Server\FilterConfig.cs" />

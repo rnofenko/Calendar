@@ -69,6 +69,8 @@ namespace Bs.Calendar.Mvc.Controllers
             room.Extra.CallAction = "Update";
             room.Extra.CallController = "Room";
 
+            room.NumberOfPlaces = 11;
+            room.Name = "Initial name";
             room.Color = System.Drawing.Color.Blue;
 
             return View("EditRoom", room);

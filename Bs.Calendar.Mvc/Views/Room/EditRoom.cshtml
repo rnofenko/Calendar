@@ -1,7 +1,10 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.RoomEditVm
+﻿@using System.Drawing
+@model Bs.Calendar.Mvc.ViewModels.RoomEditVm
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    string color = ColorTranslator.ToHtml(Model.Color);
 }
 
 @section Scripts
@@ -15,8 +18,12 @@
 
 <h2>@Model.Extra.ViewTitle</h2>
 
-<form action="@string.Format("/{0}/{1}", Model.Extra.CallController, Model.Extra.CallAction)" method="post">
-    {
+@using (Html.BeginForm(
+    @Model.Extra.CallAction,
+    @Model.Extra.CallController,
+    FormMethod.Post,
+    new {id = "input_form"}))
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
@@ -42,6 +49,7 @@
         <div>
             @Html.LabelFor(room => room.Color)
         </div>
+        <input data-val="true" id="Extra_Color" name="Extra.Color" type="hidden" value="@ColorTranslator.ToHtml(Model.Color)">
         <div>
             <table class="color_picker_table">
                 <tr>
@@ -51,18 +59,12 @@
             <div id="color_picker_container"></div>
         </div>
         <p>
-            <input type="submit" value="Update" />
+            <input id="submit_button" type="submit" value="Update" />
         </p>
     </fieldset>
-</form>
+}
 
 <div>
     @Html.ActionLink("Accept", "List")
     @Html.ActionLink("Back", "List")
 </div>
-
-<script>
-    @*alert("");
-    $("document").ready(function (){$("#pick_color").css("background-color", "rgb(255, 0, 0)"));
-        @string.Format("rgb({0},{1},{2})", Model.Color.R, Model.Color.G, Model.Color.B)*@
-</script>

@@ -10,17 +10,11 @@ namespace Bs.Calendar.Mvc.ViewModels
     {
         public class RoomEditVmExtra
         {
-            /// <summary>
-            /// Title for the current working mode page
-            /// </summary>
             public string ViewTitle { get; set; }
             public string CallAction { get; set; }
             public string CallController { get; set; }
 
-            public RoomEditVmExtra()
-            {
-                ViewTitle = CallAction = CallController = string.Empty;
-            }
+            public string Color { get; set; }
         }
 
         /// <summary>
@@ -34,7 +28,8 @@ namespace Bs.Calendar.Mvc.ViewModels
         Required(ErrorMessage = "The name of the room must be specified"),
         Display(Name = "Name")]
         public string Name { get; set; }
-        [Display(Name = "Number of places")]
+        [Display(Name = "Number of places"),
+        Required(ErrorMessage = "This value should bespecified")]
         public int NumberOfPlaces { get; set; }
         [Display(Name = "Color")]
         public Color Color { get; set; }
