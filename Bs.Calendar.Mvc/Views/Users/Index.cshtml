@@ -1,21 +1,28 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm 
 @{
     ViewBag.Title = "User Page";
+    var isThereAnyUsers = Model.Users.Any();
 }
 
 <div id="container">
     
     <h1>Users</h1>
     <button>@Html.ActionLink("Create", "Create")</button>
-
-    @using (Ajax.BeginForm("Find", new AjaxOptions {UpdateTargetId = "user-table"})) 
+    @if (isThereAnyUsers)
     {
-        <input type="text" name="searchStr" value="Find User"/>
-    }
+        using (Ajax.BeginForm("Find", new AjaxOptions {UpdateTargetId = "user-table"}))
+         {
+             <input type="text" name="searchStr" value="Find User"/>
+         }
 
-    <table id="user-table">
-        @Html.Partial("UserList", Model)
-    </table>
+        <table id="user-table">
+            @Html.Partial("UserList", Model)
+        </table>
+    }
+    else
+    {
+        <p>There is no users yet...</p> 
+    }
 </div>
 
 @section Scripts {

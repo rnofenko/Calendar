@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Web.Mvc;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
@@ -62,15 +63,12 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             try
             {
-                if (_service.IsValidEmailAddress(model.Email))
-                {
-                    _service.EditUser(model);
-                    return RedirectToAction("Index");
-                }
-                return View(model);
+                _service.EditUser(model);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (WarningException exception)
             {
+                ModelState.AddModelError("IncorrectEmail", exception.Message);
                 return View(model);
             }
         }

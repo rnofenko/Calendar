@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
@@ -47,6 +48,10 @@ namespace Bs.Calendar.Mvc.Services
 
         public void EditUser(UserEditVm userModel)
         {
+            if (!IsValidEmailAddress(userModel.Email))
+            {
+                throw new WarningException("{0} - is not valid email address", userModel.Email);
+            }
             var userToEdit = GetUser(userModel.UserId);
             userToEdit.FirstName = userModel.FirstName;
             userToEdit.LastName = userModel.LastName;
