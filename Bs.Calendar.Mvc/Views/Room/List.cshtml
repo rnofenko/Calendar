@@ -1,1 +1,20 @@
-﻿
+﻿@model Bs.Calendar.Mvc.ViewModels.RoomsVm
+
+@foreach (var room in Model.Rooms)
+{
+<tr>
+    <td> @room.Name </td>
+    <td> @room.NumberOfPlaces </td>
+    <td> @room.Color </td>
+    <td>
+        <div class="medium default btn icon-left icon-pencil">
+            @Html.ActionLink("Edit", "UpdatePage", new { id = room.Id})
+        </div>
+    </td>
+    <td>
+        <div class="medium danger btn icon-left icon-trash">
+            @Html.ActionLink("Delete", "Delete", new {id = room.Id})
+        </div>
+    </td>
+</tr>
+}
