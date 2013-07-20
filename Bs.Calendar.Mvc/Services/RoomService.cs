@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Bs.Calendar.DataAccess.Bases;
-using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Services
@@ -56,11 +55,11 @@ namespace Bs.Calendar.Mvc.Services
             Delete(room);
         }
 
-        public RoomsVm List()
+        public RoomsVm GetAllRooms()
         {
             var rooms = _repoUnit.Room.Load().ToList();
 
-            return new RoomsVm() { Rooms = rooms };
+            return new RoomsVm { Rooms = rooms };
         }
     }
 }

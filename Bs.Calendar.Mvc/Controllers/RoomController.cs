@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-using System.Web.Mvc;
-using Bs.Calendar.DataAccess.Bases;
+﻿using System.Web.Mvc;
 using Bs.Calendar.Mvc.Services;
 
 using Bs.Calendar.Mvc.ViewModels;
@@ -22,18 +16,11 @@ namespace Bs.Calendar.Mvc.Controllers
 
         //
         // GET: /Room/
-        public ActionResult List()
-        {
-            var rooms = _service.List();
-
-            return View("List", rooms);
-        }
-
-        //
-        // GET: /Room/
         public ActionResult Index()
         {
-            return List();
+            var rooms = _service.GetAllRooms();
+
+            return View(rooms);
         }
 
         /// <summary>

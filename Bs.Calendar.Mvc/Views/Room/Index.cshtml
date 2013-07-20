@@ -1,6 +1,51 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model Bs.Calendar.Mvc.ViewModels.RoomsVm
+
+@{
+    ViewBag.Title = "Rooms List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="row">
+    <div class ="nine columns centered">
+        <table>            
+            <thead>
+                <tr>
+                    <th>Room name</th>
+                    <th>Number of places</th>
+                    <th>Color</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var room in Model.Rooms)
+                {
+                    <tr>
+                        <td> @room.Name </td>
+                        <td> @room.NumberOfPlaces </td>
+                        <td style="background: red;">
+                            <div style="width: 15px; height: 15px; background: green; vertical-align: central"/>
+                        </td>
+                        <td>
+                            <div class="medium default btn icon-left icon-pencil">
+                                @Html.ActionLink("Edit", "UpdatePage", new { id = room.Id})
+                            </div>
+                        </td>
+                        <td>
+                            <div class="medium danger btn icon-left icon-trash">
+                                @Html.ActionLink("Delete", "Delete", new {id = room.Id})
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table> 
+    </div>
+</div>
 
-<h2>Index</h2>
+<div class="row">
+    <div class = "nine columns centered">
+        <div class="medium primary btn icon-left icon-plus pull_right">
+            @Html.ActionLink("Add", "AddPage")
+        </div>
+    </div>
+</div>
