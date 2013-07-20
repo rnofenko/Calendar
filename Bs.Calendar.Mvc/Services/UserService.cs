@@ -108,7 +108,7 @@ namespace Bs.Calendar.Mvc.Services
         private IEnumerable<User> FindByName(IEnumerable<User> users, string searchStr)
         {
             var arrName = searchStr.Split();
-            var comparisonType = StringComparison.InvariantCulture;
+            var comparisonType = StringComparison.InvariantCultureIgnoreCase;
 
             var filteredUsers = users.Where(user =>
                 user.FirstName.Equals(arrName[0], comparisonType) ||
