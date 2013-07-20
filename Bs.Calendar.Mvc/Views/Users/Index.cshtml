@@ -2,25 +2,39 @@
 
 @{
     ViewBag.Title = "User Page";
+    var ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "user-table",
+        LoadingElementId = "loading"
+    };
 }
-
-<div class ="row" id="container">
+    
+<div class="row">
     <h2>Users</h2>
+</div>
     
+<div class="row">
     <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
-    
-    <div>
-        @using (Ajax.BeginForm("List", new AjaxOptions {UpdateTargetId = "user-table"}))
-        {
-            <div class="field three columns">
-                <input class="search input" type="text" name="searchStr" placeholder="Find user"/>
-            </div>
-        }
-    </div>
+</div>
+<br/>
 
-    <table id="user-table">
+<div class="row">
+    @using (Ajax.BeginForm("List", ajaxOptions))
+    {
+        <div class="field three columns">
+            <input class="search input" type="text" name="searchStr" placeholder="Find user"/>
+        </div>
+
+        <div class="three columns" id="loading" style="display: none">
+            Loading Data...
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div id="user-table">
         @Html.Partial("UserList", Model)
-    </table>
+    </div>
 </div>
 
 @section Scripts {

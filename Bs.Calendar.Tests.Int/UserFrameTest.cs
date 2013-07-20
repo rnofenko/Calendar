@@ -5,9 +5,12 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Controllers;
+using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Core;
 using NUnit.Framework;
+using FluentAssertions;
 
 namespace Bs.Calendar.Tests.Int
 {
@@ -15,14 +18,19 @@ namespace Bs.Calendar.Tests.Int
     class UserFrameTest
     {
         private RepoUnit _unit;
+        private UsersController _usersController;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
-            _unit = new RepoUnit();
+            DiMvc.Register();
+            Resolver.RegisterType<IUserRepository, UserRepository>();
 
+            _unit = new RepoUnit();
             _unit.User.Save(new User {Email = "aaa@bbb.com", FirstName = "aaa", LastName = "bbb"});
             _unit.User.Save(new User { Email = "ccc@ddd.com", FirstName = "ccc", LastName = "ddd" });
+
+            _usersController = new UsersController(new UserService(_unit));
         }
 
         [TestFixtureTearDown]
@@ -37,35 +45,26 @@ namespace Bs.Calendar.Tests.Int
         }
 
         [Test]
-        public void CanDisplayUsers()
+        public void Can_Provide_Users()
         {
-            //arrange
-            var usersController = Core.Resolver.Resolve<UsersController>();
-
             //act
-            var usersView = usersController.Index() as ViewResult;
-            var users = (UsersVm)usersView.Model;
+            var usersView = _usersController.Index() as ViewResult;
+            var users = usersView.Model as UsersVm;
 
             //assert
-            Assert.GreaterOrEqual(users.Users.Count(), 2);
+            users.Users.Count().Should().BeGreaterOrEqualTo(2);
         }
 
         [Test]
-        public void CanFilterUsers() 
+        public void Can_Search_Users() 
         {
-            //arrange
-            var usersController = Core.Resolver.Resolve<UsersController>();
-
             //act
-            var usersView = usersController.List("ccc@ddd.com") as PartialViewResult;
-            
-            var users = (UsersVm)usersView.Model;
+            var usersView = _usersController.List("ccc@ddd.com") as PartialViewResult;         
+            var users = usersView.Model as UsersVm;
             var user = users.Users.First();
 
             //assert
-            Assert.AreEqual("ccc@ddd.com", user.Email);
-            Assert.AreEqual("ccc", user.FirstName);
-            Assert.AreEqual("ddd", user.LastName);
+            user.Email.ShouldBeEquivalentTo("ccc@ddd.com");
         }
     }
 }

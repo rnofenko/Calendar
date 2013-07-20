@@ -5,5 +5,6 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
 {
     public class FakeUserRepository : FakeBaseRepository<User>, IUserRepository
     {
+
     }
 }
