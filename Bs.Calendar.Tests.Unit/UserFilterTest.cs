@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
-using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
+using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
-using Moq;
+using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Tests.Unit.FakeObjects;
 using NUnit.Framework;
+using FluentAssertions;
 
 namespace Bs.Calendar.Tests.Unit
 {
@@ -17,6 +20,9 @@ namespace Bs.Calendar.Tests.Unit
         [TestFixtureSetUp]
         public void Setup()
         {
+            DiMvc.Register();
+            Resolver.RegisterType<IUserRepository, FakeUserRepository>();
+
             //arrange
             _users = new List<User>
             {
@@ -26,6 +32,24 @@ namespace Bs.Calendar.Tests.Unit
             };
         }
         
+        [Test]
+        public void Find_should_return_one_user_When_filter_has_email()
+        {
+            const string EMAIL = "my@mail.com";
+            const string NAME = "myname";
+
+            var service = Resolver.Resolve<UserService>();
+            service.SaveUser(new UserEditVm {Email = "12345@mail.com", FirstName = "dfsdfds"});
+            service.SaveUser(new UserEditVm {Email = EMAIL, FirstName = NAME});
+            service.SaveUser(new UserEditVm {Email = "423523@mail.com", FirstName = "fdgfdgfdgdfgdf"});
+
+            var user = service.Find(EMAIL);
+
+            user.Should().NotBeNull();
+            user.Users.Count().Should().Be(1);
+            user.Users.First().Email.Should().Be(EMAIL);
+            user.Users.First().FirstName.Should().Be(NAME);
+        }
 
         [Test]
         public void CanFilterByEmail()
