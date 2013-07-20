@@ -186,6 +186,8 @@
     <Content Include="Content\ColorPicker.css" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Content Include="Content\css\gumby.css" />
+    <Content Include="Content\css\gumby2.css" />
     <Content Include="Content\gumby.css" />
     <Content Include="Scripts\Rooms\ColorPicker.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
@@ -216,6 +218,9 @@
   <ItemGroup>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Content\fonts\icons\entypo.eot" />
+    <Content Include="Content\fonts\icons\entypo.ttf" />
+    <Content Include="Content\fonts\icons\entypo.woff" />
     <None Include="Scripts\jquery-2.0.2.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.2.js" />
     <Content Include="Scripts\jquery-2.0.2.min.js" />
@@ -267,7 +272,7 @@
     <Content Include="Views\Users\UserList.cshtml" />
     <Content Include="Views\Room\EditRoom.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
-	<Content Include="Views\Team\Index.cshtml" />
+    <Content Include="Views\Team\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

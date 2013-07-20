@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FluentAssertions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsersControllerTest.cs" />
     <Compile Include="UserFrameTest.cs" />
