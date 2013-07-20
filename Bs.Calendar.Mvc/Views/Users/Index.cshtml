@@ -1,33 +1,28 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm 
+
 @{
     ViewBag.Title = "User Page";
-    var isThereAnyUsers = Model.Users.Any();
 }
 
 <div class ="row" id="container">
-    <fieldset class="ten-columns">
-    <legend class="large"> Users </legend>
-    @*<h1>Users</h1>*@
+    <h2>Users</h2>
+    
     <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
-    @if (isThereAnyUsers)
-    {
-        using (Ajax.BeginForm("List", new AjaxOptions {UpdateTargetId = "user-table"}))
+    
+    <div>
+        @using (Ajax.BeginForm("List", new AjaxOptions {UpdateTargetId = "user-table"}))
         {
-             <input class="text input" type="text" name="searchStr" placeholder="Find user"/>
+            <div class="field three columns">
+                <input class="search input" type="text" name="searchStr" placeholder="Find user"/>
+            </div>
         }
+    </div>
 
-        <table id="user-table">
-            @Html.Partial("UserList", Model)
-        </table>
-    }
-    else
-    {
-        <p>There is no users yet...</p> 
-    }
-        </fieldset>
+    <table id="user-table">
+        @Html.Partial("UserList", Model)
+    </table>
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryajax")
-    @Scripts.Render("~/bundles/jqueryuser")
 }
