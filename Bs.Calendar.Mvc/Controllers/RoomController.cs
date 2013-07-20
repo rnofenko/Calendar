@@ -37,50 +37,51 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         /// <summary>
-        /// Method is used both to create and to update room records
+        /// Action is used both to create and to edit room records
         /// </summary>
-        [HttpPost]
-        public ActionResult Update(RoomEditVm room)
+        [HttpPost,
+        ValidateAntiForgeryToken]
+        public ActionResult Edit(RoomEditVm room)
         {
-            if (_service.IsValid(room))
+            if (ModelState.IsValid && _service.IsValid(room))
             {
                 _service.Save(room);
+                return RedirectToAction("Edit", room.Id);
             }
-
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult AddPage()
-        {
-            var room = _service.CreateViewModel();
-
-            room.Extra.ViewTitle = "Add room";
-            room.Extra.CallAction = "Update";
-            room.Extra.CallController = "Room";
 
             return View("EditRoom", room);
         }
 
-        public ActionResult UpdatePage()
+        public ActionResult Create()
         {
-            var room = _service.CreateViewModel();
+            var room = _service.CreateViewModel(new RoomEditVm.RoomEditVmExtra()
+            {
+                ViewTitle = "Create room",
+                CallAction = "Edit",
+                CallController = "Room"
+            });
 
-            room.Extra.ViewTitle = "Update room";
-            room.Extra.CallAction = "Update";
-            room.Extra.CallController = "Room";
+            return View("EditRoom", room);
+        }
 
-            room.NumberOfPlaces = 11;
-            room.Name = "Initial name";
-            room.Color = System.Drawing.Color.Blue;
+        public ActionResult Edit(int id)
+        {
+            var room = _service.Load(id);
+            room.Extra = new RoomEditVm.RoomEditVmExtra()
+             {
+                 ViewTitle = "Edit room",
+                 CallAction = "Edit",
+                 CallController = "Room"
+             };
 
             return View("EditRoom", room);
         }
 
         //
         // GET: /Room/Save
-        public ActionResult Save(RoomEditVm revView)
+        public ActionResult Save(RoomEditVm roomViewModel)
         {
-            _service.Save(revView);
+            _service.Save(roomViewModel);
 
             return View("Index");
         }

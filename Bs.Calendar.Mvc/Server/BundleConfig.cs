@@ -10,8 +10,6 @@ namespace Bs.Calendar.Mvc.Server
                 "~/Scripts/jquery-{version}.js"));
 
             var scripts = new Bundle("~/Scripts/all", new JsMinify());
-            scripts.Include("~/Scripts/Rooms/Utilities.js");
-            scripts.Include("~/Scripts/Rooms/ColorPicker.js");
             scripts.Include("~/Scripts/Rooms/SetupEvents.js");
 
             scripts.Include("~/Scripts/Users/user.js");
@@ -19,7 +17,7 @@ namespace Bs.Calendar.Mvc.Server
 
             var css = new Bundle("~/Content/css", new CssMinify());
             css.Include("~/Content/gumby.css");
-            css.Include("~/Content/ColorPicker.css");
+            css.Include("~/Content/Rooms/ColorPicker.css");
             BundleTable.Bundles.Add(css);
         }
     }

@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Bs.Calendar.DataAccess.Bases;
-using Bs.Calendar.Models;
+using Bs.Calendar.Models.Bases;
 using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Services
 {
-    /// <summary>
-    /// Class used by the RoomController class for edit room management
-    /// </summary>
     public class RoomService
     {
         private readonly RepoUnit _repoUnit;
@@ -23,6 +20,14 @@ namespace Bs.Calendar.Mvc.Services
             return new RoomEditVm();
         }
 
+        public RoomEditVm CreateViewModel(RoomEditVm.RoomEditVmExtra extraInfo)
+        {
+            var roomViewModel = CreateViewModel();
+            roomViewModel.Extra = extraInfo;
+
+            return roomViewModel;
+        }
+
         public void Save(RoomEditVm room)
         {
             _repoUnit.Room.Save(room);
@@ -31,7 +36,9 @@ namespace Bs.Calendar.Mvc.Services
         public bool IsValid(RoomEditVm room)
         {
             return room.Name != string.Empty &&
-                   room.NumberOfPlaces > 0;
+                   room.NumberOfPlaces > 0 &&
+                   room.Color >= BaseEntity.MIN_COLOR_VALUE &&
+                   room.Color < BaseEntity.MAX_COLOR_VALUE;
         }
 
         public RoomEditVm Load(int id)
@@ -41,7 +48,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public void Delete(RoomEditVm room)
         {
-            if(room == null)
+            if (room == null)
             {
                 throw new ArgumentNullException("reference to the deleted instance cannot be null");
             }
@@ -53,7 +60,12 @@ namespace Bs.Calendar.Mvc.Services
         {
             var room = _repoUnit.Room.Get(id);
 
-            Delete(room);
+            if(room == null)
+            {
+                throw new ArgumentNullException("reference to the deleted instance cannot be null");
+            }
+
+            _repoUnit.Room.Delete(room);
         }
 
         public RoomsVm List()

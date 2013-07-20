@@ -183,13 +183,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\ColorPicker.css" />
+    <Content Include="Content\Rooms\ColorPicker.css" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Content\gumby.css" />
-    <Content Include="Scripts\Rooms\ColorPicker.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
-    <Content Include="Scripts\Rooms\Utilities.js" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Server\BundleConfig.cs" />
     <Compile Include="Server\DiMvc.cs" />
@@ -265,9 +263,9 @@
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Delete.cshtml" />
     <Content Include="Views\Users\UserList.cshtml" />
-    <Content Include="Views\Room\EditRoom.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
-	<Content Include="Views\Team\Index.cshtml" />
+    <Content Include="Views\Team\Index.cshtml" />
+    <Content Include="Views\Room\EditRoom.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
