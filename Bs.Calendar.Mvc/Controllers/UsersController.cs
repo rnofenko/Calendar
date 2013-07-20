@@ -98,7 +98,7 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Find(string searchStr)
+        public ActionResult List(string searchStr)
         {
             return PartialView("UserList", _service.Find(searchStr));
         }

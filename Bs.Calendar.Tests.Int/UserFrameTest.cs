@@ -56,7 +56,7 @@ namespace Bs.Calendar.Tests.Int
             var usersController = Core.Resolver.Resolve<UsersController>();
 
             //act
-            var usersView = usersController.Find("ccc@ddd.com") as PartialViewResult;
+            var usersView = usersController.List("ccc@ddd.com") as PartialViewResult;
             
             var users = (UsersVm)usersView.Model;
             var user = users.Users.First();

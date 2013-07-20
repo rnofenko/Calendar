@@ -11,7 +11,7 @@
     <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
     @if (isThereAnyUsers)
     {
-        using (Ajax.BeginForm("Find", new AjaxOptions {UpdateTargetId = "user-table"}))
+        using (Ajax.BeginForm("List", new AjaxOptions {UpdateTargetId = "user-table"}))
         {
              <input class="text input" type="text" name="searchStr" placeholder="Find user"/>
         }
