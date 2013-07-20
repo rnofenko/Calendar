@@ -1,4 +1,4 @@
-﻿using System.Web.Mvc;
+using System.Web.Mvc;
 using Bs.Calendar.Mvc.Services;
 
 using Bs.Calendar.Mvc.ViewModels;

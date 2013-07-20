@@ -86,41 +86,42 @@ namespace Bs.Calendar.Mvc.Services
             }
         }
 
-        public IEnumerable<User> Find(IEnumerable<User> users, string searchStr)
+        public UsersVm Find(string searchStr)
         {
             //Delete extra whitespaces
             searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ");
 
+            var users = _unit.User.Load().AsEnumerable();
             if (searchStr.Contains('@') && IsValidEmailAddress(searchStr))
             {
-                users = FindByEmail(users, searchStr);
-            }
+                users = users.Where(user => user.Email.Equals(
+                              searchStr, StringComparison.InvariantCulture));
+            } 
             else if (searchStr.Length != 0)
             {
                 users = FindByName(users, searchStr);
             }
 
-            return users.ToList();
+            return new UsersVm {Users = users.ToList()};
         }
 
         private IEnumerable<User> FindByName(IEnumerable<User> users, string searchStr)
         {
             var arrName = searchStr.Split();
+            var comparisonType = StringComparison.InvariantCulture;
 
-            var filteredUsers = users.Where(
-                user => user.FirstName.Equals(arrName[0], StringComparison.InvariantCulture));
+            var filteredUsers = users.Where(user =>
+                user.FirstName.Equals(arrName[0], comparisonType) ||
+                user.LastName.Equals(arrName[0], comparisonType));
 
             if (arrName.Length == 2)
-                filteredUsers = filteredUsers.Where(
-                    user => user.LastName.Equals(arrName[1], StringComparison.InvariantCulture));
+            {
+                filteredUsers = filteredUsers.Where(user =>
+                    user.FirstName.Equals(arrName[1], comparisonType) ||
+                    user.LastName.Equals(arrName[1], comparisonType));
+            }
 
             return filteredUsers;
-        }
-
-        private IEnumerable<User> FindByEmail(IEnumerable<User> users, string searchStr)
-        {
-            return users.Where(user => user.Email.Equals(
-                searchStr, StringComparison.InvariantCulture));
         }
     }
 }

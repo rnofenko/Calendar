@@ -100,12 +100,7 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpPost]
         public ActionResult Find(string searchStr)
         {
-            var users = _service.GetAllUsers();
-            if (string.IsNullOrEmpty(searchStr))
-                return PartialView("UserList",
-                    new UsersVm { Users = users });
-            var usersVm = new UsersVm { Users = _service.Find(users, searchStr) };
-            return PartialView("UserList", usersVm);
+            return PartialView("UserList", _service.Find(searchStr));
         }
     }
 }
