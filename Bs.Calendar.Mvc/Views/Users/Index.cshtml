@@ -13,22 +13,22 @@
     <h2>Users</h2>
 </div>
     
-<div class="row">
-    <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
-</div>
-<br/>
-
-<div class="row">
-    @using (Ajax.BeginForm("List", ajaxOptions))
-    {
-        <div class="field three columns">
-            <input class="search input" type="text" name="searchStr" placeholder="Find user"/>
+<div class="twelve colgrid">
+    <div class="row">
+        <div class="column">
+            <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
         </div>
+        @using (Ajax.BeginForm("List", ajaxOptions))
+        {
+            <div class="field push_seven three columns">
+                <input class="search input" type="text" name="searchStr" placeholder="Find user"/>
+            </div>
 
-        <div class="three columns" id="loading" style="display: none">
-            Loading Data...
-        </div>
-    }
+            <div class="three columns" id="loading" style="display: none">
+                Loading Data...
+            </div>
+        }
+    </div>
 </div>
 
 <div class="row">
