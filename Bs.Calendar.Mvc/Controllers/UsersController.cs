@@ -14,6 +14,12 @@ namespace Bs.Calendar.Mvc.Controllers
             _service = service;
         }
 
+        private ActionResult PassUserIntoTheView(string view, int id)
+        {
+            var user = _service.GetUser(id);
+            return user != null ? (ActionResult)View(view, new UserEditVm(user)) : HttpNotFound();
+        }
+
         public ActionResult Index()
         {
             var users = _service.GetAllUsers();
@@ -22,8 +28,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Details(int id)
         {
-            var user = _service.GetUser(id);
-            return user != null ? (ActionResult)View(new UserEditVm(user)) : HttpNotFound();
+            return PassUserIntoTheView("Details", id);
         }
 
         public ActionResult Create()
@@ -49,8 +54,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Edit(int id)
         {
-            var user = _service.GetUser(id);
-            return user != null ? (ActionResult)View(new UserEditVm(user)) : HttpNotFound();
+            return PassUserIntoTheView("Edit", id);
         }
 
         [HttpPost]
@@ -70,8 +74,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Delete(int id)
         {
-            var user = _service.GetUser(id);
-            return user != null ? (ActionResult)View(new UserEditVm(user)) : HttpNotFound();
+            return PassUserIntoTheView("Delete", id);
         }
 
         [HttpPost]
