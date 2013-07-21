@@ -263,7 +263,7 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Delete.cshtml" />
-    <Content Include="Views\Users\UserList.cshtml" />
+    <Content Include="Views\Users\List.cshtml" />
     <Content Include="Views\Room\EditRoom.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />

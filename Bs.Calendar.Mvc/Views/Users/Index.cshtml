@@ -1,11 +1,10 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm 
-
-@{
+﻿@{
     ViewBag.Title = "User Page";
     var ajaxOptions = new AjaxOptions
     {
         UpdateTargetId = "user-table",
-        LoadingElementId = "loading"
+        LoadingElementId = "loading",
+        HttpMethod = "Get"
     };
 }
     
@@ -33,7 +32,7 @@
 
 <div class="row">
     <div id="user-table">
-        @Html.Partial("UserList", Model)
+        @Html.Action("List")
     </div>
 </div>
 
