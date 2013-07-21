@@ -70,31 +70,15 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Delete(int id)
         {
-            try
-            {
-                var user = _service.GetUser(id);
-                return View(new UserEditVm(user));
-            }
-            catch (WarningException exception)
-            {
-                ModelState.AddModelError("UserNotFound", exception.Message);
-                return RedirectToAction("Index");
-            }
+            var user = _service.GetUser(id);
+            return user != null ? (ActionResult)View(new UserEditVm(user)) : HttpNotFound();
         }
 
         [HttpPost]
         public ActionResult Delete(UserEditVm model)
         {
-            try
-            {
-                _service.DeleteUser(model.UserId);
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                var user = _service.GetUser(model.UserId);
-                return View(new UserEditVm(user));
-            }
+            _service.DeleteUser(model.UserId);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
