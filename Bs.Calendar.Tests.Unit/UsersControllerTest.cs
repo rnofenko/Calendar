@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Bs.Calendar.DataAccess;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Controllers;
@@ -12,7 +9,7 @@ using Bs.Calendar.Mvc.ViewModels;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Bs.Calendar.Tests.Int
+namespace Bs.Calendar.Tests.Unit
 {
     [TestFixture]
     class UsersControllerTest
@@ -38,25 +35,6 @@ namespace Bs.Calendar.Tests.Int
         }
 
         [Test]
-        public void CanNotAddNewUserWithExistingInTheDbEmail()
-        {
-            // arrange
-            var userToAdd = new User
-                {
-                    FirstName = "Same",
-                    LastName = "Email",
-                    Email = "newuser@gmail.com",
-                    Role = Roles.Simple
-                };
-
-            // act
-            Action action = () => _userService.SaveUser(new UserEditVm(userToAdd));
-
-            // assert
-            action.ShouldThrow<WarningException>().WithMessage(string.Format("User with email {0} already exists", userToAdd.Email));
-        }
-
-        [Test]
         public void ShouldAddNewUserToTheDb()
         {
             // arrange             
@@ -73,7 +51,7 @@ namespace Bs.Calendar.Tests.Int
             _userService.SaveUser(new UserEditVm(user));
 
             // assert
-            _userService.GetAllUsers().Count().Should().Be(quantaty + 1);
+            Assert.AreEqual(_userService.GetAllUsers().Count(), quantaty + 1);
         }
 
         [Test]
@@ -87,7 +65,7 @@ namespace Bs.Calendar.Tests.Int
             var model = viewResult.Model as UserEditVm;
 
             // assert
-            model.ShouldBeEquivalentTo(new UserEditVm(user));            
+            model.ShouldBeEquivalentTo(new UserEditVm(user));
         }
 
         [Test]
@@ -111,7 +89,7 @@ namespace Bs.Calendar.Tests.Int
                     u.Email == user.Email &&
                     u.Role == user.Role
                 ));
-            savedUser.Id.Should().Be(user.Id);
+            savedUser.Id.ShouldBeEquivalentTo(user.Id);
         }
 
         [Test]
@@ -139,7 +117,7 @@ namespace Bs.Calendar.Tests.Int
             var viewResult = new UsersController(_userService).Delete(new UserEditVm(userToDelete));
 
             // assert
-            _unit.User.Get(userToDelete.Id).Should().Be(null);
+            Assert.IsNull(_unit.User.Get(userToDelete.Id));
         }
 
         [TestFixtureTearDown]

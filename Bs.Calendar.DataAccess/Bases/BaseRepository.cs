@@ -7,12 +7,7 @@ namespace Bs.Calendar.DataAccess.Bases
 {
     public class BaseRepository<T> : IRepository<T> where T : class, IEntityId
     {
-        private readonly CalendarContext _context;
-
-        protected BaseRepository(CalendarContext context)
-        {
-            _context = context;
-        }
+        private CalendarContext _context;
 
         public void Dispose()
         {
@@ -60,6 +55,11 @@ namespace Bs.Calendar.DataAccess.Bases
             }
 
             _context.SaveChanges();
+        }
+
+        public void SetContext(object context)
+        {
+            _context = (CalendarContext)context;
         }
     }
 }

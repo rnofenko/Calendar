@@ -1,6 +1,32 @@
-﻿@{
-    ViewBag.Title = "Index";
+@model Bs.Calendar.Mvc.ViewModels.RoomsVm
+
+@{
+    ViewBag.Title = "Rooms List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="row">
+    <div class ="nine columns centered">
+        <table id="rooms-table">
+            <thead>
+                <tr>
+                    <th>Room name</th>
+                    <th>Number of places</th>
+                    <th>Color</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @Html.Partial("List", Model)
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<h2>Index</h2>
+<div class="row">
+    <div class = "nine columns centered">
+        <div class="medium primary btn icon-left icon-plus pull_right">
+            @Html.ActionLink("Add", "AddPage")
+        </div>
+    </div>
+</div>
