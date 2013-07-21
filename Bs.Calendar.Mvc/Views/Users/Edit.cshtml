@@ -23,14 +23,17 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
-    <fieldset>
-        <legend>User</legend>
+    <div class="row">
+    <fieldset class="ten columns">
+        <legend>
+            <h2>User</h2>
+        </legend>
         
         @Html.Hidden("UserId", userId)
-        <br/>
-
+        
         <div>
             @Html.LabelFor(user => user.FirstName)
+            @*<label for=@Model.FirstName class="success label"></label>*@
         </div>
         <div>
             @Html.EditorFor(user => user.FirstName)
@@ -62,6 +65,7 @@
             <input type="submit" value=@btnName /> | @Html.ActionLink("Back to the list", "Index")
         </p>
     </fieldset>
+        </div>
 }
 
 @section Scripts {
