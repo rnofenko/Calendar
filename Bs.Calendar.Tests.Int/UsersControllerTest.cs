@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
+using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
-using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Controllers;
+using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Tests.Unit.FakeObjects;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -24,9 +26,6 @@ namespace Bs.Calendar.Tests.Int
         [TestFixtureSetUp]
         public void Setup()
         {
-            _unit = new RepoUnit();
-            _userService = new UserService(_unit);
-
             _user = new User
                 {
                     FirstName = "New",
@@ -34,6 +33,10 @@ namespace Bs.Calendar.Tests.Int
                     Email = "newuser@gmail.com",
                     Role = Roles.Simple
                 };
+            DiMvc.Register();
+            Resolver.RegisterType<IUserRepository, FakeUserRepository>();
+            _unit = Resolver.Resolve<RepoUnit>();
+            _userService = new UserService(_unit);
             _userService.SaveUser(new UserEditVm(_user));
         }
 
@@ -101,7 +104,7 @@ namespace Bs.Calendar.Tests.Int
             user.Role = Roles.None;
 
             // act
-            var viewResult = new UsersController(_userService).Edit(new UserEditVm(user));
+            new UsersController(_userService).Edit(new UserEditVm(user));
 
             // assert
             var savedUser = _unit.User.Get(u =>
@@ -136,7 +139,7 @@ namespace Bs.Calendar.Tests.Int
                 ));
 
             // act
-            var viewResult = new UsersController(_userService).Delete(new UserEditVm(userToDelete));
+            new UsersController(_userService).Delete(new UserEditVm(userToDelete));
 
             // assert
             _unit.User.Get(userToDelete.Id).Should().Be(null);
