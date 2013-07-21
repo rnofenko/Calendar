@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using Bs.Calendar.DataAccess;
-using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Controllers;
 using Bs.Calendar.Mvc.Server;
@@ -45,10 +44,10 @@ namespace Bs.Calendar.Tests.Int
         }
 
         [Test]
-        public void Can_Provide_Users()
+        public void Can_Provide_All_Users()
         {
             //act
-            var usersView = _usersController.Index() as ViewResult;
+            var usersView = _usersController.List(null) as PartialViewResult;
             var users = usersView.Model as UsersVm;
 
             //assert

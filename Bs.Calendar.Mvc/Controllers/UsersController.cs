@@ -22,8 +22,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Index()
         {
-            var users = _service.GetAllUsers();
-            return View(new UsersVm { Users = users });
+            return View();
         }
 
         public ActionResult Details(int id)
@@ -84,10 +83,10 @@ namespace Bs.Calendar.Mvc.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult List(string searchStr)
         {
-            return PartialView("UserList", _service.Find(searchStr));
+            return PartialView(_service.Find(searchStr));
         }
     }
 }

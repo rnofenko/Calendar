@@ -88,10 +88,16 @@ namespace Bs.Calendar.Mvc.Services
 
         public UsersVm Find(string searchStr)
         {
+            var users = _unit.User.Load().AsEnumerable();
+
+            if (string.IsNullOrEmpty(searchStr))
+            {
+                return new UsersVm {Users = users.ToList()};
+            }
+
             //Delete extra whitespaces
             searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ");
 
-            var users = _unit.User.Load().AsEnumerable();
             if (searchStr.Contains('@') && IsValidEmailAddress(searchStr))
             {
                 users = users.Where(user => user.Email.Equals(

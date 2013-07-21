@@ -5,7 +5,7 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
-using Bs.Calendar.Tests.Unit.FakeObjects;
+using Moq;
 using NUnit.Framework;
 using FluentAssertions;
 
@@ -27,18 +27,17 @@ namespace Bs.Calendar.Tests.Unit
                 new User {Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov"}
             };
 
-            DiMvc.Register();
-            Resolver.RegisterType<IUserRepository, FakeUserRepository>();
-            
-            var repoUnit = Resolver.Resolve<RepoUnit>();
-            _users.ForEach(user => repoUnit.User.Save(user));
+            var moq = new Mock<IUserRepository>();
+            moq.Setup(m => m.Load()).Returns(_users.AsQueryable());
 
-            _userService = new UserService(repoUnit);
+            DiMvc.Register();
+            Resolver.RegisterInstance<IUserRepository>(moq.Object);
+            _userService = Resolver.Resolve<UserService>();
         }
 
         
         [Test]
-        public void Find_should_return_one_user_When_filter_has_email()
+        public void Find_Should_Return_One_User_When_Filter_Has_Email()
         {
             //arrange
             var testUser = _users[0];
@@ -54,7 +53,7 @@ namespace Bs.Calendar.Tests.Unit
 
 
         [Test]
-        public void Find_return_user_When_filter_by_Name() 
+        public void Find_Return_User_When_Filter_By_Name() 
         {
             //arrange
             var testUser = _users[0];
@@ -69,7 +68,7 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
-        public void Find_return_many_users_When_filter_by_similar_Name() {
+        public void Find_Return_Many_Users_When_Filter_By_Similar_Name() {
             //arrange
             var testUser = _users[1];
 
@@ -84,7 +83,7 @@ namespace Bs.Calendar.Tests.Unit
 
 
         [Test]
-        public void Find_return_no_user_When_filter_by_Nonexistent_Email() {
+        public void Find_Return_No_User_When_Filter_By_Nonexistent_Email() {
             //arrange
             var testUser = new User {Email = "00000@gmail.com"};
 
@@ -97,7 +96,7 @@ namespace Bs.Calendar.Tests.Unit
 
 
         [Test]
-        public void Find_return_no_user_When_filter_by_Nonexistent_Name() {
+        public void Find_Return_No_User_When_Filter_By_Nonexistent_Name() {
             //arrange
             var testUser = new User { FirstName = "Alex" };
 
@@ -110,12 +109,23 @@ namespace Bs.Calendar.Tests.Unit
 
 
         [Test]
-        public void Find_return_all_users_When_filter_by_empty_String() {
+        public void Find_Return_All_Users_When_Filter_By_Empty_String() {
             //arrange
             var emptyString = string.Empty;
 
             //act
             var users = _userService.Find(emptyString).Users;
+            //assert
+            users.Count().ShouldBeEquivalentTo(_users.Count);
+        }
+
+        [Test]
+        public void Find_Return_All_Users_When_Filter_By_Null_String() {
+            //arrange
+            string nullString = null;
+
+            //act
+            var users = _userService.Find(nullString).Users;
             //assert
             users.Count().ShouldBeEquivalentTo(_users.Count);
         }
