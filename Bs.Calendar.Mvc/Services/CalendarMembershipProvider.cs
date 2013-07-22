@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Web.Security;
 using Bs.Calendar.DataAccess;
+using Bs.Calendar.Models;
 
 namespace Bs.Calendar.Mvc.Services
 {
     class CalendarMembershipProvider : MembershipProvider
     {
-        private readonly RepoUnit _unit;
-
-        public CalendarMembershipProvider(RepoUnit unit)
-        {
-            _unit = unit;
-        }
-
         #region 
 
         public override string ApplicationName
@@ -85,7 +79,12 @@ namespace Bs.Calendar.Mvc.Services
 
         public override MembershipUser GetUser(string email, bool userIsOnline)
         {
-            var user = _unit.User.Get(u => u.Email == email);
+            User user;
+
+            using (var unit = new RepoUnit())
+            {
+                user = unit.User.Get(u => u.Email == email);
+            }
 
             if (user != null)
             {
@@ -113,8 +112,11 @@ namespace Bs.Calendar.Mvc.Services
 
         public override string GetUserNameByEmail(string email)
         {
-            var user = _unit.User.Get(u => u.Email == email);
-            return string.Format("{0} {1}", user.FirstName, user.LastName);
+            using (var unit = new RepoUnit())
+            {
+                var user = unit.User.Get(u => u.Email == email);
+                return string.Format("{0} {1}", user.FirstName, user.LastName);
+            }
         }
 
         #region 
@@ -188,11 +190,14 @@ namespace Bs.Calendar.Mvc.Services
         public override bool ValidateUser(string userEmail, string password)
         {
             var crypto = new CryptoProvider();
-            var user = _unit.User.Get(
-                u => u.Email == userEmail &&
-                u.PasswordKeccakHash == crypto.GetKeccakHash(password) &&
-                u.PasswordSkeinHash == crypto.GetSkeinHash(password));
-            return user != null;
+            using (var unit = new RepoUnit())
+            {
+                var user = unit.User.Get(
+                    u => u.Email == userEmail &&
+                         u.PasswordKeccakHash == crypto.GetKeccakHash(password) &&
+                         u.PasswordSkeinHash == crypto.GetSkeinHash(password));
+                return user != null;
+            }
         }
     }
 }
