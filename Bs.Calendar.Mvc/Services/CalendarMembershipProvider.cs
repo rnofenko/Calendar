@@ -151,9 +151,14 @@ namespace Bs.Calendar.Mvc.Services
         }
 
         public override bool ValidateUser(string userEmail, string password)
-        {
-            var user = _unit.User.Get(u => u.Email == userEmail && u.Password == password);
+        {            
+            var user = _unit.User.Get(u => u.Email == userEmail && u.Password == GetHash(password));
             return user != null;
+        }
+
+        private string GetHash(string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }
