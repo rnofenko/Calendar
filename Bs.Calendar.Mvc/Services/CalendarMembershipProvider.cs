@@ -1,10 +1,18 @@
 ﻿using System;
 using System.Web.Security;
+using Bs.Calendar.DataAccess;
 
 namespace Bs.Calendar.Mvc.Services
 {
     class CalendarMembershipProvider : MembershipProvider 
     {
+        private readonly RepoUnit _unit;
+
+        public CalendarMembershipProvider(RepoUnit unit)
+        {
+            _unit = unit;
+        }
+
         public override string ApplicationName
         {
             get
@@ -142,9 +150,10 @@ namespace Bs.Calendar.Mvc.Services
             throw new NotImplementedException();
         }
 
-        public override bool ValidateUser(string username, string password)
+        public override bool ValidateUser(string userEmail, string password)
         {
-            throw new NotImplementedException();
+            var user = _unit.User.Get(u => u.Email == userEmail && u.Password == password);
+            return user != null;
         }
     }
 }
