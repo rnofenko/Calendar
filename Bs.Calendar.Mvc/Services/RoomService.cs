@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Bs.Calendar.DataAccess;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models.Bases;
 using Bs.Calendar.Mvc.ViewModels;
@@ -43,7 +44,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public RoomEditVm Load(int id)
         {
-            return _repoUnit.Room.Get(id);
+            return _repoUnit.Room.Get(id) ?? null;
         }
 
         public void Delete(RoomEditVm room)

@@ -18,9 +18,28 @@ namespace Bs.Calendar.Mvc.Controllers
         // GET: /Room/
         public ActionResult Index()
         {
-            var rooms = _service.GetAllRooms();
+            var rooms = _service.List();
 
             return View(rooms);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var room = _service.Load(id);
+
+            if(room == null)
+            {
+                return HttpNotFound();
+            }
+
+            room.Extra = new RoomEditVm.RoomEditVmExtra()
+            {
+                ViewTitle = "Edit room",
+                CallAction = "Edit",
+                CallController = "Room"
+            };
+
+            return View("EditRoom", room);
         }
 
         /// <summary>
@@ -47,19 +66,6 @@ namespace Bs.Calendar.Mvc.Controllers
                 CallAction = "Edit",
                 CallController = "Room"
             });
-
-            return View("EditRoom", room);
-        }
-
-        public ActionResult Edit(int id)
-        {
-            var room = _service.Load(id);
-            room.Extra = new RoomEditVm.RoomEditVmExtra()
-             {
-                 ViewTitle = "Edit room",
-                 CallAction = "Edit",
-                 CallController = "Room"
-             };
 
             return View("EditRoom", room);
         }
