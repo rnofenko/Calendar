@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.Security;
 using Bs.Calendar.DataAccess;
-using Bs.Calendar.Models;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -14,16 +13,12 @@ namespace Bs.Calendar.Mvc.Services
             _unit = unit;
         }
 
+        #region 
+
         public override string ApplicationName
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public override bool ChangePassword(string username, string oldPassword, string newPassword)
@@ -31,48 +26,17 @@ namespace Bs.Calendar.Mvc.Services
             throw new NotImplementedException();
         }
 
-        public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
+        public override bool ChangePasswordQuestionAndAnswer(string username, string password,
+                                                             string newPasswordQuestion, string newPasswordAnswer)
         {
             throw new NotImplementedException();
         }
 
-        public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
+        public override MembershipUser CreateUser(string username, string password, string email,
+                                                  string passwordQuestion, string passwordAnswer, bool isApproved,
+                                                  object providerUserKey, out MembershipCreateStatus status)
         {
-            var args = new ValidatePasswordEventArgs(username, password, true);
-            OnValidatingPassword(args);
-
-            if (args.Cancel)
-            {
-                status = MembershipCreateStatus.InvalidPassword;
-                return null;
-            }
-
-            if (RequiresUniqueEmail && GetUserNameByEmail(email) != string.Empty)
-            {
-                status = MembershipCreateStatus.DuplicateEmail;
-                return null;
-            }
-
-            var user = _unit.User.Get(u => u.Email == email);
-
-            if (user == null)
-            {
-                var userObj = new User
-                    {
-                        FirstName = username.Split(' ')[0],
-                        LastName = username.Split(' ')[1],
-                        Password = GetHash(password),
-                        Email = email
-                    };
-
-                _unit.User.Save(userObj);
-                status = MembershipCreateStatus.Success;
-
-                return GetUser(user.Email, true);
-            }
-            status = MembershipCreateStatus.DuplicateUserName;
-
-            return null;
+            throw new NotImplementedException();
         }
 
         public override bool DeleteUser(string username, bool deleteAllRelatedData)
@@ -90,12 +54,14 @@ namespace Bs.Calendar.Mvc.Services
             get { throw new NotImplementedException(); }
         }
 
-        public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
+        public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize,
+                                                                  out int totalRecords)
         {
             throw new NotImplementedException();
         }
 
-        public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
+        public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize,
+                                                                 out int totalRecords)
         {
             throw new NotImplementedException();
         }
@@ -114,6 +80,8 @@ namespace Bs.Calendar.Mvc.Services
         {
             throw new NotImplementedException();
         }
+
+        #endregion
 
         public override MembershipUser GetUser(string email, bool userIsOnline)
         {
@@ -149,6 +117,8 @@ namespace Bs.Calendar.Mvc.Services
             return string.Format("{0} {1}", user.FirstName, user.LastName);
         }
 
+        #region 
+
         public override int MaxInvalidPasswordAttempts
         {
             get { throw new NotImplementedException(); }
@@ -159,10 +129,14 @@ namespace Bs.Calendar.Mvc.Services
             get { throw new NotImplementedException(); }
         }
 
+        #endregion
+
         public override int MinRequiredPasswordLength
         {
             get { return 6; }
         }
+
+        #region 
 
         public override int PasswordAttemptWindow
         {
@@ -184,10 +158,15 @@ namespace Bs.Calendar.Mvc.Services
             get { throw new NotImplementedException(); }
         }
 
+        #endregion
+    
+
         public override bool RequiresUniqueEmail
         {
             get { return true; }
         }
+
+        #region
 
         public override string ResetPassword(string username, string answer)
         {
@@ -204,15 +183,16 @@ namespace Bs.Calendar.Mvc.Services
             throw new NotImplementedException();
         }
 
+        #endregion
+
         public override bool ValidateUser(string userEmail, string password)
         {
-            var user = _unit.User.Get(u => u.Email == userEmail && u.Password == GetHash(password));
+            var crypto = new CryptoProvider();
+            var user = _unit.User.Get(
+                u => u.Email == userEmail &&
+                u.PasswordKeccakHash == crypto.GetKeccakHash(password) &&
+                u.PasswordSkeinHash == crypto.GetSkeinHash(password));
             return user != null;
-        }
-
-        private string GetHash(string password)
-        {
-            throw new NotImplementedException();
         }
     }
 }

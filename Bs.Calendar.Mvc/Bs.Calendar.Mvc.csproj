@@ -295,6 +295,10 @@
       <Project>{9ebc5d85-6739-452c-ac72-f9377dae9cd6}</Project>
       <Name>Bs.Calendar.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Bs.Calendar.Rules\Bs.Calendar.Rules.csproj">
+      <Project>{1D5478A3-8104-4F73-AE7E-426BBCACBD71}</Project>
+      <Name>Bs.Calendar.Rules</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
