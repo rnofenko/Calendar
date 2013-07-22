@@ -1,0 +1,47 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.TeamEditVm
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts
+{
+    @Scripts.Render(
+            "~/bundles/jquery",
+            "~/bundles/roomjs")
+
+    @Styles.Render("~/Content/roomcss")
+}
+
+<h2>@Model.Extra.ViewTitle</h2>
+
+@using (Html.BeginForm(
+    @Model.Extra.CallAction,
+    @Model.Extra.CallController,
+    FormMethod.Post,
+    new {id = "input_form"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Team</legend>
+
+        <div>
+            @Html.LabelFor(team => team.Name)
+        </div>
+        <div>
+            @Html.EditorFor(team => team.Name)
+            @Html.ValidationMessageFor(team => team.Name)
+        </div>
+
+        <p>
+            <input id="submit_button" type="submit" value="Update" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Accept", "Index")
+    @Html.ActionLink("Back", "Index")
+</div>

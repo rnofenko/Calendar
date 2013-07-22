@@ -1,0 +1,18 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.TeamsVm
+
+@foreach (var team in Model.Teams)
+{
+<tr>
+    <td> @team.Name </td>
+    <td>
+        <div class="medium default btn icon-left icon-pencil">
+            @Html.ActionLink("Edit", "UpdatePage", new { id = team.Id})
+        </div>
+    </td>
+    <td>
+        <div class="medium danger btn icon-left icon-trash">
+            @Html.ActionLink("Delete", "Delete", new {id = team.Id})
+        </div>
+    </td>
+</tr>
+}
