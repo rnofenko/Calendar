@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Web.Security;
 using Bs.Calendar.DataAccess;
+using Bs.Calendar.Models;
 
 namespace Bs.Calendar.Mvc.Services
 {
-    class CalendarMembershipProvider : MembershipProvider 
+    class CalendarMembershipProvider : MembershipProvider
     {
         private readonly RepoUnit _unit;
 
@@ -37,7 +38,41 @@ namespace Bs.Calendar.Mvc.Services
 
         public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
         {
-            throw new NotImplementedException();
+            var args = new ValidatePasswordEventArgs(username, password, true);
+            OnValidatingPassword(args);
+
+            if (args.Cancel)
+            {
+                status = MembershipCreateStatus.InvalidPassword;
+                return null;
+            }
+
+            if (RequiresUniqueEmail && GetUserNameByEmail(email) != string.Empty)
+            {
+                status = MembershipCreateStatus.DuplicateEmail;
+                return null;
+            }
+
+            var user = _unit.User.Get(u => u.Email == email);
+
+            if (user == null)
+            {
+                var userObj = new User
+                    {
+                        FirstName = username.Split(' ')[0],
+                        LastName = username.Split(' ')[1],
+                        Password = GetHash(password),
+                        Email = email
+                    };
+
+                _unit.User.Save(userObj);
+                status = MembershipCreateStatus.Success;
+
+                return GetUser(user.Email, true);
+            }
+            status = MembershipCreateStatus.DuplicateUserName;
+
+            return null;
         }
 
         public override bool DeleteUser(string username, bool deleteAllRelatedData)
@@ -80,9 +115,27 @@ namespace Bs.Calendar.Mvc.Services
             throw new NotImplementedException();
         }
 
-        public override MembershipUser GetUser(string username, bool userIsOnline)
+        public override MembershipUser GetUser(string email, bool userIsOnline)
         {
-            throw new NotImplementedException();
+            var user = _unit.User.Get(u => u.Email == email);
+
+            if (user != null)
+            {
+                var memUser = new MembershipUser("CustomMembershipProvider",
+                    string.Format("{0} {1}", user.FirstName, user.LastName),
+                    user.Id, user.Email,
+                    string.Empty,
+                    string.Empty,
+                    true,
+                    false,
+                    DateTime.Now,
+                    DateTime.MinValue,
+                    DateTime.MinValue,
+                    DateTime.Now,
+                    DateTime.Now);
+                return memUser;
+            }
+            return null;
         }
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
@@ -92,7 +145,8 @@ namespace Bs.Calendar.Mvc.Services
 
         public override string GetUserNameByEmail(string email)
         {
-            throw new NotImplementedException();
+            var user = _unit.User.Get(u => u.Email == email);
+            return string.Format("{0} {1}", user.FirstName, user.LastName);
         }
 
         public override int MaxInvalidPasswordAttempts
@@ -107,7 +161,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public override int MinRequiredPasswordLength
         {
-            get { throw new NotImplementedException(); }
+            get { return 6; }
         }
 
         public override int PasswordAttemptWindow
@@ -132,7 +186,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public override bool RequiresUniqueEmail
         {
-            get { throw new NotImplementedException(); }
+            get { return true; }
         }
 
         public override string ResetPassword(string username, string answer)
@@ -151,7 +205,7 @@ namespace Bs.Calendar.Mvc.Services
         }
 
         public override bool ValidateUser(string userEmail, string password)
-        {            
+        {
             var user = _unit.User.Get(u => u.Email == userEmail && u.Password == GetHash(password));
             return user != null;
         }
