@@ -18,9 +18,13 @@ namespace Bs.Calendar.Mvc.Controllers
         // GET: /Room/
         public ActionResult Index()
         {
-            var rooms = _service.List();
+            return View();
+        }
 
-            return View(rooms);
+        [HttpGet]
+        public ActionResult List(string searchStr)
+        {
+            return PartialView(_service.Find(searchStr));
         }
 
         public ActionResult Edit(int id)

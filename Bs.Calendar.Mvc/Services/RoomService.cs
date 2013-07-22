@@ -69,11 +69,11 @@ namespace Bs.Calendar.Mvc.Services
             _repoUnit.Room.Delete(room);
         }
 
-        public RoomsVm List()
+        public RoomsVm Find(string searchStr)
         {
-            var rooms = _repoUnit.Room.Load().ToList();
+            var rooms = _repoUnit.Room.Load();
 
-            return new RoomsVm() { Rooms = rooms };
+            return new RoomsVm() { Rooms = rooms.ToList() };
         }
     }
 }
