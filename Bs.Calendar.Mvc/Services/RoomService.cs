@@ -63,7 +63,7 @@ namespace Bs.Calendar.Mvc.Services
 
             if(room == null)
             {
-                throw new ArgumentNullException("reference to the deleted instance cannot be null");
+                throw new ArgumentException("There is no record with such id in table");
             }
 
             _repoUnit.Room.Delete(room);

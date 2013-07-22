@@ -2,6 +2,7 @@ using System.Web.Mvc;
 using Bs.Calendar.Mvc.Services;
 
 using Bs.Calendar.Mvc.ViewModels;
+using System;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -23,6 +24,37 @@ namespace Bs.Calendar.Mvc.Controllers
             return View(rooms);
         }
 
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                _service.Delete(id);
+            }
+            catch(ArgumentException exception)
+            {
+                return HttpNotFound();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Action is used both to create and to edit room records
+        /// </summary>
+        [HttpPost,
+        ValidateAntiForgeryToken]
+        public ActionResult Edit(RoomEditVm room)
+        {
+            if (ModelState.IsValid && _service.IsValid(room))
+            {
+                _service.Save(room);
+                return RedirectToAction("Index");
+            }
+
+            return View("EditRoom", room);
+        }
+
+        [HttpGet]
         public ActionResult Edit(int id)
         {
             var room = _service.Load(id);
@@ -38,22 +70,6 @@ namespace Bs.Calendar.Mvc.Controllers
                 CallAction = "Edit",
                 CallController = "Room"
             };
-
-            return View("EditRoom", room);
-        }
-
-        /// <summary>
-        /// Action is used both to create and to edit room records
-        /// </summary>
-        [HttpPost,
-        ValidateAntiForgeryToken]
-        public ActionResult Edit(RoomEditVm room)
-        {
-            if (ModelState.IsValid && _service.IsValid(room))
-            {
-                _service.Save(room);
-                return RedirectToAction("Edit", room.Id);
-            }
 
             return View("EditRoom", room);
         }
