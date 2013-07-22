@@ -270,7 +270,6 @@
     <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Room\EditRoom.cshtml" />
-    <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
