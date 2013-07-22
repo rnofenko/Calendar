@@ -73,6 +73,14 @@ namespace Bs.Calendar.Mvc.Services
         {
             var rooms = _repoUnit.Room.Load();
 
+            if (!string.IsNullOrEmpty(searchStr))
+            {
+                searchStr = searchStr.ToLower();
+                rooms = rooms.Where(
+                    room => room.Name.ToLower().Contains(searchStr)
+                    );
+            }
+
             return new RoomsVm() { Rooms = rooms.ToList() };
         }
     }
