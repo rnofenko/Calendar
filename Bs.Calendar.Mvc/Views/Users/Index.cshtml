@@ -1,24 +1,41 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm 
-@{
+﻿@{
     ViewBag.Title = "User Page";
-}
-
-<div id="container">
-    
-    <h1>Users</h1>
-    <button>@Html.ActionLink("Create", "Create")</button>
-
-    @using (Ajax.BeginForm("Find", new AjaxOptions {UpdateTargetId = "user-table"})) 
+    var ajaxOptions = new AjaxOptions
     {
-        <input type="text" name="searchStr" value="Find User"/>
-    }
+        UpdateTargetId = "user-table",
+        LoadingElementId = "loading",
+        HttpMethod = "Get"
+    };
+}
+    
+<div class="row">
+    <h2>Users</h2>
+</div>
+    
+<div class="twelve colgrid">
+    <div class="row">
+        <div class="column">
+            <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
+        </div>
+        @using (Ajax.BeginForm("List", ajaxOptions))
+        {
+            <div class="field push_seven three columns">
+                <input class="search input" type="text" name="searchStr" placeholder="Find user"/>
+            </div>
 
-    <table id="user-table">
-        @Html.Partial("UserList", Model)
-    </table>
+            <div class="three columns" id="loading" style="display: none">
+                Loading Data...
+            </div>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div id="user-table">
+        @Html.Action("List")
+    </div>
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryajax")
-    @Scripts.Render("~/bundles/jqueryuser")
 }

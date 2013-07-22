@@ -1,79 +1,133 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Bs.Calendar.Core;
+using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
+using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
+using Moq;
 using NUnit.Framework;
+using FluentAssertions;
 
 namespace Bs.Calendar.Tests.Unit
 {
     [TestFixture] 
     class UserFilterTest
     {
+        private UserService _userService;
         private List<User> _users;
 
         [TestFixtureSetUp]
         public void Setup()
         {
-            //arrange
             _users = new List<User>
             {
-                new User {Email = "bondinis@gmail.com", FirstName = "Saveli", LastName = "Bondini"},
-                new User {Email = "jango@gmail.com", FirstName = "Jango", LastName = "Rossi"},
-                new User {Email = "kolo@gmail.com", FirstName = "Dima", LastName = "Prohorov"}
+                new User {Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini"},
+                new User {Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi"},
+                new User {Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov"}
             };
+
+            var moq = new Mock<IUserRepository>();
+            moq.Setup(m => m.Load()).Returns(_users.AsQueryable());
+
+            DiMvc.Register();
+            Resolver.RegisterInstance<IUserRepository>(moq.Object);
+            _userService = Resolver.Resolve<UserService>();
         }
+
         
-
         [Test]
-        public void CanFilterByEmail()
+        public void Find_Should_Return_One_User_When_Filter_Has_Email()
         {
+            //arrange
+            var testUser = _users[0];
+
             //act
-            var userService = new UserService(null);
-            var filteredUsers = userService.Find(_users, "bondinis@gmail.com").ToList();
-            var result = filteredUsers[0];
+            var users = _userService.Find(testUser.Email).Users;
 
             //assert
-            Assert.AreEqual("bondinis@gmail.com", result.Email);
-            Assert.AreEqual("Saveli", result.FirstName);
-            Assert.AreEqual("Bondini", result.LastName);
+            users.Count().ShouldBeEquivalentTo(1);
+            users.First().Email.ShouldBeEquivalentTo(testUser.Email);
+            users.First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
+        }
+
+
+        [Test]
+        public void Find_Return_User_When_Filter_By_Name() 
+        {
+            //arrange
+            var testUser = _users[0];
+
+            //act
+            var users = _userService.Find(testUser.FirstName).Users;
+
+            //assert
+            users.Count().ShouldBeEquivalentTo(1);
+            users.First().Email.ShouldBeEquivalentTo(testUser.Email);
+            users.First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
         }
 
         [Test]
-        public void CanFilterByName() 
-        {
+        public void Find_Return_Many_Users_When_Filter_By_Similar_Name() {
+            //arrange
+            var testUser = _users[1];
+
             //act
-            var userService = new UserService(null);
-            var filteredUsers = userService.Find(_users, "Jango Rossi").ToList();
-            var result = filteredUsers[0];
+            var users = _userService.Find(testUser.FirstName).Users;
 
             //assert
-            Assert.AreEqual("jango@gmail.com", result.Email);
-            Assert.AreEqual("Jango", result.FirstName);
-            Assert.AreEqual("Rossi", result.LastName);
+            users.Count().ShouldBeEquivalentTo(2);
+            users.First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
+            users.Skip(1).First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
+        }
+
+
+        [Test]
+        public void Find_Return_No_User_When_Filter_By_Nonexistent_Email() {
+            //arrange
+            var testUser = new User {Email = "00000@gmail.com"};
+
+            //act
+            var users = _userService.Find(testUser.Email).Users;
+
+            //assert
+            users.Count().ShouldBeEquivalentTo(0);
+        }
+
+
+        [Test]
+        public void Find_Return_No_User_When_Filter_By_Nonexistent_Name() {
+            //arrange
+            var testUser = new User { FirstName = "Alex" };
+
+            //act
+            var users = _userService.Find(testUser.FirstName).Users;
+
+            //assert
+            users.Count().ShouldBeEquivalentTo(0);
+        }
+
+
+        [Test]
+        public void Find_Return_All_Users_When_Filter_By_Empty_String() {
+            //arrange
+            var emptyString = string.Empty;
+
+            //act
+            var users = _userService.Find(emptyString).Users;
+            //assert
+            users.Count().ShouldBeEquivalentTo(_users.Count);
         }
 
         [Test]
-        public void CanFilterByEmptyString()
-        {
+        public void Find_Return_All_Users_When_Filter_By_Null_String() {
+            //arrange
+            string nullString = null;
+
             //act
-            var userService = new UserService(null);
-            var filteredUsers = userService.Find(_users, "").ToList();
-
+            var users = _userService.Find(nullString).Users;
             //assert
-            Assert.AreEqual(3, filteredUsers.Count);
-        }
-
-        [Test]
-        public void CanFilterByNonexistentUser() {
-            //act
-            var userService = new UserService(null);
-            var filteredUsers = userService.Find(_users, "Oleg Beloy").ToList();
-
-            //assert
-            Assert.AreEqual(0, filteredUsers.Count);
+            users.Count().ShouldBeEquivalentTo(_users.Count);
         }
     }
 }

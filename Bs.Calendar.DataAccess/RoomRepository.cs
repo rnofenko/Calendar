@@ -5,10 +5,5 @@ namespace Bs.Calendar.DataAccess
 {
     public class RoomRepository : BaseRepository<Room>
     {
-        public RoomRepository(CalendarContext context)
-            : base(context)
-        {
-
-        }
     }
 }

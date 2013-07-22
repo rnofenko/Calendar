@@ -1,0 +1,33 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm
+
+@if (!Model.Users.Any())
+{
+    <div class="danger alert three columns">Sorry, no such user!</div>
+}
+else {
+    <table>
+        <thead>
+            <tr>
+                @*<th>Id</th>*@
+                <th>Name</th>
+                <th>E-mail</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    @*<td>@user.Id</td>*@
+                    <td>@user.FirstName @user.LastName</td>      
+                    <td>@user.Email</td>
+                    <td>           
+                        <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
+                        <div class="medium default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>
+                        <div class="medium danger btn icon-right icon-trash">@Html.ActionLink("Delete", "Delete", new {id = user.Id})</div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -53,6 +53,10 @@
     <Compile Include="UserFrameTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bs.Calendar.Core\Bs.Calendar.Core.csproj">
+      <Project>{23e3a5fc-0ccb-4789-ad85-e2491ab288d7}</Project>
+      <Name>Bs.Calendar.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Bs.Calendar.DataAccess\Bs.Calendar.DataAccess.csproj">
       <Project>{67610384-762c-4176-861d-2189c4ae80bb}</Project>
       <Name>Bs.Calendar.DataAccess</Name>
@@ -64,6 +68,10 @@
     <ProjectReference Include="..\Bs.Calendar.Mvc\Bs.Calendar.Mvc.csproj">
       <Project>{2eecd851-ffb3-4c7e-ad69-ba824041377b}</Project>
       <Name>Bs.Calendar.Mvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bs.Calendar.Tests.Unit\Bs.Calendar.Tests.Unit.csproj">
+      <Project>{2C15FBA8-3995-4ACB-8286-68C9C06B7085}</Project>
+      <Name>Bs.Calendar.Tests.Unit</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
