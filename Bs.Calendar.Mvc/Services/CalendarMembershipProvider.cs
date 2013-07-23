@@ -2,10 +2,11 @@
 using System.Web.Security;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
+using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Services
 {
-    class CalendarMembershipProvider : MembershipProvider
+    public class CalendarMembershipProvider : MembershipProvider
     {
         #region 
 
@@ -195,7 +196,7 @@ namespace Bs.Calendar.Mvc.Services
                 var user = unit.User.Get(
                     u => u.Email == userEmail &&
                          u.PasswordKeccakHash == crypto.GetKeccakHash(password) &&
-                         u.PasswordSkeinHash == crypto.GetSkeinHash(password));
+                         u.PasswordMd5Hash == crypto.GetMd5Hash(password));
                 return user != null;
             }
         }
