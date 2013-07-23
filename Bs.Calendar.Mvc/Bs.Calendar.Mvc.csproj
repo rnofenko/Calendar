@@ -209,6 +209,7 @@
     <Compile Include="Services\CalendarRoleProvider.cs" />
     <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\RoomService.cs" />
+    <Compile Include="ViewModels\AccountVm.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />
     <Compile Include="ViewModels\UsersVm.cs" />

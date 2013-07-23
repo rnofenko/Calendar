@@ -25,6 +25,7 @@ namespace Bs.Calendar.Mvc.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Details(int id)
         {
             return PassUserIntoTheView("Details", id);
