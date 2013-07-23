@@ -1,18 +1,26 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Security;
+using Bs.Calendar.DataAccess;
 
 namespace Bs.Calendar.Mvc.Services
 {
-    public class CalendarRoleProvider : RoleProvider 
+    public class CalendarRoleProvider : RoleProvider
     {
-        public override bool IsUserInRole(string username, string roleName)
+        public override bool IsUserInRole(string email, string roleName)
         {
-            throw new NotImplementedException();
+            using (var unit = new RepoUnit())
+            {
+                return unit.User.Get(u => u.Email == email && u.Role.ToString() == roleName) != null;
+            }
         }
 
-        public override string[] GetRolesForUser(string username)
+        public override string[] GetRolesForUser(string email)
         {
-            throw new NotImplementedException();
+            using (var unit = new RepoUnit())
+            {
+                return new[] { unit.User.Get(u => u.Email == email).Role.ToString() };
+            }
         }
 
         public override void CreateRole(string roleName)
@@ -27,7 +35,8 @@ namespace Bs.Calendar.Mvc.Services
 
         public override bool RoleExists(string roleName)
         {
-            throw new NotImplementedException();
+            return (Enum.GetValues(typeof(Roles))
+                           .Cast<object>().Count(role => roleName == role.ToString())) != 0;
         }
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
