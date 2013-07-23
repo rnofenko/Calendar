@@ -8,8 +8,6 @@ namespace Bs.Calendar.Mvc.Services
 {
     public class CalendarMembershipProvider : MembershipProvider
     {
-        #region 
-
         public override string ApplicationName
         {
             get { throw new NotImplementedException(); }
@@ -76,8 +74,6 @@ namespace Bs.Calendar.Mvc.Services
             throw new NotImplementedException();
         }
 
-        #endregion
-
         public override MembershipUser GetUser(string email, bool userIsOnline)
         {
             User user;
@@ -119,9 +115,7 @@ namespace Bs.Calendar.Mvc.Services
                 return string.Format("{0} {1}", user.FirstName, user.LastName);
             }
         }
-
-        #region 
-
+        
         public override int MaxInvalidPasswordAttempts
         {
             get { throw new NotImplementedException(); }
@@ -132,14 +126,10 @@ namespace Bs.Calendar.Mvc.Services
             get { throw new NotImplementedException(); }
         }
 
-        #endregion
-
         public override int MinRequiredPasswordLength
         {
             get { return 6; }
         }
-
-        #region 
 
         public override int PasswordAttemptWindow
         {
@@ -161,15 +151,10 @@ namespace Bs.Calendar.Mvc.Services
             get { throw new NotImplementedException(); }
         }
 
-        #endregion
-    
-
         public override bool RequiresUniqueEmail
         {
             get { return true; }
         }
-
-        #region
 
         public override string ResetPassword(string username, string answer)
         {
@@ -186,17 +171,26 @@ namespace Bs.Calendar.Mvc.Services
             throw new NotImplementedException();
         }
 
-        #endregion
-
+        /// <summary>
+        /// Validate user.
+        /// </summary>
+        /// <param name="userEmail">User's email.</param>
+        /// <param name="password">User's password.</param>
+        /// <returns></returns>
         public override bool ValidateUser(string userEmail, string password)
         {
             var crypto = new CryptoProvider();
             using (var unit = new RepoUnit())
             {
+                var keccakHash = crypto.GetKeccakHash(password);
+                var md5Hash = crypto.GetMd5Hash(password);
+
+                //var user = unit.User.Get(1);
+
                 var user = unit.User.Get(
-                    u => u.Email == userEmail &&
-                         u.PasswordKeccakHash == crypto.GetKeccakHash(password) &&
-                         u.PasswordMd5Hash == crypto.GetMd5Hash(password));
+                    u => (u.Email == userEmail &&
+                         u.PasswordKeccakHash == keccakHash &&
+                         u.PasswordMd5Hash == md5Hash));
                 return user != null;
             }
         }

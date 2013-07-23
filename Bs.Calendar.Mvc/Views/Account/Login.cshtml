@@ -1,0 +1,23 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.AccountVm
+@{
+    ViewBag.Title = "Login";
+}
+
+@using(Html.BeginForm())
+{
+    Html.ValidationSummary(true);
+    
+    <div class="row">
+        <ul class="seven columns">
+            <li><h2>Login</h2></li>
+            <li class="field">
+                <input class="email input" type="email" name="Email" placeholder="Your email" /> @Html.ValidationMessageFor(model => model.Email)</li>
+            <li class="field">
+                <input class="password input" type="password" name="Password" placeholder="Your password" />@Html.ValidationMessageFor(model => model.Password)
+            </li>
+            <li>
+                <div class="medium primary btn"><input type="submit" value="Enter"/></div>
+            </li>
+        </ul>        
+    </div>    
+}
