@@ -1,0 +1,23 @@
+﻿.color_picker_cell
+{
+    width:  0px;
+    height: 17px;
+    cursor: pointer;
+
+    border: 1px solid black;
+}
+
+.color_picker_table
+{
+    border-spacing:0;
+    margin: 0;
+    padding: 0;
+    border-collapse:collapse;
+
+    background-color: #DDDDDD;
+}
+
+#color_picker_container
+{
+    position: fixed;
+}

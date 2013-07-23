@@ -3,11 +3,7 @@ using Bs.Calendar.Models;
 
 namespace Bs.Calendar.DataAccess
 {
-    public class UserRepository : BaseRepository<User>
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public UserRepository(CalendarContext context)
-            :base(context)
-        {
-        }
     }
 }

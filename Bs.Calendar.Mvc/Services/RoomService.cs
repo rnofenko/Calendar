@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Bs.Calendar.DataAccess;
 using Bs.Calendar.DataAccess.Bases;
-using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Services
@@ -28,6 +28,12 @@ namespace Bs.Calendar.Mvc.Services
             _repoUnit.Room.Save(room);
         }
 
+        public bool IsValid(RoomEditVm room)
+        {
+            return room.Name != string.Empty &&
+                   room.NumberOfPlaces > 0;
+        }
+
         public RoomEditVm Load(int id)
         {
             return _repoUnit.Room.Get(id);
@@ -50,11 +56,11 @@ namespace Bs.Calendar.Mvc.Services
             Delete(room);
         }
 
-        public RoomsVm List()
+        public RoomsVm GetAllRooms()
         {
             var rooms = _repoUnit.Room.Load().ToList();
 
-            return new RoomsVm() { Rooms = rooms };
+            return new RoomsVm { Rooms = rooms };
         }
     }
 }

@@ -1,0 +1,26 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm
+
+@if (!Model.Users.Any())
+{
+    <div class="danger alert three columns">Sorry, no such user!</div>
+}
+else {
+    <ul class="two_up tiles">
+        @foreach (var user in Model.Users)
+        {
+            <li class="row">
+                <div class="two columns">
+                    <a href="#"><img width="50" src="../../Images/photo.png"/></a>
+                </div>
+                <div class="ten columns">
+                    @user.FirstName @user.LastName
+                </div>
+                <div class="five columns">
+                    <div class="small default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
+                    <div class="small default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>
+                </div>
+            </li>
+            
+        }
+    </ul>
+}
