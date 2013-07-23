@@ -6,17 +6,26 @@
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
+        @RenderSection("styles", false)
     </head>
+
     <body>
-        <header>
-        </header>
-        <div>
+        <div class="page-wrapper">
+            @Html.Partial("Header")
+
+        
+            
             @RenderBody()
+            
+            
+            
+            <div class="page-buffer"></div>
         </div>
-        <footer>
-        </footer>
+
+        @Html.Partial("Footer")
 
         @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/Gumby")
         @Scripts.Render("~/Scripts/all")
         @RenderSection("scripts", required: false)
     </body>

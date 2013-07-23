@@ -188,7 +188,13 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Content\css\gumby.css" />
     <Content Include="Content\css\gumby2.css" />
+    <Content Include="Content\css\style.css" />
     <Content Include="Content\gumby.css" />
+    <Content Include="Content\Layout\layout.css" />
+    <Content Include="Content\User\user-edit.css" />
+    <Content Include="Content\User\user-view.css" />
+    <Content Include="Images\photo.png" />
+    <Content Include="Scripts\Gumby\gumby.min.js" />
     <Content Include="Scripts\Rooms\ColorPicker.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
     <Content Include="Scripts\Rooms\Utilities.js" />
@@ -272,6 +278,8 @@
     <Content Include="Views\Room\EditRoom.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
+    <Content Include="Views\Shared\Header.cshtml" />
+    <Content Include="Views\Shared\Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,31 @@
+﻿<header class="navbar" id="nav1">
+    <div class="row">
+        <div class="three columns">
+            <ul>
+                <li>
+                    @Html.ActionLink("BINARY LOGO", "Index", "Home")
+                </li>
+            </ul>
+        </div>
+        <div class="push_eight one column">
+            <ul>
+                <li>
+                    <a href="#">MENU</a>
+                    <div class="dropdown">
+                        <ul>
+                            <li>
+                                @Html.ActionLink("Users", "Index", "Users")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Room Manager", "Index", "Room")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Team Manager", "Index", "Team")
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
