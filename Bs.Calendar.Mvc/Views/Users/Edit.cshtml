@@ -1,18 +1,14 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.UserEditVm
 @{
-    var userRoles = (from object role in Enum.GetValues(typeof (Bs.Calendar.Models.Roles)) select role.ToString()).ToList();
+    var userRoles = (from object role in Enum.GetValues(typeof (Bs.Calendar.Models.Roles)) select role.ToString()).ToList();   
+    var btnName = Model == null ? "Create" : "Update";
     var userId = 0;
-    var btnName = "Create";
-    
-    if (Model != null && Model.UserId != 0)
-    {
+
+    if (Model != null && Model.UserId != 0) {
         userId = Model.UserId;
         ViewBag.Title = "Edit User";
-        btnName = "Update";
         ViewBag.User = Model.FirstName + " " + Model.LastName;
-    }
-    else
-    {
+    } else {
         ViewBag.Title = "Create User";
         ViewBag.User = "New User";
     }
@@ -24,65 +20,68 @@
     </div>
 </div>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-    @Html.HiddenFor(x => x.UserId)
+<div class="row">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(user => user.UserId)
+        <div class="centered seven columns">
+            @Html.ValidationSummary()
+        </div>
 
-    <div class="row">
-        <fieldset class="centered seven columns">
-            <legend>
-                <h4>@ViewBag.User</h4>
-            </legend>
+        <div class="row">
+            <fieldset class="centered seven columns">
+                <legend>
+                    <h4>@ViewBag.User</h4>
+                </legend>
 
-            <ul>
-                <li class="field">
-                    @Html.LabelFor(user => user.FirstName, new {@class = "inline"})
-                    @Html.TextBoxFor(user => user.FirstName, new {@class = "wide text input"})
-                    @Html.ValidationMessageFor(user => user.FirstName)
-                </li>
+                <ul>
+                    <li class="field">
+                        @Html.LabelFor(user => user.FirstName, new {@class = "inline"})
+                        @Html.TextBoxFor(user => user.FirstName, new {@class = "wide text input"})
+                    </li>
 
-                <li class="field">
-                    @Html.LabelFor(user => user.LastName, new {@class = "inline"})
-                    @Html.TextBoxFor(user => user.LastName, new {@class = "wide text input"})
-                    @Html.ValidationMessageFor(user => user.LastName)
-                </li>
+                    <li class="field">
+                        @Html.LabelFor(user => user.LastName, new {@class = "inline"})
+                        @Html.TextBoxFor(user => user.LastName, new {@class = "wide text input"})
+                    </li>
 
-                <li class="field">
-                    @Html.LabelFor(user => user.Email, new {@class = "inline"})
-                    @Html.TextBoxFor(user => user.Email, new {@class = "wide text input"})
-                    @Html.ValidationMessageFor(user => user.Email)
-                </li>
+                    <li class="field">
+                        @Html.LabelFor(user => user.Email, new {@class = "inline"})
+                        @Html.TextBoxFor(user => user.Email, new {@class = "wide text input"})
+                    </li>
 
-                <li class="field">
-                    @Html.LabelFor(user => user.Role, new {@class = "inline"})
-                    <div class="picker">
-                        @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
-                    </div>
-                </li>
-            </ul>
+                    <li class="field">
+                        @Html.LabelFor(user => user.Role, new {@class = "inline"})
+                        <div class="picker">
+                            @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
+                        </div>
+                    </li>
+                </ul>
 
-            <div class="medium secondary btn three columns">
-                <input type="submit" value=@btnName />
-            </div>
-
-            <div class="medium default btn push_one three columns">
-                @Html.ActionLink("Back", "Index")
-            </div>
-            
-            @if (userId != 0)
-            {
-                <div class="medium info btn three columns push_one">
-                    @Html.ActionLink("Delete", "Delete", new {id = userId})
+                <div class="medium secondary btn three columns">
+                    <input type="submit" value=@btnName />
                 </div>
+
+                <div class="medium default btn push_one three columns">
+                    @Html.ActionLink("Back", "Index")
+                </div>
+            
+                @if (userId != 0)
+                {
+                    <div class="medium info btn three columns push_one">
+                        @Html.ActionLink("Delete", "Delete", new {id =  userId})
+                    </div>
                 }  
-        </fieldset>
-    </div>
-}
+            </fieldset>
+        </div>
+    }
+</div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <script src="/Scripts/jquery-2.0.2.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 }
 @section styles {
     <link href="@Url.Content("~/Content/User/user-edit.css")" rel="stylesheet"/>

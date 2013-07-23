@@ -39,6 +39,10 @@ namespace Bs.Calendar.Mvc.Controllers
         ValidateAntiForgeryToken]
         public ActionResult Create(UserEditVm model)
         {
+            ModelState.Remove("userId");
+            if (!ModelState.IsValid)
+                return View("Edit", model);
+
             try
             {
                 _service.SaveUser(model);
@@ -59,6 +63,10 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpPost]
         public ActionResult Edit(UserEditVm model)
         {
+            ModelState.Remove("userId");
+            if (!ModelState.IsValid)
+                return View("Edit", model);
+
             try
             {
                 _service.EditUser(model);
