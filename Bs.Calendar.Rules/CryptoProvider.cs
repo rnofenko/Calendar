@@ -1,31 +1,23 @@
 ﻿using System;
+using System.Security.Cryptography;
+using SHA3;
 
-namespace Bs.Calendar.Mvc.Services
+namespace Bs.Calendar.Rules
 {
-    public class CryptoProvider
+    public class CryptoProvider : ICryptoProvider
     {
         public string GetKeccakHash(string password)
         {
-            var keccak512 = HashLib.HashFactory.Crypto.SHA3.CreateKeccak512();
-            return keccak512.ComputeString(password).ToString();
+            var sha3Managed = new SHA3Managed(512);
+            var b = System.Text.Encoding.UTF8.GetBytes(password);
+            var hash = sha3Managed.ComputeHash(b);
+            return BitConverter.ToString(hash).Replace("-", "");
         }
 
-        public string GetSkeinHash(string password)
+        public string GetMd5Hash(string password)
         {
-            var skein512 = HashLib.HashFactory.Crypto.SHA3.CreateSkein512();
-            return skein512.ComputeString(password).ToString();
-        }
-    }
-
-    public static class Program
-    {
-        static void Main()
-        {
-            Console.WriteLine("HI!");
-            var str = "";
-            var crypto = new CryptoProvider();
-            Console.WriteLine(crypto.GetKeccakHash(str));
-            Console.ReadLine();
+            var md5 = MD5.Create();
+            return BitConverter.ToString(md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password))).Replace("-", "");        
         }
     }
 }
