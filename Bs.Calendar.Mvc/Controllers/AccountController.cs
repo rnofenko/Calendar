@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Security;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Mvc.Services;
@@ -12,13 +8,20 @@ namespace Bs.Calendar.Mvc.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly RepoUnit _unit;
+
+        public AccountController(RepoUnit unit)
+        {
+            _unit = unit;
+        }
+
         public ActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult Login(AccountVm model, string ReturnUrl)
+        public ActionResult Login(AccountVm model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -26,9 +29,9 @@ namespace Bs.Calendar.Mvc.Controllers
                 if (membershipProvider.ValidateUser(model.Email, model.Password))
                 {
                     FormsAuthentication.SetAuthCookie(model.Email, true);
-                    if (Url.IsLocalUrl(ReturnUrl))
+                    if (Url.IsLocalUrl(returnUrl))
                     {
-                        return Redirect(ReturnUrl);
+                        return Redirect(returnUrl);
                     }
                     return RedirectToAction("Index", "Home");
                 }
@@ -46,7 +49,8 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return View(new UserEditVm(new RepoUnit().User.Get(u => u.Email == User.Identity.Name)));
+                var userEmail = User.Identity.Name;
+                return View(new UserEditVm(_unit.User.Get(u=>u.Email == userEmail)));
             }
             FormsAuthentication.RedirectToLoginPage();
             return null;

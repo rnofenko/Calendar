@@ -83,23 +83,20 @@ namespace Bs.Calendar.Mvc.Services
                 user = unit.User.Get(u => u.Email == email);
             }
 
-            if (user != null)
-            {
-                var memUser = new MembershipUser("CustomMembershipProvider",
-                    string.Format("{0} {1}", user.FirstName, user.LastName),
-                    user.Id, user.Email,
-                    string.Empty,
-                    string.Empty,
-                    true,
-                    false,
-                    DateTime.Now,
-                    DateTime.MinValue,
-                    DateTime.MinValue,
-                    DateTime.Now,
-                    DateTime.Now);
-                return memUser;
-            }
-            return null;
+            if (user == null) return null;
+            var memUser = new MembershipUser("CustomMembershipProvider",
+                string.Format("{0} {1}", user.FirstName, user.LastName),
+                user.Id, user.Email,
+                string.Empty,
+                string.Empty,
+                true,
+                false,
+                DateTime.Now,
+                DateTime.MinValue,
+                DateTime.MinValue,
+                DateTime.Now,
+                DateTime.Now);
+            return memUser;
         }
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
@@ -184,9 +181,6 @@ namespace Bs.Calendar.Mvc.Services
             {
                 var keccakHash = crypto.GetKeccakHash(password);
                 var md5Hash = crypto.GetMd5Hash(password);
-
-                //var user = unit.User.Get(1);
-
                 var user = unit.User.Get(
                     u => (u.Email == userEmail &&
                          u.PasswordKeccakHash == keccakHash &&

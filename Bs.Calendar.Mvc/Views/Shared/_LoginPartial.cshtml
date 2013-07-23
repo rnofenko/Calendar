@@ -1,9 +1,12 @@
-﻿@if (Request.IsAuthenticated) {
+﻿@using Bs.Calendar.Mvc.Services
+@if (Request.IsAuthenticated)
+{    
+    var calendar = new CalendarMembershipProvider();
+    var userName = calendar.GetUserNameByEmail(User.Identity.Name);
     <text>
-        Hello, @Html.ActionLink(User.Identity.Name,
-        "Manage", "Account")!
-        @Html.ActionLink("Logout", "Logout", "Account")
-        
+        @Html.ActionLink(userName,
+        "Manage", "Account")|
+        @Html.ActionLink("Logout", "Logout", "Account")        
     </text>
 } else {
     <ul>
