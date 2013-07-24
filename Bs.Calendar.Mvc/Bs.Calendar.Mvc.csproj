@@ -213,6 +213,8 @@
     <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\AjaxLinkHelpers.cs" />
     <Compile Include="Services\RoomService.cs" />
+    <Compile Include="ViewModels\HomeBirthdayListVm.cs" />
+    <Compile Include="ViewModels\HomeBirthdaysVm.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />
     <Compile Include="ViewModels\UsersVm.cs" />
@@ -281,6 +283,7 @@
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Shared\Header.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
+    <Content Include="Views\Home\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
