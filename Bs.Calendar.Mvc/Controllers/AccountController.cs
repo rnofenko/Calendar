@@ -27,6 +27,7 @@ namespace Bs.Calendar.Mvc.Controllers
                     }
                     return RedirectToAction("Index", "Home");
                 }
+                ModelState.AddModelError("", "The user name or password provided is incorrect.");
             }
             return View(model);
         }
