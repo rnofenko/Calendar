@@ -193,7 +193,7 @@
     <Content Include="Content\Layout\layout.css" />
     <Content Include="Content\User\user-edit.css" />
     <Content Include="Content\User\user-view.css" />
-    <Content Include="Images\photo.png" />
+    <Content Include="Images\binaryLogo.png" />
     <Content Include="Scripts\Gumby\gumby.min.js" />
     <Content Include="Scripts\Rooms\ColorPicker.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
@@ -211,6 +211,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HomeService.cs" />
+    <Compile Include="Services\AjaxLinkHelpers.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />

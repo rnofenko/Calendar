@@ -47,7 +47,7 @@ namespace Bs.Calendar.Tests.Int
         public void Can_Provide_All_Users()
         {
             //act
-            var usersView = _usersController.List(null) as PartialViewResult;
+            var usersView = _usersController.List(null, null) as PartialViewResult;
             var users = usersView.Model as UsersVm;
 
             //assert
@@ -58,7 +58,7 @@ namespace Bs.Calendar.Tests.Int
         public void Can_Search_Users() 
         {
             //act
-            var usersView = _usersController.List("ccc@ddd.com") as PartialViewResult;         
+            var usersView = _usersController.List("ccc@ddd.com", null) as PartialViewResult;         
             var users = usersView.Model as UsersVm;
             var user = users.Users.First();
 
