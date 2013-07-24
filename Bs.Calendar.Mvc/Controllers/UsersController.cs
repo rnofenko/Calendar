@@ -24,8 +24,7 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             return View();
         }
-
-        [Authorize]
+        
         public ActionResult Details(int id)
         {
             return PassUserIntoTheView("Details", id);
@@ -52,6 +51,7 @@ namespace Bs.Calendar.Mvc.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult Edit(int id)
         {
             return PassUserIntoTheView("Edit", id);
@@ -72,6 +72,7 @@ namespace Bs.Calendar.Mvc.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult Delete(int id)
         {
             return PassUserIntoTheView("Delete", id);
