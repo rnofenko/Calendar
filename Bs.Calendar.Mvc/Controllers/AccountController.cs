@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
-using Bs.Calendar.DataAccess;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 
@@ -8,13 +7,6 @@ namespace Bs.Calendar.Mvc.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly RepoUnit _unit;
-
-        public AccountController(RepoUnit unit)
-        {
-            _unit = unit;
-        }
-
         public ActionResult Login()
         {
             return View();
@@ -43,17 +35,6 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");
-        }
-
-        public ActionResult Manage()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                var userEmail = User.Identity.Name;
-                return View(new UserEditVm(_unit.User.Get(u=>u.Email == userEmail)));
-            }
-            FormsAuthentication.RedirectToLoginPage();
-            return null;
         }
     }
 }
