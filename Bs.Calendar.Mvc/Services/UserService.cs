@@ -34,7 +34,7 @@ namespace Bs.Calendar.Mvc.Services
         {
             if (!IsValidEmailAddress(userModel.Email))
             {
-                throw new WarningException("{0} - is not valid email address", userModel.Email);
+                throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
             if (_unit.User.Get(u => u.Email == userModel.Email) != null)
             {
@@ -60,7 +60,7 @@ namespace Bs.Calendar.Mvc.Services
             var userToEdit = GetUser(userModel.UserId);
             if (!IsValidEmailAddress(userModel.Email))
             {
-                throw new WarningException("{0} - is not valid email address", userModel.Email);
+                throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
             if(userToEdit.Email != userModel.Email && _unit.User.Get(u => u.Email == userModel.Email) != null)
             {

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using Bs.Calendar.Models;
 
 namespace Bs.Calendar.Mvc.ViewModels
@@ -30,17 +31,16 @@ namespace Bs.Calendar.Mvc.ViewModels
         public int UserId { get; set; }
 
         [StringLength(50),
-        Required,
+        Required(ErrorMessage = "First name is required!"),
         Display(Name = "First name")]
         public string FirstName { get; set; }
 
         [StringLength(50),
-        Required,
+        Required(ErrorMessage = "Last name is required!"),
         Display(Name = "Last name")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "An email is required"),
-        EmailAddress,
+        [Required(ErrorMessage = "An email is required!"),
         StringLength(200)]
         public string Email { get; set; }
 

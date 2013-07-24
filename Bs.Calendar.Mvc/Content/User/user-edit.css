@@ -1,0 +1,9 @@
+﻿ul label.inline {
+    padding-right: 0;
+    min-width: 130px;
+}
+
+div.validation-summary-errors {
+    color: red !important;
+    margin-top: 25px;
+}

@@ -1,73 +1,88 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.UserEditVm
 @{
-    
-    var userRoles = (from object role in Enum.GetValues(typeof(Bs.Calendar.Models.Roles)) select role.ToString()).ToList();
+    var userRoles = (from object role in Enum.GetValues(typeof (Bs.Calendar.Models.Roles)) select role.ToString()).ToList();   
+    var btnName = Model == null ? "Create" : "Update";
     var userId = 0;
-    var btnName = "Create";
-    if (Model != null && Model.UserId != 0)
-    {
+
+    if (Model != null && Model.UserId != 0) {
         userId = Model.UserId;
-        ViewBag.Title = "Edit current user";
-        btnName = "Update";
+        ViewBag.Title = "Edit User";
+        ViewBag.User = Model.FirstName + " " + Model.LastName;
+    } else {
+        ViewBag.Title = "Create User";
+        ViewBag.User = "New User";
     }
-    else
+}
+
+<div class="row">
+    <div class="centered seven columns">
+        <h3>@ViewBag.Title</h3>
+    </div>
+</div>
+
+<div class="row">
+    @using (Html.BeginForm())
     {
-        ViewBag.Title = "Create new user";
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(user => user.UserId)
+        <div class="centered seven columns">
+            @Html.ValidationSummary()
+        </div>
+
+        <div class="row">
+            <fieldset class="centered seven columns">
+                <legend>
+                    <h4>@ViewBag.User</h4>
+                </legend>
+
+                <ul>
+                    <li class="field">
+                        @Html.LabelFor(user => user.FirstName, new {@class = "inline"})
+                        @Html.TextBoxFor(user => user.FirstName, new {@class = "wide text input"})
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(user => user.LastName, new {@class = "inline"})
+                        @Html.TextBoxFor(user => user.LastName, new {@class = "wide text input"})
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(user => user.Email, new {@class = "inline"})
+                        @Html.TextBoxFor(user => user.Email, new {@class = "wide text input"})
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(user => user.Role, new {@class = "inline"})
+                        <div class="picker">
+                            @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="medium secondary btn three columns">
+                    <input type="submit" value=@btnName />
+                </div>
+
+                <div class="medium default btn push_one three columns">
+                    @Html.ActionLink("Back", "Index")
+                </div>
+            
+                @if (userId != 0)
+                {
+                    <div class="medium info btn three columns push_one">
+                        @Html.ActionLink("Delete", "Delete", new {id =  userId})
+                    </div>
+                }  
+            </fieldset>
+        </div>
     }
-}
-
-<h2>@ViewBag.Title</h2>
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-
-    <div class="row">
-    <fieldset class="ten columns">
-        <legend>
-            <h2>User</h2>
-        </legend>
-        
-        @Html.Hidden("UserId", userId)
-        
-        <div>
-            @Html.LabelFor(user => user.FirstName)
-            @*<label for=@Model.FirstName class="success label"></label>*@
-        </div>
-        <div>
-            @Html.EditorFor(user => user.FirstName)
-            @Html.ValidationMessageFor(user => user.FirstName)
-        </div>
-
-        <div>
-            @Html.LabelFor(user => user.LastName)
-        </div>
-        <div>
-            @Html.EditorFor(user => user.LastName)
-            @Html.ValidationMessageFor(user => user.LastName)
-        </div>
-
-        <div>
-            @Html.LabelFor(user => user.Email)
-        </div>
-        <div>
-            @Html.EditorFor(user => user.Email)
-            @Html.ValidationMessageFor(user => user.Email)
-        </div>
-
-        <div>
-            @Html.LabelFor(model => model.Role)
-            @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
-        </div>
-                
-        <p>
-            <input type="submit" value=@btnName /> | @Html.ActionLink("Back to the list", "Index")
-        </p>
-    </fieldset>
-        </div>
-}
+</div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <script src="/Scripts/jquery-2.0.2.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
+@section styles {
+    <link href="@Url.Content("~/Content/User/user-edit.css")" rel="stylesheet"/>
 }

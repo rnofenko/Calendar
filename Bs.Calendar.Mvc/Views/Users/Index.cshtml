@@ -12,22 +12,22 @@
     <h2>Users</h2>
 </div>
     
-<div class="twelve colgrid">
+<div class="sixteen colgrid">
     <div class="row">
-        <div class="column">
-            <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
+        <div class="one columns">
+            <button class="medium secondary btn">@Html.ActionLink("Create", "Create")</button>
         </div>
         @using (Ajax.BeginForm("List", ajaxOptions))
         {
-            <div class="field push_seven three columns">
+            <div class="field push_eleven four columns">
                 <input class="search input" type="text" name="searchStr" placeholder="Find user"/>
-            </div>
-
-            <div class="three columns" id="loading" style="display: none">
-                Loading Data...
             </div>
         }
     </div>
+</div>
+
+<div class="row" id="loading" style="display: none">
+    Loading...
 </div>
 
 <div class="row">
@@ -38,4 +38,8 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryajax")
+}
+
+@section styles {
+    <link href="@Url.Content("~/Content/User/user-view.css")" rel="stylesheet"/>
 }
