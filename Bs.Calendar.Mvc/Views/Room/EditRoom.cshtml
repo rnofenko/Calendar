@@ -1,70 +1,60 @@
-﻿@using System.Drawing
+﻿@using Bs.Calendar.Models.Bases;
 @model Bs.Calendar.Mvc.ViewModels.RoomEditVm
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
-    string color = ColorTranslator.ToHtml(Model.Color);
-}
-
-@section Scripts
-{
-    @Scripts.Render(
-            "~/bundles/jquery",
-            "~/bundles/roomjs")
-
-    @Styles.Render("~/Content/roomcss")
+    string colorClassTemplate = "roomColor_{0}";
 }
 
 <h2>@Model.Extra.ViewTitle</h2>
 
-@using (Html.BeginForm(
-    @Model.Extra.CallAction,
-    @Model.Extra.CallController,
-    FormMethod.Post,
-    new {id = "input_form"}))
+@using (Html.BeginForm(@Model.Extra.CallAction, @Model.Extra.CallController, FormMethod.Post))
 {
+    
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
-    <fieldset>
-        <legend>Room</legend>
-
-        <div>
-            @Html.LabelFor(room => room.Name)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
         </div>
-        <div>
-            @Html.EditorFor(room => room.Name)
-            @Html.ValidationMessageFor(room => room.Name)
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
         </div>
 
-        <div>
-            @Html.LabelFor(room => room.NumberOfPlaces)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.NumberOfPlaces)
         </div>
-        <div>
-            @Html.EditorFor(room => room.NumberOfPlaces)
-            @Html.ValidationMessageFor(room => room.NumberOfPlaces)
+        <div class="editor-field">
+            @Html.EditorFor(model => model.NumberOfPlaces)
+            @Html.ValidationMessageFor(model => model.NumberOfPlaces)
         </div>
 
-        <div>
-            @Html.LabelFor(room => room.Color)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Color)
         </div>
-        <input data-val="true" id="Extra_Color" name="Extra.Color" type="hidden" value="@ColorTranslator.ToHtml(Model.Color)">
-        <div>
-            <table class="color_picker_table">
-                <tr>
-                    <td id="pick_color" class="color_picker_cell"></td>
-                </tr>
-            </table>
-            <div id="color_picker_container"></div>
+        <div class="editor-field">
+            @Html.HiddenFor(model => model.Color)
+            @Html.ValidationMessageFor(model => model.Color)
+            
+                <div id="color_cell" class="@string.Format(colorClassTemplate, @Model.Color)"></div>
+            <div id="color_picker" class="color_picker_container">
+                
+                @for (int i = @BaseEntity.MIN_COLOR_VALUE; i <= @BaseEntity.MAX_COLOR_VALUE; ++ i )
+                {
+                    <div class="@string.Format(colorClassTemplate, i)"></div>
+                }
+
+            </div>
+            
+            <div class="justDivider"></div>
         </div>
+
         <p>
-            <input id="submit_button" type="submit" value="Update" />
+            <input type="submit" value="Accept" />
         </p>
-    </fieldset>
 }
 
 <div>
-    @Html.ActionLink("Accept", "Index")
-    @Html.ActionLink("Back", "Index")
+    @Html.ActionLink("Back to List", "Index")
 </div>

@@ -183,12 +183,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Rooms\ColorPicker.css" />
+<<<<<<< HEAD
+    <Content Include="Content\ColorPicker.css" />
     <Compile Include="Controllers\AccountController.cs" />
+=======
+    <Content Include="Content\Rooms\ColorPicker.css" />
+>>>>>>> a40ca3f358c6b4003ade52656438679de923236f
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Content\css\gumby.css" />
     <Content Include="Content\css\gumby2.css" />
+    <Content Include="Content\css\style.css" />
     <Content Include="Content\gumby.css" />
     <Content Include="Content\Layout\layout.css" />
     <Content Include="Content\User\user-edit.css" />
@@ -278,10 +283,17 @@
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Delete.cshtml" />
     <Content Include="Views\Users\List.cshtml" />
-    <Content Include="Views\Room\EditRoom.cshtml" />
+    <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
+=======
+    <Content Include="Views\Room\EditRoom.cshtml" />
+    <Content Include="Views\Team\Index.cshtml" />
+    <Content Include="Views\Shared\Header.cshtml" />
+    <Content Include="Views\Shared\Footer.cshtml" />
+>>>>>>> a40ca3f358c6b4003ade52656438679de923236f
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

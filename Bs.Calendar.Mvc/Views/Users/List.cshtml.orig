@@ -8,8 +8,15 @@ else {
     <table>
         <thead>
             <tr>
+<<<<<<< HEAD
+                <th>Id</th>
+                <th>Name</th>
+                <th>E-mail</th>
+                <th>Role</th>
+=======
                 <th>@Html.AjaxSortLink(@Model, "Name")</th>
                 <th>@Html.AjaxSortLink(@Model, "E-mail")</th>
+>>>>>>> a40ca3f358c6b4003ade52656438679de923236f
                 <th>Actions</th>
             </tr>
         </thead>
@@ -17,8 +24,13 @@ else {
             @foreach (var user in Model.Users)
             {
                 <tr>
+<<<<<<< HEAD
+                    <td>@user.Id</td>
+=======
+>>>>>>> a40ca3f358c6b4003ade52656438679de923236f
                     <td>@user.FirstName @user.LastName</td>      
                     <td>@user.Email</td>
+                    <td>@user.Role</td>
                     <td>           
                         <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new { id = user.Id })</div>
                         <div class="medium default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>
