@@ -35,7 +35,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public override bool RoleExists(string roleName)
         {
-            return (Enum.GetValues(typeof(Roles))
+            return (Enum.GetValues(typeof(Models.Roles))
                            .Cast<object>().Count(role => roleName == role.ToString())) != 0;
         }
 
@@ -51,12 +51,18 @@ namespace Bs.Calendar.Mvc.Services
 
         public override string[] GetUsersInRole(string roleName)
         {
-            throw new NotImplementedException();
+            using (var unit = new RepoUnit())
+            {
+                var usersInRole = unit.User.Get(u => u.Role.ToString() == roleName);
+                if (usersInRole == null) return null;
+                var usersInRoleEmails = usersInRole.Email;
+                return new[] {usersInRoleEmails};
+            }
         }
 
         public override string[] GetAllRoles()
         {
-            throw new NotImplementedException();
+            return Enum.GetNames(typeof(Models.Roles));
         }
 
         public override string[] FindUsersInRole(string roleName, string usernameToMatch)
