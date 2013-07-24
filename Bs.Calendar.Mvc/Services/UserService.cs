@@ -51,10 +51,17 @@ namespace Bs.Calendar.Mvc.Services
             _unit.User.Save(user);
         }
 
-        public void DeleteUser(int id)
+        public void UpdateUserState(int userModelId, State state)
         {
-            _unit.User.Delete(_unit.User.Get(id));
+            var user = _unit.User.Get(userModelId);
+            user.State = state;
+            _unit.User.Save(user);
         }
+
+        //public void DeleteUser(int id)
+        //{
+        //    _unit.User.Delete(_unit.User.Get(id));
+        //}
 
         public void EditUser(UserEditVm userModel)
         {

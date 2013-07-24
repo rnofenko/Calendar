@@ -2,7 +2,7 @@
 {
     public enum State
     {
-        Deleted = 0,
-        Ok = 1
+        Ok = 0,
+        Deleted = 1        
     }
 }
