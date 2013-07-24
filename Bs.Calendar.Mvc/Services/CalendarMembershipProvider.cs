@@ -203,10 +203,10 @@ namespace Bs.Calendar.Mvc.Services
         public override bool ValidateUser(string userEmail, string password)
         {
             var crypto = new CryptoProvider();
+            var keccakHash = crypto.GetKeccakHash(password);
+            var md5Hash = crypto.GetMd5Hash(password);
             using (var unit = new RepoUnit())
             {
-                var keccakHash = crypto.GetKeccakHash(password);
-                var md5Hash = crypto.GetMd5Hash(password);
                 var user = unit.User.Get(
                     u => (u.Email == userEmail &&
                          u.PasswordKeccakHash == keccakHash &&
