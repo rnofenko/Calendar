@@ -3,6 +3,7 @@ using System.Web.Security;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Rules;
+using Roles = Bs.Calendar.Models.Roles;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -29,7 +30,32 @@ namespace Bs.Calendar.Mvc.Services
                                                   string passwordQuestion, string passwordAnswer, bool isApproved,
                                                   object providerUserKey, out MembershipCreateStatus status)
         {
-            throw new NotImplementedException();
+            if (!UserService.IsValidEmailAddress(email))
+            {
+                status = MembershipCreateStatus.InvalidEmail;
+                return null;
+            }
+            if (GetUser(email, true) != null)
+            {
+                status = MembershipCreateStatus.DuplicateEmail;
+                return null;
+            }
+            var crypto = new CryptoProvider();
+            var user = new User
+            {
+                FirstName = email.Remove(email.IndexOf('@')),
+                LastName = "",
+                Email = email,
+                PasswordKeccakHash = crypto.GetKeccakHash(password),
+                PasswordMd5Hash = crypto.GetMd5Hash(password),
+                Role = Roles.None
+            };
+            using (var unit = new RepoUnit())
+            {
+                unit.User.Save(user);
+                status = MembershipCreateStatus.Success;
+                return GetUser(email, true);
+            }
         }
 
         public override bool DeleteUser(string username, bool deleteAllRelatedData)
@@ -84,7 +110,7 @@ namespace Bs.Calendar.Mvc.Services
             }
 
             if (user == null) return null;
-            var memUser = new MembershipUser("CustomMembershipProvider",
+            var memUser = new MembershipUser("CalendarMembershipProvider",
                 string.Format("{0} {1}", user.FirstName, user.LastName),
                 user.Id, user.Email,
                 string.Empty,
@@ -112,7 +138,7 @@ namespace Bs.Calendar.Mvc.Services
                 return string.Format("{0} {1}", user.FirstName, user.LastName);
             }
         }
-        
+
         public override int MaxInvalidPasswordAttempts
         {
             get { throw new NotImplementedException(); }

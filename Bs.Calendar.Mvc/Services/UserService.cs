@@ -73,7 +73,7 @@ namespace Bs.Calendar.Mvc.Services
             _unit.User.Save(userToEdit);
         }
 
-        public bool IsValidEmailAddress(string emailaddress)
+        public static bool IsValidEmailAddress(string emailaddress)
         {
             try
             {
