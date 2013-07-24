@@ -11,11 +11,12 @@
 {
     <div class="danger alert three columns">Sorry, no such user!</div>
 }
-else {
+else
+{
     <div class="default alert    two columns">
         <div class="centered eight columns">@Model.CurrentPage of @Model.TotalPages</div>
     </div>
-    
+
     <table>
         <thead>
             <tr>
@@ -31,18 +32,18 @@ else {
                     <td>@user.FirstName @user.LastName</td>      
                     <td>@user.Email</td>
                     <td>           
-                        <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new { id = user.Id })</div>
+                        <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
                         <div class="medium default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-    
+
     <div class="row">
         <div class="twelve columns">
             <div class="one columns">
-                @using (Ajax.BeginForm("List", "Users", new { searchStr = Model.SearchStr, sortByStr = Model.SortByStr}, ajaxOptions))
+                @using (Ajax.BeginForm("List", "Users", new {searchStr = Model.SearchStr, sortByStr = Model.SortByStr}, ajaxOptions))
                 {
                     <div class="field">
                         <input class="text input" type="text" name="page" placeholder="Page"/>
@@ -57,5 +58,6 @@ else {
             </div>
         </div>
     </div>
+}
 
 
