@@ -1,26 +1,62 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm
-
+@{
+    var ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "user-table",
+        LoadingElementId = "loading",
+        HttpMethod = "Get"
+    };
+}
 @if (!Model.Users.Any())
 {
     <div class="danger alert three columns">Sorry, no such user!</div>
 }
 else {
-    <ul class="two_up tiles">
-        @foreach (var user in Model.Users)
-        {
-            <li class="row">
-                <div class="two columns">
-                    <a href="#"><img width="50" src="../../Images/photo.png"/></a>
-                </div>
-                <div class="ten columns">
-                    @user.FirstName @user.LastName
-                </div>
-                <div class="five columns">
-                    <div class="small default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
-                    <div class="small default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>
-                </div>
-            </li>
-            
-        }
-    </ul>
+    <div class="default alert    two columns">
+        <div class="centered eight columns">@Model.CurrentPage of @Model.TotalPages</div>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>@Html.AjaxSortLink(@Model, "Name")</th>
+                <th>@Html.AjaxSortLink(@Model, "E-mail")</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.FirstName @user.LastName</td>      
+                    <td>@user.Email</td>
+                    <td>           
+                        <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new { id = user.Id })</div>
+                        <div class="medium default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+    <div class="row">
+        <div class="twelve columns">
+            <div class="one columns">
+                @using (Ajax.BeginForm("List", "Users", new { searchStr = Model.SearchStr, sortByStr = Model.SortByStr}, ajaxOptions))
+                {
+                    <div class="field">
+                        <input class="text input" type="text" name="page" placeholder="Page"/>
+                    </div>
+                }
+            </div>
+            <div class="primary label push_seven two columns">
+                @Html.AjaxPageLink(@Model, "Previous", @Model.CurrentPage - 1)
+            </div>
+            <div class="primary label two columns">
+                @Html.AjaxPageLink(@Model, "Next", @Model.CurrentPage + 1)
+            </div>
+        </div>
+    </div>
+
+
 }

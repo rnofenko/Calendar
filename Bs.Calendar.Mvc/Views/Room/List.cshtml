@@ -1,14 +1,18 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.RoomsVm
 
+@{
+    const string colorClassTemplate = "roomColor_{0}";    
+}
+
 @foreach (var room in Model.Rooms)
 {
 <tr>
     <td> @room.Name </td>
     <td> @room.NumberOfPlaces </td>
-    <td> @room.Color </td>
+    <td> <div class="@string.Format(colorClassTemplate, room.Color) roomColor"></div> </td>
     <td>
         <div class="medium default btn icon-left icon-pencil">
-            @Html.ActionLink("Edit", "UpdatePage", new { id = room.Id})
+            @Html.ActionLink("Edit", "Edit", new { id = room.Id})
         </div>
     </td>
     <td>

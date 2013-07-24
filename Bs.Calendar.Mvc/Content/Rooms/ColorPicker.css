@@ -1,25 +1,30 @@
-﻿.color_picker_cell
+﻿.roomColor_0 { background-color: linen; }
+.roomColor_1 { background-color: moccasin; }
+.roomColor_2 { background-color: lightcyan; }
+.roomColor_3 { background-color: lemonchiffon; }
+.roomColor_4 { background-color: lime; }
+.roomColor_5 { background-color: sandybrown; }
+.roomColor_6 { background-color: lightskyblue; }
+.roomColor_7 { background-color: yellow; }
+
+.color_picker_container div, #color_cell, .roomColor
 {
-    width:  17px;
-    height: 17px;
-    cursor: pointer;
+    width:  21px;
+    height: 21px;
 
     border: 1px solid black;
 
-    background-color: black;
+    float: left;
+
+    cursor: pointer;
 }
 
-.color_picker_table
+.color_picker_container
 {
-    border-spacing:0;
-    margin: 0;
-    padding: 0;
-    border-collapse:collapse;
-
-    background-color: #DDDDDD;
+    width: 5%;
 }
 
-#color_picker_container
+.justDivider
 {
-    position: fixed;
+    clear: both;   
 }

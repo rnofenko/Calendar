@@ -2,6 +2,7 @@ using System.Web.Mvc;
 using Bs.Calendar.Mvc.Services;
 
 using Bs.Calendar.Mvc.ViewModels;
+using System;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -18,56 +19,82 @@ namespace Bs.Calendar.Mvc.Controllers
         // GET: /Room/
         public ActionResult Index()
         {
-            var rooms = _service.GetAllRooms();
-
-            return View(rooms);
+            return View();
         }
 
-        /// <summary>
-        /// Method is used both to create and to update room records
-        /// </summary>
-        [HttpPost]
-        public ActionResult Update(RoomEditVm room)
+        [HttpGet]
+        public ActionResult List(string searchStr)
         {
-            if (_service.IsValid(room))
+            return PartialView(_service.Find(searchStr));
+        }
+
+        public ActionResult Delete(int id)
+        {
+            try
             {
-                _service.Save(room);
+                _service.Delete(id);
+            }
+            catch(ArgumentException exception)
+            {
+                return HttpNotFound();
             }
 
             return RedirectToAction("Index");
         }
 
-        public ActionResult AddPage()
+        /// <summary>
+        /// Action is used both to create and to edit room records
+        /// </summary>
+        [HttpPost,
+        ValidateAntiForgeryToken]
+        public ActionResult Edit(RoomEditVm room)
         {
-            var room = _service.CreateViewModel();
-
-            room.Extra.ViewTitle = "Add room";
-            room.Extra.CallAction = "Update";
-            room.Extra.CallController = "Room";
+            if (ModelState.IsValid && _service.IsValid(room))
+            {
+                _service.Save(room);
+                return RedirectToAction("Index");
+            }
 
             return View("EditRoom", room);
         }
 
-        public ActionResult UpdatePage()
+        [HttpGet]
+        public ActionResult Edit(int id)
         {
-            var room = _service.CreateViewModel();
+            var room = _service.Load(id);
 
-            room.Extra.ViewTitle = "Update room";
-            room.Extra.CallAction = "Update";
-            room.Extra.CallController = "Room";
+            if(room == null)
+            {
+                return HttpNotFound();
+            }
 
-            room.NumberOfPlaces = 11;
-            room.Name = "Initial name";
-            room.Color = System.Drawing.Color.Blue;
+            room.Extra = new RoomEditVm.RoomEditVmExtra()
+            {
+                ViewTitle = "Edit room",
+                CallAction = "Edit",
+                CallController = "Room"
+            };
+
+            return View("EditRoom", room);
+        }
+
+        public ActionResult Create()
+        {
+            var room = _service.CreateViewModel(new RoomEditVm.RoomEditVmExtra()
+            {
+                ViewTitle = "Create room",
+                CallAction = "Edit",
+                CallController = "Room"
+            });
 
             return View("EditRoom", room);
         }
 
         //
         // GET: /Room/Save
-        public ActionResult Save(RoomEditVm revView)
+        public ActionResult Save(RoomEditVm roomViewModel)
         {
-            _service.Save(revView);
+            _service.Save(roomViewModel);
 
             return View("Index");
         }

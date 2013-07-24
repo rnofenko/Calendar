@@ -1,12 +1,24 @@
-@model Bs.Calendar.Mvc.ViewModels.RoomsVm
-
 @{
     ViewBag.Title = "Rooms List";
+    var ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "rooms-table",
+        HttpMethod = "Get"
+    };
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row">
+    @using (Ajax.BeginForm("List", ajaxOptions))
+    {
+        <div class="field three columns">
+            <input class="search input" type="text" name="searchStr" placeholder="Find room by name"/>
+        </div>
+    }
+</div>
+
+<div class="row">
     <div class ="nine columns centered">
-        <table id="rooms-table">
+        <table>
             <thead>
                 <tr>
                     <th>Room name</th>
@@ -16,8 +28,8 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                @Html.Partial("List", Model)
+            <tbody id="rooms-table">
+                @Html.Action("List")
             </tbody>
         </table>
     </div>
@@ -26,7 +38,11 @@
 <div class="row">
     <div class = "nine columns centered">
         <div class="medium primary btn icon-left icon-plus pull_right">
-            @Html.ActionLink("Add", "AddPage")
+            @Html.ActionLink("Add", "Create")
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryajax")
+}

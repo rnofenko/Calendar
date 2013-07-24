@@ -16,14 +16,14 @@ namespace Bs.Calendar.Mvc.Server
                 "~/Scripts/Gumby/gumby.min.js"));
 
             var scripts = new Bundle("~/Scripts/all", new JsMinify());
-            scripts.Include("~/Scripts/Rooms/Utilities.js");
-            scripts.Include("~/Scripts/Rooms/ColorPicker.js");
             scripts.Include("~/Scripts/Rooms/SetupEvents.js");
 
             scripts.Include("~/Scripts/Users/user.js");
             BundleTable.Bundles.Add(scripts);
 
             var css = new Bundle("~/Content/css", new CssMinify());
+            css.Include("~/Content/gumby.css");
+            css.Include("~/Content/Rooms/ColorPicker.css");
             css.Include("~/Content/css/gumby.css");
             css.Include("~/Content/css/style.css");
             css.Include("~/Content/ColorPicker.css");

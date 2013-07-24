@@ -13,9 +13,11 @@ namespace Bs.Calendar.Mvc.Services
     public class UserService
     {
         private readonly RepoUnit _unit;
+        public int PageSize { get; set; }
 
         public UserService(RepoUnit unit)
         {
+            PageSize = 7;
             _unit = unit;
         }
 
@@ -34,7 +36,7 @@ namespace Bs.Calendar.Mvc.Services
         {
             if (!IsValidEmailAddress(userModel.Email))
             {
-                throw new WarningException("{0} - is not valid email address", userModel.Email);
+                throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
             if (_unit.User.Get(u => u.Email == userModel.Email) != null)
             {
@@ -60,7 +62,7 @@ namespace Bs.Calendar.Mvc.Services
             var userToEdit = GetUser(userModel.UserId);
             if (!IsValidEmailAddress(userModel.Email))
             {
-                throw new WarningException("{0} - is not valid email address", userModel.Email);
+                throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
             if(userToEdit.Email != userModel.Email && _unit.User.Get(u => u.Email == userModel.Email) != null)
             {
@@ -86,15 +88,49 @@ namespace Bs.Calendar.Mvc.Services
             }
         }
 
-        public UsersVm Find(string searchStr)
+        public UsersVm RetreiveList(string searchStr, string sortByStr, int page)
         {
             var users = _unit.User.Load().AsEnumerable();
 
-            if (string.IsNullOrEmpty(searchStr))
+            if (!string.IsNullOrEmpty(searchStr))
             {
-                return new UsersVm {Users = users.ToList()};
+                users = Find(users, searchStr);
             }
 
+            if (!string.IsNullOrEmpty(sortByStr))
+            {
+                users = Sort(users, sortByStr);
+            }
+
+            var totalPages = (int) Math.Ceiling((decimal) users.Count()/PageSize);
+            var currentPage = page < 1 ? 1 : page > totalPages ? totalPages : page;
+
+            return new UsersVm
+            {
+                Users = users.Skip((currentPage - 1)*PageSize).Take(PageSize).ToList(),
+                CurrentPage = currentPage,
+                TotalPages = totalPages,
+                SearchStr = searchStr,
+                SortByStr = sortByStr,
+            };
+        }
+
+        public IEnumerable<User> Sort(IEnumerable<User> users, string sortByStr)
+        {
+            switch (sortByStr)
+            {
+                case "Name":
+                    users = users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName);
+                    break;
+                case "E-mail":
+                    users = users.OrderBy(user => user.Email);
+                    break;
+            }
+            return users;
+        }
+
+        public IEnumerable<User> Find(IEnumerable<User> users, string searchStr)
+        {
             //Delete extra whitespaces
             searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ");
 
@@ -108,7 +144,7 @@ namespace Bs.Calendar.Mvc.Services
                 users = FindByName(users, searchStr);
             }
 
-            return new UsersVm {Users = users.ToList()};
+            return users;
         }
 
         private IEnumerable<User> FindByName(IEnumerable<User> users, string searchStr)

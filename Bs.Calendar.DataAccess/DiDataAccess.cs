@@ -7,6 +7,7 @@ namespace Bs.Calendar.DataAccess
         public static void Register()
         {
             Resolver.RegisterType<IUserRepository, UserRepository>();
+            Resolver.RegisterType<IRoomRepository, RoomRepository>();
         }
     }
 }
