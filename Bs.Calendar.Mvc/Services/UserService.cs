@@ -13,10 +13,11 @@ namespace Bs.Calendar.Mvc.Services
     public class UserService
     {
         private readonly RepoUnit _unit;
-        private readonly int _pageSize = 6;
+        public int PageSize { get; set; }
 
         public UserService(RepoUnit unit)
         {
+            PageSize = 7;
             _unit = unit;
         }
 
@@ -101,11 +102,14 @@ namespace Bs.Calendar.Mvc.Services
                 users = Sort(users, sortByStr);
             }
 
+            var totalPages = (int) Math.Ceiling((decimal) users.Count()/PageSize);
+            var currentPage = page < 1 ? 1 : page > totalPages ? totalPages : page;
+
             return new UsersVm
             {
-                Users = users.Skip((page - 1)*_pageSize).Take(_pageSize).ToList(),
-                CurrentPage = page,
-                TotalPages = (int)Math.Ceiling((decimal) users.Count() / _pageSize),
+                Users = users.Skip((currentPage - 1)*PageSize).Take(PageSize).ToList(),
+                CurrentPage = currentPage,
+                TotalPages = totalPages,
                 SearchStr = searchStr,
                 SortByStr = sortByStr,
             };

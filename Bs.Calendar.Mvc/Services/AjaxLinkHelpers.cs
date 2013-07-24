@@ -32,25 +32,21 @@ namespace Bs.Calendar.Mvc.Services
             return link;
         }
 
-        public static MvcHtmlString AjaxPageLinks(this HtmlHelper html, UsersVm usersVm)
+        public static MvcHtmlString AjaxPageLink(this HtmlHelper html, UsersVm usersVm, string linkText, int pageNumber)
         {
-            var pages = new StringBuilder();
             var ajaxHelper = new AjaxHelper(html.ViewContext, html.ViewDataContainer);
 
-            for (var i = 1; i <= usersVm.TotalPages; i++)
-            {
-                var link = ajaxHelper.ActionLink(
-                    i.ToString(),
-                    "List",
-                    new {searchStr = usersVm.SearchStr, sortByStr = usersVm.SortByStr, page = i},
-                    new AjaxOptions {UpdateTargetId = "user-table"},
-                    new {@class = i == usersVm.CurrentPage ? "primary badge" : ""}
-                    );
+            if (pageNumber < 1 || pageNumber > usersVm.TotalPages)
+                pageNumber = usersVm.CurrentPage;
 
-                pages.Append(link);
-            }
-            
-            return MvcHtmlString.Create(pages.ToString());
+            var link = ajaxHelper.ActionLink(
+                linkText,
+                "List",
+                new {searchStr = usersVm.SearchStr, sortByStr = usersVm.SortByStr, page = pageNumber},
+                new AjaxOptions {UpdateTargetId = "user-table"}
+                );
+
+            return link;
         }
     }
 }
