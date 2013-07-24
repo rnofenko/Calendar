@@ -205,6 +205,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\RoomService.cs" />
+    <Compile Include="ViewModels\HomeBirthdayListVm.cs" />
+    <Compile Include="ViewModels\HomeBirthdaysVm.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />
     <Compile Include="ViewModels\UsersVm.cs" />
@@ -272,6 +274,7 @@
     <Content Include="Views\Room\EditRoom.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
+    <Content Include="Views\Home\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

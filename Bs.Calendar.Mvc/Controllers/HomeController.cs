@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Bs.Calendar.Mvc.Services;
+using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -14,8 +15,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Index()
         {
-            var users = _service.LoadUsers();
-            return View(users);
+            return View(_service.List(BirthdateRange.YEAR));
         }
     }
 }

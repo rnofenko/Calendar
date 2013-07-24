@@ -1,16 +1,8 @@
-﻿@model IEnumerable<Bs.Calendar.Models.User>
+﻿@model Bs.Calendar.Mvc.ViewModels.HomeBirthdayListVm
 @{
     ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
-    
-    <h1>Пользователи</h1>
-
-    @foreach (var user in Model)
-    {
-        <div class="row">
-            @user.Email
-        </div>
-    }
-</div>
+<h1>Happy birthday, guys</h1>
+@Html.Partial("List", Model)
