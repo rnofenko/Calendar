@@ -19,5 +19,7 @@ namespace Bs.Calendar.Models
         public string PasswordKeccakHash { get; set; }
 
         public string PasswordMd5Hash { get; set; }
+
+        public State State { get; set; }
     }
 }
