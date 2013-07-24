@@ -1,0 +1,21 @@
+﻿@using System.Globalization
+@model Bs.Calendar.Mvc.ViewModels.HomeBirthdayListVm
+
+@{
+    var dateFormat = "MMM dd, yyyy";
+    var culture = new CultureInfo("en-US");//System.Threading.Thread.CurrentThread.CurrentCulture;
+
+    DateTime currentDay = DateTime.Today;
+}
+
+@foreach (var user in Model.GuysWhoHaveBirthdays)
+{
+    var newAge = currentDay.Year - user.Birthdate.Year;
+    newAge = user.Birthdate > currentDay.AddYears(-newAge) ? -- newAge : newAge;
+<tr>
+    <td>@user.FirstName </td>
+    <td>@user.LastName</td>
+    <td>-@newAge</td>
+    <td>(was born on @user.Birthdate.ToString(dateFormat, culture))</td>
+</tr>
+}
