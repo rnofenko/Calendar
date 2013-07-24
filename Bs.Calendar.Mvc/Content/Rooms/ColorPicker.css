@@ -7,7 +7,7 @@
 .roomColor_6 { background-color: lightskyblue; }
 .roomColor_7 { background-color: yellow; }
 
-.color_picker_container div, #color_cell
+.color_picker_container div, #color_cell, .roomColor
 {
     width:  21px;
     height: 21px;

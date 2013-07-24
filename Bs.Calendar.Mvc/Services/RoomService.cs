@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Bs.Calendar.DataAccess;
-using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models.Bases;
 using Bs.Calendar.Mvc.ViewModels;
 
@@ -81,7 +80,7 @@ namespace Bs.Calendar.Mvc.Services
                     );
             }
 
-            return new RoomsVm() { Rooms = rooms.ToList() };
+            return new RoomsVm { Rooms = rooms.ToList() };
         }
     }
 }
