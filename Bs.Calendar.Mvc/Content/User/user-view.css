@@ -1,4 +1,13 @@
-﻿.tiles li {
-    margin-bottom: 10px;
-    background: silver;
+﻿th > a {
+    color: white;
+}
+
+th > a:hover {
+    color: white;
+}
+
+a[data-ajax="true"] {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 11pt;
 }

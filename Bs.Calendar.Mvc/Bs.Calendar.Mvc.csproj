@@ -211,6 +211,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HomeService.cs" />
+    <Compile Include="Services\AjaxLinkHelpers.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />

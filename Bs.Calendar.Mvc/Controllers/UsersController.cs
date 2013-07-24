@@ -92,9 +92,9 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
-        public ActionResult List(string searchStr)
+        public ActionResult List(string searchStr, string sortByStr, int page = 1)
         {
-            return PartialView(_service.Find(searchStr));
+            return PartialView(_service.RetreiveList(searchStr, sortByStr, page));
         }
     }
 }

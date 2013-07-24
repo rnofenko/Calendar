@@ -65,7 +65,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //act
             _userController.Create(testUserVm);
-            var userView = _userController.List("") as PartialViewResult;
+            var userView = _userController.List("", null) as PartialViewResult;
             var users = (userView.Model as UsersVm).Users;
 
             //assert
@@ -79,7 +79,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //act
             _userController.Create(testUserVm);
-            var userView = _userController.List("") as PartialViewResult;
+            var userView = _userController.List("", null) as PartialViewResult;
             var users = (userView.Model as UsersVm).Users;
 
             //assert
@@ -93,7 +93,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //act
             _userController.Create(testUserVm);
-            var userView = _userController.List("") as PartialViewResult;
+            var userView = _userController.List("", null) as PartialViewResult;
             var users = (userView.Model as UsersVm).Users;
 
             //assert
@@ -125,7 +125,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //act
             _userController.Edit(testUserVm);
-            var userView = _userController.List("") as PartialViewResult;
+            var userView = _userController.List("", null) as PartialViewResult;
             var users = (userView.Model as UsersVm).Users;
 
             //assert
@@ -156,7 +156,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //act
             _userController.Delete(testUserVm);
-            var userView = _userController.List("") as PartialViewResult;
+            var userView = _userController.List("", null) as PartialViewResult;
             var users = (userView.Model as UsersVm).Users;
 
             //assert

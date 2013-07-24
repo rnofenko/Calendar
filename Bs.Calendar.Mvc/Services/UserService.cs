@@ -13,6 +13,7 @@ namespace Bs.Calendar.Mvc.Services
     public class UserService
     {
         private readonly RepoUnit _unit;
+        private readonly int _pageSize = 6;
 
         public UserService(RepoUnit unit)
         {
@@ -86,15 +87,46 @@ namespace Bs.Calendar.Mvc.Services
             }
         }
 
-        public UsersVm Find(string searchStr)
+        public UsersVm RetreiveList(string searchStr, string sortByStr, int page)
         {
             var users = _unit.User.Load().AsEnumerable();
 
-            if (string.IsNullOrEmpty(searchStr))
+            if (!string.IsNullOrEmpty(searchStr))
             {
-                return new UsersVm {Users = users.ToList()};
+                users = Find(users, searchStr);
             }
 
+            if (!string.IsNullOrEmpty(sortByStr))
+            {
+                users = Sort(users, sortByStr);
+            }
+
+            return new UsersVm
+            {
+                Users = users.Skip((page - 1)*_pageSize).Take(_pageSize).ToList(),
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling((decimal) users.Count() / _pageSize),
+                SearchStr = searchStr,
+                SortByStr = sortByStr,
+            };
+        }
+
+        public IEnumerable<User> Sort(IEnumerable<User> users, string sortByStr)
+        {
+            switch (sortByStr)
+            {
+                case "Name":
+                    users = users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName);
+                    break;
+                case "E-mail":
+                    users = users.OrderBy(user => user.Email);
+                    break;
+            }
+            return users;
+        }
+
+        public IEnumerable<User> Find(IEnumerable<User> users, string searchStr)
+        {
             //Delete extra whitespaces
             searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ");
 
@@ -108,7 +140,7 @@ namespace Bs.Calendar.Mvc.Services
                 users = FindByName(users, searchStr);
             }
 
-            return new UsersVm {Users = users.ToList()};
+            return users;
         }
 
         private IEnumerable<User> FindByName(IEnumerable<User> users, string searchStr)
