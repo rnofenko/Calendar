@@ -49,6 +49,13 @@ namespace Bs.Calendar.Tests.Int
         }
 
         [Test]
-        public void 
+        public void ShouldReturnCorrectUserNameWithGivenEmail()
+        {
+            // assert
+            string
+                .Format("{0} {1}", _user.FirstName, _user.LastName)
+                .Should()
+                .Be(_membershipProvider.GetUserNameByEmail(_user.Email));
+        }
     }
 }
