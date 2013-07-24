@@ -16,10 +16,14 @@ namespace Bs.Calendar.Mvc.Services
         public static MvcHtmlString AjaxSortLink(this HtmlHelper html, UsersVm usersVm, string sortByStr)
         {
             var ajaxHelper = new AjaxHelper(html.ViewContext, html.ViewDataContainer);
+            var linkText = sortByStr;
+            
+            //When clicked again show default unsorted view
+            if (sortByStr.Equals(usersVm.SortByStr))
+                sortByStr = null;
 
-            var link = AjaxExtensions.ActionLink(
-                ajaxHelper,
-                sortByStr,
+            var link = ajaxHelper.ActionLink(
+                linkText,
                 "List",
                 new {searchStr = usersVm.SearchStr, sortByStr = sortByStr, page = usersVm.CurrentPage},
                 new AjaxOptions {UpdateTargetId = "user-table"}
@@ -35,8 +39,7 @@ namespace Bs.Calendar.Mvc.Services
 
             for (var i = 1; i <= usersVm.TotalPages; i++)
             {
-                var link = AjaxExtensions.ActionLink(
-                    ajaxHelper,
+                var link = ajaxHelper.ActionLink(
                     i.ToString(),
                     "List",
                     new {searchStr = usersVm.SearchStr, sortByStr = usersVm.SortByStr, page = i},

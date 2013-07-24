@@ -43,7 +43,7 @@ namespace Bs.Calendar.Tests.Unit
             var testUser = _users[0];
 
             //act
-            var users = _userService.Find(testUser.Email).Users;
+            var users = _userService.Find(_users, testUser.Email).ToList();
 
             //assert
             users.Count().ShouldBeEquivalentTo(1);
@@ -59,7 +59,7 @@ namespace Bs.Calendar.Tests.Unit
             var testUser = _users[0];
 
             //act
-            var users = _userService.Find(testUser.FirstName).Users;
+            var users = _userService.Find(_users, testUser.FirstName).ToList();
 
             //assert
             users.Count().ShouldBeEquivalentTo(1);
@@ -73,7 +73,7 @@ namespace Bs.Calendar.Tests.Unit
             var testUser = _users[1];
 
             //act
-            var users = _userService.Find(testUser.FirstName).Users;
+            var users = _userService.Find(_users, testUser.FirstName).ToList();
 
             //assert
             users.Count().ShouldBeEquivalentTo(2);
@@ -88,7 +88,7 @@ namespace Bs.Calendar.Tests.Unit
             var testUser = new User {Email = "00000@gmail.com"};
 
             //act
-            var users = _userService.Find(testUser.Email).Users;
+            var users = _userService.Find(_users, testUser.Email).ToList();
 
             //assert
             users.Count().ShouldBeEquivalentTo(0);
@@ -101,7 +101,7 @@ namespace Bs.Calendar.Tests.Unit
             var testUser = new User { FirstName = "Alex" };
 
             //act
-            var users = _userService.Find(testUser.FirstName).Users;
+            var users = _userService.Find(_users, testUser.FirstName).ToList();
 
             //assert
             users.Count().ShouldBeEquivalentTo(0);
@@ -114,18 +114,7 @@ namespace Bs.Calendar.Tests.Unit
             var emptyString = string.Empty;
 
             //act
-            var users = _userService.Find(emptyString).Users;
-            //assert
-            users.Count().ShouldBeEquivalentTo(_users.Count);
-        }
-
-        [Test]
-        public void Find_Return_All_Users_When_Filter_By_Null_String() {
-            //arrange
-            string nullString = null;
-
-            //act
-            var users = _userService.Find(nullString).Users;
+            var users = _userService.Find(_users, emptyString).ToList();
             //assert
             users.Count().ShouldBeEquivalentTo(_users.Count);
         }
