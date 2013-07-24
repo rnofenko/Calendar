@@ -5,6 +5,7 @@ using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly UserService _service;
@@ -51,7 +52,6 @@ namespace Bs.Calendar.Mvc.Controllers
             }
         }
 
-        [Authorize]
         public ActionResult Edit(int id)
         {
             return PassUserIntoTheView("Edit", id);
@@ -72,7 +72,6 @@ namespace Bs.Calendar.Mvc.Controllers
             }
         }
 
-        [Authorize]
         public ActionResult Delete(int id)
         {
             return PassUserIntoTheView("Delete", id);

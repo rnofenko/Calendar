@@ -8,9 +8,10 @@ else {
     <table>
         <thead>
             <tr>
-                @*<th>Id</th>*@
+                <th>Id</th>
                 <th>Name</th>
                 <th>E-mail</th>
+                <th>Role</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -18,13 +19,14 @@ else {
             @foreach (var user in Model.Users)
             {
                 <tr>
-                    @*<td>@user.Id</td>*@
+                    <td>@user.Id</td>
                     <td>@user.FirstName @user.LastName</td>      
                     <td>@user.Email</td>
+                    <td>@user.Role</td>
                     <td>           
-                        @*<div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>*@
+                        <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
                         <div class="medium default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>
-                        @*<div class="medium danger btn icon-right icon-trash">@Html.ActionLink("Delete", "Delete", new {id = user.Id})</div>*@
+                        <div class="medium danger btn icon-right icon-trash">@Html.ActionLink("Delete", "Delete", new {id = user.Id})</div>
                     </td>
                 </tr>
             }
