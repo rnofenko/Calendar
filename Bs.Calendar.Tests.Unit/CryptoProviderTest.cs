@@ -11,7 +11,7 @@ namespace Bs.Calendar.Tests.Unit
         [TestFixtureSetUp]
         public void Setup()
         {
-            cryptoProvider = new CryptoProvider();
+            cryptoProvider = new KeccakCryptoProvider();
         }
 
         [TestCase("",
@@ -25,7 +25,7 @@ namespace Bs.Calendar.Tests.Unit
         public string ShouldReturnCorrectKeccakHash(string data)
         {
             // act & assert
-            return cryptoProvider.GetKeccakHash(data).ToLower();
+            return cryptoProvider.GetHash(data).ToLower();
         }
 
         [TestCase("", Result = "d41d8cd98f00b204e9800998ecf8427e"),
@@ -34,14 +34,7 @@ namespace Bs.Calendar.Tests.Unit
         public string ShouldReturnCorrectMd5Hash(string data)
         {
             // act & assert
-            return ((CryptoProvider) cryptoProvider).GetMd5Hash(data).ToLower();
-        }
-
-        [Test]
-        public void RomanNofenkoPasswordHash()
-        {
-            const string password = "rnofenko@gmail.com";
-            var hash = cryptoProvider.GetKeccakHashWithSalt(password);
+            return Md5.GetMd5Hash(data).ToLower();
         }
     }
 }

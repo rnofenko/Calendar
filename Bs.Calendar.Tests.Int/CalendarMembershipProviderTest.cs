@@ -27,9 +27,9 @@ namespace Bs.Calendar.Tests.Int
 
             _membershipProvider = new CalendarMembershipProvider();
 
-            var crypto = new CryptoProvider();
+            var crypto = new KeccakCryptoProvider();
             _userPassword = "moriarty";
-            var keccak = crypto.GetKeccakHashWithSalt(_userPassword);
+            var keccak = crypto.GetHashWithSalt(_userPassword);
             
             _user = new User
             {

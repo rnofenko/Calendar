@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Bs.Calendar.DataAccess.Bases;
+using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Controllers;
 using Bs.Calendar.Mvc.Services;

@@ -40,13 +40,13 @@ namespace Bs.Calendar.Mvc.Services
                 status = MembershipCreateStatus.DuplicateEmail;
                 return null;
             }
-            var crypto = new CryptoProvider();
+            var crypto = new KeccakCryptoProvider();
             var user = new User
             {
                 FirstName = email.Remove(email.IndexOf('@')),
                 LastName = "",
                 Email = email,
-                PasswordKeccakHash = crypto.GetKeccakHashWithSalt(password),
+                PasswordKeccakHash = crypto.GetHash(password),
                 Role = Roles.None
             };
             using (var unit = new RepoUnit())
@@ -201,8 +201,8 @@ namespace Bs.Calendar.Mvc.Services
         /// <returns></returns>
         public override bool ValidateUser(string userEmail, string password)
         {
-            var crypto = new CryptoProvider();
-            var keccakHash = crypto.GetKeccakHashWithSalt(password);
+            var crypto = new KeccakCryptoProvider();
+            var keccakHash = crypto.GetHashWithSalt(password);
             using (var unit = new RepoUnit())
             {
                 var user = unit.User.Get(

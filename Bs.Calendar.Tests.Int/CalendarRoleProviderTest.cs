@@ -30,10 +30,9 @@ namespace Bs.Calendar.Tests.Int
 
             _roleProvider = new CalendarRoleProvider();
 
-            var crypto = new CryptoProvider();
+            var crypto = new KeccakCryptoProvider();
             _userPassword = "IrenAdler";
-            var keccak = crypto.GetKeccakHash(_userPassword);
-            var md5 = crypto.GetMd5Hash(_userPassword);
+            var keccak = crypto.GetHashWithSalt(_userPassword);
 
             _user = new User
             {
