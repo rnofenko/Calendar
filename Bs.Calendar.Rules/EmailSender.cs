@@ -13,7 +13,6 @@ namespace Bs.Calendar.Rules
         {
             public void Send(object threadContext)
             {
-                Console.WriteLine("Thread starts");
                 var message = threadContext as MailMessage;
                 if (message == null)
                 {
@@ -28,7 +27,6 @@ namespace Bs.Calendar.Rules
                     };
                 smtp.EnableSsl = true;
                 smtp.Send(message);
-                Console.WriteLine("Message is sent");
             }
         }
 
@@ -40,9 +38,10 @@ namespace Bs.Calendar.Rules
         public void SendEmail(MailMessage message)
         {
             var sender = new AsyncSender();
-            Console.WriteLine("Ready");
-            ThreadPool.QueueUserWorkItem(sender.Send, message);
-            Console.WriteLine("Queued");
+            // Sync call for sender. It will be removed soon.
+            sender.Send(message);
+            // Async call for sender. It doesn't work now
+            // ThreadPool.QueueUserWorkItem(sender.Send, message);
         }
     }
 }

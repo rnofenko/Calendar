@@ -19,7 +19,7 @@ namespace Bs.Calendar.Tests.Int
             message.Body = "This is the message body";
             var sender = new EmailSender();
             sender.SendEmail(message);
-            Thread.Sleep(10000);    
+            // Thread.Sleep(10000);    
         }
     }
 }
