@@ -11,16 +11,11 @@
     <body>
         <div class="page-wrapper">
             @Html.Partial("Header")
-
-        
             
-        <header>
-        </header>
-        <div>
-            @Html.Partial("_LoginPartial")
-            @RenderBody()
-            
-            
+            <div class="row">
+                @Html.Partial("_LoginPartial")
+            </div>
+                @RenderBody()
             
             <div class="page-buffer"></div>
         </div>
