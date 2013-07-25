@@ -41,7 +41,6 @@ namespace Bs.Calendar.Tests.Int
                 FirstName = "Sherlock",
                 LastName = "Holmes",
                 PasswordKeccakHash = keccak,
-                PasswordMd5Hash = md5,
                 Role = Roles.Simple
             };
             _unit.User.Save(_user);                       

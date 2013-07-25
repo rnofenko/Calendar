@@ -34,7 +34,14 @@ namespace Bs.Calendar.Tests.Unit
         public string ShouldReturnCorrectMd5Hash(string data)
         {
             // act & assert
-            return cryptoProvider.GetMd5Hash(data).ToLower();
+            return ((CryptoProvider) cryptoProvider).GetMd5Hash(data).ToLower();
+        }
+
+        [Test]
+        public void RomanNofenkoPasswordHash()
+        {
+            const string password = "rnofenko@gmail.com";
+            var hash = cryptoProvider.GetKeccakHashWithSalt(password);
         }
     }
 }

@@ -3,6 +3,6 @@
     public enum State
     {
         Ok = 0,
-        Deleted = 1        
+        Deleted = 1
     }
 }

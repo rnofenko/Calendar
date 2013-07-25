@@ -13,7 +13,7 @@ namespace Bs.Calendar.Tests.Int
     [TestFixture]
     public class CalendarMembershipProviderTest
     {
-        private CalendarMembershipProvider _membershipProvider;        
+        private CalendarMembershipProvider _membershipProvider;
         private RepoUnit _unit;
         private User _user;
         private string _userPassword;
@@ -29,18 +29,17 @@ namespace Bs.Calendar.Tests.Int
 
             var crypto = new CryptoProvider();
             _userPassword = "moriarty";
-            var keccak = crypto.GetKeccakHash(_userPassword);
-            var md5 = crypto.GetMd5Hash(_userPassword);
-
+            var keccak = crypto.GetKeccakHashWithSalt(_userPassword);
+            
             _user = new User
             {
                 Email = "holmes@email.com",
-                FirstName = "Sherlock", LastName = "Holmes",
+                FirstName = "Sherlock",
+                LastName = "Holmes",
                 PasswordKeccakHash = keccak,
-                PasswordMd5Hash = md5,
                 Role = Roles.Simple
             };
-            _unit.User.Save(_user);           
+            _unit.User.Save(_user);
         }
 
         [Test]
@@ -52,7 +51,7 @@ namespace Bs.Calendar.Tests.Int
             // assert
             user.Should().NotBeNull();
             user.UserName.Should().Be(string.Format("{0} {1}", _user.FirstName, _user.LastName));
-            user.Email.Should().Be(_user.Email);           
+            user.Email.Should().Be(_user.Email);
         }
 
         [Test]

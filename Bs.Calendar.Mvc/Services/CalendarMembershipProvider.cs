@@ -46,8 +46,7 @@ namespace Bs.Calendar.Mvc.Services
                 FirstName = email.Remove(email.IndexOf('@')),
                 LastName = "",
                 Email = email,
-                PasswordKeccakHash = crypto.GetKeccakHash(password),
-                PasswordMd5Hash = crypto.GetMd5Hash(password),
+                PasswordKeccakHash = crypto.GetKeccakHashWithSalt(password),
                 Role = Roles.None
             };
             using (var unit = new RepoUnit())
@@ -203,14 +202,12 @@ namespace Bs.Calendar.Mvc.Services
         public override bool ValidateUser(string userEmail, string password)
         {
             var crypto = new CryptoProvider();
-            var keccakHash = crypto.GetKeccakHash(password);
-            var md5Hash = crypto.GetMd5Hash(password);
+            var keccakHash = crypto.GetKeccakHashWithSalt(password);
             using (var unit = new RepoUnit())
             {
                 var user = unit.User.Get(
                     u => (u.Email == userEmail &&
-                         u.PasswordKeccakHash == keccakHash &&
-                         u.PasswordMd5Hash == md5Hash));
+                         u.PasswordKeccakHash == keccakHash));
                 return user != null;
             }
         }

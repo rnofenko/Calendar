@@ -15,8 +15,11 @@ namespace Bs.Calendar.Mvc.Services
 
                 if (!users.Any())
                 {
-                    unit.User.Save(new User {Email = "rnofenko@gmail.com", Role = Roles.Admin, 
-                        FirstName = "Roman", LastName = "Nofenko", PasswordKeccakHash = "50071663808AB77374A5A26BDE4D48379442BF7755A7A3A5281EFF7CCFA5DAF7DE59F1145EDCDF39AC525FA2DFAE64088A097952033A70A378FD1E29A45226F7",PasswordMd5Hash = "C10ED385C509CC2C7BA59B2EB4C4947A"});
+                    unit.User.Save(new User {Email = "rnofenko@gmail.com", Role = Roles.Admin, State = State.Ok,
+                                             FirstName = "Roman",
+                                             LastName = "Nofenko",
+                                             PasswordKeccakHash = "E9447A0B454AA39752445D6DCD2619F25C83F6453BA463C614820239CDC7CAB811F0C75D27776E119836523CF839C90596F2C0B07A45023741C200B51B6944D4"
+                    });
                     users = unit.User.Load().ToList();
                 }
 
