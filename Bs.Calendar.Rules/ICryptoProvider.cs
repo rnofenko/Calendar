@@ -2,7 +2,7 @@
 {
     public interface ICryptoProvider
     {
-        string GetKeccakHash(string data);
-        string GetKeccakHashWithSalt(string data);
+        string GetHash(string data);
+        string GetHashWithSalt(string data);
     }
 }
