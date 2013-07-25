@@ -89,7 +89,7 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpPost]
         public ActionResult Delete(UserEditVm model)
         {
-            _service.UpdateUserState(model.UserId, State.Deleted);
+            _service.UpdateUserState(model.UserId, LiveState.Deleted);
             return RedirectToAction("Index");
         }
 

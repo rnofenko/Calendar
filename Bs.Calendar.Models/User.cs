@@ -18,6 +18,6 @@ namespace Bs.Calendar.Models
 
         public string PasswordKeccakHash { get; set; }
         
-        public State State { get; set; }
+        public LiveState LiveState { get; set; }
     }
 }

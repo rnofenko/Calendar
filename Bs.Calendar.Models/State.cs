@@ -1,8 +1,8 @@
 ﻿namespace Bs.Calendar.Models
 {
-    public enum State
+    public enum LiveState
     {
-        Ok = 0,
-        Deleted = 1
+        Ok = 1,
+        Deleted = 2
     }
 }

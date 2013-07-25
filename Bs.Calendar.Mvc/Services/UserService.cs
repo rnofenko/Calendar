@@ -45,10 +45,10 @@ namespace Bs.Calendar.Mvc.Services
             _unit.User.Save(user);
         }
 
-        public void UpdateUserState(int userModelId, State state)
+        public void UpdateUserState(int userModelId, LiveState liveState)
         {
             var user = _unit.User.Get(userModelId);
-            user.State = state;
+            user.LiveState = liveState;
             _unit.User.Save(user);
         }
 

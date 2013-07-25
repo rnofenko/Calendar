@@ -32,7 +32,7 @@ namespace Bs.Calendar.Tests.Int
                     LastName = "User",
                     Email = "newuser@gmail.com",
                     Role = Roles.Simple,
-                    State = State.Ok
+                    LiveState = LiveState.Ok
                 };
             DiMvc.Register();
             Resolver.RegisterType<IUserRepository, FakeUserRepository>();
@@ -51,7 +51,7 @@ namespace Bs.Calendar.Tests.Int
                     LastName = "Email",
                     Email = "newuser@gmail.com",
                     Role = Roles.Simple,
-                    State = State.Ok
+                    LiveState = LiveState.Ok
                 };
 
             // act
@@ -129,7 +129,7 @@ namespace Bs.Calendar.Tests.Int
                 LastName = "Del",
                 Email = "deluser@gmail.com",
                 Role = Roles.None,
-                State = State.Ok
+                LiveState = LiveState.Ok
             };
             _userService.SaveUser(userToDeleteVm);
 
@@ -139,7 +139,7 @@ namespace Bs.Calendar.Tests.Int
             new UsersController(_userService).Delete(new UserEditVm(userToDelete));
 
             // assert
-            _unit.User.Get(userToDelete.Id).State.Should().Be(State.Deleted);
+            _unit.User.Get(userToDelete.Id).LiveState.Should().Be(LiveState.Deleted);
         }
 
         [TestFixtureTearDown]
