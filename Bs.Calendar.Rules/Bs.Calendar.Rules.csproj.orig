@@ -47,7 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <Compile Include="CryptoProvider.cs" />
     <Compile Include="EmailSender.cs" />
+>>>>>>> 1de7b51aabbfb12c4f31ccbc8614fd59b0a24e29
     <Compile Include="ICryptoProvider.cs" />
     <Compile Include="KeccakCryptoProvider.cs" />
     <Compile Include="Md5.cs" />
