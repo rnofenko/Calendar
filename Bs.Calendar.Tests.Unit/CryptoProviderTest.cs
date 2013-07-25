@@ -6,12 +6,12 @@ namespace Bs.Calendar.Tests.Unit
     [TestFixture]
     class CryptoProviderTest
     {
-        private ICryptoProvider cryptoProvider;
+        private ICryptoProvider _cryptoProvider;
 
         [TestFixtureSetUp]
         public void Setup()
         {
-            cryptoProvider = new KeccakCryptoProvider();
+            _cryptoProvider = new KeccakCryptoProvider();
         }
 
         [TestCase("",
@@ -25,7 +25,7 @@ namespace Bs.Calendar.Tests.Unit
         public string ShouldReturnCorrectKeccakHash(string data)
         {
             // act & assert
-            return cryptoProvider.GetHash(data).ToLower();
+            return _cryptoProvider.GetHash(data).ToLower();
         }
 
         [TestCase("", Result = "d41d8cd98f00b204e9800998ecf8427e"),

@@ -28,9 +28,9 @@ namespace Bs.Calendar.Tests.Int
         {
             _user = new User
                 {
-                    FirstName = "New",
-                    LastName = "User",
-                    Email = "newuser@gmail.com",
+                    FirstName = "Winston",
+                    LastName = "Smith",
+                    Email = "bigbrother1984@gmail.com",
                     Role = Roles.Simple,
                     LiveState = LiveState.Ok
                 };
@@ -39,6 +39,7 @@ namespace Bs.Calendar.Tests.Int
             _unit = Resolver.Resolve<RepoUnit>();
             _userService = new UserService(_unit);
             _userService.SaveUser(new UserEditVm(_user));
+            _user = _unit.User.Get(u => u.Email == _user.Email);
         }
 
         [Test]
@@ -47,12 +48,35 @@ namespace Bs.Calendar.Tests.Int
             // arrange
             var userToAdd = new User
                 {
-                    FirstName = "Same",
-                    LastName = "Email",
-                    Email = "newuser@gmail.com",
+                    FirstName = "Emmanuel",
+                    LastName = "Goldstein",
+                    Email = "bigbrother1984@gmail.com",
                     Role = Roles.Simple,
                     LiveState = LiveState.Ok
                 };
+
+            // act
+            Action action = () => _userService.SaveUser(new UserEditVm(userToAdd));
+
+            // assert
+            action.ShouldThrow<WarningException>().WithMessage(string.Format("User with email {0} already exists", userToAdd.Email));
+        }
+
+        [Test]
+        public void CanNotAddNewUserWithExistingInTheDbEmailEvenIfUserWithThisEmaisIsDeleted()
+        {
+            // arrange
+            _user.LiveState = LiveState.Deleted;
+            _userService.UpdateUserState(_user.Id, LiveState.Deleted);
+
+            var userToAdd = new User
+            {
+                FirstName = "Julia",
+                LastName = "Htims",
+                Email = "bigbrother1984@gmail.com",
+                Role = Roles.Simple,
+                LiveState = LiveState.Ok
+            };
 
             // act
             Action action = () => _userService.SaveUser(new UserEditVm(userToAdd));
@@ -68,9 +92,9 @@ namespace Bs.Calendar.Tests.Int
             var quantaty = _userService.GetAllUsers().Count();
             var user = new User
                 {
-                    FirstName = "NewOne",
-                    LastName = "AnotherUser",
-                    Email = "newoneuser@gmail.com",
+                    FirstName = "George",
+                    LastName = "Orwell",
+                    Email = "orwell.george@gmail.com",
                     Role = Roles.None
                 };
 
@@ -100,9 +124,9 @@ namespace Bs.Calendar.Tests.Int
         {
             // arrange
             var user = _userService.GetAllUsers().Last();
-            user.FirstName = "Modyfied";
-            user.LastName = "User";
-            user.Email = "newemail@gmail.com";
+            user.FirstName = "Big";
+            user.LastName = "Brother";
+            user.Email = "iamwatchingyou@gmail.com";
             user.Role = Roles.None;
 
             // act
@@ -125,9 +149,9 @@ namespace Bs.Calendar.Tests.Int
             // arrange
             var userToDeleteVm = new UserEditVm
             {
-                FirstName = "User",
-                LastName = "Del",
-                Email = "deluser@gmail.com",
+                FirstName = " OBrien",
+                LastName = "Agent",
+                Email = "obrien@gmail.com",
                 Role = Roles.None,
                 LiveState = LiveState.Ok
             };
@@ -145,30 +169,9 @@ namespace Bs.Calendar.Tests.Int
         [TestFixtureTearDown]
         public void TearDown()
         {
-            var user1 = _unit.User.Get(user =>
-                (
-                    user.FirstName == "New" &&
-                    user.LastName == "User" &&
-                    user.Email == "newuser@gmail.com" &&
-                    user.Role == Roles.Simple
-                ));
-
-            var user2 = _unit.User.Get(user =>
-               (
-                    user.FirstName == "NewOne" &&
-                    user.LastName == "AnotherUser" &&
-                    user.Email == "newoneuser@gmail.com" &&
-                    user.Role == Roles.None
-               ));
-
-            var user3 = _unit.User.Get(user =>
-                (
-                    user.FirstName == "Modyfied" &&
-                    user.LastName == "User" &&
-                    user.Email == "newemail@gmail.com" &&
-                    user.Role == Roles.None
-                ));
-
+            var user1 = _unit.User.Get(user => user.Email == "bigbrother1984@gmail.com");
+            var user2 = _unit.User.Get(user => user.Email == "orwell.george@gmail.com");
+            var user3 = _unit.User.Get(user => user.Email == "iamwatchingyou@gmail.com");
             var changedUsersList = new List<User> {user1, user2, user3};
 
             foreach (var user in changedUsersList.Where(user => user!=null))
