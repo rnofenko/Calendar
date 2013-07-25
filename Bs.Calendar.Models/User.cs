@@ -5,7 +5,7 @@ using Bs.Calendar.Models.Bases;
 
 namespace Bs.Calendar.Models
 {
-    public class User : BaseEntity
+    public class User : BaseEntity 
     {
         [StringLength(LENGTH_NAME)]
         public string Email { get; set; }
@@ -20,5 +20,8 @@ namespace Bs.Calendar.Models
 
         [DataType(DataType.Date)]
         public DateTime Birthdate { get; set; }
+        public string PasswordKeccakHash { get; set; }
+        
+        public State State { get; set; }
     }
 }

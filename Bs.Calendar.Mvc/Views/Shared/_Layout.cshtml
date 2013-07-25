@@ -8,16 +8,14 @@
         @Styles.Render("~/Content/css")
         @RenderSection("styles", false)
     </head>
-
     <body>
         <div class="page-wrapper">
             @Html.Partial("Header")
-
-        
             
-            @RenderBody()
-            
-            
+            <div class="row">
+                @Html.Partial("_LoginPartial")
+            </div>
+                @RenderBody()
             
             <div class="page-buffer"></div>
         </div>

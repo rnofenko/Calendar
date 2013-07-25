@@ -1,124 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 
-using Bs.Calendar.Core.Utilities;
-using Bs.Calendar.Mvc.ViewModels;
-
 namespace Bs.Calendar.Mvc.Services
 {
-    public enum BirthdateRange
-    {
-        DAY,
-        WEEK,
-        MONTH,
-        YEAR
-    }
-
     public class HomeService
     {
-        private readonly RepoUnit _repoUnit;
-
-        public HomeService(RepoUnit repository)
+        public IEnumerable<User> LoadUsers()
         {
-            _repoUnit = repository;
-        }
-
-        public HomeBirthdayListVm List(BirthdateRange range)
-        {
-            var birthdays = new HomeBirthdayListVm();
-
-            var today = DateTime.Today;
-            var isLeapYear = DateTime.IsLeapYear(today.Year);
-
-            switch(range)
+            using (var unit = new RepoUnit())
             {
-                case BirthdateRange.YEAR:
-                    {
-                        birthdays.GuysWhoHaveBirthdays = _repoUnit.User
-                            .Load(user => 
-                                isLeapYear ||
-                                !isLeapYear &&
-                                user.Birthdate.Month != 2 &&
-                                user.Birthdate.Day != 29)
-                            .ToList();
+                var users = unit.User.Load().ToList();
 
-                        break;
-                    }
-                case BirthdateRange.MONTH:
-                    {
-                        birthdays.GuysWhoHaveBirthdays = _repoUnit.User
-                            .Load(user =>
-                                (isLeapYear && today.Month == user.Birthdate.Month) ||
-                                (!isLeapYear && today.Month == user.Birthdate.Month &&
-                                    ((user.Birthdate.Month != 2) || (user.Birthdate.Month == 2 && user.Birthdate.Day != 29))))
-                            .ToList();
+                if (!users.Any())
+                {
+                    unit.User.Save(new User {Email = "rnofenko@gmail.com", Role = Roles.Admin, State = State.Ok,
+                                             FirstName = "Roman",
+                                             LastName = "Nofenko",
+                                             PasswordKeccakHash = "E9447A0B454AA39752445D6DCD2619F25C83F6453BA463C614820239CDC7CAB811F0C75D27776E119836523CF839C90596F2C0B07A45023741C200B51B6944D4"
+                    });
+                    users = unit.User.Load().ToList();
+                }
 
-                        break;
-                    }
-                case BirthdateRange.WEEK:
-                    {
-                        DateTime currentWeekStart = today.FirstDayOfWeek();
-                        DateTime currentWeekEnd = today.LastDayOfWeek();
-
-                        birthdays.GuysWhoHaveBirthdays = _repoUnit.User
-                            .Load(user =>
-                                user.Birthdate.Month == currentWeekStart.Month && user.Birthdate.Day >= currentWeekStart.Day ||
-                                user.Birthdate.Month == currentWeekEnd.Month && user.Birthdate.Day <= currentWeekEnd.Day)
-                            .ToList();
-
-                        break;
-                    }
-                case BirthdateRange.DAY:
-                    {
-                        birthdays.GuysWhoHaveBirthdays = _repoUnit.User
-                            .Load(user =>
-                            today.Month == user.Birthdate.Month &&
-                            today.Day == user.Birthdate.Day)
-                            .ToList();
-
-                        break;
-                    }
+                return users;
             }
-
-            return birthdays;
-        }
-
-        public int NewAge(DateTime birthdate)
-        {
-            DateTime currentDay = DateTime.Now;
-
-            int newAge = currentDay.Year - birthdate.Year;
-
-            return birthdate > currentDay.AddYears(-newAge) ? -- newAge : newAge;
-        }
-
-        public HomeBirthdayListVm List()
-        {
-            var users = _repoUnit.User.Load().ToList();
-
-            if (!users.Any())
-            {
-                var rRandom = new Random(Environment.TickCount);
-
-                _repoUnit.User.Save(new User
-                                        {
-                                            Email = "somemail@gmail.com",
-                                            Role = Roles.None,
-                                            FirstName = "Paul",
-                                            LastName = "Porfiroff",
-                                            Birthdate = new DateTime(rRandom.Next(1700, 2013), rRandom.Next(1, 12), rRandom.Next(1, 28))
-                                        });
-
-                //unit.User.Save(new User {Email = "rnofenko@gmail.com", Role = Roles.Admin, 
-                //    FirstName = "Roman", LastName = "Nofenko"});
-                users = _repoUnit.User.Load().ToList();
-            }
-
-            return new HomeBirthdayListVm() {GuysWhoHaveBirthdays = users};
         }
     }
 }

@@ -1,0 +1,36 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.AccountVm
+
+@{
+    ViewBag.Title = "Register";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+            <ul class="seven columns">
+                <li>
+                    <h2>Register</h2>
+                </li>
+                <li>Please enter your email and password. @Html.ActionLink("Login", "Login") if you already have an account.</li>
+                <li class="field">
+                    <input class="email input" type="email" name="Email" placeholder="Your email" />
+                    @Html.ValidationMessageFor(model => model.Email)</li>
+                <li class="field">
+                    <input class="password input" type="password" name="Password" placeholder="Your password" />
+                    @Html.ValidationMessageFor(model => model.Password)
+                </li>
+                <li>
+                    <div class="medium primary btn">
+                        <input type="submit" value="Enter"/> 
+                    </div>
+                    | @Html.ActionLink("Back", "Index", "Home")
+                </li>
+                <li>@Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.")</li>
+            </ul>
+    </div>    
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -26,6 +26,7 @@ namespace Bs.Calendar.Tests.Int
             Resolver.RegisterType<IUserRepository, UserRepository>();
 
             _unit = new RepoUnit();
+            
             _unit.User.Save(new User {Email = "aaa@bbb.com", FirstName = "aaa", LastName = "bbb"});
             _unit.User.Save(new User { Email = "ccc@ddd.com", FirstName = "ccc", LastName = "ddd" });
 

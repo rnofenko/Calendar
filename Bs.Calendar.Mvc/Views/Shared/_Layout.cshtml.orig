@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/css")
+        @RenderSection("styles", false)
+    </head>
+
+    <body>
+<<<<<<< HEAD
+        <header>
+        </header>
+        <div>
+            @Html.Partial("_LoginPartial")
+=======
+        <div class="page-wrapper">
+            @Html.Partial("Header")
+
+        
+            
+>>>>>>> a40ca3f358c6b4003ade52656438679de923236f
+            @RenderBody()
+            
+            
+            
+            <div class="page-buffer"></div>
+        </div>
+
+        @Html.Partial("Footer")
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/Gumby")
+        @Scripts.Render("~/Scripts/all")
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

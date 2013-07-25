@@ -1,10 +1,12 @@
 using System.ComponentModel;
 using System.Web.Mvc;
+using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly UserService _service;
@@ -24,7 +26,7 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             return View();
         }
-
+        
         public ActionResult Details(int id)
         {
             return PassUserIntoTheView("Details", id);
@@ -87,7 +89,7 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpPost]
         public ActionResult Delete(UserEditVm model)
         {
-            _service.DeleteUser(model.UserId);
+            _service.UpdateUserState(model.UserId, State.Deleted);
             return RedirectToAction("Index");
         }
 

@@ -55,8 +55,9 @@
     <Compile Include="FakeObjects\FakeBaseRepository.cs" />
     <Compile Include="FakeObjects\FakeUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoomFrameTest.cs" />
     <Compile Include="UserControllerTest.cs" />
-    <Compile Include="UserFilterTest.cs" />
+    <None Include="UserFilterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

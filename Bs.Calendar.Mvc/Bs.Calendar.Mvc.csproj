@@ -184,11 +184,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Rooms\ColorPicker.css" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Content\css\gumby.css" />
     <Content Include="Content\css\gumby2.css" />
-    <Content Include="Content\css\style.css" />
     <Content Include="Content\gumby.css" />
     <Content Include="Content\Layout\layout.css" />
     <Content Include="Content\User\user-edit.css" />
@@ -210,11 +210,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CalendarMembershipProvider.cs" />
+    <Compile Include="Services\CalendarRoleProvider.cs" />
     <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\AjaxLinkHelpers.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\HomeBirthdayListVm.cs" />
     <Compile Include="ViewModels\HomeBirthdaysVm.cs" />
+    <Compile Include="ViewModels\AccountVm.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />
     <Compile Include="ViewModels\UsersVm.cs" />
@@ -277,13 +280,13 @@
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Delete.cshtml" />
     <Content Include="Views\Users\List.cshtml" />
-    <Content Include="Views\Room\Index.cshtml" />
-    <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Room\EditRoom.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
-    <Content Include="Views\Shared\Header.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\Home\List.cshtml" />
+    <Content Include="Views\Shared\Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -305,6 +308,10 @@
       <Project>{9ebc5d85-6739-452c-ac72-f9377dae9cd6}</Project>
       <Name>Bs.Calendar.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Bs.Calendar.Rules\Bs.Calendar.Rules.csproj">
+      <Project>{1D5478A3-8104-4F73-AE7E-426BBCACBD71}</Project>
+      <Name>Bs.Calendar.Rules</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -322,7 +329,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>61049</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:63814/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.2.0.1\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
@@ -39,7 +43,9 @@
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,7 +55,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmailTest.cs" />
+    <Compile Include="CalendarMembershipProviderTest.cs" />
+    <Compile Include="CalendarRoleProviderTest.cs" />
+    <Compile Include="PagingAndSortingTests.cs" />
+    <Compile Include="PagingPerfomanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestHelpers\FastDbInitializer.cs" />
     <Compile Include="UsersControllerTest.cs" />
     <Compile Include="UserFrameTest.cs" />
   </ItemGroup>
@@ -71,7 +82,7 @@
       <Name>Bs.Calendar.Mvc</Name>
     </ProjectReference>
     <ProjectReference Include="..\Bs.Calendar.Rules\Bs.Calendar.Rules.csproj">
-      <Project>{1d5478a3-8104-4f73-ae7e-426bbcacbd71}</Project>
+      <Project>{1D5478A3-8104-4F73-AE7E-426BBCACBD71}</Project>
       <Name>Bs.Calendar.Rules</Name>
     </ProjectReference>
     <ProjectReference Include="..\Bs.Calendar.Tests.Unit\Bs.Calendar.Tests.Unit.csproj">

@@ -61,7 +61,7 @@ namespace Bs.Calendar.Tests.Unit
         [Test]
         public void Can_Create_Users() {
             //arrange
-            var testUserVm = new UserEditVm(0, "Alexandr", "Fomkin", "0000@gmail.com", Roles.None);
+            var testUserVm = new UserEditVm(0, "Alexandr", "Fomkin", "0000@gmail.com", Roles.None, State.Ok);
 
             //act
             _userController.Create(testUserVm);
@@ -121,7 +121,7 @@ namespace Bs.Calendar.Tests.Unit
             var newLastName = "Koko";
             var newEmail = "ggggg@gmail.com";
             var newRole = Roles.Admin;
-            var testUserVm = new UserEditVm(_users[1].Id, newFirstName, newLastName, newEmail, newRole);
+            var testUserVm = new UserEditVm(_users[1].Id, newFirstName, newLastName, newEmail, newRole, State.Ok);
 
             //act
             _userController.Edit(testUserVm);
