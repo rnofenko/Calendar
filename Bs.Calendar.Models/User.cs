@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+
+using System.ComponentModel.DataAnnotations;
 using Bs.Calendar.Models.Bases;
 
 namespace Bs.Calendar.Models
@@ -16,6 +18,8 @@ namespace Bs.Calendar.Models
 
         public Roles Role { get; set; }
 
+        [DataType(DataType.Date)]
+        public DateTime Birthdate { get; set; }
         public string PasswordKeccakHash { get; set; }
         
         public State State { get; set; }

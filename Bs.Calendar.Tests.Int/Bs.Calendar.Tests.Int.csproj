@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmailTest.cs" />
     <Compile Include="CalendarMembershipProviderTest.cs" />
     <Compile Include="CalendarRoleProviderTest.cs" />
     <Compile Include="EmailTest.cs" />
