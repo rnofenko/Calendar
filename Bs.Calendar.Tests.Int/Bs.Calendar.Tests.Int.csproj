@@ -57,7 +57,6 @@
     <Compile Include="EmailTest.cs" />
     <Compile Include="CalendarMembershipProviderTest.cs" />
     <Compile Include="CalendarRoleProviderTest.cs" />
-    <Compile Include="EmailTest.cs" />
     <Compile Include="PagingAndSortingTests.cs" />
     <Compile Include="PagingPerfomanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

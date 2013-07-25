@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="EmailSender.cs" />
     <Compile Include="CryptoProvider.cs" />
-    <Compile Include="EmailSender.cs" />
     <Compile Include="ICryptoProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
