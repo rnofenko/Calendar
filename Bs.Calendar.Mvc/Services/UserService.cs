@@ -15,59 +15,48 @@ namespace Bs.Calendar.Mvc.Services
         private readonly RepoUnit _unit;
         public int PageSize { get; set; }
 
-        public UserService(RepoUnit unit)
-        {
+        public UserService(RepoUnit unit) {
             PageSize = 7;
             _unit = unit;
         }
 
-        public User GetUser(int userId)
-        {
+        public User GetUser(int userId) {
             var user = _unit.User.Get(userId);
             return user;
         }
 
-        public IEnumerable<User> GetAllUsers()
-        {
+        public IEnumerable<User> GetAllUsers() {
             return _unit.User.Load().ToList();
         }
 
-        public void SaveUser(UserEditVm userModel)
-        {
-            if (!IsValidEmailAddress(userModel.Email))
-            {
+        public void SaveUser(UserEditVm userModel) {
+            if (!IsValidEmailAddress(userModel.Email)) {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
-            if (_unit.User.Get(u => u.Email == userModel.Email) != null)
-            {
+            if (_unit.User.Get(u => u.Email == userModel.Email) != null) {
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
-            var user = new User
-                {
-                    FirstName = userModel.FirstName,
-                    LastName = userModel.LastName,
-                    Email = userModel.Email,
-                    Role = userModel.Role
-                };
+            var user = new User {
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                Email = userModel.Email,
+                Role = userModel.Role
+            };
             _unit.User.Save(user);
         }
 
-        public void DeleteUser(int id)
-        {
+        public void DeleteUser(int id) {
             _unit.User.Delete(_unit.User.Get(id));
         }
 
-        public void EditUser(UserEditVm userModel)
-        {
+        public void EditUser(UserEditVm userModel) {
             var userToEdit = GetUser(userModel.UserId);
-            if (!IsValidEmailAddress(userModel.Email))
-            {
+            if (!IsValidEmailAddress(userModel.Email)) {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
-            if(userToEdit.Email != userModel.Email && _unit.User.Get(u => u.Email == userModel.Email) != null)
-            {
+            if (userToEdit.Email != userModel.Email && _unit.User.Get(u => u.Email == userModel.Email) != null) {
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
-            }            
+            }
             userToEdit.FirstName = userModel.FirstName;
             userToEdit.LastName = userModel.LastName;
             userToEdit.Email = userModel.Email;
@@ -75,39 +64,35 @@ namespace Bs.Calendar.Mvc.Services
             _unit.User.Save(userToEdit);
         }
 
-        public static bool IsValidEmailAddress(string emailaddress)
-        {
-            try
-            {
+        public static bool IsValidEmailAddress(string emailaddress) {
+            try {
                 var email = new MailAddress(emailaddress);
                 return true;
-            }
-            catch (FormatException)
-            {
+            } catch (FormatException) {
                 return false;
             }
         }
 
-        public UsersVm RetreiveList(string searchStr, string sortByStr, int page)
-        {
-            var users = _unit.User.Load().AsEnumerable();
+        public UsersVm RetreiveList(string searchStr, string sortByStr, int page) {
+            var users = _unit.User.Load();
 
-            if (!string.IsNullOrEmpty(searchStr))
-            {
+            if (!string.IsNullOrEmpty(searchStr)) {
                 users = Find(users, searchStr);
             }
 
-            if (!string.IsNullOrEmpty(sortByStr))
-            {
+            if (!string.IsNullOrEmpty(sortByStr)) {
                 users = Sort(users, sortByStr);
             }
+            else
+            {
+                users = users.OrderBy(user => user.Id);
+            }
 
-            var totalPages = (int) Math.Ceiling((decimal) users.Count()/PageSize);
+            var totalPages = (int)Math.Ceiling((decimal)users.Count() / PageSize);
             var currentPage = page < 1 ? 1 : page > totalPages ? totalPages : page;
 
-            return new UsersVm
-            {
-                Users = users.Skip((currentPage - 1)*PageSize).Take(PageSize).ToList(),
+            return new UsersVm {
+                Users = users.Skip((currentPage - 1) * PageSize).Take(PageSize).ToList(),
                 CurrentPage = currentPage,
                 TotalPages = totalPages,
                 SearchStr = searchStr,
@@ -115,10 +100,8 @@ namespace Bs.Calendar.Mvc.Services
             };
         }
 
-        public IEnumerable<User> Sort(IEnumerable<User> users, string sortByStr)
-        {
-            switch (sortByStr)
-            {
+        public IQueryable<User> Sort(IQueryable<User> users, string sortByStr) {
+            switch (sortByStr) {
                 case "Name":
                     users = users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName);
                     break;
@@ -129,26 +112,21 @@ namespace Bs.Calendar.Mvc.Services
             return users;
         }
 
-        public IEnumerable<User> Find(IEnumerable<User> users, string searchStr)
-        {
+        public IQueryable<User> Find(IQueryable<User> users, string searchStr) {
             //Delete extra whitespaces
             searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ");
 
-            if (searchStr.Contains('@') && IsValidEmailAddress(searchStr))
-            {
+            if (searchStr.Contains('@') && IsValidEmailAddress(searchStr)) {
                 users = users.Where(user => user.Email.Equals(
                               searchStr, StringComparison.InvariantCulture));
-            } 
-            else if (searchStr.Length != 0)
-            {
+            } else if (searchStr.Length != 0) {
                 users = FindByName(users, searchStr);
             }
 
             return users;
         }
 
-        private IEnumerable<User> FindByName(IEnumerable<User> users, string searchStr)
-        {
+        private IQueryable<User> FindByName(IQueryable<User> users, string searchStr) {
             var arrName = searchStr.Split();
             var comparisonType = StringComparison.InvariantCultureIgnoreCase;
 
@@ -156,8 +134,7 @@ namespace Bs.Calendar.Mvc.Services
                 user.FirstName.Equals(arrName[0], comparisonType) ||
                 user.LastName.Equals(arrName[0], comparisonType));
 
-            if (arrName.Length == 2)
-            {
+            if (arrName.Length == 2) {
                 filteredUsers = filteredUsers.Where(user =>
                     user.FirstName.Equals(arrName[1], comparisonType) ||
                     user.LastName.Equals(arrName[1], comparisonType));

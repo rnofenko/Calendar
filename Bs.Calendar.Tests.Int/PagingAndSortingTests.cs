@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using Bs.Calendar.Core;
 using System.Web.Mvc;
 using Bs.Calendar.DataAccess;
+using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Controllers;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Tests.Int.TestHelpers;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -27,8 +31,8 @@ namespace Bs.Calendar.Tests.Int
             Resolver.RegisterType<IUserRepository, UserRepository>();
 
             _unit = new RepoUnit();
-            _unit.User.Save(new User {Email = "aaa@bbb.com", FirstName = "aaa", LastName = "ddd"});
-            _unit.User.Save(new User {Email = "ccc@ddd.com", FirstName = "aaa", LastName = "bbb"});
+            _unit.User.Save(new User { Email = "aaa@bbb.com", FirstName = "aaa", LastName = "ddd" });
+            _unit.User.Save(new User { Email = "ccc@ddd.com", FirstName = "aaa", LastName = "bbb" });
 
             var userService = new UserService(_unit);
             userService.PageSize = _pageSize = 1;
