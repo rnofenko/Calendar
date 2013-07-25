@@ -47,7 +47,8 @@ namespace Bs.Calendar.Mvc.Services
                 LastName = "",
                 Email = email,
                 PasswordKeccakHash = crypto.GetHash(password),
-                Role = Roles.None
+                Role = Roles.None,
+                LiveState = LiveState.Ok
             };
             using (var unit = new RepoUnit())
             {

@@ -47,6 +47,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
             try
             {
+                model.LiveState = LiveState.Ok;
                 _service.SaveUser(model);
                 return RedirectToAction("Index");
             }
