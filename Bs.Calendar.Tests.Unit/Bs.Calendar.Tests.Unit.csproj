@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetAgeTest.cs" />
     <Compile Include="CryptoProviderTest.cs" />
     <Compile Include="FakeObjects\FakeBaseRepository.cs" />
     <Compile Include="FakeObjects\FakeUserRepository.cs" />
