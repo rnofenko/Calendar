@@ -56,13 +56,12 @@
   <ItemGroup>
     <Compile Include="CalendarMembershipProviderTest.cs" />
     <Compile Include="CalendarRoleProviderTest.cs" />
-    <Compile Include="EmailTest.cs" />
-    <Compile Include="PagingAndSortingTests.cs" />
-    <Compile Include="PagingPerfomanceTests.cs" />
+    <None Include="PagingAndSortingTests.cs" />
+    <None Include="PagingPerfomanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers\FastDbInitializer.cs" />
-    <Compile Include="UsersControllerTest.cs" />
-    <Compile Include="UserFrameTest.cs" />
+    <None Include="UsersControllerTest.cs" />
+    <None Include="UserFrameTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bs.Calendar.Core\Bs.Calendar.Core.csproj">

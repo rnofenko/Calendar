@@ -53,6 +53,7 @@
     <Compile Include="Bases\IRepository.cs" />
     <Compile Include="DiDataAccess.cs" />
     <Compile Include="IRoomRepository.cs" />
+    <Compile Include="ITeamRepository.cs" />
     <Compile Include="RepoUnit.cs" />
     <Compile Include="IUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

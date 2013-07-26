@@ -5,6 +5,7 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
+using Bs.Calendar.Mvc.ViewModels;
 using Moq;
 using NUnit.Framework;
 using FluentAssertions;
@@ -40,26 +41,26 @@ namespace Bs.Calendar.Tests.Unit
         public void Find_Should_Return_One_User_When_Filter_Has_Email()
         {
             //arrange
-            var testUser = _users[0];
+            var testEmail = _users[0].Email;
+            var pagingVm = new PagingVm {SearchStr = testEmail};
 
             //act
-            var users = _userService.Find(_users, testUser.Email).ToList();
+            var users = _userService.RetreiveList(pagingVm).Users;
 
             //assert
             users.Count().ShouldBeEquivalentTo(1);
-            users.First().Email.ShouldBeEquivalentTo(testUser.Email);
-            users.First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
+            users.First().Email.ShouldBeEquivalentTo(testEmail);
         }
 
 
         [Test]
-        public void Find_Return_User_When_Filter_By_Name() 
-        {
+        public void Find_Return_User_When_Filter_By_Name() {
             //arrange
-            var testUser = _users[0];
+            var testName = _users[0].F;
+            var pagingVm = new PagingVm { SearchStr = testName };
 
             //act
-            var users = _userService.Find(_users, testUser.FirstName).ToList();
+            var users = _userService.RetreiveList(pagingVm).Users
 
             //assert
             users.Count().ShouldBeEquivalentTo(1);
@@ -85,7 +86,7 @@ namespace Bs.Calendar.Tests.Unit
         [Test]
         public void Find_Return_No_User_When_Filter_By_Nonexistent_Email() {
             //arrange
-            var testUser = new User {Email = "00000@gmail.com"};
+            var testUser = new User { Email = "00000@gmail.com" };
 
             //act
             var users = _userService.Find(_users, testUser.Email).ToList();

@@ -1,34 +1,33 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm
+﻿@model Bs.Calendar.Mvc.ViewModels.TeamsVm
+
 @{
     var ajaxOptions = new AjaxOptions
     {
-        UpdateTargetId = "user-table",
+        UpdateTargetId = "team-table",
         HttpMethod = "Get"
     };
 }
-@if (!Model.Users.Any())
+@if (!Model.Teams.Any())
 {
-    <div class="danger alert centered four columns">Sorry, no such user!</div>
+    <div class="danger alert centered four columns">Sorry, no team available!</div>
 }
 else
-{
+{  
     <table>
         <thead>
             <tr>
                 <th>@Html.AjaxSortLink(@Model.PagingVm, "Name", ajaxOptions)</th>
-                <th>@Html.AjaxSortLink(@Model.PagingVm, "E-mail", ajaxOptions)</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in Model.Users)
+            @foreach (var team in Model.Teams)
             {
                 <tr>
-                    <td>@user.FirstName @user.LastName</td>      
-                    <td>@user.Email</td>
+                    <td>@team.Name</td>      
                     <td>           
-                        <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
-                        <div class="medium default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>
+                        <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = team.Id})</div>
+                        <div class="medium default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = team.Id})</div>
                     </td>
                 </tr>
             }
@@ -37,10 +36,10 @@ else
 
     <div class="row">
         <div class="two columns">
-            @using (Ajax.BeginForm("List", "Users", ajaxOptions))
+            @using (Ajax.BeginForm("List", "Team", ajaxOptions))
             {
-                @Html.HiddenFor(user => user.PagingVm.SearchStr)
-                @Html.HiddenFor(user => user.PagingVm.SortByStr)
+                @Html.HiddenFor(team => team.PagingVm.SearchStr)
+                @Html.HiddenFor(team => team.PagingVm.SortByStr)
                 <div class="field">
                     <input class="text input" type="text" name="PagingVm.Page" placeholder="@Model.PagingVm.Page">
                 </div>
@@ -53,7 +52,7 @@ else
             </div>
         </div>
 
-        <div class="primary label push_six two columns">
+        <div class="primary push_six label two columns">
             @Html.AjaxPageLink(@Model.PagingVm, "Previous", @Model.PagingVm.Page - 1, ajaxOptions)
         </div>
 

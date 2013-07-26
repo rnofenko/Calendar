@@ -191,8 +191,8 @@
     <Content Include="Content\css\gumby2.css" />
     <Content Include="Content\gumby.css" />
     <Content Include="Content\Layout\layout.css" />
-    <Content Include="Content\User\user-edit.css" />
-    <Content Include="Content\User\user-view.css" />
+    <Content Include="Content\Layout\edit-form.css" />
+    <Content Include="Content\Layout\list-view.css" />
     <Content Include="Images\binaryLogo.png" />
     <Content Include="Scripts\Gumby\gumby.min.js" />
     <Content Include="Scripts\Rooms\ColorPicker.js" />
@@ -214,10 +214,12 @@
     <Compile Include="Services\CalendarRoleProvider.cs" />
     <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\AjaxLinkHelpers.cs" />
+    <Compile Include="ViewModels\PagingVm.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\AccountVm.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />
+    <Compile Include="ViewModels\TeamEditVm.cs" />
     <Compile Include="ViewModels\UsersVm.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="ViewModels\UserEditVm.cs" />
@@ -284,6 +286,12 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\Shared\Header.cshtml" />
+    <Content Include="Views\Team\List.cshtml" />
+    <Content Include="Views\Room\Index.cshtml" />
+    <Content Include="Views\Room\Room.cshtml" />
+    <Content Include="Views\Team\Edit.cshtml" />
+    <Content Include="Views\Team\Details.cshtml" />
+    <Content Include="Views\Team\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

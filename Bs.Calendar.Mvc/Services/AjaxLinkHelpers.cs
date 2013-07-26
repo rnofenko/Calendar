@@ -13,37 +13,34 @@ namespace Bs.Calendar.Mvc.Services
     public static class AjaxLinkHelpers
     
     {
-        public static MvcHtmlString AjaxSortLink(this HtmlHelper html, UsersVm usersVm, string sortByStr)
+        public static MvcHtmlString AjaxSortLink(this HtmlHelper html, PagingVm paginVm, string sortByStr, AjaxOptions options)
         {
             var ajaxHelper = new AjaxHelper(html.ViewContext, html.ViewDataContainer);
             var linkText = sortByStr;
             
             //When clicked again show default unsorted view
-            if (sortByStr.Equals(usersVm.SortByStr))
+            if (sortByStr.Equals(paginVm.SortByStr))
                 sortByStr = null;
 
             var link = ajaxHelper.ActionLink(
                 linkText,
                 "List",
-                new {searchStr = usersVm.SearchStr, sortByStr = sortByStr, page = usersVm.CurrentPage},
-                new AjaxOptions {UpdateTargetId = "user-table"}
+                new PagingVm(paginVm.SearchStr, sortByStr, paginVm.TotalPages, paginVm.Page),
+                options
                 );
 
             return link;
         }
 
-        public static MvcHtmlString AjaxPageLink(this HtmlHelper html, UsersVm usersVm, string linkText, int pageNumber)
+        public static MvcHtmlString AjaxPageLink(this HtmlHelper html, PagingVm paginVm, string linkText, int pageNumber, AjaxOptions options)
         {
             var ajaxHelper = new AjaxHelper(html.ViewContext, html.ViewDataContainer);
-
-            if (pageNumber < 1 || pageNumber > usersVm.TotalPages)
-                pageNumber = usersVm.CurrentPage;
 
             var link = ajaxHelper.ActionLink(
                 linkText,
                 "List",
-                new {searchStr = usersVm.SearchStr, sortByStr = usersVm.SortByStr, page = pageNumber},
-                new AjaxOptions {UpdateTargetId = "user-table"}
+                new PagingVm(paginVm.SearchStr, paginVm.SortByStr, paginVm.TotalPages, pageNumber),
+                options
                 );
 
             return link;
