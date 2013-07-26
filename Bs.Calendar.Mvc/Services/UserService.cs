@@ -49,9 +49,15 @@ namespace Bs.Calendar.Mvc.Services
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
                 Email = userModel.Email,
-                Role = userModel.Role
+                Role = userModel.Role,
                 LiveState = userModel.LiveState
             };
+            _unit.User.Save(user);
+        }
+
+        public void UpdateUserState(int userModelId, LiveState liveState) {
+            var user = _unit.User.Get(userModelId);
+            user.LiveState = liveState;
             _unit.User.Save(user);
         }
 
