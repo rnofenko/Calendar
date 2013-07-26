@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Web.Mvc;
 using Bs.Calendar.Models;
@@ -43,11 +44,14 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             ModelState.Remove("userId");
             if (!ModelState.IsValid)
+            {                
                 return View("Edit", model);
+            }
 
             try
             {
                 model.LiveState = LiveState.Ok;
+                model.BirthDate = new DateTime((new Random()).Next(1970, 1992), (new Random()).Next(1, 12), (new Random()).Next(1, 28)).Date;
                 _service.SaveUser(model);
                 return RedirectToAction("Index");
             }
@@ -71,7 +75,7 @@ namespace Bs.Calendar.Mvc.Controllers
                 return View("Edit", model);
 
             try
-            {
+            {                
                 _service.EditUser(model);
                 return RedirectToAction("Index");
             }

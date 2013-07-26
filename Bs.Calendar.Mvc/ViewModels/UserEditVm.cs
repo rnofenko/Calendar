@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Bs.Calendar.Models;
 
 namespace Bs.Calendar.Mvc.ViewModels
@@ -53,5 +54,7 @@ namespace Bs.Calendar.Mvc.ViewModels
         public Roles Role { get; set; }
 
         public LiveState LiveState { get; set; }
+
+        public DateTime BirthDate { get; set; }
     }
 }
