@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Bs.Calendar.Models.Bases;
 
 namespace Bs.Calendar.Models
@@ -19,5 +20,7 @@ namespace Bs.Calendar.Models
         public string PasswordKeccakHash { get; set; }
         
         public LiveState LiveState { get; set; }
+
+        public DateTime BirthDate { get; set; }
     }
 }
