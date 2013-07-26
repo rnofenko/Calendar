@@ -16,7 +16,7 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
         {
         }
 
-        public IQueryable<T> Load()
+        public virtual IQueryable<T> Load()
         {
             return _entities.AsQueryable();
         }

@@ -10,6 +10,7 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Mvc.Controllers;
 using Bs.Calendar.Mvc.Server;
+using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Tests.Int.TestHelpers;
 using NUnit.Framework;
 
@@ -37,27 +38,28 @@ namespace Bs.Calendar.Tests.Int
         }
 
         [Test]
-        public void Estimate_Paging_Time() {
+        public void Estimate_Paging_Time() 
+        {
             //arrange
             var stopWatch = new Stopwatch();
             double page100, page10t, page500t;
 
             //act
             //warm database up
-            _usersController.List(null, null, 1000);
+            _usersController.List(new PagingVm { Page = 1000});
 
             stopWatch.Start();
-            _usersController.List(null, null, 100);
+            _usersController.List(new PagingVm { Page = 100 });
             stopWatch.Stop();
             page100 = stopWatch.Elapsed.TotalMilliseconds;
 
             stopWatch.Restart();
-            _usersController.List(null, null, 10000);
+            _usersController.List(new PagingVm { Page = 10000 });
             stopWatch.Stop();
             page10t = stopWatch.Elapsed.TotalMilliseconds;
 
             stopWatch.Restart();
-            _usersController.List(null, null, 500000);
+            _usersController.List(new PagingVm { Page = 100000 });
             stopWatch.Stop();
             page500t = stopWatch.Elapsed.TotalMilliseconds;
 
@@ -68,27 +70,28 @@ namespace Bs.Calendar.Tests.Int
         }
 
         [Test]
-        public void Estimate_Sorting_And_Paging_Time() {
+        public void Estimate_Sorting_And_Paging_Time()
+        {
             //arrange
             var stopWatch = new Stopwatch();
             double page100, page10t, page500t;
 
             //act
             //warm database up
-            _usersController.List(null, "Name", 1000);
+            _usersController.List(new PagingVm {SortByStr = "Name", Page = 1000});
 
             stopWatch.Start();
-            _usersController.List(null, "Name", 100);
+            _usersController.List(new PagingVm { SortByStr = "Name", Page = 100 });
             stopWatch.Stop();
             page100 = stopWatch.Elapsed.TotalMilliseconds;
 
             stopWatch.Restart();
-            _usersController.List(null, "Name", 10000);
+            _usersController.List(new PagingVm { SortByStr = "Name", Page = 10000 });
             stopWatch.Stop();
             page10t = stopWatch.Elapsed.TotalMilliseconds;
 
             stopWatch.Restart();
-            _usersController.List(null, "Name", 500000);
+            _usersController.List(new PagingVm { SortByStr = "Name", Page = 100000 });
             stopWatch.Stop();
             page500t = stopWatch.Elapsed.TotalMilliseconds;
 

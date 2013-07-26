@@ -32,7 +32,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public void SaveTeam(TeamEditVm teamModel) 
         {
-            if (_unit.Team.Get(t => t.Name == teamModel.Name) != null) 
+            if (_unit.Team.Get(t => t.Name.Equals(teamModel.Name, StringComparison.OrdinalIgnoreCase)) != null) 
             {
                 throw new WarningException(string.Format("Team with name {0} already exists", teamModel.Name));
             }
@@ -51,41 +51,32 @@ namespace Bs.Calendar.Mvc.Services
 
         public void EditTeam(TeamEditVm teamModel) 
         {
-            var oldName = GetTeam(teamModel.TeamId).Name;
-            var comparisonType = StringComparison.InvariantCultureIgnoreCase;
+            var teamToEdit = GetTeam(teamModel.TeamId);
+            var comparisonType = StringComparison.OrdinalIgnoreCase;
 
-            if (!oldName.Equals(teamModel.Name, comparisonType) &&
+            if (!teamToEdit.Name.Equals(teamModel.Name, comparisonType) &&
                 _unit.Team.Get(t => t.Name.Equals(teamModel.Name, comparisonType)) != null) 
             {
                 throw new WarningException(string.Format("Team with name {0} already exists", teamModel.Name));
             }
 
-            _unit.Team.Save(new Team {
-                Id = teamModel.TeamId,
-                Name = teamModel.Name,
-                Description = teamModel.Description
-            });
+            teamToEdit.Name = teamModel.Name;
+            teamToEdit.Description = teamModel.Description;
+
+            _unit.Team.Save(teamToEdit);
         }
 
         public TeamsVm RetreiveList(PagingVm pagingVm)
         {
             var teams = _unit.Team.Load();
 
-            if (!string.IsNullOrEmpty(pagingVm.SearchStr)) 
-            {
-                teams = Find(teams, pagingVm.SearchStr);
-            }
-            if (!string.IsNullOrEmpty(pagingVm.SortByStr))
-            {
-                teams = teams.OrderBy(team => team.Name);
-            } 
-            else 
-            {
-                teams = teams.OrderBy(team => team.Id);
-            }
-            
-            var totalPages = (int)Math.Ceiling((decimal)teams.Count() / PageSize);
-            var currentPage = pagingVm.Page <= 1 ? 1 : pagingVm.Page > totalPages ? totalPages : pagingVm.Page;
+            teams = teams.WhereIf(!string.IsNullOrEmpty(pagingVm.SearchStr), 
+                        team => team.Name.ToLower().Contains(pagingVm.SearchStr.ToLower()));
+
+            teams = sortByStr(teams, pagingVm.SortByStr);
+
+            var totalPages = getTotalPages(teams.Count(), PageSize);
+            var currentPage = getRangedPage(pagingVm.Page, totalPages);
 
             return new TeamsVm 
             {
@@ -94,10 +85,24 @@ namespace Bs.Calendar.Mvc.Services
             };
         }
 
-        private IQueryable<Team> Find(IQueryable<Team> teams, string searchStr)
+        private IQueryable<Team> sortByStr(IQueryable<Team> teams, string sortByStr) 
+        {    
+            teams = teams.OrderByIf(!string.IsNullOrEmpty(sortByStr),
+                        team => team.Name);
+
+            teams = teams.OrderByIf(string.IsNullOrEmpty(sortByStr),
+                        team => team.Id);
+            return teams;
+        }
+
+        private int getTotalPages(int count, int pageSize)
         {
-            var resultTeams = teams.Where(team => team.Name.Equals(searchStr, StringComparison.InvariantCultureIgnoreCase));
-            return resultTeams;
+            return (int) Math.Ceiling((decimal) count/pageSize);
+        }
+
+        private int getRangedPage(int page, int totalPages)
+        {
+            return page <= 1 ? 1 : page > totalPages ? totalPages : page;
         }
     }
 }

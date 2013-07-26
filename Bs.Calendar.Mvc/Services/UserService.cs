@@ -101,22 +101,12 @@ namespace Bs.Calendar.Mvc.Services
         {
             var users = _unit.User.Load();
 
-            if (!string.IsNullOrEmpty(pagingVm.SearchStr)) 
-            {
-                users = find(users, pagingVm.SearchStr);
-            }
+            users = searchByStr(users, pagingVm.SearchStr);
 
-            if (!string.IsNullOrEmpty(pagingVm.SortByStr))
-            {
-                users = sort(users, pagingVm.SortByStr);
-            }
-            else
-            {
-                users = users.OrderBy(user => user.Id);
-            }
+            users = sortByStr(users, pagingVm.SortByStr);
 
-            var totalPages = (int)Math.Ceiling((decimal)users.Count() / PageSize);
-            var currentPage = pagingVm.Page <= 1 ? 1 : pagingVm.Page > totalPages ? totalPages : pagingVm.Page;
+            var totalPages = getTotalPages(users.Count(), PageSize);
+            var currentPage = getRangedPage(pagingVm.Page, totalPages);
 
             return new UsersVm 
             {
@@ -125,58 +115,55 @@ namespace Bs.Calendar.Mvc.Services
             };
         }
 
-        private IQueryable<User> sort(IQueryable<User> users, string sortByStr) 
+        private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
         {
-            switch (sortByStr) 
-            {
-                case "Name":
-                    users = users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName);
-                    break;
-                case "E-mail":
-                    users = users.OrderBy(user => user.Email);
-                    break;
-            }
+            if (string.IsNullOrEmpty(sortByStr))
+                return users.OrderBy(user => user.Id);
+
+            users = users.OrderByIf(sortByStr.Equals("Name"),
+                        team => team.FullName);
+
+            users = users.OrderByIf(sortByStr.Equals("E-mail"),
+                        team => team.FullName);
+
             return users;
         }
 
-        private IQueryable<User> find(IQueryable<User> users, string searchStr) 
+        private IQueryable<User> searchByStr(IQueryable<User> users, string searchStr)
         {
+            if (string.IsNullOrEmpty(searchStr))
+                return users;
+
             //Delete extra whitespaces
-            searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ");
+            searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ").ToLower();
+            
+            var filteredUsers = users.WhereIf(searchStr.Length > 0,
+                                    user => user.Email.ToLower().Contains(searchStr));
 
-            if (searchStr.Contains('@') && IsValidEmailAddress(searchStr))
-            {
-                users = users.Where(user => user.Email.Equals(
-                              searchStr, StringComparison.InvariantCulture));
-            } 
-            else if (searchStr.Length != 0) 
-            {
-                users = findByName(users, searchStr);
-            }
+            filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
 
-            return users;
+            return filteredUsers.Distinct();
         }
 
-        private IQueryable<User> findByName(IQueryable<User> users, string searchStr) 
+        private IQueryable<User> searchByName(IQueryable<User> users, string searchStr)
         {
-            var arrName = searchStr.Split();
-            
-            var comparisonType = StringComparison.InvariantCultureIgnoreCase;
-            var firstName = arrName[0];
-           
-            var filteredUsers = users.Where(user =>
-                user.FirstName.Equals(firstName, comparisonType) ||
-                user.LastName.Equals(firstName, comparisonType));
+            var filteredUsers = Enumerable.Empty<User>().AsQueryable();
+            var splitedStr = searchStr.Split();
 
-            if (arrName.Length == 2)
-            {
-                var lastName = arrName[1];
-                filteredUsers = filteredUsers.Where(user =>
-                    user.FirstName.Equals(lastName, comparisonType) ||
-                    user.LastName.Equals(lastName, comparisonType));
+            for (int i = 0; i < splitedStr.Rank && i < 2; i++) {
+                var str = splitedStr[i];
+                filteredUsers = filteredUsers.Concat(users.Where(user => user.FullName.ToLower().Contains(str)));
             }
 
             return filteredUsers;
+        }
+
+        private int getTotalPages(int count, int pageSize) {
+            return (int)Math.Ceiling((decimal)count / pageSize);
+        }
+
+        private int getRangedPage(int page, int totalPages) {
+            return page <= 1 ? 1 : page > totalPages ? totalPages : page;
         }
     }
 }

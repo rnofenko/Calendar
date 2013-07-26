@@ -17,7 +17,7 @@ namespace Bs.Calendar.DataAccess.Bases
             }
         }
 
-        public IQueryable<T> Load()
+        public virtual IQueryable<T> Load()
         {
             return _context.Set<T>();
         }
@@ -43,7 +43,7 @@ namespace Bs.Calendar.DataAccess.Bases
             _context.SaveChanges();
         }
 
-        public void Save(T entity)
+        public virtual void Save(T entity)
         {
             if (entity.Id == 0)
             {

@@ -9,6 +9,9 @@ namespace Bs.Calendar.Models
         public string Email { get; set; }
 
         [StringLength(LENGTH_NAME)]
+        public string FullName { get; set; }
+
+        [StringLength(LENGTH_NAME)]
         public string FirstName { get; set; }
 
         [StringLength(LENGTH_NAME)]

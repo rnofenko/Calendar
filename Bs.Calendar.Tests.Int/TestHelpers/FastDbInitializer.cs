@@ -25,9 +25,11 @@ namespace Bs.Calendar.Tests.Int.TestHelpers
                     var user = new User
                     {
                         Email = "test@gmail.com",
+                        FullName = "Test Test",
                         FirstName = "Test",
                         LastName = "Test",
-                        Role = Roles.None
+                        Role = Roles.None,
+                        LiveState = LiveState.Ok
                     };
 
                     context = AddToContext(context, user, i, 1000, true);
