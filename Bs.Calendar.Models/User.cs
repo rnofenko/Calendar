@@ -21,6 +21,6 @@ namespace Bs.Calendar.Models
         
         public LiveState LiveState { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
     }
 }

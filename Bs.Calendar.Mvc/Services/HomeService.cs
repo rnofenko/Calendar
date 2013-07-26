@@ -12,7 +12,7 @@ namespace Bs.Calendar.Mvc.Services
         {
             using (var unit = new RepoUnit())
             {
-                var users = unit.User.Load(u => u.BirthDate.Month == DateTime.Now.Month && u.BirthDate.Day > DateTime.Now.Day && u.LiveState == LiveState.Ok).ToList();
+                var users = unit.User.Load(u => ((DateTime)u.BirthDate).Month == DateTime.Now.Month && ((DateTime)u.BirthDate).Day > DateTime.Now.Day && u.LiveState == LiveState.Ok).ToList();
 
                 if (!users.Any())
                 {

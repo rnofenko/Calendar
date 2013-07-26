@@ -11,7 +11,7 @@
             @foreach (var user in Model)
             {               
                 var bday = user.BirthDate;                
-                var age = now.Year - bday.Year;
+                var age = now.Year - ((DateTime)bday).Year;
                 
                 if (bday > now.AddYears(-age))
                 {
@@ -20,7 +20,7 @@
                 ++age;
                 <tr>
                     <td>@user.FirstName @user.LastName</td>      
-                    <td>@user.BirthDate.ToShortDateString()</td>
+                    <td>@(((DateTime)(user.BirthDate)).ToShortDateString())</td>
                     <td class="danger badge">@age</td>
                 </tr>
             }
