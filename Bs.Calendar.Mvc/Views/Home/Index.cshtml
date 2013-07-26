@@ -1,16 +1,29 @@
 ﻿@model IEnumerable<Bs.Calendar.Models.User>
 @{
     ViewBag.Title = "Home Page";
+    var now = DateTime.Now;
 }
 
-<div class="row">
-    
+<div class="row">    
     <h1>Пользователи</h1>
-
-    @foreach (var user in Model)
-    {
-        <div class="row">
-            @user.Email
-        </div>
-    }
-</div>
+    <table>
+        <tbody>
+            @foreach (var user in Model)
+            {               
+                var bday = user.BirthDate;                
+                var age = now.Year - bday.Year;
+                
+                if (bday > now.AddYears(-age))
+                {
+                    age--;
+                }
+                ++age;
+                <tr>
+                    <td>@user.FirstName @user.LastName</td>      
+                    <td>@user.BirthDate.ToShortDateString()</td>
+                    <td class="danger badge">@age</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>    
