@@ -17,11 +17,18 @@
                 {
                     age--;
                 }
-                ++age;
                 <tr>
                     <td>@user.FirstName @user.LastName</td>      
                     <td>@(((DateTime)(user.BirthDate)).ToShortDateString())</td>
+                @if (((DateTime) bday).Day != now.Day)
+                {
+                    ++age;
+                    <td class="secondary badge">@age</td>
+                }
+                else
+                {
                     <td class="danger badge">@age</td>
+                }
                 </tr>
             }
         </tbody>
