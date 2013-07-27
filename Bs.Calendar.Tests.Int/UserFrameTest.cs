@@ -27,8 +27,8 @@ namespace Bs.Calendar.Tests.Int
 
             _unit = new RepoUnit();
             
-            _unit.User.Save(new User {Email = "aaa@bbb.com", FirstName = "aaa", LastName = "bbb"});
-            _unit.User.Save(new User { Email = "ccc@ddd.com", FirstName = "ccc", LastName = "ddd" });
+            _unit.User.Save(new User {Email = "aaa@bbb.com", FirstName = "aaa", LastName = "bbb", LiveState = LiveState.Ok});
+            _unit.User.Save(new User { Email = "ccc@ddd.com", FirstName = "ccc", LastName = "ddd", LiveState = LiveState.Ok});
 
             _usersController = new UsersController(new UserService(_unit));
         }
@@ -48,7 +48,7 @@ namespace Bs.Calendar.Tests.Int
         public void Can_Provide_All_Users()
         {
             //act
-            var usersView = _usersController.List(null, null) as PartialViewResult;
+            var usersView = _usersController.List(new PagingVm()) as PartialViewResult;
             var users = usersView.Model as UsersVm;
 
             //assert
@@ -58,13 +58,17 @@ namespace Bs.Calendar.Tests.Int
         [Test]
         public void Can_Search_Users() 
         {
+            //arrange
+            var pagingVm = new PagingVm();
+            pagingVm.SearchStr = "ccc@ddd.com";
+
             //act
-            var usersView = _usersController.List("ccc@ddd.com", null) as PartialViewResult;         
+            var usersView = _usersController.List(pagingVm) as PartialViewResult;         
             var users = usersView.Model as UsersVm;
             var user = users.Users.First();
 
             //assert
-            user.Email.ShouldBeEquivalentTo("ccc@ddd.com");
+            user.Email.ShouldBeEquivalentTo(pagingVm.SearchStr);
         }
     }
 }

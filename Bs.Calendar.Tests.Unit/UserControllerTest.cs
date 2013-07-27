@@ -28,9 +28,9 @@ namespace Bs.Calendar.Tests.Unit
         {
             _users = new List<User>
             {
-                new User {Id = 1, Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.None},
-                new User {Id = 2, Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.None},
-                new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.None}
+                new User {Id = 1, Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.None, LiveState = LiveState.Ok},
+                new User {Id = 2, Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.None, LiveState = LiveState.Ok},
+                new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.None, LiveState = LiveState.Ok}
             };
 
             DiMvc.Register();
@@ -65,7 +65,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //act
             _userController.Create(testUserVm);
-            var userView = _userController.List("", null) as PartialViewResult;
+            var userView = _userController.List(new PagingVm()) as PartialViewResult;
             var users = (userView.Model as UsersVm).Users;
 
             //assert
@@ -79,7 +79,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //act
             _userController.Create(testUserVm);
-            var userView = _userController.List("", null) as PartialViewResult;
+            var userView = _userController.List(new PagingVm()) as PartialViewResult;
             var users = (userView.Model as UsersVm).Users;
 
             //assert
@@ -93,7 +93,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //act
             _userController.Create(testUserVm);
-            var userView = _userController.List("", null) as PartialViewResult;
+            var userView = _userController.List(new PagingVm()) as PartialViewResult;
             var users = (userView.Model as UsersVm).Users;
 
             //assert
@@ -117,22 +117,18 @@ namespace Bs.Calendar.Tests.Unit
         [Test]
         public void Can_Edit_User() {
             //arrange
-            var newFirstName = "Toto";
-            var newLastName = "Koko";
-            var newEmail = "ggggg@gmail.com";
-            var newRole = Roles.Admin;
-            var testUserVm = new UserEditVm(_users[1].Id, newFirstName, newLastName, newEmail, newRole, LiveState.Ok);
+            var testUserVm = new UserEditVm(_users[1].Id, "Toto", "Koko", "ggggg@gmail.com", Roles.Admin, LiveState.Ok);
 
             //act
             _userController.Edit(testUserVm);
-            var userView = _userController.List("", null) as PartialViewResult;
+            var userView = _userController.List(new PagingVm()) as PartialViewResult;
             var users = (userView.Model as UsersVm).Users;
 
             //assert
-            users.Should().Contain(user => user.Email.Equals(newEmail));
-            users.Should().Contain(user => user.FirstName.Equals(newFirstName));
-            users.Should().Contain(user => user.LastName.Equals(newLastName));
-            users.Should().Contain(user => user.Role.Equals(newRole));
+            users.Should().Contain(user => user.Email.Equals(testUserVm.Email));
+            users.Should().Contain(user => user.FirstName.Equals(testUserVm.FirstName));
+            users.Should().Contain(user => user.LastName.Equals(testUserVm.LastName));
+            users.Should().Contain(user => user.Role.Equals(testUserVm.Role));
         }
 
         [Test]
@@ -156,7 +152,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //act
             _userController.Delete(testUserVm);
-            var userView = _userController.List("", null) as PartialViewResult;
+            var userView = _userController.List(new PagingVm()) as PartialViewResult;
             var users = (userView.Model as UsersVm).Users;
 
             //assert

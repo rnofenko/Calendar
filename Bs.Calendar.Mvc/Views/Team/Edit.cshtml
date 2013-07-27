@@ -1,0 +1,75 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.TeamEditVm
+@{ 
+    var btnName = Model == null ? "Create" : "Update";
+    var teamId = 0;
+
+    if (Model != null && Model.TeamId != 0) {
+        teamId = Model.TeamId;
+        ViewBag.Title = "Edit Team";
+        ViewBag.Team = "Current Team";
+    } else {
+        ViewBag.Title = "Create Team";
+        ViewBag.Team = "New Team";
+    }
+}
+
+<div class="row">
+    <div class="centered seven columns default alert">
+        <h4 class="centered four columns">@ViewBag.Title</h4>
+    </div>
+</div>
+
+<div class="row">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(team => team.TeamId)
+        <div class="centered seven columns">
+            @Html.ValidationSummary()
+        </div>
+
+        <div class="row">
+            <fieldset class="centered seven columns">
+                <legend>
+                    <h4>@ViewBag.Team</h4>
+                </legend>
+                              
+                <ul>
+                    <li class="field">
+                        @Html.LabelFor(team => team.Name, new {@class = "inline"})
+                        @Html.TextBoxFor(team => team.Name, new {@class = "wide text input"})
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(team => team.Description, new {@class = "inline"})
+                        @Html.TextAreaFor(team => team.Description, new {@class = "textarea input", @rows = 3})
+                    </li>
+                </ul>
+
+                <div class="medium secondary btn three columns">
+                    <input type="submit" value=@btnName />
+                </div>
+
+                <div class="medium default btn push_one three columns">
+                    @Html.ActionLink("Back", "Index")
+                </div>
+            
+                @if (teamId != 0)
+                {
+                    <div class="medium info btn three columns push_one">
+                        @Html.ActionLink("Delete", "Delete", new {id =  teamId})
+                    </div>
+                }  
+            </fieldset>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="/Scripts/jquery-2.0.2.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
+@section styles {
+    <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
+}

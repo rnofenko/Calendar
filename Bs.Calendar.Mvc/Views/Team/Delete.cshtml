@@ -1,7 +1,7 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.UserEditVm
+﻿@model Bs.Calendar.Mvc.ViewModels.TeamEditVm
 
 @{
-    ViewBag.Title = "Delete User";
+    ViewBag.Title = "Delete Team";
 }
 
 <div class="row">
@@ -14,14 +14,14 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        @Html.Hidden("UserId", Model.UserId)
+        @Html.Hidden("TeamId", Model.TeamId)
 
         <fieldset class="centered seven columns">
             <legend>
-                <h4>@Model.FirstName @Model.LastName</h4>
+                <h4>@Model.Name</h4>
             </legend>
-          
-            <div class="centered eight columns">Are you sure want to delete this user?</div>
+              
+            <div class="centered eight columns">Are you sure want to delete this team?</div>
             <br/>
             <br/>
 
@@ -30,7 +30,7 @@
             </div>
 
             <div class="medium default btn push_three three columns">
-                @Html.ActionLink("No", "Edit", new {id = @Model.UserId})
+                @Html.ActionLink("No", "Edit", new {id = @Model.TeamId})
             </div>
         </fieldset>
     }

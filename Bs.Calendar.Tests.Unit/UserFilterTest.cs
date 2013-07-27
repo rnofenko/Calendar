@@ -5,6 +5,7 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
+using Bs.Calendar.Mvc.ViewModels;
 using Moq;
 using NUnit.Framework;
 using FluentAssertions;
@@ -22,9 +23,9 @@ namespace Bs.Calendar.Tests.Unit
         {
             _users = new List<User>
             {
-                new User {Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini"},
-                new User {Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi"},
-                new User {Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov"}
+                new User {Email = "12345@gmail.com", FullName = "Saveli Bondini", FirstName = "Saveli", LastName = "Bondini"},
+                new User {Email = "5678@gmail.com", FullName = "Dima Rossi", FirstName = "Dima", LastName = "Rossi"},
+                new User {Email = "9999@gmail.com", FullName = "Dima Prohorov", FirstName = "Dima", LastName = "Prohorov"}
             };
 
             var moq = new Mock<IUserRepository>();
@@ -37,13 +38,30 @@ namespace Bs.Calendar.Tests.Unit
 
         
         [Test]
-        public void Find_Should_Return_One_User_When_Filter_Has_Email()
+        public void Should_Return_One_User_When_Filter_Has_Email()
+        {
+            //arrange
+            var testEmail = _users[0].Email;
+            var pagingVm = new PagingVm {SearchStr = testEmail};
+
+            //act
+            var users = _userService.RetreiveList(pagingVm).Users;
+
+            //assert
+            users.Count().ShouldBeEquivalentTo(1);
+            users.First().Email.ShouldBeEquivalentTo(testEmail);
+        }
+
+
+        [Test]
+        public void Should_Return_User_When_Filter_By_Name() 
         {
             //arrange
             var testUser = _users[0];
+            var pagingVm = new PagingVm { SearchStr = testUser.FirstName};
 
             //act
-            var users = _userService.Find(_users, testUser.Email).ToList();
+            var users = _userService.RetreiveList(pagingVm).Users;
 
             //assert
             users.Count().ShouldBeEquivalentTo(1);
@@ -51,29 +69,15 @@ namespace Bs.Calendar.Tests.Unit
             users.First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
         }
 
-
         [Test]
-        public void Find_Return_User_When_Filter_By_Name() 
+        public void Should_Return_Many_Users_When_Filter_By_Similar_Name() 
         {
-            //arrange
-            var testUser = _users[0];
-
-            //act
-            var users = _userService.Find(_users, testUser.FirstName).ToList();
-
-            //assert
-            users.Count().ShouldBeEquivalentTo(1);
-            users.First().Email.ShouldBeEquivalentTo(testUser.Email);
-            users.First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
-        }
-
-        [Test]
-        public void Find_Return_Many_Users_When_Filter_By_Similar_Name() {
             //arrange
             var testUser = _users[1];
+            var pagingVm = new PagingVm { SearchStr = testUser.FirstName };
 
             //act
-            var users = _userService.Find(_users, testUser.FirstName).ToList();
+            var users = _userService.RetreiveList(pagingVm).Users;
 
             //assert
             users.Count().ShouldBeEquivalentTo(2);
@@ -83,12 +87,13 @@ namespace Bs.Calendar.Tests.Unit
 
 
         [Test]
-        public void Find_Return_No_User_When_Filter_By_Nonexistent_Email() {
+        public void Should_Return_No_User_When_Filter_By_Nonexistent_Email() 
+        {
             //arrange
-            var testUser = new User {Email = "00000@gmail.com"};
+            var pagingVm = new PagingVm { SearchStr = "00000@gmail.com" };
 
             //act
-            var users = _userService.Find(_users, testUser.Email).ToList();
+            var users = _userService.RetreiveList(pagingVm).Users;
 
             //assert
             users.Count().ShouldBeEquivalentTo(0);
@@ -96,12 +101,13 @@ namespace Bs.Calendar.Tests.Unit
 
 
         [Test]
-        public void Find_Return_No_User_When_Filter_By_Nonexistent_Name() {
+        public void Should_Return_No_User_When_Filter_By_Nonexistent_Name() 
+        {
             //arrange
-            var testUser = new User { FirstName = "Alex" };
+            var pagingVm = new PagingVm { SearchStr = "Alex" };
 
             //act
-            var users = _userService.Find(_users, testUser.FirstName).ToList();
+            var users = _userService.RetreiveList(pagingVm).Users;
 
             //assert
             users.Count().ShouldBeEquivalentTo(0);
@@ -109,12 +115,13 @@ namespace Bs.Calendar.Tests.Unit
 
 
         [Test]
-        public void Find_Return_All_Users_When_Filter_By_Empty_String() {
+        public void Should_Return_All_Users_When_Filter_By_Empty_String() 
+        {
             //arrange
-            var emptyString = string.Empty;
+            var pagingVm = new PagingVm { SearchStr = string.Empty};
 
             //act
-            var users = _userService.Find(_users, emptyString).ToList();
+            var users = _userService.RetreiveList(pagingVm).Users;
             //assert
             users.Count().ShouldBeEquivalentTo(_users.Count);
         }

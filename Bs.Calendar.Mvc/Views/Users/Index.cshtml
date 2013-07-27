@@ -1,45 +1,44 @@
 ﻿@{
-    ViewBag.Title = "User Page";
-    var ajaxOptions = new AjaxOptions
-    {
+    ViewBag.Title = "Users";
+
+    var ajaxOptions = new AjaxOptions {
         UpdateTargetId = "user-table",
-        LoadingElementId = "loading",
         HttpMethod = "Get"
     };
 }
-    
+
 <div class="row">
-    <h3>Users</h3>
+    <div class="centered seven columns default alert">
+        <h4 class="centered two columns">@ViewBag.Title</h4>
+    </div>
 </div>
     
-<div class="sixteen colgrid">
-    <div class="row">
-        <div class="one columns">
-            <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
-        </div>
-        @using (Ajax.BeginForm("List", ajaxOptions))
-        {
-            <div class="field push_eleven four columns">
-                <input class="search input" type="text" name="searchStr" placeholder="Find user"/>
+<div class="row">
+    <div class="sixteen colgrid">
+        <div class="row">
+            <div class="one columns">
+                <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
             </div>
-        }
+        
+            @using (Ajax.BeginForm("List", "Users", ajaxOptions))
+            {
+                <div class="field push_eleven four columns">
+                    <input class="search input" type="text" name="searchStr" placeholder="Find user"/>
+                </div>
+            }
+        </div>
+
+        <div class="row">
+            <div id="user-table">
+                @Html.Action("List")
+            </div>
+        </div>
     </div>
 </div>
-
-<div class="row" id="loading" style="display: none">
-    Loading...
-</div>
-
-<div class="row">
-    <div id="user-table">
-        @Html.Action("List")
-    </div>
-</div>
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryajax")
 }
 
 @section styles {
-    <link href="@Url.Content("~/Content/User/user-view.css")" rel="stylesheet"/>
+    <link href="@Url.Content("~/Content/Layout/list-view.css")" rel="stylesheet"/>
 }

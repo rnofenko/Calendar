@@ -3,7 +3,7 @@ using Bs.Calendar.Models;
 
 namespace Bs.Calendar.DataAccess
 {
-    public class TeamRepository : BaseRepository<Team>, ITeamRepository
+    public interface ITeamRepository : IRepository<Team>
     {
     }
 }

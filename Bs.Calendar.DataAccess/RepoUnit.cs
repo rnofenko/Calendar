@@ -9,7 +9,7 @@ namespace Bs.Calendar.DataAccess
         private CalendarContext _context;
         private IUserRepository _user;
 		private IRoomRepository _room;
-		private TeamRepository _team;
+        private ITeamRepository _team;
 
         public IUserRepository User
         {
@@ -21,9 +21,9 @@ namespace Bs.Calendar.DataAccess
             get { return _room ?? (_room = getRepository<IRoomRepository>()); }
         }
 
-		public TeamRepository Team
+		public ITeamRepository Team
         {
-            get { return _team ?? (_team = getRepository<TeamRepository>()); }
+            get { return _team ?? (_team = getRepository<ITeamRepository>()); }
         }    
 		
         private CalendarContext getContext()

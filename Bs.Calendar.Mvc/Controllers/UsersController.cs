@@ -99,9 +99,9 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
-        public ActionResult List(string searchStr, string sortByStr, int page = 1)
+        public ActionResult List(PagingVm pagingVm)
         {
-            return PartialView(_service.RetreiveList(searchStr, sortByStr, page));
+            return PartialView(_service.RetreiveList(pagingVm));
         }
     }
 }

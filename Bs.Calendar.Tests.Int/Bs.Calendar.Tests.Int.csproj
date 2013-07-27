@@ -56,8 +56,11 @@
   <ItemGroup>
     <Compile Include="CalendarMembershipProviderTest.cs" />
     <Compile Include="CalendarRoleProviderTest.cs" />
+    <Compile Include="TeamControllerTest.cs" />
+    <Compile Include="TeamFrameTest.cs" />
+    <Compile Include="TeamPagingTest.cs" />
+    <Compile Include="UserPagingTests.cs" />
     <Compile Include="EmailTest.cs" />
-    <Compile Include="PagingAndSortingTests.cs" />
     <Compile Include="PagingPerfomanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers\FastDbInitializer.cs" />

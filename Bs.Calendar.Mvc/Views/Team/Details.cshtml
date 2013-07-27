@@ -1,32 +1,27 @@
-@model Bs.Calendar.Mvc.ViewModels.UserEditVm
+﻿@model Bs.Calendar.Mvc.ViewModels.TeamEditVm
 
 @{
-    ViewBag.Title = "User Details";
+    ViewBag.Title = "Team Description";
 }
 
 <div class="row">
     <div class="centered seven columns default alert">
-        <h4 class="centered four columns">@ViewBag.Title</h4>
+        <h4 class="centered five columns">@ViewBag.Title</h4>
     </div>
 </div>
 
 <div class="row">
     @using (Html.BeginForm())
     {
-
         <fieldset class="centered seven columns">
             <legend>
-                <h4>@Model.FirstName @Model.LastName</h4>
+                <h4>@Model.Name</h4>
             </legend>
         
             <ul>
                 <li class="field">
-                    @Html.LabelFor(user => user.Email, new {@class = "inline"})
-                    @Model.Email
-                </li>
-                <li class="field">
-                    @Html.LabelFor(user => user.Role, new {@class = "inline"})
-                    @Model.Role
+                    @Html.LabelFor(team => team.Description, new {@class = "inline"})
+                    @Html.TextAreaFor(team => team.Description, new {@class = "textarea input", @rows = 3})
                 </li>
             </ul>
         
@@ -37,6 +32,7 @@
         </fieldset>
     }
 </div>
+
 @section styles {
     <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
 }

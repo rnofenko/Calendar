@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using Bs.Calendar.Core;
 using System.Web.Mvc;
 using Bs.Calendar.DataAccess;
-using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Controllers;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
-using Bs.Calendar.Tests.Int.TestHelpers;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -31,8 +27,8 @@ namespace Bs.Calendar.Tests.Int
             Resolver.RegisterType<IUserRepository, UserRepository>();
 
             _unit = new RepoUnit();
-            _unit.User.Save(new User { Email = "aaa@bbb.com", FirstName = "aaa", LastName = "ddd" });
-            _unit.User.Save(new User { Email = "ccc@ddd.com", FirstName = "aaa", LastName = "bbb" });
+            _unit.User.Save(new User { Email = "aaa@bbb.com", FullName = "aaa ddd", FirstName = "aaa", LastName = "ddd", LiveState = LiveState.Ok});
+            _unit.User.Save(new User { Email = "ccc@ddd.com", FullName = "aaa bbb", FirstName = "aaa", LastName = "bbb", LiveState = LiveState.Ok });
 
             var userService = new UserService(_unit);
             userService.PageSize = _pageSize = 1;
@@ -55,7 +51,7 @@ namespace Bs.Calendar.Tests.Int
         public void Can_Paginate_Users()
         {
             //act
-            var usersView = _usersController.List(null, null, 2) as PartialViewResult;
+            var usersView = _usersController.List(new PagingVm {Page = 2}) as PartialViewResult;
             var users = usersView.Model as UsersVm;
 
             //assert
@@ -63,12 +59,13 @@ namespace Bs.Calendar.Tests.Int
         }
 
         [Test]
-        public void Can_Sort_Users() {
+        public void Can_Sort_Users() 
+        {
             //arrange
             var user = _unit.User.Load().OrderBy(n => n.FirstName).ThenBy(n => n.LastName).First();
 
             //act
-            var usersView = _usersController.List(null, "Name", 1) as PartialViewResult;
+            var usersView = _usersController.List(new PagingVm { Page = 1, SortByStr = "Name"}) as PartialViewResult;
             var users = usersView.Model as UsersVm;
 
             //assert

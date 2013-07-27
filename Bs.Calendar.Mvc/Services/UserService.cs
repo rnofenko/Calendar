@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using Bs.Calendar.DataAccess;
@@ -15,7 +16,7 @@ namespace Bs.Calendar.Mvc.Services
         private readonly RepoUnit _unit;
         public int PageSize { get; set; }
 
-        public UserService(RepoUnit unit)
+        public UserService(RepoUnit unit) 
         {
             PageSize = 7;
             _unit = unit;
@@ -27,14 +28,14 @@ namespace Bs.Calendar.Mvc.Services
             return user;
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public IEnumerable<User> GetAllUsers() 
         {
             return _unit.User.Load().ToList();
         }
 
-        public void SaveUser(UserEditVm userModel)
+        public void SaveUser(UserEditVm userModel) 
         {
-            if (!IsValidEmailAddress(userModel.Email))
+            if (!IsValidEmailAddress(userModel.Email)) 
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
@@ -42,7 +43,8 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
-            var user = new User
+
+            var user = new User 
             {
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
@@ -54,21 +56,25 @@ namespace Bs.Calendar.Mvc.Services
             _unit.User.Save(user);
         }
 
-        public void UpdateUserState(int userModelId, LiveState liveState)
-        {
+        public void UpdateUserState(int userModelId, LiveState liveState) {
             var user = _unit.User.Get(userModelId);
             user.LiveState = liveState;
             _unit.User.Save(user);
         }
 
-        public void EditUser(UserEditVm userModel)
+        public void DeleteUser(int id)
+        {
+            _unit.User.Delete(_unit.User.Get(id));
+        }
+
+        public void EditUser(UserEditVm userModel) 
         {
             var userToEdit = GetUser(userModel.UserId);
-            if (!IsValidEmailAddress(userModel.Email))
+            if (!IsValidEmailAddress(userModel.Email)) 
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
-            if (userToEdit.Email != userModel.Email && _unit.User.Get(u => u.Email == userModel.Email) != null)
+            if (userToEdit.Email != userModel.Email && _unit.User.Get(u => u.Email == userModel.Email) != null) 
             {
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
@@ -79,98 +85,86 @@ namespace Bs.Calendar.Mvc.Services
             _unit.User.Save(userToEdit);
         }
 
-        public static bool IsValidEmailAddress(string emailaddress)
+        public static bool IsValidEmailAddress(string emailaddress) 
         {
-            try
+            try 
             {
                 var email = new MailAddress(emailaddress);
                 return true;
-            }
-            catch (FormatException)
+            } 
+            catch (FormatException) 
             {
                 return false;
             }
         }
 
-        public UsersVm RetreiveList(string searchStr, string sortByStr, int page)
+        public UsersVm RetreiveList(PagingVm pagingVm)
         {
             var users = _unit.User.Load();
 
-            if (!string.IsNullOrEmpty(searchStr))
-            {
-                users = Find(users, searchStr);
-            }
+            users = searchByStr(users, pagingVm.SearchStr);
 
-            if (!string.IsNullOrEmpty(sortByStr))
-            {
-                users = Sort(users, sortByStr);
-            }
-            else
-            {
-                users = users.OrderBy(user => user.Id);
-            }
+            users = sortByStr(users, pagingVm.SortByStr);
 
-            var totalPages = (int)Math.Ceiling((decimal)users.Count() / PageSize);
-            var currentPage = page < 1 ? 1 : page > totalPages ? totalPages : page;
+            var totalPages = getTotalPages(users.Count(), PageSize);
+            var currentPage = getRangedPage(pagingVm.Page, totalPages);
 
-            return new UsersVm
+            return new UsersVm 
             {
                 Users = users.Skip((currentPage - 1) * PageSize).Take(PageSize).ToList(),
-                CurrentPage = currentPage,
-                TotalPages = totalPages,
-                SearchStr = searchStr,
-                SortByStr = sortByStr,
+                PagingVm = new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage)
             };
         }
 
-        public IQueryable<User> Sort(IQueryable<User> users, string sortByStr)
+        private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
         {
-            switch (sortByStr)
-            {
-                case "Name":
-                    users = users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName);
-                    break;
-                case "E-mail":
-                    users = users.OrderBy(user => user.Email);
-                    break;
-            }
+            if (string.IsNullOrEmpty(sortByStr))
+                return users.OrderBy(user => user.Id);
+
+            users = users.OrderByIf(sortByStr.Equals("Name"),
+                        team => team.FullName);
+
+            users = users.OrderByIf(sortByStr.Equals("E-mail"),
+                        team => team.FullName);
+
             return users;
         }
 
-        public IQueryable<User> Find(IQueryable<User> users, string searchStr)
+        private IQueryable<User> searchByStr(IQueryable<User> users, string searchStr)
         {
+            if (string.IsNullOrEmpty(searchStr))
+                return users;
+
             //Delete extra whitespaces
-            searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ");
+            searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ").ToLower();
+            
+            var filteredUsers = users.WhereIf(searchStr.Length > 0,
+                                    user => user.Email.ToLower().Contains(searchStr));
 
-            if (searchStr.Contains('@') && IsValidEmailAddress(searchStr))
-            {
-                users = users.Where(user => user.Email.Equals(
-                              searchStr, StringComparison.InvariantCulture));
-            }
-            else if (searchStr.Length != 0)
-            {
-                users = FindByName(users, searchStr);
-            }
-            return users;
+            filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
+
+            return filteredUsers.Distinct();
         }
 
-        private IQueryable<User> FindByName(IQueryable<User> users, string searchStr)
+        private IQueryable<User> searchByName(IQueryable<User> users, string searchStr)
         {
-            var arrName = searchStr.Split();
-            var comparisonType = StringComparison.InvariantCultureIgnoreCase;
+            var filteredUsers = Enumerable.Empty<User>().AsQueryable();
+            var splitedStr = searchStr.Split();
 
-            var filteredUsers = users.Where(user =>
-                user.FirstName.Equals(arrName[0], comparisonType) ||
-                user.LastName.Equals(arrName[0], comparisonType));
-
-            if (arrName.Length == 2)
-            {
-                filteredUsers = filteredUsers.Where(user =>
-                    user.FirstName.Equals(arrName[1], comparisonType) ||
-                    user.LastName.Equals(arrName[1], comparisonType));
+            for (int i = 0; i < splitedStr.Rank && i < 2; i++) {
+                var str = splitedStr[i];
+                filteredUsers = filteredUsers.Concat(users.Where(user => user.FullName.ToLower().Contains(str)));
             }
 
             return filteredUsers;
+        }
+
+        private int getTotalPages(int count, int pageSize) {
+            return (int)Math.Ceiling((decimal)count / pageSize);
+        }
+
+        private int getRangedPage(int page, int totalPages) {
+            return page <= 1 ? 1 : page > totalPages ? totalPages : page;
         }
     }
 }
