@@ -3,14 +3,20 @@
 {    
     var calendar = new CalendarMembershipProvider();
     var userName = calendar.GetUserNameByEmail(User.Identity.Name);
-    <text>
-        @Html.ActionLink(userName,
-        "Manage", "Account")|
+    <li>
+
+        @Html.ActionLink(userName, "Manage", "Account")
+    </li>
+    <li>
         @Html.ActionLink("Logout", "Logout", "Account")        
-    </text>
+    </li>
 } 
 else {
     
-       <text>@Html.ActionLink("Register", "Register", "Account") |
-           @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</text>
+        <li>
+            @Html.ActionLink("Register", "Register", "Account")
+        </li>
+        <li>
+            @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+        </li>
 }
