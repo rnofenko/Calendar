@@ -66,12 +66,15 @@ namespace Bs.Calendar.Mvc.Controllers
             return PassUserIntoTheView("Edit", id);
         }
 
-        [HttpPost]
+        [HttpPost,
+        ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditVm model, bool delete)
         {
             ModelState.Remove("userId");
             if (!ModelState.IsValid)
+            {
                 return View("Edit", model);
+            }
 
             try
             {
@@ -90,7 +93,8 @@ namespace Bs.Calendar.Mvc.Controllers
             return PassUserIntoTheView("Delete", id);
         }
 
-        [HttpPost]
+        [HttpPost,
+        ValidateAntiForgeryToken]
         public ActionResult Delete(UserEditVm model)
         {
             _service.UpdateUserState(model.UserId, LiveState.Deleted);

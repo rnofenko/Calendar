@@ -69,7 +69,7 @@
     <Compile Include="PagingPerfomanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers\FastDbInitializer.cs" />
-    <Compile Include="UsersControllerTest.cs" />
+    <None Include="UsersControllerTest.cs" />
     <Compile Include="UserFrameTest.cs" />
   </ItemGroup>
   <ItemGroup>

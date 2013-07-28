@@ -64,7 +64,7 @@
     <Compile Include="RoomFrameTest.cs" />
     <Compile Include="TeamControllerTest.cs" />
     <Compile Include="TeamFilterTest.cs" />
-    <Compile Include="UserControllerTest.cs" />
+    <None Include="UserControllerTest.cs" />
     <Compile Include="UserFilterTest.cs" />
   </ItemGroup>
   <ItemGroup>

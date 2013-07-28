@@ -1,0 +1,65 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.UserEditVm
+
+@{
+    ViewBag.Title = "Account details";
+}
+
+<div class="row">
+    <div class="centered seven columns default alert">
+        <h4 class="centered five columns">@ViewBag.Title</h4>
+    </div>
+</div>
+
+<div class="row">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(user => user.UserId)
+
+        <div class="centered seven columns">
+            @Html.ValidationSummary()
+        </div>
+        
+        <div class="row">
+            <fieldset class="centered seven columns">
+                <legend>
+                    <h4>@string.Format("{0} {1}", Model.FirstName, Model.LastName)</h4>
+                </legend>
+                              
+                <ul>
+                    <li class="field">
+                        @Html.LabelFor(user => Model.FirstName, new {@class = "inline"})
+                        @Html.TextBoxFor(user => Model.FirstName, new {@class = "wide text input"})
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(user => Model.LastName, new {@class = "inline"})
+                        @Html.TextBoxFor(user => Model.LastName, new {@class = "wide text input"})
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(user => Model.Email, new {@class = "inline"})
+                        @Html.TextBoxFor(user => Model.Email, new {@class = "wide text input"})
+                    </li>
+                </ul>
+
+                <div class="medium secondary btn three columns">
+                    <input type="submit" value="Update" />
+                </div>
+
+                <div class="medium default btn push_one three columns">
+                    @Html.ActionLink("Back", "Index", "Home")
+                </div> 
+            </fieldset>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="/Scripts/jquery-2.0.2.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
+@section styles {
+    <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
+}

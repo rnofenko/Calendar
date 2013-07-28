@@ -5,7 +5,7 @@
     var userName = calendar.GetUserNameByEmail(User.Identity.Name);
     <li>
 
-        @Html.ActionLink(userName, "Manage", "Account")
+        @Html.ActionLink(userName, "Edit", "Account")
     </li>
     <li>
         @Html.ActionLink("Logout", "Logout", "Account")        

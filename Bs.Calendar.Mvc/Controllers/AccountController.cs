@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.ComponentModel;
+using System.Web.Mvc;
 using System.Web.Security;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
@@ -104,5 +105,42 @@ namespace Bs.Calendar.Mvc.Controllers
                     return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
         }
+
+        public ActionResult Edit()
+        {
+            var email = User.Identity.Name;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(_service.GetUserEditVm(email));
+        }
+
+        [HttpPost,
+        ValidateAntiForgeryToken]
+        public ActionResult Edit(UserEditVm userEditVm)
+        {
+            ModelState.Remove("userId");
+            ModelState.Remove("BirthDate");
+            if (!ModelState.IsValid)
+            {
+                return View(userEditVm);
+            }
+
+            try 
+            {
+                _service.EditUser(userEditVm);
+                FormsAuthentication.SetAuthCookie(userEditVm.Email, true);
+                return RedirectToAction("Index", "Home");
+            } 
+            catch (WarningException exception) 
+            {
+                ModelState.AddModelError("", exception.Message);
+                return View(userEditVm);
+            }
+        }
+
     }
 }

@@ -44,7 +44,7 @@ namespace Bs.Calendar.Mvc.ViewModels
         Display(Name = "Last name")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "An email is required!"),
+        [Required(ErrorMessage = "E-mail is required!"),
         StringLength(200)]
         public string Email { get; set; }
 
@@ -57,6 +57,9 @@ namespace Bs.Calendar.Mvc.ViewModels
 
         public LiveState LiveState { get; set; }
 
+        [DataType(DataType.Date),
+        Display(Name = "Birth date"),
+        Required(ErrorMessage = "Birth date is required!")]
         public DateTime? BirthDate { get; set; }
     }
 }
