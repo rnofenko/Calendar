@@ -1,5 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
+using Bs.Calendar.DataAccess;
+using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 
@@ -7,8 +9,9 @@ namespace Bs.Calendar.Mvc.Controllers
 {
     public class AccountController : Controller
     {
-        public ActionResult Login()
+        public ActionResult Login(bool recover = false)
         {
+            ViewBag.Recover = recover;
             return View();
         }
 
@@ -20,7 +23,13 @@ namespace Bs.Calendar.Mvc.Controllers
                 var membershipProvider = new CalendarMembershipProvider();
                 if (membershipProvider.ValidateUser(model.Email, model.Password))
                 {
-                    FormsAuthentication.SetAuthCookie(model.Email, true);
+                    using (var unit = new RepoUnit())
+                    {
+                        var user = unit.User.Get(u => u.Email == model.Email);
+                        user.LiveState = user.LiveState == LiveState.Deleted ? LiveState.NotApproved : user.LiveState;
+                        unit.User.Save(user);
+                    }
+                    FormsAuthentication.SetAuthCookie(model.Email, true);                    
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -44,7 +53,7 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(AccountVm account)
+        public ActionResult Register(AccountVm account, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -56,6 +65,17 @@ namespace Bs.Calendar.Mvc.Controllers
                 {
                     FormsAuthentication.SetAuthCookie(account.Email, false);
                     return RedirectToAction("Index", "Home");
+                }
+                if (status == MembershipCreateStatus.DuplicateEmail)
+                {
+                    using (var unit = new RepoUnit())
+                    {
+                        var user = unit.User.Get(u => u.Email == account.Email);
+                        if (user.LiveState == LiveState.Deleted)
+                        {
+                            return RedirectToAction("Login", new { recover = true });
+                        }
+                    }
                 }
                 ModelState.AddModelError("", ErrorCodeToString(status));
             }
