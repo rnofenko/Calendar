@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
+using System.Web;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
@@ -126,7 +126,7 @@ namespace Bs.Calendar.Mvc.Services
                         team => team.FullName);
 
             users = users.OrderByIf(sortByStr.Equals("E-mail"),
-                        team => team.FullName);
+                        team => team.Email);
 
             return users;
         }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web.Mvc;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.DataAccess.Bases;
@@ -12,6 +8,8 @@ using Bs.Calendar.Mvc.Controllers;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Tests.Int.TestHelpers;
+using Moq;
+using System.Web;
 using NUnit.Framework;
 
 namespace Bs.Calendar.Tests.Int
@@ -24,17 +22,22 @@ namespace Bs.Calendar.Tests.Int
         [TestFixtureSetUp]
         public void SetUp()
         {
-            Database.SetInitializer(new FastDbInitializer());
+            Database.SetInitializer(new FastDbInitializer(1000));
             try {
                 var context = new CalendarContext();
                 context.Database.Initialize(true);
             } catch {
                 //Do Nothing
             }
+             
+            var mock = new Mock<ControllerContext>();
+            mock.Setup(p => p.HttpContext.Session).Returns(new Mock<HttpSessionStateBase>().Object);
 
             DiMvc.Register();
             Resolver.RegisterType<IUserRepository, UserRepository>();
+
             _usersController = Resolver.Resolve<UsersController>();
+            _usersController.ControllerContext = mock.Object;
         }
 
         [Test]

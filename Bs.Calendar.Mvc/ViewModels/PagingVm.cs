@@ -20,6 +20,11 @@ namespace Bs.Calendar.Mvc.ViewModels
             TotalPages = totalPages;
         }
 
+        public PagingVm(PagingVm pagingVm)
+            : this(pagingVm.SearchStr, pagingVm.SortByStr, pagingVm.TotalPages, pagingVm.Page)
+        {
+        }
+
         public string SearchStr { get; set; }
 
         public string SortByStr { get; set; }

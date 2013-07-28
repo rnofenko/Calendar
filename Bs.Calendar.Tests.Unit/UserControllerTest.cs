@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
@@ -13,6 +14,7 @@ using Bs.Calendar.Core;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Tests.Unit.FakeObjects;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 
 namespace Bs.Calendar.Tests.Unit
@@ -33,6 +35,9 @@ namespace Bs.Calendar.Tests.Unit
                 new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.None, LiveState = LiveState.Active}
             };
 
+            var mock = new Mock<ControllerContext>();
+            mock.Setup(p => p.HttpContext.Session).Returns(new Mock<HttpSessionStateBase>().Object);
+
             DiMvc.Register();
             Resolver.RegisterType<IUserRepository, FakeUserRepository>();
 
@@ -41,6 +46,7 @@ namespace Bs.Calendar.Tests.Unit
 
             Resolver.RegisterInstance<RepoUnit>(repoUnit);
             _userController = Resolver.Resolve<UsersController>();
+            _userController.ControllerContext = mock.Object;
         }
 
         [Test]
