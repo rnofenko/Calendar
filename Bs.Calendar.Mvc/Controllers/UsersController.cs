@@ -51,7 +51,7 @@ namespace Bs.Calendar.Mvc.Controllers
             try
             {
                 model.LiveState = LiveState.Active;
-                model.BirthDate = new DateTime((new Random()).Next(1970, 1992), (new Random()).Next(1, 12), (new Random()).Next(1, 28)).Date;
+                //model.BirthDate = new DateTime((new Random()).Next(1970, 1992), (new Random()).Next(1, 12), (new Random()).Next(1, 28)).Date;
                 _service.SaveUser(model);
                 return RedirectToAction("Index");
             }

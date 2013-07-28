@@ -30,7 +30,6 @@
         @Html.AntiForgeryToken()
         @Html.HiddenFor(user => user.UserId)
         @Html.HiddenFor(user => user.BirthDate)
-        @Html.HiddenFor(user => user.LiveState)
         <div class="centered seven columns">
             @Html.ValidationSummary()
         </div>
