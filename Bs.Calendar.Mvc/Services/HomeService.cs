@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
+using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -12,7 +12,10 @@ namespace Bs.Calendar.Mvc.Services
         {
             using (var unit = new RepoUnit())
             {
-                var users = unit.User.Load(u => ((DateTime)u.BirthDate).Month == DateTime.Now.Month && ((DateTime)u.BirthDate).Day >= DateTime.Now.Day && u.LiveState != LiveState.Deleted).ToList();
+                //var users = unit.User.Load(u => ((DateTime)u.BirthDate).Month == DateTime.Now.Month && ((DateTime)u.BirthDate).Day >= DateTime.Now.Day && u.LiveState != LiveState.Deleted).ToList();
+                
+                var now = DateTime.Now;
+                var users = new UsersRules().LoadUsersByBirthday(now, new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month)));
 
                 //if (!users.Any())
                 //{
