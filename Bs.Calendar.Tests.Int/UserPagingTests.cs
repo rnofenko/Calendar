@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web;
 using Bs.Calendar.Core;
 using System.Web.Mvc;
 using Bs.Calendar.DataAccess;
@@ -9,6 +10,7 @@ using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 
 namespace Bs.Calendar.Tests.Int
@@ -23,6 +25,9 @@ namespace Bs.Calendar.Tests.Int
         [TestFixtureSetUp]
         public void SetUp()
         {
+            var mock = new Mock<ControllerContext>();
+            mock.Setup(p => p.HttpContext.Session).Returns(new Mock<HttpSessionStateBase>().Object);
+
             DiMvc.Register();
             Resolver.RegisterType<IUserRepository, UserRepository>();
 
@@ -34,6 +39,7 @@ namespace Bs.Calendar.Tests.Int
             userService.PageSize = _pageSize = 1;
 
             _usersController = new UsersController(userService);
+            _usersController.ControllerContext = mock.Object;
         }
 
         [TestFixtureTearDown]

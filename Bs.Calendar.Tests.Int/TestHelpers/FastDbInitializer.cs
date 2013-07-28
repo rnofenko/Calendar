@@ -11,20 +11,29 @@ namespace Bs.Calendar.Tests.Int.TestHelpers
 {
     public class FastDbInitializer : DropCreateDatabaseIfModelChanges<CalendarContext>
     {
+        private readonly int _userCount;
+
+        public FastDbInitializer(int userCount)
+        {
+            _userCount = userCount;
+        }
+
+
         protected override void Seed(CalendarContext context) {
             if (context == null)
                 context = new CalendarContext();
 
             context.Configuration.AutoDetectChangesEnabled = false;
             context.Configuration.ValidateOnSaveEnabled = false;
+            var randomizer = new Random();
 
             try
             {
-                for (int i = 1; i < 1000000; i++)
+                for (int i = 1; i < _userCount; i++)
                 {
                     var user = new User
                     {
-                        Email = "test@gmail.com",
+                        Email = "test" + randomizer.Next(_userCount) + "@gmail.com",
                         FullName = "Test Test",
                         FirstName = "Test",
                         LastName = "Test",

@@ -101,7 +101,10 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpGet]
         public ActionResult List(PagingVm pagingVm)
         {
-            return PartialView(_service.RetreiveList(pagingVm));
+            var usersVm = _service.RetreiveList(pagingVm);
+            Session["pagingVm"] = usersVm.PagingVm;
+
+            return PartialView(usersVm);
         }
     }
 }
