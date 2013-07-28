@@ -1,14 +1,18 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.UserEditVm
+﻿@using Bs.Calendar.Models
+@model Bs.Calendar.Mvc.ViewModels.UserEditVm
 @{
-    var userRoles = (from object role in Enum.GetValues(typeof (Bs.Calendar.Models.Roles)) select role.ToString()).ToList();   
+    var userRoles = (from object role in Enum.GetValues(typeof(Bs.Calendar.Models.Roles)) select role.ToString()).ToList();
     var btnName = Model == null ? "Create" : "Update";
     var userId = 0;
 
-    if (Model != null && Model.UserId != 0) {
+    if (Model != null && Model.UserId != 0)
+    {
         userId = Model.UserId;
         ViewBag.Title = "Edit User";
         ViewBag.User = Model.FirstName + " " + Model.LastName;
-    } else {
+    }
+    else
+    {
         ViewBag.Title = "Create User";
         ViewBag.User = "New User";
     }
@@ -25,6 +29,8 @@
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(user => user.UserId)
+        @Html.HiddenFor(user => user.BirthDate)
+        @Html.HiddenFor(user => user.LiveState)
         <div class="centered seven columns">
             @Html.ValidationSummary()
         </div>
@@ -34,29 +40,39 @@
                 <legend>
                     <h4>@ViewBag.User</h4>
                 </legend>
-                              
+
                 <ul>
                     <li class="field">
-                        @Html.LabelFor(user => user.FirstName, new {@class = "inline"})
-                        @Html.TextBoxFor(user => user.FirstName, new {@class = "wide text input"})
+                        @Html.LabelFor(user => user.FirstName, new { @class = "inline" })
+                        @Html.TextBoxFor(user => user.FirstName, new { @class = "wide text input" })
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => user.LastName, new {@class = "inline"})
-                        @Html.TextBoxFor(user => user.LastName, new {@class = "wide text input"})
+                        @Html.LabelFor(user => user.LastName, new { @class = "inline" })
+                        @Html.TextBoxFor(user => user.LastName, new { @class = "wide text input" })
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => user.Email, new {@class = "inline"})
-                        @Html.TextBoxFor(user => user.Email, new {@class = "wide text input"})
+                        @Html.LabelFor(user => user.Email, new { @class = "inline" })
+                        @Html.TextBoxFor(user => user.Email, new { @class = "wide text input" })
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => user.Role, new {@class = "inline"})
+                        @Html.LabelFor(user => user.Role, new { @class = "inline" })
                         <div class="picker">
                             @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
                         </div>
                     </li>
+                    @if (userId != 0)
+                    {
+                        if (Model.LiveState != LiveState.Deleted)
+                        { 
+                            <li>
+                                <text class="column">Deleted</text>
+                                @Html.CheckBox("delete")
+                            </li>
+                        }
+                    }
                 </ul>
 
                 <div class="medium secondary btn three columns">
@@ -66,13 +82,8 @@
                 <div class="medium default btn push_one three columns">
                     @Html.ActionLink("Back", "Index")
                 </div>
-            
-                @if (userId != 0)
-                {
-                    <div class="medium info btn three columns push_one">
-                        @Html.ActionLink("Delete", "Delete", new {id =  userId})
-                    </div>
-                }
+
+
             </fieldset>
         </div>
     }

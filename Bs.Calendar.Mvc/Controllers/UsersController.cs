@@ -68,15 +68,15 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(UserEditVm model)
+        public ActionResult Edit(UserEditVm model, bool delete)
         {
             ModelState.Remove("userId");
             if (!ModelState.IsValid)
                 return View("Edit", model);
 
             try
-            {                
-                _service.EditUser(model);
+            {
+                _service.EditUser(model, delete);
                 return RedirectToAction("Index");
             }
             catch (WarningException exception)

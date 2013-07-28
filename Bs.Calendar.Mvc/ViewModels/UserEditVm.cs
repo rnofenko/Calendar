@@ -6,13 +6,14 @@ namespace Bs.Calendar.Mvc.ViewModels
 {
     public class UserEditVm
     {
-        public UserEditVm(int userId,string firstName,string lastName, string email, Roles role, LiveState liveState)
+        public UserEditVm(int userId,string firstName,string lastName, string email, Roles role, DateTime? bday, LiveState liveState)
         {
             UserId = userId;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Role = role;
+            BirthDate = bday;
             LiveState = liveState;
         }
 
@@ -23,6 +24,7 @@ namespace Bs.Calendar.Mvc.ViewModels
             LastName = user.LastName;
             Email = user.Email;
             Role = user.Role;
+            BirthDate = user.BirthDate;
             LiveState = user.LiveState;
         }
         
@@ -55,6 +57,6 @@ namespace Bs.Calendar.Mvc.ViewModels
 
         public LiveState LiveState { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
     }
 }
