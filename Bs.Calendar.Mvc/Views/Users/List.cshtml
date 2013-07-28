@@ -17,6 +17,7 @@ else
             <tr>
                 <th>@Html.AjaxSortLink(@Model.PagingVm, "Name", ajaxOptions)</th>
                 <th>@Html.AjaxSortLink(@Model.PagingVm, "E-mail", ajaxOptions)</th>
+                <th>@Html.AjaxSortLink(@Model.PagingVm, "State", ajaxOptions)</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -26,6 +27,7 @@ else
                 <tr>
                     <td>@user.FirstName @user.LastName</td>      
                     <td>@user.Email</td>
+                    <td>@user.LiveState</td>
                     <td>           
                         <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
                         <div class="medium default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>

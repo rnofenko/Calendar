@@ -27,8 +27,8 @@ namespace Bs.Calendar.Tests.Int
 
             _unit = new RepoUnit();
             
-            _unit.User.Save(new User {Email = "aaa@bbb.com", FirstName = "aaa", LastName = "bbb", LiveState = LiveState.Ok});
-            _unit.User.Save(new User { Email = "ccc@ddd.com", FirstName = "ccc", LastName = "ddd", LiveState = LiveState.Ok});
+            _unit.User.Save(new User {Email = "aaa@bbb.com", FirstName = "aaa", LastName = "bbb", LiveState = LiveState.Active});
+            _unit.User.Save(new User { Email = "ccc@ddd.com", FirstName = "ccc", LastName = "ddd", LiveState = LiveState.Active});
 
             _usersController = new UsersController(new UserService(_unit));
         }

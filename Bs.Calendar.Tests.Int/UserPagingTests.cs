@@ -27,8 +27,8 @@ namespace Bs.Calendar.Tests.Int
             Resolver.RegisterType<IUserRepository, UserRepository>();
 
             _unit = new RepoUnit();
-            _unit.User.Save(new User { Email = "aaa@bbb.com", FullName = "aaa ddd", FirstName = "aaa", LastName = "ddd", LiveState = LiveState.Ok});
-            _unit.User.Save(new User { Email = "ccc@ddd.com", FullName = "aaa bbb", FirstName = "aaa", LastName = "bbb", LiveState = LiveState.Ok });
+            _unit.User.Save(new User { Email = "aaa@bbb.com", FullName = "aaa ddd", FirstName = "aaa", LastName = "ddd", LiveState = LiveState.Active});
+            _unit.User.Save(new User { Email = "ccc@ddd.com", FullName = "aaa bbb", FirstName = "aaa", LastName = "bbb", LiveState = LiveState.Active });
 
             var userService = new UserService(_unit);
             userService.PageSize = _pageSize = 1;

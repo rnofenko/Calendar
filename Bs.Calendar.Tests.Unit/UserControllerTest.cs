@@ -28,9 +28,9 @@ namespace Bs.Calendar.Tests.Unit
         {
             _users = new List<User>
             {
-                new User {Id = 1, Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.None, LiveState = LiveState.Ok},
-                new User {Id = 2, Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.None, LiveState = LiveState.Ok},
-                new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.None, LiveState = LiveState.Ok}
+                new User {Id = 1, Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.None, LiveState = LiveState.Active},
+                new User {Id = 2, Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.None, LiveState = LiveState.Active},
+                new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.None, LiveState = LiveState.Active}
             };
 
             DiMvc.Register();
@@ -61,7 +61,7 @@ namespace Bs.Calendar.Tests.Unit
         [Test]
         public void Can_Create_Users() {
             //arrange
-            var testUserVm = new UserEditVm(0, "Alexandr", "Fomkin", "0000@gmail.com", Roles.None, LiveState.Ok);
+            var testUserVm = new UserEditVm(0, "Alexandr", "Fomkin", "0000@gmail.com", Roles.None, LiveState.Active);
 
             //act
             _userController.Create(testUserVm);
@@ -117,7 +117,7 @@ namespace Bs.Calendar.Tests.Unit
         [Test]
         public void Can_Edit_User() {
             //arrange
-            var testUserVm = new UserEditVm(_users[1].Id, "Toto", "Koko", "ggggg@gmail.com", Roles.Admin, LiveState.Ok);
+            var testUserVm = new UserEditVm(_users[1].Id, "Toto", "Koko", "ggggg@gmail.com", Roles.Admin, LiveState.Active);
 
             //act
             _userController.Edit(testUserVm);

@@ -29,7 +29,7 @@ namespace Bs.Calendar.Tests.Int.TestHelpers
                         FirstName = "Test",
                         LastName = "Test",
                         Role = Roles.None,
-                        LiveState = LiveState.Ok
+                        LiveState = LiveState.Active
                     };
 
                     context = AddToContext(context, user, i, 1000, true);

@@ -22,10 +22,10 @@ namespace Bs.Calendar.Tests.Unit
         public void Setup() {
             _users = new List<User>
             {
-                new User {Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", LiveState = LiveState.Ok},
-                new User {Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", LiveState = LiveState.Ok},
-                new User {Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", LiveState = LiveState.Ok},
-                new User {Email = "0000@gmail.com", FirstName = "Alex", LastName = "Sinov", LiveState = LiveState.Ok}
+                new User {Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", LiveState = LiveState.Active},
+                new User {Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", LiveState = LiveState.Active},
+                new User {Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", LiveState = LiveState.Active},
+                new User {Email = "0000@gmail.com", FirstName = "Alex", LastName = "Sinov", LiveState = LiveState.Active}
             };
             _users.ForEach(user => user.FullName = string.Format("{0} {1}", user.FirstName, user.LastName));
 

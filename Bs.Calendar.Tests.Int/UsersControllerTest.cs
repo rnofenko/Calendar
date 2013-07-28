@@ -32,7 +32,7 @@ namespace Bs.Calendar.Tests.Int
                     LastName = "Smith",
                     Email = "bigbrother1984@gmail.com",
                     Role = Roles.Simple,
-                    LiveState = LiveState.Ok
+                    LiveState = LiveState.Active
                 };
             DiMvc.Register();
             Resolver.RegisterType<IUserRepository, FakeUserRepository>();
@@ -52,7 +52,7 @@ namespace Bs.Calendar.Tests.Int
                     LastName = "Goldstein",
                     Email = "bigbrother1984@gmail.com",
                     Role = Roles.Simple,
-                    LiveState = LiveState.Ok
+                    LiveState = LiveState.Active
                 };
 
             // act
@@ -75,7 +75,7 @@ namespace Bs.Calendar.Tests.Int
                 LastName = "Htims",
                 Email = "bigbrother1984@gmail.com",
                 Role = Roles.Simple,
-                LiveState = LiveState.Ok
+                LiveState = LiveState.Active
             };
 
             // act
@@ -153,7 +153,7 @@ namespace Bs.Calendar.Tests.Int
                 LastName = "Agent",
                 Email = "obrien@gmail.com",
                 Role = Roles.None,
-                LiveState = LiveState.Ok
+                LiveState = LiveState.Active
             };
             _userService.SaveUser(userToDeleteVm);
 

@@ -1,36 +1,43 @@
 ﻿@model IEnumerable<Bs.Calendar.Models.User>
 @{
     ViewBag.Title = "Home Page";
-    var now = DateTime.Now;
+    var now = DateTime.Now;       
 }
 
-<div class="row">    
-    <h1>Пользователи</h1>
-    <table>
-        <tbody>
-            @foreach (var user in Model)
-            {               
-                var bday = user.BirthDate;                
-                var age = now.Year - ((DateTime)bday).Year;
-                
-                if (bday > now.AddYears(-age))
+@if (!Model.Any())
+{
+    <h2>There is no users with birthdays in this month</h2>
+}
+else
+{
+    <div class="row">
+        <h1>Пользователи</h1>
+        <table>
+            <tbody>
+                @foreach (var user in Model)
                 {
-                    age--;
+                    var bday = user.BirthDate;
+                    var age = now.Year - ((DateTime) bday).Year;
+
+                    if (bday > now.AddYears(-age))
+                    {
+                        age--;
+                    }
+                    <tr>
+                        <td>@user.FirstName @user.LastName</td>      
+                        <td>@(((DateTime) (user.BirthDate)).ToShortDateString())</td>
+                        @if (((DateTime) bday).Day != now.Day)
+                        {
+                            ++age;
+                            <td class="secondary badge">@age</td>
+                        }
+                        else
+                        {
+                            <td class="danger badge">@age</td>
+                        }
+                    </tr>
                 }
-                <tr>
-                    <td>@user.FirstName @user.LastName</td>      
-                    <td>@(((DateTime)(user.BirthDate)).ToShortDateString())</td>
-                @if (((DateTime) bday).Day != now.Day)
-                {
-                    ++age;
-                    <td class="secondary badge">@age</td>
-                }
-                else
-                {
-                    <td class="danger badge">@age</td>
-                }
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>    
+            </tbody>
+        </table>
+    </div>
+}
