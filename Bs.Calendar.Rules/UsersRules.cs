@@ -7,12 +7,16 @@ namespace Bs.Calendar.Rules
 {
     public class UsersRules
     {
+        private readonly RepoUnit _unit;
+
+        public UsersRules(RepoUnit unit)
+        {
+            _unit = unit;
+        }
+
         public IEnumerable<User> LoadUsersByBirthday(DateTime from, DateTime into)
         {
-            using (var unit = new RepoUnit())
-            {
-                return unit.User.Load(u => u.BirthDate >= from && u.BirthDate <= into);
-            }
+            return _unit.User.Load(u => u.BirthDate >= from && u.BirthDate <= into);
         }
     }
 }
