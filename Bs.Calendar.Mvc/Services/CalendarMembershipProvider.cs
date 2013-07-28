@@ -46,7 +46,7 @@ namespace Bs.Calendar.Mvc.Services
                 FirstName = email.Remove(email.IndexOf('@')),
                 LastName = "",
                 Email = email,
-                PasswordKeccakHash = crypto.GetHash(password),
+                PasswordKeccakHash = crypto.GetHashWithSalt(password),
                 Role = Roles.None,
                 LiveState = LiveState.NotApproved,
                 BirthDate = null

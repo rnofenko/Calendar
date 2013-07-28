@@ -77,7 +77,7 @@ namespace Bs.Calendar.Mvc.Controllers
             try
             {
                 _service.EditUser(model, delete);
-                return RedirectToAction("Index");
+                return delete ? RedirectToAction("Logout", "Account") : RedirectToAction("Index");
             }
             catch (WarningException exception)
             {

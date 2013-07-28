@@ -1,7 +1,7 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.AccountVm
 @{
     ViewBag.Title = "Login";    
-    var recover = ViewBag.Recover;
+    var recover = ViewBag.Recover ?? false;
 }
 
 @using(Html.BeginForm())
