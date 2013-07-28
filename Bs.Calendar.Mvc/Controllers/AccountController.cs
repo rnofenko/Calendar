@@ -1,9 +1,13 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Net.Mail;
+using System.Web.Mvc;
 using System.Web.Security;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Rules;
+using Roles = Bs.Calendar.Models.Roles;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -63,6 +67,7 @@ namespace Bs.Calendar.Mvc.Controllers
                     out status);
                 if (status == MembershipCreateStatus.Success)
                 {
+                    SendMsgToAdmins(account.Email);
                     FormsAuthentication.SetAuthCookie(account.Email, false);
                     return RedirectToAction("Index", "Home");
                 }
@@ -80,6 +85,26 @@ namespace Bs.Calendar.Mvc.Controllers
                 ModelState.AddModelError("", ErrorCodeToString(status));
             }
             return View(account);
+        }
+
+        private static void SendMsgToAdmins(string emailAddress)
+        {
+            var sender = new EmailSender();
+            const string subject = "New user registration";
+            var body = string.Format("Hi there!\nA new user with email {0} has been added to the calendar!",
+                emailAddress);
+            using (var unit = new RepoUnit())
+            {
+                foreach (var admin in unit.User.Load(u => u.Role == Roles.Admin).ToList())
+                {
+                    var msg = new MailMessage(emailAddress, admin.Email)
+                    {
+                        Subject = subject,
+                        Body = body
+                    };
+                    sender.SendEmail(msg);
+                }
+            }
         }
 
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
