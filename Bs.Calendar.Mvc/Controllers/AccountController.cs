@@ -1,18 +1,19 @@
-﻿using System.Linq;
-using System.Net.Mail;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Security;
-using Bs.Calendar.DataAccess;
-using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
-using Bs.Calendar.Rules;
-using Roles = Bs.Calendar.Models.Roles;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly AccountService _service;
+
+        public AccountController(AccountService service)
+        {
+            _service = service;
+        }
+
         public ActionResult Login(bool recover = false)
         {
             ViewBag.Recover = recover;
@@ -24,16 +25,8 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                var membershipProvider = new CalendarMembershipProvider();
-                if (membershipProvider.ValidateUser(model.Email, model.Password))
-                {
-                    using (var unit = new RepoUnit())
-                    {
-                        var user = unit.User.Get(u => u.Email == model.Email);
-                        user.LiveState = user.LiveState == LiveState.Deleted ? LiveState.NotApproved : user.LiveState;
-                        unit.User.Save(user);
-                    }
-                    FormsAuthentication.SetAuthCookie(model.Email, true);                    
+                if(_service.LoginUser(model))
+                {                    
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -61,52 +54,21 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                var calendarMembershipProvider = new CalendarMembershipProvider();
                 MembershipCreateStatus status;
-                calendarMembershipProvider.CreateUser("", account.Password, account.Email, "", "", true, null,
-                    out status);
-                if (status == MembershipCreateStatus.Success)
+                var register = _service.RegisterUser(account, out status);
+                if (register == true)
                 {
-                    SendMsgToAdmins(account.Email);
-                    FormsAuthentication.SetAuthCookie(account.Email, false);
                     return RedirectToAction("Index", "Home");
                 }
-                if (status == MembershipCreateStatus.DuplicateEmail)
+                if (register == false)
                 {
-                    using (var unit = new RepoUnit())
-                    {
-                        var user = unit.User.Get(u => u.Email == account.Email);
-                        if (user.LiveState == LiveState.Deleted)
-                        {
-                            return RedirectToAction("Login", new { recover = true });
-                        }
-                    }
+                    return RedirectToAction("Login", new { recover = true });
                 }
                 ModelState.AddModelError("", ErrorCodeToString(status));
             }
             return View(account);
         }
-
-        private static void SendMsgToAdmins(string emailAddress)
-        {
-            var sender = new EmailSender();
-            const string subject = "New user registration";
-            var body = string.Format("Hi there!\nA new user with email {0} has been added to the calendar!",
-                emailAddress);
-            using (var unit = new RepoUnit())
-            {
-                foreach (var admin in unit.User.Load(u => u.Role == Roles.Admin).ToList())
-                {
-                    var msg = new MailMessage(emailAddress, admin.Email)
-                    {
-                        Subject = subject,
-                        Body = body
-                    };
-                    sender.SendEmail(msg);
-                }
-            }
-        }
-
+        
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
         {
             switch (createStatus)

@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using System.Web.Mvc;
 using Bs.Calendar.Models;
