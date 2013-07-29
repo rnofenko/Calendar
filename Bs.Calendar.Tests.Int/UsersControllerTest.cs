@@ -95,7 +95,9 @@ namespace Bs.Calendar.Tests.Int
                     FirstName = "George",
                     LastName = "Orwell",
                     Email = "orwell.george@gmail.com",
-                    Role = Roles.None
+                    Role = Roles.None,
+                    BirthDate = null,
+                    LiveState = LiveState.Active
                 };
 
             // act
@@ -130,7 +132,7 @@ namespace Bs.Calendar.Tests.Int
             user.Role = Roles.None;
 
             // act
-            new UsersController(_userService).Edit(new UserEditVm(user));
+            new UsersController(_userService).Edit(new UserEditVm(user), false);
 
             // assert
             var savedUser = _unit.User.Get(u =>

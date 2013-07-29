@@ -67,7 +67,7 @@ namespace Bs.Calendar.Tests.Unit
         [Test]
         public void Can_Create_Users() {
             //arrange
-            var testUserVm = new UserEditVm(0, "Alexandr", "Fomkin", "0000@gmail.com", Roles.None, LiveState.Active);
+            var testUserVm = new UserEditVm(0, "Alexandr", "Fomkin", "0000@gmail.com", Roles.None, null, LiveState.Active);
 
             //act
             _userController.Create(testUserVm);
@@ -123,10 +123,10 @@ namespace Bs.Calendar.Tests.Unit
         [Test]
         public void Can_Edit_User() {
             //arrange
-            var testUserVm = new UserEditVm(_users[1].Id, "Toto", "Koko", "ggggg@gmail.com", Roles.Admin, LiveState.Active);
+            var testUserVm = new UserEditVm(_users[1].Id, "Toto", "Koko", "ggggg@gmail.com", Roles.Admin, null, LiveState.Active);
 
             //act
-            _userController.Edit(testUserVm);
+            _userController.Edit(testUserVm, false);
             var userView = _userController.List(new PagingVm()) as PartialViewResult;
             var users = (userView.Model as UsersVm).Users;
 
