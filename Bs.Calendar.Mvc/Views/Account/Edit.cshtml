@@ -41,6 +41,11 @@
                         @Html.LabelFor(user => Model.Email, new {@class = "inline"})
                         @Html.TextBoxFor(user => Model.Email, new {@class = "wide text input"})
                     </li>
+                    
+                    <li class="field">
+                        @Html.LabelFor(user => user.BirthDate, new { @class = "inline" })
+                        @Html.CustomDateEditor(user => user.BirthDate)
+                    </li>
                 </ul>
 
                 <div class="medium secondary btn three columns">

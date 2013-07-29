@@ -214,7 +214,7 @@
     <Compile Include="Services\CalendarMembershipProvider.cs" />
     <Compile Include="Services\CalendarRoleProvider.cs" />
     <Compile Include="Services\HomeService.cs" />
-    <Compile Include="Services\AjaxLinkHelpers.cs" />
+    <Compile Include="Services\CustomHtmlHelpers.cs" />
     <Compile Include="ViewModels\PagingVm.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\AccountVm.cs" />

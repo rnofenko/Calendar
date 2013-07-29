@@ -103,6 +103,8 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.FirstName = userEditVm.FirstName;
             userToEdit.LastName = userEditVm.LastName;
             userToEdit.Email = userEditVm.Email;
+            userToEdit.BirthDate = userEditVm.BirthDate;
+
             _unit.User.Save(userToEdit);  
         }
 

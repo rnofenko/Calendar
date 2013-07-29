@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountServiceTest.cs" />
     <Compile Include="GetAgeTest.cs" />
     <Compile Include="CryptoProviderTest.cs" />
     <Compile Include="FakeObjects\FakeBaseRepository.cs" />
@@ -64,7 +65,7 @@
     <Compile Include="RoomFrameTest.cs" />
     <Compile Include="TeamControllerTest.cs" />
     <Compile Include="TeamFilterTest.cs" />
-    <None Include="UserControllerTest.cs" />
+    <Compile Include="UserControllerTest.cs" />
     <Compile Include="UserFilterTest.cs" />
   </ItemGroup>
   <ItemGroup>

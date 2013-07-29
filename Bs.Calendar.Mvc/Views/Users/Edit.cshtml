@@ -29,7 +29,7 @@
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(user => user.UserId)
-        @Html.HiddenFor(user => user.BirthDate)
+
         <div class="centered seven columns">
             @Html.ValidationSummary()
         </div>
@@ -55,6 +55,11 @@
                         @Html.LabelFor(user => user.Email, new { @class = "inline" })
                         @Html.TextBoxFor(user => user.Email, new { @class = "wide text input" })
                     </li>
+                    
+                    <li class="field">
+                        @Html.LabelFor(user => user.BirthDate, new { @class = "inline" })
+                        @Html.CustomDateEditor(user => user.BirthDate)
+                    </li>
 
                     <li class="field">
                         @Html.LabelFor(user => user.Role, new { @class = "inline" })
@@ -62,19 +67,20 @@
                             @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
                         </div>
                     </li>
+
                     @if (userId != 0)
                     {
                         if (Model.LiveState != LiveState.Deleted)
                         { 
                             <li>
-                                <text class="column">Deleted</text>
+                                <label class="inline">Deleted</label>
                                 @Html.CheckBox("delete")
                             </li>
                         }
                     }
                 </ul>
 
-                <div class="medium secondary btn three columns">
+                <div class="medium secondary btn push_two three columns">
                     <input type="submit" value=@btnName />
                 </div>
 

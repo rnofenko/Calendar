@@ -130,7 +130,7 @@ namespace Bs.Calendar.Tests.Int
             user.Role = Roles.None;
 
             // act
-            new UsersController(_userService).Edit(new UserEditVm(user));
+            new UsersController(_userService).Edit(new UserEditVm(user), false);
 
             // assert
             var savedUser = _unit.User.Get(u =>

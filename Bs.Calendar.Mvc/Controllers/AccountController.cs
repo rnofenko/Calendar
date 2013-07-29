@@ -123,7 +123,6 @@ namespace Bs.Calendar.Mvc.Controllers
         public ActionResult Edit(UserEditVm userEditVm)
         {
             ModelState.Remove("userId");
-            ModelState.Remove("BirthDate");
             if (!ModelState.IsValid)
             {
                 return View(userEditVm);
