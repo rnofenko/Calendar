@@ -215,6 +215,7 @@
     <Compile Include="Services\CalendarRoleProvider.cs" />
     <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\CustomHtmlHelpers.cs" />
+    <Compile Include="Services\MvcConfig.cs" />
     <Compile Include="ViewModels\PagingVm.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\AccountVm.cs" />
