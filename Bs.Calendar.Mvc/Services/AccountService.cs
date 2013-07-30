@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Mail;
-using System.Web;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
@@ -91,7 +89,7 @@ namespace Bs.Calendar.Mvc.Services
         {
             var userToEdit = GetUser(userEditVm.UserId);
 
-            if (!IsValidEmailAddress(userEditVm.Email)) 
+            if(!EmailSender.IsValidEmailAddress(userEditVm.Email))
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userEditVm.Email));
             }
@@ -107,19 +105,5 @@ namespace Bs.Calendar.Mvc.Services
 
             _unit.User.Save(userToEdit);  
         }
-
-        public static bool IsValidEmailAddress(string emailaddress) 
-        {
-            try 
-            {
-                var email = new MailAddress(emailaddress);
-                return true;
-            } 
-            catch (FormatException)
-            {
-                return false;
-            }
-        }
-        
     }
 }
