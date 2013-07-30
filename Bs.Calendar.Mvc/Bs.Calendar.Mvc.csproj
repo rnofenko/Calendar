@@ -213,6 +213,7 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\CalendarMembershipProvider.cs" />
     <Compile Include="Services\CalendarRoleProvider.cs" />
+    <Compile Include="Services\EmailValidation.cs" />
     <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\AjaxLinkHelpers.cs" />
     <Compile Include="ViewModels\PagingVm.cs" />

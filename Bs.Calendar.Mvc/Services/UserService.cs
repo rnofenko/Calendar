@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
-using System.Web;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
@@ -36,7 +35,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public void SaveUser(UserEditVm userModel)
         {
-            if (!IsValidEmailAddress(userModel.Email))
+            if(!userModel.Email.IsValidEmailAddress())
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
@@ -72,7 +71,7 @@ namespace Bs.Calendar.Mvc.Services
         public void EditUser(UserEditVm userModel, bool delete)
         {
             var userToEdit = GetUser(userModel.UserId);
-            if (!IsValidEmailAddress(userModel.Email))
+            if (!userModel.Email.IsValidEmailAddress())
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
@@ -101,19 +100,6 @@ namespace Bs.Calendar.Mvc.Services
                 Body = body
             };
             sender.SendEmail(msg);
-        }
-
-        public static bool IsValidEmailAddress(string emailaddress)
-        {
-            try
-            {
-                var email = new MailAddress(emailaddress);
-                return true;
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
         }
 
         public UsersVm RetreiveList(PagingVm pagingVm)
@@ -161,6 +147,8 @@ namespace Bs.Calendar.Mvc.Services
 
             filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
 
+            filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
+
             return filteredUsers.Distinct();
         }
 
@@ -176,6 +164,12 @@ namespace Bs.Calendar.Mvc.Services
             }
 
             return filteredUsers;
+        }
+
+        private IQueryable<User> SearchByRole(IQueryable<User> users, string searchStr)
+        {
+            return 
+                string.IsNullOrEmpty(searchStr) ? users : users.WhereIf(!String.IsNullOrEmpty(searchStr), u => u.Role.ToString().ToLower() == searchStr.ToLower());
         }
 
         private int getTotalPages(int count, int pageSize)
