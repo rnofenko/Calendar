@@ -30,7 +30,7 @@ namespace Bs.Calendar.Mvc.Services
                                                   string passwordQuestion, string passwordAnswer, bool isApproved,
                                                   object providerUserKey, out MembershipCreateStatus status)
         {
-            if(!email.IsValidEmailAddress())
+            if(!EmailSender.IsValidEmailAddress(email))
             {
                 status = MembershipCreateStatus.InvalidEmail;
                 return null;

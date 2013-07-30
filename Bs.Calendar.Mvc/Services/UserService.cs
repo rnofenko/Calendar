@@ -35,7 +35,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public void SaveUser(UserEditVm userModel)
         {
-            if(!userModel.Email.IsValidEmailAddress())
+            if(!EmailSender.IsValidEmailAddress(userModel.Email))
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
@@ -71,7 +71,7 @@ namespace Bs.Calendar.Mvc.Services
         public void EditUser(UserEditVm userModel, bool delete)
         {
             var userToEdit = GetUser(userModel.UserId);
-            if (!userModel.Email.IsValidEmailAddress())
+            if(!EmailSender.IsValidEmailAddress(userModel.Email))
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
