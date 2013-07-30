@@ -36,6 +36,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="FizzWare.NBuilder">
+      <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
+    </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.2.0.1\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
@@ -61,6 +64,7 @@
   <ItemGroup>
     <Compile Include="CalendarMembershipProviderTest.cs" />
     <Compile Include="CalendarRoleProviderTest.cs" />
+    <Compile Include="HomeControllerTest.cs" />
     <Compile Include="TeamControllerTest.cs" />
     <Compile Include="TeamFrameTest.cs" />
     <Compile Include="TeamPagingTest.cs" />
@@ -71,6 +75,7 @@
     <Compile Include="TestHelpers\FastDbInitializer.cs" />
     <Compile Include="UsersControllerTest.cs" />
     <Compile Include="UserFrameTest.cs" />
+    <Compile Include="UsersRulesTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bs.Calendar.Core\Bs.Calendar.Core.csproj">

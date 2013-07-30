@@ -16,7 +16,17 @@ namespace Bs.Calendar.Rules
 
         public IEnumerable<User> LoadUsersByBirthday(DateTime from, DateTime into)
         {
-            return _unit.User.Load(u => u.BirthDate >= from && u.BirthDate <= into);
+            return _unit.User.Load(u => u.LiveState != LiveState.Deleted && u.BirthDate >= from && u.BirthDate <= into);
+        }
+
+        public IEnumerable<User> LoadUsersByBirthday(DateTime from)
+        {
+            var days = DateTime.DaysInMonth(from.Year, from.Month);
+
+            return _unit.User.Load(u => u.LiveState != LiveState.Deleted 
+                    && ((DateTime)(u.BirthDate)).Month == from.Month
+                    && ((DateTime)(u.BirthDate)).Day >= from.Day
+                    && ((DateTime)(u.BirthDate)).Day <= days);
         }
     }
 }
