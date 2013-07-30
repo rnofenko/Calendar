@@ -9,7 +9,7 @@ namespace Bs.Calendar.DataAccess.Bases
         public IDbSet<User> Users { get; set; }
         public IDbSet<Room> Rooms { get; set; }
         public IDbSet<Team> Teams { get; set; }
-
+        
         public CalendarContext()
             : base(getConnectionName())
         {
@@ -23,6 +23,7 @@ namespace Bs.Calendar.DataAccess.Bases
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+
         }
     }
 }

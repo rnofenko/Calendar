@@ -9,7 +9,7 @@ namespace Bs.Calendar.DataAccess.Bases
     {
         IQueryable<T> Load();
         IQueryable<T> Load(Expression<Func<T, bool>> predicate);
-        
+        IQueryable<T> Include<TProperty>(Expression<Func<T, TProperty>> expr);
         T Get(Expression<Func<T, bool>> predicate);        
         T Get(int id);
         

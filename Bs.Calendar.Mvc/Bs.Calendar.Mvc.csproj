@@ -295,6 +295,8 @@
     <Content Include="Views\Team\Details.cshtml" />
     <Content Include="Views\Team\Delete.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
+    <Content Include="Views\Account\PasswordRecovery.cshtml" />
+    <Content Include="Views\Account\PasswordReset.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

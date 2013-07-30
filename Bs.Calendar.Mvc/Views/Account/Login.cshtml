@@ -17,7 +17,7 @@
             }
             </li>
             <li><h2>Login</h2></li>
-            <li>Please enter your email name and password. @Html.ActionLink("Register", "Register") if you don't have an account.</li>
+            <li>Please enter your email name and password. @Html.ActionLink("Register", "Register") if you don't have an account. You can also @Html.ActionLink("Recover Password", "PasswordRecovery")</li>
             <li class="field">
                 <input class="email input" type="email" name="Email" placeholder="Your email" /> @Html.ValidationMessageFor(model => model.Email)</li>
             <li class="field">
