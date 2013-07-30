@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Bs.Calendar.Core;
+﻿using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;

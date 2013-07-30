@@ -64,7 +64,6 @@
   <ItemGroup>
     <Compile Include="CalendarMembershipProviderTest.cs" />
     <Compile Include="CalendarRoleProviderTest.cs" />
-    <Compile Include="HomeControllerTest.cs" />
     <Compile Include="TeamControllerTest.cs" />
     <Compile Include="TeamFrameTest.cs" />
     <Compile Include="TeamPagingTest.cs" />
