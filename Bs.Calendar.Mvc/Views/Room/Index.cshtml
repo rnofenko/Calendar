@@ -1,5 +1,5 @@
 @{
-    ViewBag.Title = "Rooms List";
+    ViewBag.Title = "Rooms";
     var ajaxOptions = new AjaxOptions
     {
         UpdateTargetId = "rooms-table",
@@ -8,38 +8,41 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row">
+    <div class="centered seven columns default alert">
+        <h4 class="centered three columns">@ViewBag.Title</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class = "three columns">
+        <div class="medium primary btn">
+            @Html.ActionLink("Create", "Create")
+        </div>
+    </div>
+
     @using (Ajax.BeginForm("List", ajaxOptions))
     {
-        <div class="field three columns">
+        <div class="field three columns push_six">
             <input class="search input" type="text" name="searchStr" placeholder="Find room by name"/>
         </div>
     }
 </div>
 
 <div class="row">
-    <div class ="nine columns centered">
+    <div class ="twelve columns centered">
         <table>
             <thead>
                 <tr>
                     <th>Room name</th>
                     <th>Number of places</th>
                     <th>Color</th>
-                    <th></th>
-                    <th></th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody id="rooms-table">
                 @Html.Action("List")
             </tbody>
         </table>
-    </div>
-</div>
-
-<div class="row">
-    <div class = "nine columns centered">
-        <div class="medium primary btn icon-left icon-plus pull_right">
-            @Html.ActionLink("Add", "Create")
-        </div>
     </div>
 </div>
 
