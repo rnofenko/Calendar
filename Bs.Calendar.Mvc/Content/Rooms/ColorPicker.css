@@ -1,11 +1,10 @@
-﻿.roomColor_0 { background-color: linen; }
-.roomColor_1 { background-color: moccasin; }
-.roomColor_2 { background-color: lightcyan; }
-.roomColor_3 { background-color: lemonchiffon; }
-.roomColor_4 { background-color: lime; }
-.roomColor_5 { background-color: sandybrown; }
-.roomColor_6 { background-color: lightskyblue; }
-.roomColor_7 { background-color: yellow; }
+﻿.roomColor_0 { background-color: #66C266; }
+.roomColor_1 { background-color: #89C5BE; }
+.roomColor_2 { background-color: #A366C2; }
+.roomColor_3 { background-color: #6666CC; }
+.roomColor_4 { background-color: #CC6666; }
+.roomColor_5 { background-color: #FFC466; }
+.roomColor_6 { background-color: #C9906E; }
 
 .color_picker_container div, #color_cell, .roomColor
 {
