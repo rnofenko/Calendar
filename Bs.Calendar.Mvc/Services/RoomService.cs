@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Bs.Calendar.DataAccess;
+using Bs.Calendar.Models;
 using Bs.Calendar.Models.Bases;
 using Bs.Calendar.Mvc.ViewModels;
 
@@ -15,57 +16,22 @@ namespace Bs.Calendar.Mvc.Services
             _repoUnit = repository;
         }
 
-        public RoomEditVm CreateViewModel()
+        public Room Get(int id)
         {
-            return new RoomEditVm();
-        }
-
-        public RoomEditVm CreateViewModel(RoomEditVm.RoomEditVmExtra extraInfo)
-        {
-            var roomViewModel = CreateViewModel();
-            roomViewModel.Extra = extraInfo;
-
-            return roomViewModel;
-        }
-
-        public void Save(RoomEditVm room)
-        {
-            _repoUnit.Room.Save(room);
+            var room = _repoUnit.Room.Get(id);
+            return room;
         }
 
         public bool IsValid(RoomEditVm room)
         {
-            return room.Name != string.Empty &&
-                   room.NumberOfPlaces > 0 &&
-                   room.Color >= BaseEntity.MIN_COLOR_VALUE &&
-                   room.Color < BaseEntity.MAX_COLOR_VALUE;
-        }
-
-        public RoomEditVm Load(int id)
-        {
-            return _repoUnit.Room.Get(id) ?? null;
-        }
-
-        public void Delete(RoomEditVm room)
-        {
-            if (room == null)
-            {
-                throw new ArgumentNullException("reference to the deleted instance cannot be null");
-            }
-
-            _repoUnit.Room.Delete(room);
-        }
-
-        public void Delete(int id)
-        {
-            var room = _repoUnit.Room.Get(id);
-
-            if(room == null)
-            {
-                throw new ArgumentException("There is no record with such id in table");
-            }
-
-            _repoUnit.Room.Delete(room);
+            bool result = true;
+            result = result && (room.Name != string.Empty);
+            result = result && (room.NumberOfPlaces > 0);
+            result = result && (room.Color >= BaseEntity.MIN_COLOR_VALUE);
+            result = result && (room.Color < BaseEntity.MAX_COLOR_VALUE);
+            result = result && (
+                !_repoUnit.Room.Load(r => r.Id != room.RoomId && r.Name == room.Name).Any());
+            return result;
         }
 
         public RoomsVm Find(string searchStr)
@@ -81,6 +47,21 @@ namespace Bs.Calendar.Mvc.Services
             }
 
             return new RoomsVm { Rooms = rooms.ToList() };
+        }
+
+        public void Delete(int id)
+        {
+            _repoUnit.Room.Delete(_repoUnit.Room.Get(id));
+        }
+
+        public void Save(RoomEditVm roomModel)
+        {
+            var room = Get(roomModel.RoomId) ?? new Room();
+            room.Name = roomModel.Name;
+            room.NumberOfPlaces = roomModel.NumberOfPlaces;
+            room.Color = roomModel.Color;
+
+            _repoUnit.Room.Save(room);
         }
     }
 }
