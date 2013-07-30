@@ -131,8 +131,8 @@ namespace Bs.Calendar.Mvc.Services
 
             users = sortByStr(users, pagingVm.SortByStr);
 
-            var totalPages = getTotalPages(users.Count(), PageSize);
-            var currentPage = getRangedPage(pagingVm.Page, totalPages);
+            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
 
             return new UsersVm
             {
@@ -183,16 +183,6 @@ namespace Bs.Calendar.Mvc.Services
             }
 
             return filteredUsers;
-        }
-
-        private int getTotalPages(int count, int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)count / pageSize);
-        }
-
-        private int getRangedPage(int page, int totalPages)
-        {
-            return page <= 1 ? 1 : page > totalPages ? totalPages : page;
         }
     }
 }

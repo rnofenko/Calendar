@@ -6,6 +6,7 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -75,8 +76,8 @@ namespace Bs.Calendar.Mvc.Services
 
             teams = sortByStr(teams, pagingVm.SortByStr);
 
-            var totalPages = getTotalPages(teams.Count(), PageSize);
-            var currentPage = getRangedPage(pagingVm.Page, totalPages);
+            var totalPages = PageCounter.GetTotalPages(teams.Count(), PageSize);
+            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
 
             return new TeamsVm 
             {
@@ -93,16 +94,6 @@ namespace Bs.Calendar.Mvc.Services
             teams = teams.OrderByIf(string.IsNullOrEmpty(sortByStr),
                         team => team.Id);
             return teams;
-        }
-
-        private int getTotalPages(int count, int pageSize)
-        {
-            return (int) Math.Ceiling((decimal) count/pageSize);
-        }
-
-        private int getRangedPage(int page, int totalPages)
-        {
-            return page <= 1 ? 1 : page > totalPages ? totalPages : page;
         }
     }
 }
