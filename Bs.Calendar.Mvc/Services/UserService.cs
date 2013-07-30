@@ -129,13 +129,13 @@ namespace Bs.Calendar.Mvc.Services
 
         private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
         {
-            if (string.IsNullOrEmpty(sortByStr))
-                return users.OrderBy(user => user.Id);
+            users = users.OrderByIf(string.IsNullOrEmpty(sortByStr), 
+                        user => user.Id);
 
-            users = users.OrderByIf(sortByStr.Equals("Name"),
+            users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("Name"),
                         team => team.FullName);
 
-            users = users.OrderByIf(sortByStr.Equals("E-mail"),
+            users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("E-mail"),
                         team => team.Email);
 
             return users;
