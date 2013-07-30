@@ -6,6 +6,7 @@ using System;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RoomController : Controller
     {
         private readonly RoomService _service;
@@ -15,8 +16,12 @@ namespace Bs.Calendar.Mvc.Controllers
             _service = service;
         }
 
-        //
-        // GET: /Room/
+        private ActionResult PassRoomIntoTheView(string view, int id)
+        {
+            var room = _service.Get(id);
+            return room != null ? (ActionResult)View(view, new RoomEditVm(room)) : HttpNotFound();
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -34,7 +39,7 @@ namespace Bs.Calendar.Mvc.Controllers
             {
                 _service.Delete(id);
             }
-            catch(ArgumentException exception)
+            catch(ArgumentException)
             {
                 return HttpNotFound();
             }
@@ -42,11 +47,22 @@ namespace Bs.Calendar.Mvc.Controllers
             return RedirectToAction("Index");
         }
 
-        /// <summary>
-        /// Action is used both to create and to edit room records
-        /// </summary>
         [HttpPost,
-        ValidateAntiForgeryToken]
+         ValidateAntiForgeryToken]
+        public ActionResult Create(RoomEditVm room)
+        {
+            ModelState.Remove("RoomId");
+            if (ModelState.IsValid && _service.IsValid(room))
+            {
+                _service.Save(room);
+                return RedirectToAction("Index");
+            }
+
+            return View("Edit", room);
+        }
+
+        [HttpPost,
+         ValidateAntiForgeryToken]
         public ActionResult Edit(RoomEditVm room)
         {
             if (ModelState.IsValid && _service.IsValid(room))
@@ -55,48 +71,25 @@ namespace Bs.Calendar.Mvc.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View("EditRoom", room);
+            return View("Edit", room);
+        }
+
+        [HttpGet]
+        public ActionResult Details(int id)
+        {
+            return PassRoomIntoTheView("Details", id);
         }
 
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var room = _service.Load(id);
-
-            if(room == null)
-            {
-                return HttpNotFound();
-            }
-
-            room.Extra = new RoomEditVm.RoomEditVmExtra()
-            {
-                ViewTitle = "Edit room",
-                CallAction = "Edit",
-                CallController = "Room"
-            };
-
-            return View("EditRoom", room);
+            return PassRoomIntoTheView("Edit", id);
         }
 
+        [HttpGet]
         public ActionResult Create()
         {
-            var room = _service.CreateViewModel(new RoomEditVm.RoomEditVmExtra()
-            {
-                ViewTitle = "Create room",
-                CallAction = "Edit",
-                CallController = "Room"
-            });
-
-            return View("EditRoom", room);
-        }
-
-        //
-        // GET: /Room/Save
-        public ActionResult Save(RoomEditVm roomViewModel)
-        {
-            _service.Save(roomViewModel);
-
-            return View("Index");
+            return View("Edit", null);
         }
     }
 }
