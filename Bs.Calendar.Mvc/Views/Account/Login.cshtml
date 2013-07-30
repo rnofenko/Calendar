@@ -1,12 +1,21 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.AccountVm
 @{
-    ViewBag.Title = "Login";
+    ViewBag.Title = "Login";    
+    var recover = ViewBag.Recover ?? false;
 }
 
 @using(Html.BeginForm())
 {   
     <div class="row">
         <ul class="seven columns">
+            <li>
+            @if (recover)
+            {
+                <h3>
+                    User with such email already exists but you can recover it - just enter your email and password!
+                </h3>
+            }
+            </li>
             <li><h2>Login</h2></li>
             <li>Please enter your email name and password. @Html.ActionLink("Register", "Register") if you don't have an account.</li>
             <li class="field">

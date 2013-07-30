@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web;
 using Bs.Calendar.Core;
 using System.Web.Mvc;
 using Bs.Calendar.DataAccess;
@@ -9,6 +10,7 @@ using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 
 namespace Bs.Calendar.Tests.Int
@@ -23,17 +25,21 @@ namespace Bs.Calendar.Tests.Int
         [TestFixtureSetUp]
         public void SetUp()
         {
+            var mock = new Mock<ControllerContext>();
+            mock.Setup(p => p.HttpContext.Session).Returns(new Mock<HttpSessionStateBase>().Object);
+
             DiMvc.Register();
             Resolver.RegisterType<IUserRepository, UserRepository>();
 
             _unit = new RepoUnit();
-            _unit.User.Save(new User { Email = "aaa@bbb.com", FullName = "aaa ddd", FirstName = "aaa", LastName = "ddd", LiveState = LiveState.Ok});
-            _unit.User.Save(new User { Email = "ccc@ddd.com", FullName = "aaa bbb", FirstName = "aaa", LastName = "bbb", LiveState = LiveState.Ok });
+            _unit.User.Save(new User { Email = "aaa@bbb.com", FullName = "aaa ddd", FirstName = "aaa", LastName = "ddd", LiveState = LiveState.Active});
+            _unit.User.Save(new User { Email = "ccc@ddd.com", FullName = "aaa bbb", FirstName = "aaa", LastName = "bbb", LiveState = LiveState.Active });
 
             var userService = new UserService(_unit);
             userService.PageSize = _pageSize = 1;
 
             _usersController = new UsersController(userService);
+            _usersController.ControllerContext = mock.Object;
         }
 
         [TestFixtureTearDown]

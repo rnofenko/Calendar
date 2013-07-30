@@ -38,7 +38,7 @@ namespace Bs.Calendar.Mvc.Services
             if (GetUser(email, true) != null)
             {
                 status = MembershipCreateStatus.DuplicateEmail;
-                return null;
+                return GetUser(email, false);                
             }
             var crypto = new KeccakCryptoProvider();
             var user = new User
@@ -46,9 +46,10 @@ namespace Bs.Calendar.Mvc.Services
                 FirstName = email.Remove(email.IndexOf('@')),
                 LastName = "",
                 Email = email,
-                PasswordKeccakHash = crypto.GetHash(password),
+                PasswordKeccakHash = crypto.GetHashWithSalt(password),
                 Role = Roles.None,
-                LiveState = LiveState.Ok
+                LiveState = LiveState.NotApproved,
+                BirthDate = null
             };
             using (var unit = new RepoUnit())
             {

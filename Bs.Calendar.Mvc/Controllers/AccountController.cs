@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.ComponentModel;
+using System.Web.Mvc;
 using System.Web.Security;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
@@ -7,8 +8,16 @@ namespace Bs.Calendar.Mvc.Controllers
 {
     public class AccountController : Controller
     {
-        public ActionResult Login()
+        private readonly AccountService _service;
+
+        public AccountController(AccountService service)
         {
+            _service = service;
+        }
+
+        public ActionResult Login(bool recover = false)
+        {
+            ViewBag.Recover = recover;
             return View();
         }
 
@@ -17,10 +26,8 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                var membershipProvider = new CalendarMembershipProvider();
-                if (membershipProvider.ValidateUser(model.Email, model.Password))
-                {
-                    FormsAuthentication.SetAuthCookie(model.Email, true);
+                if(_service.LoginUser(model))
+                {                    
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -44,24 +51,25 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(AccountVm account)
+        public ActionResult Register(AccountVm account, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                var calendarMembershipProvider = new CalendarMembershipProvider();
                 MembershipCreateStatus status;
-                calendarMembershipProvider.CreateUser("", account.Password, account.Email, "", "", true, null,
-                    out status);
-                if (status == MembershipCreateStatus.Success)
+                var register = _service.RegisterUser(account, out status);
+                if (register == true)
                 {
-                    FormsAuthentication.SetAuthCookie(account.Email, false);
                     return RedirectToAction("Index", "Home");
+                }
+                if (register == false)
+                {
+                    return RedirectToAction("Login", new { recover = true });
                 }
                 ModelState.AddModelError("", ErrorCodeToString(status));
             }
             return View(account);
         }
-
+        
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
         {
             switch (createStatus)
@@ -97,5 +105,41 @@ namespace Bs.Calendar.Mvc.Controllers
                     return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
         }
+
+        public ActionResult Edit()
+        {
+            var email = User.Identity.Name;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(_service.GetUserEditVm(email));
+        }
+
+        [HttpPost,
+        ValidateAntiForgeryToken]
+        public ActionResult Edit(UserEditVm userEditVm)
+        {
+            ModelState.Remove("userId");
+            if (!ModelState.IsValid)
+            {
+                return View(userEditVm);
+            }
+
+            try 
+            {
+                _service.EditUser(userEditVm);
+                FormsAuthentication.SetAuthCookie(userEditVm.Email, true);
+                return RedirectToAction("Index", "Home");
+            } 
+            catch (WarningException exception) 
+            {
+                ModelState.AddModelError("", exception.Message);
+                return View(userEditVm);
+            }
+        }
+
     }
 }

@@ -32,7 +32,7 @@ namespace Bs.Calendar.Tests.Int
                     LastName = "Smith",
                     Email = "bigbrother1984@gmail.com",
                     Role = Roles.Simple,
-                    LiveState = LiveState.Ok
+                    LiveState = LiveState.Active
                 };
             DiMvc.Register();
             Resolver.RegisterType<IUserRepository, FakeUserRepository>();
@@ -40,7 +40,7 @@ namespace Bs.Calendar.Tests.Int
             _userService = new UserService(_unit);
             _userService.SaveUser(new UserEditVm(_user));
             _user = _unit.User.Get(u => u.Email == _user.Email);
-        }
+        }        
 
         [Test]
         public void CanNotAddNewUserWithExistingInTheDbEmail()
@@ -52,7 +52,7 @@ namespace Bs.Calendar.Tests.Int
                     LastName = "Goldstein",
                     Email = "bigbrother1984@gmail.com",
                     Role = Roles.Simple,
-                    LiveState = LiveState.Ok
+                    LiveState = LiveState.Active
                 };
 
             // act
@@ -75,7 +75,7 @@ namespace Bs.Calendar.Tests.Int
                 LastName = "Htims",
                 Email = "bigbrother1984@gmail.com",
                 Role = Roles.Simple,
-                LiveState = LiveState.Ok
+                LiveState = LiveState.Active
             };
 
             // act
@@ -116,7 +116,7 @@ namespace Bs.Calendar.Tests.Int
             var model = viewResult.Model as UserEditVm;
 
             // assert
-            model.ShouldBeEquivalentTo(new UserEditVm(user));            
+            model.ShouldBeEquivalentTo(new UserEditVm(user));
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace Bs.Calendar.Tests.Int
             user.Role = Roles.None;
 
             // act
-            new UsersController(_userService).Edit(new UserEditVm(user));
+            new UsersController(_userService).Edit(new UserEditVm(user), false);
 
             // assert
             var savedUser = _unit.User.Get(u =>
@@ -153,7 +153,7 @@ namespace Bs.Calendar.Tests.Int
                 LastName = "Agent",
                 Email = "obrien@gmail.com",
                 Role = Roles.None,
-                LiveState = LiveState.Ok
+                LiveState = LiveState.Active
             };
             _userService.SaveUser(userToDeleteVm);
 
@@ -172,9 +172,9 @@ namespace Bs.Calendar.Tests.Int
             var user1 = _unit.User.Get(user => user.Email == "bigbrother1984@gmail.com");
             var user2 = _unit.User.Get(user => user.Email == "orwell.george@gmail.com");
             var user3 = _unit.User.Get(user => user.Email == "iamwatchingyou@gmail.com");
-            var changedUsersList = new List<User> {user1, user2, user3};
+            var changedUsersList = new List<User> { user1, user2, user3 };
 
-            foreach (var user in changedUsersList.Where(user => user!=null))
+            foreach (var user in changedUsersList.Where(user => user != null))
             {
                 _unit.User.Delete(user);
             }

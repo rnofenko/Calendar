@@ -43,11 +43,14 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             ModelState.Remove("userId");
             if (!ModelState.IsValid)
+            {                
                 return View("Edit", model);
+            }
 
             try
             {
-                model.LiveState = LiveState.Ok;
+                model.LiveState = LiveState.Active;
+                //model.BirthDate = new DateTime((new Random()).Next(1970, 1992), (new Random()).Next(1, 12), (new Random()).Next(1, 28)).Date;
                 _service.SaveUser(model);
                 return RedirectToAction("Index");
             }
@@ -63,17 +66,20 @@ namespace Bs.Calendar.Mvc.Controllers
             return PassUserIntoTheView("Edit", id);
         }
 
-        [HttpPost]
-        public ActionResult Edit(UserEditVm model)
+        [HttpPost,
+        ValidateAntiForgeryToken]
+        public ActionResult Edit(UserEditVm model, bool delete)
         {
             ModelState.Remove("userId");
             if (!ModelState.IsValid)
+            {
                 return View("Edit", model);
+            }
 
             try
             {
-                _service.EditUser(model);
-                return RedirectToAction("Index");
+                _service.EditUser(model, delete);
+                return delete ? RedirectToAction("Logout", "Account") : RedirectToAction("Index");
             }
             catch (WarningException exception)
             {
@@ -87,7 +93,8 @@ namespace Bs.Calendar.Mvc.Controllers
             return PassUserIntoTheView("Delete", id);
         }
 
-        [HttpPost]
+        [HttpPost,
+        ValidateAntiForgeryToken]
         public ActionResult Delete(UserEditVm model)
         {
             _service.UpdateUserState(model.UserId, LiveState.Deleted);
@@ -97,7 +104,10 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpGet]
         public ActionResult List(PagingVm pagingVm)
         {
-            return PartialView(_service.RetreiveList(pagingVm));
+            var usersVm = _service.RetreiveList(pagingVm);
+            Session["pagingVm"] = usersVm.PagingVm;
+
+            return PartialView(usersVm);
         }
     }
 }

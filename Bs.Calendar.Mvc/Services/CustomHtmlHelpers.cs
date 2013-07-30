@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
+using System.Linq.Expressions;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
-using System.Web.Routing;
+using System.Web.Mvc.Html;
 using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Services
 {
-    public static class AjaxLinkHelpers
+    public static class CustomHtmlHelpers
     
     {
         public static MvcHtmlString AjaxSortLink(this HtmlHelper html, PagingVm paginVm, string sortByStr, AjaxOptions options)
@@ -44,6 +41,15 @@ namespace Bs.Calendar.Mvc.Services
                 );
 
             return link;
+        }
+
+        public static MvcHtmlString CustomDateEditor(this HtmlHelper html, Expression<Func<UserEditVm,DateTime?>> expression)
+        {
+            var htmlHelper = new HtmlHelper<UserEditVm>(html.ViewContext, html.ViewDataContainer);
+
+            var tag = htmlHelper.EditorFor(user => user.BirthDate).ToString();
+            tag = tag.Insert(tag.IndexOf("text-box", StringComparison.InvariantCulture), "wide text input ");
+            return new MvcHtmlString(tag);
         }
     }
 }

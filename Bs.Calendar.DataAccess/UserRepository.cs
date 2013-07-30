@@ -8,7 +8,7 @@ namespace Bs.Calendar.DataAccess
     {
         public override IQueryable<User> Load()
         {
-            return Load(u => u.LiveState == LiveState.Ok);
+            return Load(u => u.LiveState != LiveState.Deleted);
         }
 
         public override void Save(User entity)

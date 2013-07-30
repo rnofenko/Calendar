@@ -1,39 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
+using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Services
 {
     public class HomeService
     {
+        private readonly UsersRules _rules;
+
+        public HomeService(UsersRules rules)
+        {
+            _rules = rules;
+        }
+
         public IEnumerable<User> LoadUsers()
         {
-            using (var unit = new RepoUnit())
-            {
-                var users = unit.User.Load().ToList();
-
-                if (!users.Any())
-                {
-                    unit.User.Save(new User {Email = "rnofenko@gmail.com", Role = Roles.Admin, LiveState = LiveState.Ok,
-                                             FirstName = "Roman",
-                                             LastName = "Nofenko",
-                                             PasswordKeccakHash = "E9447A0B454AA39752445D6DCD2619F25C83F6453BA463C614820239CDC7CAB811F0C75D27776E119836523CF839C90596F2C0B07A45023741C200B51B6944D4"
-                    });
-                    unit.User.Save(new User
-                    {
-                        Email = "art.trubitsyn@gmail.com",
-                        Role = Roles.Admin,
-                        LiveState = LiveState.Ok,
-                        FirstName = "Artem",
-                        LastName = "Trubitsyn",
-                        PasswordKeccakHash = "4D14E3527467EA4AF5983EFF0C3FEECB48E7230EE7EAC0BA793B3B53B5BB6D1259E33C3ECA7B2A29AF4943391B913B8432F587D74D006D0AD9F3BFB3E8C4871F"
-                    });
-                    users = unit.User.Load().ToList();
-                }
-
-                return users;
-            }
+            var today = DateTime.Now;
+            var endOfTheMonth = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
+            return _rules.LoadUsersByBirthday(today, endOfTheMonth).ToList();
         }
     }
 }
