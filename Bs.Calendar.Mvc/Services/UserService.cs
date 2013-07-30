@@ -79,12 +79,19 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
+
+            if (userModel.Email != userToEdit.Email) 
+            {
+                SendMsgToUser(userToEdit);
+            }
+
             userToEdit.FirstName = userModel.FirstName;
             userToEdit.LastName = userModel.LastName;
             userToEdit.Email = userModel.Email;
             userToEdit.Role = userModel.Role;
             userToEdit.LiveState = delete ? LiveState.Deleted : userModel.LiveState;
-            if (userModel.Email != userToEdit.Email) SendMsgToUser(userToEdit);
+            userToEdit.BirthDate = userModel.BirthDate;
+
             _unit.User.Save(userToEdit);
         }
 
@@ -110,8 +117,8 @@ namespace Bs.Calendar.Mvc.Services
 
             users = sortByStr(users, pagingVm.SortByStr);
 
-            var totalPages = getTotalPages(users.Count(), PageSize);
-            var currentPage = getRangedPage(pagingVm.Page, totalPages);
+            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
 
             return new UsersVm
             {

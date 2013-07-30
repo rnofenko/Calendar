@@ -24,7 +24,7 @@ namespace Bs.Calendar.Mvc.ViewModels
             LastName = user.LastName;
             Email = user.Email;
             Role = user.Role;
-            BirthDate = user.BirthDate;
+            BirthDate = user.BirthDate ?? DateTime.Today;
             LiveState = user.LiveState;
         }
         
@@ -44,7 +44,7 @@ namespace Bs.Calendar.Mvc.ViewModels
         Display(Name = "Last name")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "An email is required!"),
+        [Required(ErrorMessage = "E-mail is required!"),
         StringLength(200)]
         public string Email { get; set; }
 
@@ -57,6 +57,10 @@ namespace Bs.Calendar.Mvc.ViewModels
 
         public LiveState LiveState { get; set; }
 
+        [DataType(DataType.Date),
+        Display(Name = "Birth date"),
+        DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true),
+        Required(ErrorMessage = "Birth date is required!")]
         public DateTime? BirthDate { get; set; }
     }
 }

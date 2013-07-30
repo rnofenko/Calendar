@@ -44,6 +44,11 @@ namespace Bs.Calendar.Rules
 
         public void SendEmail(MailMessage message)
         {
+            if (!Config.Instance.SendEmail)
+            {
+                return;
+            }
+
             var sender = new AsyncSender();
             // Sync call for sender. It will be removed soon.
             sender.Send(message);
