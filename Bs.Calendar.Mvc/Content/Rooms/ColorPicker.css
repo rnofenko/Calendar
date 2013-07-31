@@ -6,24 +6,21 @@
 .roomColor_5 { background-color: #FFC466; }
 .roomColor_6 { background-color: #C9906E; }
 
-.color_picker_container div, #color_cell, .roomColor
+.roomColor
 {
     width:  21px;
     height: 21px;
 
-    border: 1px solid black;
-
+   
     float: left;
 
     cursor: pointer;
+
+    margin-left: 8px;
+    margin-right: 8px;
 }
 
-.color_picker_container
+.roomColorSelected
 {
-    width: 5%;
-}
-
-.justDivider
-{
-    clear: both;   
+    border: 3px solid black;
 }
