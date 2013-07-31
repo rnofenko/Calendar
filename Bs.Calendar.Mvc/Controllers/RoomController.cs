@@ -6,6 +6,7 @@ using System;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
+    [Authorize(Roles = "Admin, Simple")]
     public class RoomController : Controller
     {
         private readonly RoomService _service;

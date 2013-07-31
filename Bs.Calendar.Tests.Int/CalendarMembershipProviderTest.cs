@@ -50,7 +50,7 @@ namespace Bs.Calendar.Tests.Int
 
             // assert
             user.Should().NotBeNull();
-            user.UserName.Should().Be(string.Format("{0} {1}", _user.FirstName, _user.LastName));
+            user.UserName.Should().Be(_user.FullName);
             user.Email.Should().Be(_user.Email);
         }
 

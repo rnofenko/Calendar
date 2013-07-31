@@ -45,7 +45,7 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
             }
         }
 
-        public void Save(T entity)
+        public virtual void Save(T entity)
         {
             if (entity.Id == 0)
             {

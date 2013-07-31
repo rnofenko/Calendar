@@ -112,7 +112,7 @@ namespace Bs.Calendar.Mvc.Services
 
             if (user == null) return null;
             var memUser = new MembershipUser("CalendarMembershipProvider",
-                string.Format("{0} {1}", user.FirstName, user.LastName),
+                user.FullName,
                 user.Id, user.Email,
                 string.Empty,
                 string.Empty,
@@ -136,7 +136,7 @@ namespace Bs.Calendar.Mvc.Services
             using (var unit = new RepoUnit())
             {
                 var user = unit.User.Get(u => u.Email == email);
-                return string.Format("{0} {1}", user.FirstName, user.LastName);
+                return user.FullName;
             }
         }
 
@@ -195,12 +195,6 @@ namespace Bs.Calendar.Mvc.Services
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Validate user.
-        /// </summary>
-        /// <param name="userEmail">User's email.</param>
-        /// <param name="password">User's password.</param>
-        /// <returns></returns>
         public override bool ValidateUser(string userEmail, string password)
         {
             var crypto = new KeccakCryptoProvider();
