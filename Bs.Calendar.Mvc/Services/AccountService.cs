@@ -7,6 +7,7 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 using System.Web.Security;
 using Bs.Calendar.Rules;
+using Bs.Calendar.Core;
 using Roles = Bs.Calendar.Models.Roles;
 
 namespace Bs.Calendar.Mvc.Services
@@ -108,7 +109,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public void PasswordRecovery(string email, string url)
         {
-            var user = _unit.User.Include(u => u.PassRecovery).FirstOrDefault(u => u.Email == email);
+            var user = _unit.User.Load(u => u.Email == email).FirstOrDefault();
             
             if (user == null)
             {
@@ -117,10 +118,10 @@ namespace Bs.Calendar.Mvc.Services
 
             var passRecovery = user.PassRecovery ?? (user.PassRecovery = new PassRecovery());
             passRecovery.Date = DateTime.Now;
-            passRecovery.PasswordKeccakHash = new KeccakCryptoProvider().GetHashWithSalt(DateTime.Now.ToString());
+            passRecovery.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString());
             _unit.User.Save(user);
 
-            var sender = new EmailSender();
+            var sender = Resolver.Resolve<EmailSender>();
             var message = string.Format("{0}/PasswordReset/{1}/{2}", url.Remove(url.LastIndexOf('/')), user.Id, passRecovery.PasswordKeccakHash);
             sender.SendEmail(new MailMessage("info@binary-studio.com", email, "Password Recovery", message));
         }
@@ -128,8 +129,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public AccountVm CheckToken(int id, string token)
         {
-            var user = _unit.User.Include(u => u.PassRecovery).
-                FirstOrDefault(u => u.Id == id && u.PassRecovery.PasswordKeccakHash == token);
+            var user = _unit.User.Load(u => u.Id == id && u.PassRecovery.PasswordKeccakHash == token).FirstOrDefault();
 
             var expiredDateTime = DateTime.Now - new TimeSpan(24, 0, 0);
             if (user == null || user.PassRecovery.Date < expiredDateTime)
@@ -143,15 +143,17 @@ namespace Bs.Calendar.Mvc.Services
 
         public void ResetPassword(AccountVm model)
         {
-            var user = _unit.User.Include(u => u.PassRecovery).FirstOrDefault(u => u.Email == model.Email);
+            var user = _unit.User.Load(u => u.Email == model.Email).FirstOrDefault();
 
-            if (user == null) { return; }
+            if (user == null)
+            {
+                throw new WarningException("Something went wrong, try again");
+            }
 
-            user.PasswordKeccakHash = new KeccakCryptoProvider().GetHashWithSalt(model.Password);
+            user.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(model.Password);
             user.PassRecovery.PasswordKeccakHash = "";
 
             _unit.User.Save(user);
-            LoginUser(model);
         }
     }
 }

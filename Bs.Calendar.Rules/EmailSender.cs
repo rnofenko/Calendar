@@ -42,7 +42,7 @@ namespace Bs.Calendar.Rules
             Console.WriteLine(ThreadPool.SetMaxThreads(ThreadsCount, ThreadsCount));
         }
 
-        public void SendEmail(MailMessage message)
+        public virtual void SendEmail(MailMessage message)
         {
             if (!Config.Instance.SendEmail)
             {

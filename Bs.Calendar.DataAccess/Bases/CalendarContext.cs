@@ -13,7 +13,7 @@ namespace Bs.Calendar.DataAccess.Bases
         public CalendarContext()
             : base(getConnectionName())
         {
-            Configuration.LazyLoadingEnabled = false;
+            Configuration.LazyLoadingEnabled = true;
         }
 
         protected static string getConnectionName()
