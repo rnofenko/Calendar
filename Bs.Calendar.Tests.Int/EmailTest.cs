@@ -1,5 +1,4 @@
 ﻿using System.Net.Mail;
-using System.Threading;
 using Bs.Calendar.Rules;
 using NUnit.Framework;
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Bs.Calendar.Models.Bases;
+using System.Data.Entity;
 
 namespace Bs.Calendar.DataAccess.Bases
 {
@@ -25,6 +26,11 @@ namespace Bs.Calendar.DataAccess.Bases
         public IQueryable<T> Load(Expression<Func<T, bool>> predicate)
         {
             return _context.Set<T>().Where(predicate);
+        }
+
+        public IQueryable<T> Include<TProperty>(Expression<Func<T, TProperty>> expr)
+        {
+            return _context.Set<T>().Include(expr);
         }
 
         public T Get(Expression<Func<T, bool>> predicate)

@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
-using System.Web;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
@@ -36,7 +35,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public void SaveUser(UserEditVm userModel)
         {
-            if (!IsValidEmailAddress(userModel.Email))
+            if(!EmailSender.IsValidEmailAddress(userModel.Email))
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
@@ -72,7 +71,7 @@ namespace Bs.Calendar.Mvc.Services
         public void EditUser(UserEditVm userModel, bool delete)
         {
             var userToEdit = GetUser(userModel.UserId);
-            if (!IsValidEmailAddress(userModel.Email))
+            if(!EmailSender.IsValidEmailAddress(userModel.Email))
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
@@ -110,19 +109,6 @@ namespace Bs.Calendar.Mvc.Services
             sender.SendEmail(msg);
         }
 
-        public static bool IsValidEmailAddress(string emailaddress)
-        {
-            try
-            {
-                var email = new MailAddress(emailaddress);
-                return true;
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
-        }
-
         public UsersVm RetreiveList(PagingVm pagingVm)
         {
             var users = _unit.User.Load();
@@ -131,8 +117,8 @@ namespace Bs.Calendar.Mvc.Services
 
             users = sortByStr(users, pagingVm.SortByStr);
 
-            var totalPages = getTotalPages(users.Count(), PageSize);
-            var currentPage = getRangedPage(pagingVm.Page, totalPages);
+            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
 
             return new UsersVm
             {
@@ -143,13 +129,13 @@ namespace Bs.Calendar.Mvc.Services
 
         private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
         {
-            if (string.IsNullOrEmpty(sortByStr))
-                return users.OrderBy(user => user.Id);
+            users = users.OrderByIf(string.IsNullOrEmpty(sortByStr), 
+                        user => user.Id);
 
-            users = users.OrderByIf(sortByStr.Equals("Name"),
+            users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("Name"),
                         team => team.FullName);
 
-            users = users.OrderByIf(sortByStr.Equals("E-mail"),
+            users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("E-mail"),
                         team => team.Email);
 
             return users;
@@ -168,6 +154,8 @@ namespace Bs.Calendar.Mvc.Services
 
             filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
 
+            filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
+
             return filteredUsers.Distinct();
         }
 
@@ -183,6 +171,12 @@ namespace Bs.Calendar.Mvc.Services
             }
 
             return filteredUsers;
+        }
+
+        private IQueryable<User> SearchByRole(IQueryable<User> users, string searchStr)
+        {
+            return 
+                string.IsNullOrEmpty(searchStr) ? users : users.WhereIf(!String.IsNullOrEmpty(searchStr), u => u.Role.ToString().ToLower() == searchStr.ToLower());
         }
 
         private int getTotalPages(int count, int pageSize)

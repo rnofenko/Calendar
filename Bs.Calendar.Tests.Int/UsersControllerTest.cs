@@ -95,7 +95,9 @@ namespace Bs.Calendar.Tests.Int
                     FirstName = "George",
                     LastName = "Orwell",
                     Email = "orwell.george@gmail.com",
-                    Role = Roles.None
+                    Role = Roles.None,
+                    BirthDate = null,
+                    LiveState = LiveState.Active
                 };
 
             // act

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Mail;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace Bs.Calendar.Rules
@@ -9,8 +10,14 @@ namespace Bs.Calendar.Rules
     {
         private const int ThreadsCount = 10;
 
-        private class AsyncSender
+        public static bool IsValidEmailAddress(string emailAddress)
         {
+            var regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+            return regex.IsMatch(emailAddress);
+        }
+
+        private class AsyncSender
+        {            
             public void Send(object threadContext)
             {
                 var message = threadContext as MailMessage;
