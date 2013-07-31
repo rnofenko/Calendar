@@ -49,12 +49,20 @@
 
                     <li class="field">
                         @Html.LabelFor(room => room.NumberOfPlaces, new {@class = "inline"})
-                        @Html.TextBoxFor(room => room.NumberOfPlaces, new {@class = "wide text input pull_right"})
+                        @Html.EditorFor(room => room.NumberOfPlaces)
                     </li>
 
                     <li class="field">
                         @Html.LabelFor(room => room.Color, new {@class = "inline"})
-                        @Html.TextBoxFor(room => room.Color, new {@class = "wide text input pull_right"})
+                        @Html.HiddenFor(room => room.Color)
+                        <div class="pull_right">
+                            <ul>
+                                @for (var i = 0; i < 7; ++i)
+                                {
+                                    <li class ="roomColor roomColor_@i" id="color_@i" onclick="select_color(@i)"></li>
+                                }
+                            </ul>
+                        </div>
                     </li>
                 </ul>
 
@@ -81,6 +89,7 @@
     <script src="/Scripts/jquery-2.0.2.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/Rooms/ColorPicker.js"></script>
 }
 @section styles {
     <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
