@@ -134,9 +134,13 @@ namespace Bs.Calendar.Mvc.Services
 
             users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("Name"),
                         team => team.FullName);
+            users = users.OrderByDescIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("NameDesc"),
+                        team => team.FullName);
 
             users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("E-mail"),
                         team => team.Email);
+            users = users.OrderByDescIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("E-mailDesc"),
+                        team => team.FullName);
 
             return users;
         }

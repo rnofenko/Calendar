@@ -156,6 +156,7 @@ namespace Bs.Calendar.Mvc.Controllers
             }
             catch (WarningException exception)
             {
+                ModelState.Remove("Password");
                 ModelState.AddModelError("", exception.Message);
                 return View();
             }
@@ -179,7 +180,18 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpPost]
         public ActionResult PasswordReset(AccountVm model)
         {
-            _service.ResetPassword(model);
+            try
+            {
+                _service.ResetPassword(model);
+                _service.LoginUser(model);
+            }
+            catch (WarningException exception)
+            {
+                ModelState.Remove("Password");
+                ModelState.AddModelError("", exception.Message);
+                return View("PasswordRecovery");
+            }
+            
             return RedirectToAction("Index", "Home");
         }
 

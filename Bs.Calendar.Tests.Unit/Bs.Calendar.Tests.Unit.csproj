@@ -61,6 +61,7 @@
     <Compile Include="FakeObjects\FakeTeamRepository.cs" />
     <Compile Include="FakeObjects\FakeUserRepository.cs" />
     <Compile Include="PageCalculatorTest.cs" />
+    <Compile Include="PasswordRecoveryTest.cs" />
     <Compile Include="TeamPagingTest.cs" />
     <Compile Include="UserPagingTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -28,11 +28,6 @@ namespace Bs.Calendar.DataAccess.Bases
             return _context.Set<T>().Where(predicate);
         }
 
-        public IQueryable<T> Include<TProperty>(Expression<Func<T, TProperty>> expr)
-        {
-            return _context.Set<T>().Include(expr);
-        }
-
         public T Get(Expression<Func<T, bool>> predicate)
         {
             return _context.Set<T>().FirstOrDefault(predicate);

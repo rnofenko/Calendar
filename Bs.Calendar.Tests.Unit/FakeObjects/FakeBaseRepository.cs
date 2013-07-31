@@ -26,11 +26,6 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
             return _entities.AsQueryable().Where(predicate);
         }
 
-        public IQueryable<T> Include<TProperty>(Expression<Func<T, TProperty>> expr)
-        {
-            throw new NotImplementedException();
-        }
-
         public T Get(Expression<Func<T, bool>> predicate)
         {
             return _entities.AsQueryable().FirstOrDefault(predicate);

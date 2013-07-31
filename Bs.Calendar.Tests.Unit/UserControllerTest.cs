@@ -9,7 +9,6 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Controllers;
 using Bs.Calendar.Mvc.Server;
-using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Core;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Tests.Unit.FakeObjects;

@@ -25,5 +25,11 @@ namespace Bs.Calendar.DataAccess
                 return source.OrderBy(predicate);
             return source;
         }
+
+        public static IQueryable<TSource> OrderByDescIf<TSource, TKey>(this IQueryable<TSource> source, bool condition, Expression<Func<TSource, TKey>> predicate) {
+            if (condition)
+                return source.OrderByDescending(predicate);
+            return source;
+        }
     }
 }
