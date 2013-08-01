@@ -5,6 +5,5 @@ select_color = function (color) {
 }
 
 $(document).ready(function() {
-    select_color(0);
-    $('#NumberOfPlaces').toggleClass("wide text input pull_right")
+    $('#NumberOfPlaces').toggleClass("wide text input pull_right");
 })
