@@ -20,7 +20,9 @@ namespace Bs.Calendar.Models
 
         public Roles Role { get; set; }
 
-        public string PasswordKeccakHash { get; set; }
+        public string PasswordHash { get; set; }
+
+        public string PasswordSalt { get; set; }
         
         public LiveState LiveState { get; set; }
 

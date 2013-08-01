@@ -51,10 +51,11 @@
     <Compile Include="EmailSender.cs" />
     <Compile Include="IConfig.cs" />
     <Compile Include="ICryptoProvider.cs" />
+    <Compile Include="ISaltProvider.cs" />
     <Compile Include="KeccakCryptoProvider.cs" />
-    <Compile Include="Md5.cs" />
     <Compile Include="PageCounter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomSaltProvider.cs" />
     <Compile Include="UsersRules.cs" />
   </ItemGroup>
   <ItemGroup>

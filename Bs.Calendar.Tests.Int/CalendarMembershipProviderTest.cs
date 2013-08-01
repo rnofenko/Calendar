@@ -17,6 +17,8 @@ namespace Bs.Calendar.Tests.Int
         private RepoUnit _unit;
         private User _user;
         private string _userPassword;
+        private string _userSalt;
+        private const int SALT_LENGTH = 128;
 
         [TestFixtureSetUp]
         public void SetUp()
@@ -25,18 +27,22 @@ namespace Bs.Calendar.Tests.Int
             Resolver.RegisterType<IUserRepository, FakeUserRepository>();
             _unit = Resolver.Resolve<RepoUnit>();
 
-            _membershipProvider = new CalendarMembershipProvider();
+            var cryptoProvider = new KeccakCryptoProvider();
+            var saltProvider = new RandomSaltProvider();
 
-            var crypto = new KeccakCryptoProvider();
+            _membershipProvider = new CalendarMembershipProvider(cryptoProvider, saltProvider);
             _userPassword = "moriarty";
-            var keccak = crypto.GetHashWithSalt(_userPassword);
+            _userSalt = saltProvider.GetSalt(SALT_LENGTH);
+
+            var keccak = cryptoProvider.GetHashWithSalt(_userPassword, _userSalt);
             
             _user = new User
             {
                 Email = "holmes@email.com",
                 FirstName = "Sherlock",
                 LastName = "Holmes",
-                PasswordKeccakHash = keccak,
+                PasswordHash = keccak,
+                PasswordSalt = _userSalt,
                 Role = Roles.Simple
             };
             _unit.User.Save(_user);
