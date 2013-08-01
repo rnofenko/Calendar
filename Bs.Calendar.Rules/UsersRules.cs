@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 
@@ -15,18 +16,37 @@ namespace Bs.Calendar.Rules
         }
 
         public IEnumerable<User> LoadUsersByBirthday(DateTime from, DateTime into)
-        {
-            return _unit.User.Load(u => u.LiveState != LiveState.Deleted && u.BirthDate >= from && u.BirthDate <= into);
+        {            
+            var fromNormalized = NormalizeDate(from);
+            var intoNormalized = NormalizeDate(into);
+
+            if (fromNormalized < intoNormalized)
+            {
+                var returnedUsers =
+                    _unit.User.Load(
+                        u =>
+                            ((DateTime) u.BirthDate).Month*100 + ((DateTime) u.BirthDate).Day >= fromNormalized &&
+                            ((DateTime) u.BirthDate).Month*100 + ((DateTime) u.BirthDate).Day <= intoNormalized);
+                            //NormalizeDate((DateTime) u.BirthDate) >= fromNormalized &&
+                            //NormalizeDate((DateTime) u.BirthDate) <= intoNormalized);
+                return returnedUsers;
+            }
+            if (fromNormalized > intoNormalized)
+            {
+                var u1 = _unit.User.Load(u =>
+                            NormalizeDate((DateTime) u.BirthDate) >= fromNormalized &&
+                            NormalizeDate((DateTime) u.BirthDate) <= 1231);
+                var u2 = _unit.User.Load(u =>
+                            NormalizeDate((DateTime) u.BirthDate) >= 101 &&
+                            NormalizeDate((DateTime) u.BirthDate) <= intoNormalized);
+                return u1.Concat(u2);
+            }
+            return null;
         }
 
-        public IEnumerable<User> LoadUsersByBirthday(DateTime from)
+        public int NormalizeDate(DateTime date)
         {
-            var days = DateTime.DaysInMonth(from.Year, from.Month);
-
-            return _unit.User.Load(u => u.LiveState != LiveState.Deleted 
-                    && ((DateTime)(u.BirthDate)).Month == from.Month
-                    && ((DateTime)(u.BirthDate)).Day >= from.Day
-                    && ((DateTime)(u.BirthDate)).Day <= days);
+            return date.Month * 100 + date.Day;
         }
     }
 }

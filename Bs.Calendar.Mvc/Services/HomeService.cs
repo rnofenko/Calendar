@@ -17,7 +17,7 @@ namespace Bs.Calendar.Mvc.Services
         public IEnumerable<User> LoadUsers()
         {
             var today = DateTime.Now;
-            return _rules.LoadUsersByBirthday(today);
+            return _rules.LoadUsersByBirthday(today, new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month)));
         }
     }
 }
