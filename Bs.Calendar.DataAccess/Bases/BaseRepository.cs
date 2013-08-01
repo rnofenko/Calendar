@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Bs.Calendar.Models.Bases;
+using System.Data.Entity;
 
 namespace Bs.Calendar.DataAccess.Bases
 {

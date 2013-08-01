@@ -15,9 +15,12 @@ namespace Bs.Calendar.Mvc.Services
             var ajaxHelper = new AjaxHelper(html.ViewContext, html.ViewDataContainer);
             var linkText = sortByStr;
             
-            //When clicked again show default unsorted view
+            //On click choose descending or ascending sorting
             if (sortByStr.Equals(paginVm.SortByStr))
-                sortByStr = null;
+            {
+                var index = sortByStr.IndexOf("Desc", StringComparison.Ordinal);
+                sortByStr = index == -1 ? sortByStr + "Desc" : sortByStr.Remove(index);
+            }
 
             var link = ajaxHelper.ActionLink(
                 linkText,

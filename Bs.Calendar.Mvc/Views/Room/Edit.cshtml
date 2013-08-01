@@ -1,0 +1,96 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.RoomEditVm
+@{
+    const string colorClassTemplate = "roomColor_{0}";
+
+    var btnName = "Create";
+    var id = 0;
+    var roomName = "New room";
+    
+    if (Model != null && Model.RoomId != 0)
+    {
+        btnName = "Update";
+        id = Model.RoomId;
+        roomName = Model.Name;
+        ViewBag.Title = "Edit Room";
+    }
+    else
+    {
+        ViewBag.Title = "Create Room";
+        ViewBag.User = "New Room";
+    }
+}
+
+<div class="row">
+    <div class="centered seven columns default alert">
+        <h4 class="centered four columns">@ViewBag.Title</h4>
+    </div>
+</div>
+
+<div class="row">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(room => room.RoomId)
+        <div class="centered seven columns">
+            @Html.ValidationSummary()
+        </div>
+
+        <div class="row">
+            <fieldset class="centered seven columns">
+                <legend>
+                    <h4>@roomName</h4>
+                </legend>
+                              
+                <ul>
+                    <li class="field">
+                        @Html.LabelFor(room => room.Name, new {@class = "inline"})
+                        @Html.TextBoxFor(room => room.Name, new {@class = "wide text input pull_right"})
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(room => room.NumberOfPlaces, new {@class = "inline"})
+                        @Html.EditorFor(room => room.NumberOfPlaces)
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(room => room.Color, new {@class = "inline"})
+                        @Html.HiddenFor(room => room.Color)
+                        <div class="pull_right">
+                            <ul>
+                                @for (var i = 0; i < 7; ++i)
+                                {
+                                    <li class ="roomColor roomColor_@i" id="color_@i" onclick="select_color(@i)"></li>
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="medium secondary btn three columns">
+                    <input type="submit" value="@btnName"/>
+                </div>
+
+                <div class="medium default btn push_one three columns">
+                    @Html.ActionLink("Back", "Index")
+                </div>
+            
+                @if (id != 0)
+                {
+                    <div class="medium info btn three columns push_one">
+                        @Html.ActionLink("Delete", "Delete", new {id})
+                    </div>
+                }  
+            </fieldset>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="/Scripts/jquery-2.0.2.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/Rooms/ColorPicker.js"></script>
+}
+@section styles {
+    <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
+}

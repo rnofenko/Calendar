@@ -13,6 +13,7 @@ namespace Bs.Calendar.Mvc.Server
             DiDataAccess.Register();
 
             Resolver.RegisterType<IConfig, MvcConfig>();
+            Resolver.RegisterType<ICryptoProvider, KeccakCryptoProvider>();
             Resolver.RegisterType<IControllerFactory, UnityControllerFactory>();
 
 

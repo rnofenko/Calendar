@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Web.Mvc;
 using System.Web.Security;
 using Bs.Calendar.Mvc.Services;
@@ -139,6 +140,59 @@ namespace Bs.Calendar.Mvc.Controllers
                 ModelState.AddModelError("", exception.Message);
                 return View(userEditVm);
             }
+        }
+
+        public ActionResult PasswordRecovery()
+        {
+            return View(); 
+        }
+
+        [HttpPost]
+        public ActionResult PasswordRecovery(AccountVm model)
+        {
+            try
+            {
+                _service.PasswordRecovery(model.Email, Request.Url.AbsoluteUri);
+            }
+            catch (WarningException exception)
+            {
+                ModelState.Remove("Password");
+                ModelState.AddModelError("", exception.Message);
+                return View();
+            }
+
+            return View(model);
+        }
+
+        public ActionResult PasswordReset(int id, string token) 
+        {
+            try 
+            {
+                return View(_service.CheckToken(id, token));
+            } 
+            catch (WarningException exception) 
+            {
+                ModelState.AddModelError("", exception.Message);
+                return View("PasswordRecovery");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult PasswordReset(AccountVm model)
+        {
+            try
+            {
+                _service.ResetPassword(model);
+                _service.LoginUser(model);
+            }
+            catch (WarningException exception)
+            {
+                ModelState.Remove("Password");
+                ModelState.AddModelError("", exception.Message);
+                return View("PasswordRecovery");
+            }
+            
+            return RedirectToAction("Index", "Home");
         }
 
     }

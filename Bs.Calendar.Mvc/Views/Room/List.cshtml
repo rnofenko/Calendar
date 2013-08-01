@@ -11,13 +11,11 @@
     <td> @room.NumberOfPlaces </td>
     <td> <div class="@string.Format(colorClassTemplate, room.Color) roomColor"></div> </td>
     <td>
-        <div class="medium default btn icon-left icon-pencil">
+        <div class="medium default btn icon-right icon-pencil">
             @Html.ActionLink("Edit", "Edit", new { id = room.Id})
         </div>
-    </td>
-    <td>
-        <div class="medium danger btn icon-left icon-trash">
-            @Html.ActionLink("Delete", "Delete", new {id = room.Id})
+        <div class="medium default btn icon-right icon-info">
+            @Html.ActionLink("Details", "Details", new {id = room.Id})
         </div>
     </td>
 </tr>

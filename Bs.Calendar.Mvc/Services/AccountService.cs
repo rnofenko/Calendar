@@ -7,6 +7,7 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 using System.Web.Security;
 using Bs.Calendar.Rules;
+using Bs.Calendar.Core;
 using Roles = Bs.Calendar.Models.Roles;
 
 namespace Bs.Calendar.Mvc.Services
@@ -104,6 +105,55 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.BirthDate = userEditVm.BirthDate;
 
             _unit.User.Save(userToEdit);  
+        }
+
+        public void PasswordRecovery(string email, string url)
+        {
+            var user = _unit.User.Load(u => u.Email == email).FirstOrDefault();
+            
+            if (user == null)
+            {
+                throw new WarningException("Can't find that email");
+            }
+
+            var passRecovery = user.PassRecovery ?? (user.PassRecovery = new PassRecovery());
+            passRecovery.Date = DateTime.Now;
+            passRecovery.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString());
+            _unit.User.Save(user);
+
+            var sender = Resolver.Resolve<EmailSender>();
+            var message = string.Format("{0}/PasswordReset/{1}/{2}", url.Remove(url.LastIndexOf('/')), user.Id, passRecovery.PasswordKeccakHash);
+            sender.SendEmail(new MailMessage("info@binary-studio.com", email, "Password Recovery", message));
+        }
+
+
+        public AccountVm CheckToken(int id, string token)
+        {
+            var user = _unit.User.Load(u => u.Id == id && u.PassRecovery.PasswordKeccakHash == token).FirstOrDefault();
+
+            var expiredDateTime = DateTime.Now - new TimeSpan(24, 0, 0);
+            if (user == null || user.PassRecovery.Date < expiredDateTime)
+            {
+                throw new WarningException("Invalid token");
+            }
+
+            return new AccountVm {Email = user.Email};
+        }
+
+
+        public void ResetPassword(AccountVm model)
+        {
+            var user = _unit.User.Load(u => u.Email == model.Email).FirstOrDefault();
+
+            if (user == null)
+            {
+                throw new WarningException("Something went wrong, try again");
+            }
+
+            user.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(model.Password);
+            user.PassRecovery.PasswordKeccakHash = "";
+
+            _unit.User.Save(user);
         }
     }
 }
