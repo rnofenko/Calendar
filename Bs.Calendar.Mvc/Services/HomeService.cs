@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
@@ -15,7 +16,8 @@ namespace Bs.Calendar.Mvc.Services
         {
             _rules = rules;
             var unit = Resolver.Resolve<RepoUnit>();
-            if (unit.User.Load() == null)
+            var users = unit.User.Load();
+            if (!users.Any())
             {
                 var defaultUser = new User
                 {
