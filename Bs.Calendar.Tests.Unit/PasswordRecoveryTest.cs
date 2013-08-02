@@ -61,8 +61,9 @@ namespace Bs.Calendar.Tests.Unit
             _accountService.PasswordRecovery(existentUser.Email, "localhost/");
 
             //assert
-            existentUser.PassRecovery.Should().NotBeNull();
-            existentUser.PassRecovery.PasswordKeccakHash.Should().NotBeNullOrEmpty();
+            existentUser.PasswordRecovery.Should().NotBeNull();
+            existentUser.PasswordRecovery.PasswordHash.Should().NotBeNullOrEmpty();
+            existentUser.PasswordRecovery.PasswordSalt.Should().NotBeNullOrEmpty();
         }
 
         [Test]
@@ -79,7 +80,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //act
             _accountService.PasswordRecovery(_users[0].Email, url);
-            var expectedUrl = string.Format("{0}PasswordReset/{1}/{2}", url, _users[0].Id,_users[0].PassRecovery.PasswordKeccakHash);
+            var expectedUrl = string.Format("{0}PasswordReset/{1}/{2}", url, _users[0].Id,_users[0].PasswordRecovery.PasswordHash);
 
             //assert
             moq.Verify(e => e.SendEmail(It.IsAny<MailMessage>()), Times.Once());
@@ -93,7 +94,7 @@ namespace Bs.Calendar.Tests.Unit
         {
             //arrange
             var user = _users[0];
-            user.PassRecovery = new PassRecovery {Date = DateTime.Now, PasswordKeccakHash = "valid"};
+            user.PasswordRecovery = new PasswordRecovery {Date = DateTime.Now, PasswordHash = "valid"};
 
             //act
             _accountService.CheckToken(user.Id, "invalid");
@@ -104,7 +105,7 @@ namespace Bs.Calendar.Tests.Unit
         public void Should_Throw_Exception_On_Invalid_Link_Date() {
             //arrange
             var user = _users[0];
-            user.PassRecovery = new PassRecovery { Date = DateTime.Now - new TimeSpan(24, 0, 0), PasswordKeccakHash = "valid" };
+            user.PasswordRecovery = new PasswordRecovery { Date = DateTime.Now - new TimeSpan(24, 0, 0), PasswordHash = "valid" };
 
             //act
             _accountService.CheckToken(user.Id, "valid");
@@ -115,7 +116,7 @@ namespace Bs.Calendar.Tests.Unit
         {
             //arrange
             var user = _users[0];
-            user.PassRecovery = new PassRecovery { Date = DateTime.Now, PasswordKeccakHash = "valid" };
+            user.PasswordRecovery = new PasswordRecovery { Date = DateTime.Now, PasswordHash = "valid" };
 
             //act
             var model = _accountService.CheckToken(user.Id, "valid");
@@ -130,14 +131,15 @@ namespace Bs.Calendar.Tests.Unit
         {
             //arrange
             var user = _users[0];
-            user.PassRecovery = new PassRecovery { Date = DateTime.Now, PasswordKeccakHash = "valid" };
+            user.PasswordRecovery = new PasswordRecovery { Date = DateTime.Now, PasswordHash = "valid" };
 
             //act
             _accountService.ResetPassword(new AccountVm { Email = user.Email, Password = "1234567"});
 
             //assert
-            user.PassRecovery.PasswordKeccakHash.Should().BeEmpty();
-            user.PasswordKeccakHash.ShouldBeEquivalentTo(Resolver.Resolve<ICryptoProvider>().GetHashWithSalt("1234567"));
+            user.PasswordRecovery.PasswordHash.Should().BeEmpty();
+            user.PasswordRecovery.PasswordSalt.Should().BeEmpty();
+            user.PasswordHash.ShouldBeEquivalentTo(Resolver.Resolve<ICryptoProvider>().GetHashWithSalt("1234567","salt"));
         }
     }
 }

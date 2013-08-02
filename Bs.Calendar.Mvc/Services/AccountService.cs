@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Net.Mail;
 using Bs.Calendar.DataAccess;
@@ -16,6 +17,7 @@ namespace Bs.Calendar.Mvc.Services
     {
         private readonly RepoUnit _unit;
         private readonly CalendarMembershipProvider _membershipProvider;
+        private const int SALT_LENGTH = 128;
 
         public AccountService(RepoUnit unit, CalendarMembershipProvider provider)
         {
@@ -73,7 +75,7 @@ namespace Bs.Calendar.Mvc.Services
             }
         }
 
-        
+
         public User GetUser(int userId)
         {
             var user = _unit.User.Get(userId);
@@ -90,11 +92,11 @@ namespace Bs.Calendar.Mvc.Services
         {
             var userToEdit = GetUser(userEditVm.UserId);
 
-            if(!EmailSender.IsValidEmailAddress(userEditVm.Email))
+            if (!EmailSender.IsValidEmailAddress(userEditVm.Email))
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userEditVm.Email));
             }
-            if (userToEdit.Email != userEditVm.Email && _unit.User.Get(u => u.Email == userEditVm.Email) != null) 
+            if (userToEdit.Email != userEditVm.Email && _unit.User.Get(u => u.Email == userEditVm.Email) != null)
             {
                 throw new WarningException(string.Format("User with email {0} already exists", userEditVm.Email));
             }
@@ -104,42 +106,41 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.Email = userEditVm.Email;
             userToEdit.BirthDate = userEditVm.BirthDate;
 
-            _unit.User.Save(userToEdit);  
+            _unit.User.Save(userToEdit);
         }
 
         public void PasswordRecovery(string email, string url)
         {
             var user = _unit.User.Load(u => u.Email == email).FirstOrDefault();
-            
+
             if (user == null)
             {
                 throw new WarningException("Can't find that email");
             }
 
-            var passRecovery = user.PassRecovery ?? (user.PassRecovery = new PassRecovery());
-            passRecovery.Date = DateTime.Now;
-            passRecovery.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString());
+            var passwordRecovery = user.PasswordRecovery ?? (user.PasswordRecovery = new PasswordRecovery());
+            passwordRecovery.Date = DateTime.Now;
+            passwordRecovery.PasswordSalt = Resolver.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
+            passwordRecovery.PasswordHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString(CultureInfo.InvariantCulture), passwordRecovery.PasswordSalt);
             _unit.User.Save(user);
 
             var sender = Resolver.Resolve<EmailSender>();
-            var message = string.Format("{0}/PasswordReset/{1}/{2}", url.Remove(url.LastIndexOf('/')), user.Id, passRecovery.PasswordKeccakHash);
+            var message = string.Format("{0}/PasswordReset/{1}/{2}", url.Remove(url.LastIndexOf('/')), user.Id, passwordRecovery.PasswordHash);
             sender.SendEmail(new MailMessage("info@binary-studio.com", email, "Password Recovery", message));
         }
 
-
         public AccountVm CheckToken(int id, string token)
         {
-            var user = _unit.User.Load(u => u.Id == id && u.PassRecovery.PasswordKeccakHash == token).FirstOrDefault();
+            var user = _unit.User.Load(u => u.Id == id && u.PasswordRecovery.PasswordHash == token).FirstOrDefault();
 
             var expiredDateTime = DateTime.Now - new TimeSpan(24, 0, 0);
-            if (user == null || user.PassRecovery.Date < expiredDateTime)
+            if (user == null || user.PasswordRecovery.Date < expiredDateTime)
             {
                 throw new WarningException("Invalid token");
             }
 
-            return new AccountVm {Email = user.Email};
+            return new AccountVm { Email = user.Email };
         }
-
 
         public void ResetPassword(AccountVm model)
         {
@@ -150,8 +151,10 @@ namespace Bs.Calendar.Mvc.Services
                 throw new WarningException("Something went wrong, try again");
             }
 
-            user.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(model.Password);
-            user.PassRecovery.PasswordKeccakHash = "";
+            user.PasswordSalt = Resolver.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
+            user.PasswordHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(model.Password, user.PasswordSalt);
+            user.PasswordRecovery.PasswordHash = "";
+            user.PasswordRecovery.PasswordSalt = "";
 
             _unit.User.Save(user);
         }

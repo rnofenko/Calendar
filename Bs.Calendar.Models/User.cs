@@ -28,6 +28,6 @@ namespace Bs.Calendar.Models
 
         public DateTime? BirthDate { get; set; }
 
-        public virtual PassRecovery PassRecovery { get; set; }
+        public virtual PasswordRecovery PasswordRecovery { get; set; }
     }
 }
