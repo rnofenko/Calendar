@@ -75,6 +75,7 @@ namespace Bs.Calendar.Mvc.Services
             }
         }
 
+
         public User GetUser(int userId)
         {
             var user = _unit.User.Get(userId);
@@ -117,10 +118,18 @@ namespace Bs.Calendar.Mvc.Services
                 throw new WarningException("Can't find that email");
             }
 
+<<<<<<< HEAD
             var passwordRecovery = user.PasswordRecovery ?? (user.PasswordRecovery = new PasswordRecovery());
             passwordRecovery.Date = DateTime.Now;
             passwordRecovery.PasswordSalt = Resolver.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
             passwordRecovery.PasswordHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString(CultureInfo.InvariantCulture), passwordRecovery.PasswordSalt);
+=======
+            var passRecovery = user.PassRecovery ?? (user.PassRecovery = new PassRecovery());
+            passRecovery.Date = DateTime.Now;
+
+#warning Artem
+            //passRecovery.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString());
+>>>>>>> 62da44126d99dd915efbf43140e3a911567c9bbe
             _unit.User.Save(user);
             
             var sender = Resolver.Resolve<EmailSender>();
@@ -150,10 +159,16 @@ namespace Bs.Calendar.Mvc.Services
                 throw new WarningException("Something went wrong, try again");
             }
 
+<<<<<<< HEAD
             user.PasswordSalt = Resolver.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
             user.PasswordHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(model.Password, user.PasswordSalt);
             user.PasswordRecovery.PasswordHash = "";
             user.PasswordRecovery.PasswordSalt = "";
+=======
+#warning Artem
+            //user.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(model.Password);
+            user.PassRecovery.PasswordKeccakHash = "";
+>>>>>>> 62da44126d99dd915efbf43140e3a911567c9bbe
 
             _unit.User.Save(user);
         }

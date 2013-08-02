@@ -1,7 +1,5 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.RoomEditVm
 @{
-    const string colorClassTemplate = "roomColor_{0}";
-
     var btnName = "Create";
     var id = 0;
     var roomName = "New room";
@@ -40,31 +38,8 @@
                 <legend>
                     <h4>@roomName</h4>
                 </legend>
-                              
-                <ul>
-                    <li class="field">
-                        @Html.LabelFor(room => room.Name, new {@class = "inline"})
-                        @Html.TextBoxFor(room => room.Name, new {@class = "wide text input pull_right"})
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(room => room.NumberOfPlaces, new {@class = "inline"})
-                        @Html.EditorFor(room => room.NumberOfPlaces)
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(room => room.Color, new {@class = "inline"})
-                        @Html.HiddenFor(room => room.Color)
-                        <div class="pull_right">
-                            <ul>
-                                @for (var i = 0; i < 7; ++i)
-                                {
-                                    <li class ="roomColor roomColor_@i" id="color_@i" onclick="select_color(@i)"></li>
-                                }
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
+                       
+                @Html.EditorForModel()
 
                 <div class="medium secondary btn three columns">
                     <input type="submit" value="@btnName"/>
@@ -84,13 +59,3 @@
         </div>
     }
 </div>
-
-@section Scripts {
-    <script src="/Scripts/jquery-2.0.2.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/Scripts/Rooms/ColorPicker.js"></script>
-}
-@section styles {
-    <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
-}

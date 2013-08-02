@@ -1,0 +1,42 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.RoomEditVm
+
+@{
+    var defaultColor = 0;
+    var numberOfPlaces = "";
+
+    if (Model != null && Model.RoomId != 0)
+    {
+        numberOfPlaces = Model.NumberOfPlaces.ToString();
+        defaultColor = Model.Color;
+    }
+}
+
+<ul>
+    <li class="field">
+        @Html.LabelFor(room => room.Name, new {@class = "inline"})
+        @Html.TextBoxFor(room => room.Name, new {@class = "wide text input pull_right"})
+    </li>
+
+    <li class="field">
+        @Html.LabelFor(room => room.NumberOfPlaces, new {@class = "inline"})
+        <input class="wide text input pull_right" data-val="true" data-val-number="The field Number of places must be a number." data-val-range="Value is out of allowed range" data-val-range-max="2147483647" data-val-range-min="1" data-val-required="Number of places should be specified" id="NumberOfPlaces" name="NumberOfPlaces" type="number" value="@numberOfPlaces">
+    </li>
+
+    <li class="field">
+        @Html.LabelFor(room => room.Color, new {@class = "inline"})
+        <input class="input-validation-error" data-val="true" data-val-required="Color should be selected" id="Color" name="Color" type="hidden" value="@defaultColor">
+        <div class="pull_right">
+            <ul>
+                @for (var i = 0; i < 7; ++i)
+                {
+                    var colorClasses = String.Format("roomColor roomColor_{0}", i);
+                    if (i == defaultColor)
+                    {
+                        colorClasses += " roomColorSelected";
+                    }
+                    <li class ="@colorClasses" id="color_@i" onclick="select_color(@i)"></li>
+                }
+            </ul>
+        </div>
+    </li>
+</ul>
