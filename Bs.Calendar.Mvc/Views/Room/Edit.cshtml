@@ -4,9 +4,11 @@
     var id = 0;
     var roomName = "New room";
     var defaultColor = 0;
+    var numberOfPlaces = "";
     
     if (Model != null && Model.RoomId != 0)
     {
+        numberOfPlaces = Model.NumberOfPlaces.ToString();   
         defaultColor = Model.Color;
         btnName = "Update";
         id = Model.RoomId;
@@ -49,7 +51,7 @@
 
                     <li class="field">
                         @Html.LabelFor(room => room.NumberOfPlaces, new {@class = "inline"})
-                        @Html.EditorFor(room => room.NumberOfPlaces)
+                        <input class="wide text input pull_right" data-val="true" data-val-number="The field Number of places must be a number." data-val-range="Value is out of allowed range" data-val-range-max="2147483647" data-val-range-min="1" data-val-required="Number of places should be specified" id="NumberOfPlaces" name="NumberOfPlaces" type="number" value="@numberOfPlaces">
                     </li>
 
                     <li class="field">
@@ -88,13 +90,3 @@
         </div>
     }
 </div>
-
-@section Scripts {
-    <script src="/Scripts/jquery-2.0.2.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/Scripts/Rooms/ColorPicker.js"></script>
-}
-@section styles {
-    <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
-}
