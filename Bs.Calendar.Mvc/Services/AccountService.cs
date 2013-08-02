@@ -157,5 +157,20 @@ namespace Bs.Calendar.Mvc.Services
 
             _unit.User.Save(user);
         }
+
+        public ContactType GetContactType(string contact)
+        {
+            if (string.IsNullOrEmpty(contact)) return ContactType.None;
+
+            if (contact.StartsWith("@")) return ContactType.Twitter;
+            
+            if (EmailSender.IsValidEmailAddress(contact)) return ContactType.Email;
+
+            if (contact.All(char.IsNumber)) return ContactType.Phone;
+
+            if (Uri.IsWellFormedUriString(contact, UriKind.Absolute)) return ContactType.UrlAdress;
+
+            return ContactType.Skype;
+        }
     }
 }

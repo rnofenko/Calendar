@@ -119,8 +119,7 @@ namespace Bs.Calendar.Mvc.Controllers
             return View(_service.GetUserEditVm(email));
         }
 
-        [HttpPost,
-        ValidateAntiForgeryToken]
+        [HttpPost]
         public ActionResult Edit(UserEditVm userEditVm)
         {
             ModelState.Remove("userId");
@@ -195,5 +194,10 @@ namespace Bs.Calendar.Mvc.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        
+        public ActionResult GetString(string contact)
+        {
+            return Json(_service.GetContactType(contact), JsonRequestBehavior.AllowGet);
+        }
     }
 }

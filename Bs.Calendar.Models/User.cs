@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Bs.Calendar.Models.Bases;
 
@@ -29,5 +30,7 @@ namespace Bs.Calendar.Models
         public DateTime? BirthDate { get; set; }
 
         public virtual PasswordRecovery PasswordRecovery { get; set; }
+
+        public virtual ICollection<Contact> Contacts { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Bs.Calendar.Models;
 
@@ -48,6 +49,12 @@ namespace Bs.Calendar.Mvc.ViewModels
         StringLength(200)]
         public string Email { get; set; }
 
+        [DataType(DataType.Date),
+        Display(Name = "Birth date"),
+        DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true),
+        Required(ErrorMessage = "Birth date is required!")]
+        public DateTime? BirthDate { get; set; }
+
         public string UserLogin
         {
             get { return Email; }
@@ -57,10 +64,6 @@ namespace Bs.Calendar.Mvc.ViewModels
 
         public LiveState LiveState { get; set; }
 
-        [DataType(DataType.Date),
-        Display(Name = "Birth date"),
-        DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true),
-        Required(ErrorMessage = "Birth date is required!")]
-        public DateTime? BirthDate { get; set; }
+        public List<Contact> Contacts { get; set; } 
     }
 }
