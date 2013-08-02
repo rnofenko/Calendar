@@ -1,13 +1,15 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.RoomEditVm
 @{
-    const string colorClassTemplate = "roomColor_{0}";
-
     var btnName = "Create";
     var id = 0;
     var roomName = "New room";
+    var defaultColor = 0;
+    var numberOfPlaces = "";
     
     if (Model != null && Model.RoomId != 0)
     {
+        numberOfPlaces = Model.NumberOfPlaces.ToString();   
+        defaultColor = Model.Color;
         btnName = "Update";
         id = Model.RoomId;
         roomName = Model.Name;
@@ -49,23 +51,27 @@
 
                     <li class="field">
                         @Html.LabelFor(room => room.NumberOfPlaces, new {@class = "inline"})
-                        @Html.EditorFor(room => room.NumberOfPlaces)
+                        <input class="wide text input pull_right" data-val="true" data-val-number="The field Number of places must be a number." data-val-range="Value is out of allowed range" data-val-range-max="2147483647" data-val-range-min="1" data-val-required="Number of places should be specified" id="NumberOfPlaces" name="NumberOfPlaces" type="number" value="@numberOfPlaces">
                     </li>
 
                     <li class="field">
                         @Html.LabelFor(room => room.Color, new {@class = "inline"})
-                        @Html.HiddenFor(room => room.Color)
+                        <input class="input-validation-error" data-val="true" data-val-required="Color should be selected" id="Color" name="Color" type="hidden" value="@defaultColor">
                         <div class="pull_right">
                             <ul>
                                 @for (var i = 0; i < 7; ++i)
                                 {
-                                    <li class ="roomColor roomColor_@i" id="color_@i" onclick="select_color(@i)"></li>
+                                    var colorClasses = String.Format("roomColor roomColor_{0}", i);
+                                    if (i == defaultColor)
+                                    {
+                                        colorClasses += " roomColorSelected";
+                                    }
+                                    <li class ="@colorClasses" id="color_@i" onclick="select_color(@i)"></li>
                                 }
                             </ul>
                         </div>
                     </li>
                 </ul>
-
                 <div class="medium secondary btn three columns">
                     <input type="submit" value="@btnName"/>
                 </div>
@@ -84,13 +90,3 @@
         </div>
     }
 </div>
-
-@section Scripts {
-    <script src="/Scripts/jquery-2.0.2.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/Scripts/Rooms/ColorPicker.js"></script>
-}
-@section styles {
-    <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
-}
