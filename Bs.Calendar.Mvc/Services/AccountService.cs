@@ -118,7 +118,9 @@ namespace Bs.Calendar.Mvc.Services
 
             var passRecovery = user.PassRecovery ?? (user.PassRecovery = new PassRecovery());
             passRecovery.Date = DateTime.Now;
-            passRecovery.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString());
+
+#warning Artem
+            //passRecovery.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString());
             _unit.User.Save(user);
 
             var sender = Resolver.Resolve<EmailSender>();
@@ -150,7 +152,8 @@ namespace Bs.Calendar.Mvc.Services
                 throw new WarningException("Something went wrong, try again");
             }
 
-            user.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(model.Password);
+#warning Artem
+            //user.PasswordKeccakHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(model.Password);
             user.PassRecovery.PasswordKeccakHash = "";
 
             _unit.User.Save(user);

@@ -3,6 +3,7 @@ Deploy/
 bin/
 obj/
 tmp/
+packages/
 _ReSharper*/
 _NCrunch*/
 *.suo
@@ -14,4 +15,3 @@ _NCrunch*/
 .xml
 .pdb
 .dll
-*.config
