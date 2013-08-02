@@ -16,8 +16,7 @@ namespace Bs.Calendar.Mvc.Server
             Resolver.RegisterType<ICryptoProvider, KeccakCryptoProvider>();
             Resolver.RegisterType<IControllerFactory, UnityControllerFactory>();
 
-
-            Resolver.RegisterType<ICryptoProvider, KeccakCryptoProvider>();
+            Resolver.RegisterType<ICryptoProvider, SimpleCryptoProvider>();
             Resolver.RegisterType<ISaltProvider, RandomSaltProvider>();
         }
     }

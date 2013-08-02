@@ -123,7 +123,7 @@ namespace Bs.Calendar.Mvc.Services
             passwordRecovery.PasswordSalt = Resolver.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
             passwordRecovery.PasswordHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString(CultureInfo.InvariantCulture), passwordRecovery.PasswordSalt);
             _unit.User.Save(user);
-
+            
             var sender = Resolver.Resolve<EmailSender>();
             var message = string.Format("{0}/PasswordReset/{1}/{2}", url.Remove(url.LastIndexOf('/')), user.Id, passwordRecovery.PasswordHash);
             sender.SendEmail(new MailMessage("info@binary-studio.com", email, "Password Recovery", message));
