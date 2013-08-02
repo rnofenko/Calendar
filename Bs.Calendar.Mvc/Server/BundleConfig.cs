@@ -15,6 +15,10 @@ namespace Bs.Calendar.Mvc.Server
             bundles.Add(new ScriptBundle("~/bundles/Gumby").Include(
                 "~/Scripts/Gumby/gumby.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/Knockout").Include(
+                "~/Scripts/Knockout/knockout-2.3.0.js",
+                "~/Scripts/Knockout/knockout.mapping-latest.js"));
+
             var scripts = new Bundle("~/Scripts/all", new JsMinify());
             scripts.Include("~/Scripts/Rooms/SetupEvents.js");
 

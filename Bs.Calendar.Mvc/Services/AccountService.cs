@@ -104,6 +104,9 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.LastName = userEditVm.LastName;
             userToEdit.Email = userEditVm.Email;
             userToEdit.BirthDate = userEditVm.BirthDate;
+            
+            userToEdit.Contacts.Clear();
+            userToEdit.Contacts = userEditVm.Contacts;  
 
             _unit.User.Save(userToEdit);
         }

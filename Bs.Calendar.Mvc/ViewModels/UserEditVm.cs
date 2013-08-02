@@ -27,6 +27,7 @@ namespace Bs.Calendar.Mvc.ViewModels
             Role = user.Role;
             BirthDate = user.BirthDate ?? DateTime.Today;
             LiveState = user.LiveState;
+            Contacts = new List<Contact>(user.Contacts);
         }
         
         public UserEditVm()

@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Account details";
+    var isDisplay = ViewContext.ViewData.ModelState.IsValid ? "none" : "inline";
 }
 
 <div class="row">
@@ -11,66 +12,49 @@
 </div>
 
 <div class="row">
-    <form method="POST" action="@Url.Action("Edit")" data-bind="submit: save" enctype="multipart/form-data">
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(user => user.UserId)
 
-        <div class="centered seven columns">
+        
+        <div class="centered seven columns danger alert">
             @Html.ValidationSummary()
         </div>
-        
+
         <div class="row">
             <fieldset class="centered seven columns">
                 <legend>
-                    <h4>@string.Format("{0} {1}", Model.FirstName, Model.LastName)</h4>                    
+                    <h4>@Model.FirstName @Model.LastName</h4>                    
                 </legend>
                               
                 <ul>
                     <li class="field">
-                        @Html.LabelFor(user => Model.FirstName, new {@class = "inline"})
-                        @Html.TextBoxFor(user => Model.FirstName, new {@class = "wide text input", @data_bind = "value: model.FirstName"})
+                        @Html.LabelFor(user => Model.FirstName, new {@class = "inline three columns"})
+                        @Html.TextBoxFor(user => Model.FirstName, new { @class = "wide text input" })
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => Model.LastName, new {@class = "inline"})
-                        @Html.TextBoxFor(user => Model.LastName, new {@class = "wide text input", @data_bind = "value: model.LastName"})
+                        @Html.LabelFor(user => Model.LastName, new {@class = "inline three columns"})
+                        @Html.TextBoxFor(user => Model.LastName, new {@class = "wide text input"})
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => Model.Email, new {@class = "inline"})
-                        @Html.TextBoxFor(user => Model.Email, new {@class = "wide text input", @data_bind = "value: model.Email"})
+                        @Html.LabelFor(user => Model.Email, new {@class = "inline three columns"})
+                        @Html.TextBoxFor(user => Model.Email, new {@class = "wide text input"})
                     </li>
                     
                     <li class="field">
-                        @Html.LabelFor(user => user.BirthDate, new { @class = "inline" })
+                        @Html.LabelFor(user => user.BirthDate, new {@class = "inline three columns"})
                         @Html.CustomDateEditor(user => user.BirthDate)
                     </li>
                 </ul>
                 
             </fieldset>
         </div>
-        
-        <div class="row">
-            <fieldset class="centered seven columns">
-                <legend>
-                    <h4>Contacts</h4>
-                </legend>
 
-                <ul data-bind="foreach: model.Contacts">
-                    <li class="field">
-                        <div class="row">
-                            <div class="push_one two columns"><i data-bind="contactImage : ContactType"></i></div>
-                            <input class="wide text input eight columns" type="text" data-bind="value: Value, valueUpdate: 'afterkeydown', attr: { name: $root.contactsIndexedName($index()) }">
-                        </div>
-                    </li>
-                </ul>
-                
-                <div class="row">
-                    <div class="medium info btn icon-left icon-user-add push_nine three columns" data-bind="click: addInput"><a href="#">Add</a></div>
-                </div>
-            </fieldset>
-        </div>
-        
+        @Html.Partial("UserContacts");
+
         <div class="row">
             <div class="centered seven columns">
                 <div class="medium secondary btn three columns">
@@ -82,86 +66,18 @@
                 </div>
             </div>
         </div>
-    </form>
+    }
 </div>
 
-@section styles {
-    <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
-}
-
 @section Scripts {
-    <script src="/Scripts/jquery-2.0.2.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    
+    <script src="../../Scripts/Users/UserContacts.js"></script>
+    <script type="text/javascript">
+        var contactModel = ko.mapping.fromJS(@Html.Raw(Json.Encode(@Model)), mappingOption);
+        ko.applyBindings(new UserContactsVm(contactModel));
+    </script>
 }
 
-<script src="~/Scripts/Knockout/knockout-2.3.0.js"></script>
-<script src="~/Scripts/Knockout/knockout.mapping-latest.js"></script>
 
-<script type="text/javascript">
-    //Type
-    function Contact() {
-        var self = this;
-        self.Value = ko.observable("").extend({ throttle: 400 });
-        self.ContactType = ko.observable("");
-    }
-
-    //ViewModel
-    function MyViewModel() {
-        var self = this;
-
-        //Variables
-        self.model = ko.mapping.fromJS(@Html.Raw(Json.Encode(@Model))),
-        self.model.Contacts = ko.observableArray([]);
-        
-        //Methods
-        self.addInput = function () {
-            var contact = ko.observable(new Contact());
-                      
-            contact().Value.subscribe(function (changedContact) {
-                $.getJSON('@Url.Action("GetString")', {contact : changedContact}, function(data) {
-                    contact().ContactType(data);
-                });
-            });
-            
-            self.model.Contacts.push(contact);
-        };
-
-        self.save = function (formElement) {
-            $.post('@Url.Action("Edit")', $(formElement).serialize(), null, "json");
-        };
-
-        self.contactsIndexedName = function(index) {
-            return "Contacts[" + index + "].Value";
-        };
-
-        ko.computed(function() {
-            
-        }, this);
-
-        //Custom Bindings
-        ko.bindingHandlers.contactImage = {
-            update: function(element, valueAccessor) {
-                var valueUnwrapped = ko.unwrap(valueAccessor());
-                var newClass = "";
-
-                switch (valueUnwrapped) {
-                    case 1:
-                        newClass = "icon-mail"; break;
-                    case 2:
-                        newClass = "icon-twitter"; break;
-                    case 3:
-                        newClass = "icon-skype"; break;
-                    case 4:
-                        newClass = "icon-phone"; break;
-                    case 5:
-                        newClass = "icon-globe";
-                }
-                $(element).attr("class", newClass);
-            }
-        };
-    };
-
-
-    ko.applyBindings(new MyViewModel());
-</script>
