@@ -3,6 +3,7 @@ Deploy/
 bin/
 obj/
 tmp/
+packages/
 _ReSharper*/
 _NCrunch*/
 *.suo
