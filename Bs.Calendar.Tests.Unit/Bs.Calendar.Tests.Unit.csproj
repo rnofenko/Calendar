@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountServiceTest.cs" />
+    <Compile Include="ContactTypeParserTest.cs" />
     <Compile Include="GetAgeTest.cs" />
     <Compile Include="CryptoProviderTest.cs" />
     <Compile Include="FakeObjects\FakeBaseRepository.cs" />
