@@ -9,6 +9,18 @@ namespace Bs.Calendar.Mvc.Services
 {
     public class CalendarMembershipProvider : MembershipProvider
     {
+        private readonly ICryptoProvider _crypto;
+        private readonly ISaltProvider  _salt;
+        private const  int SALT_LENGTH = 128;
+
+        public CalendarMembershipProvider(ICryptoProvider crypto, ISaltProvider salt)
+        {
+            _crypto = crypto;
+            _salt = salt;
+        }
+
+        public CalendarMembershipProvider(){}
+
         public override string ApplicationName
         {
             get { throw new NotImplementedException(); }
@@ -40,17 +52,18 @@ namespace Bs.Calendar.Mvc.Services
                 status = MembershipCreateStatus.DuplicateEmail;
                 return GetUser(email, false);                
             }
-            var crypto = new KeccakCryptoProvider();
+            var salt = _salt.GetSalt(SALT_LENGTH);
             var user = new User
             {
                 FirstName = email.Remove(email.IndexOf('@')),
                 LastName = "",
                 Email = email,
-                PasswordKeccakHash = crypto.GetHashWithSalt(password),
+                PasswordHash = _crypto.GetHashWithSalt(password, salt),
+                PasswordSalt = salt,
                 Role = Roles.None,
                 LiveState = LiveState.NotApproved,
                 BirthDate = null
-            };
+            };           
             using (var unit = new RepoUnit())
             {
                 unit.User.Save(user);
@@ -112,7 +125,7 @@ namespace Bs.Calendar.Mvc.Services
 
             if (user == null) return null;
             var memUser = new MembershipUser("CalendarMembershipProvider",
-                string.Format("{0} {1}", user.FirstName, user.LastName),
+                user.FullName,
                 user.Id, user.Email,
                 string.Empty,
                 string.Empty,
@@ -136,7 +149,7 @@ namespace Bs.Calendar.Mvc.Services
             using (var unit = new RepoUnit())
             {
                 var user = unit.User.Get(u => u.Email == email);
-                return string.Format("{0} {1}", user.FirstName, user.LastName);
+                return user.FullName;
             }
         }
 
@@ -195,23 +208,19 @@ namespace Bs.Calendar.Mvc.Services
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Validate user.
-        /// </summary>
-        /// <param name="userEmail">User's email.</param>
-        /// <param name="password">User's password.</param>
-        /// <returns></returns>
         public override bool ValidateUser(string userEmail, string password)
         {
-            var crypto = new KeccakCryptoProvider();
-            var keccakHash = crypto.GetHashWithSalt(password);
             using (var unit = new RepoUnit())
             {
-                var user = unit.User.Get(
-                    u => (u.Email == userEmail &&
-                         u.PasswordKeccakHash == keccakHash));
-                return user != null;
+                var user = unit.User.Get(u => u.Email == userEmail);
+                if (user == null) return false;
+
+                var passwordSalt = user.PasswordSalt;
+                var passwordHash = _crypto.GetHashWithSalt(password, passwordSalt);
+
+                if (user.PasswordHash == passwordHash) return true;
             }
+            return false;
         }
     }
 }

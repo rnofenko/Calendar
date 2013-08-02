@@ -1,7 +1,10 @@
 ﻿@using Bs.Calendar.Mvc.Services
+@using Bs.Calendar.Rules
 @if (Request.IsAuthenticated)
-{    
-    var calendar = new CalendarMembershipProvider();
+{
+    var cryptoProvider = new KeccakCryptoProvider();
+    var saltProvider = new RandomSaltProvider();
+    var calendar = new CalendarMembershipProvider(cryptoProvider, saltProvider);
     var userName = calendar.GetUserNameByEmail(User.Identity.Name);
     <li>
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
@@ -8,6 +9,7 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
+using Microsoft.Ajax.Utilities;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -35,7 +37,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public void SaveUser(UserEditVm userModel)
         {
-            if(!EmailSender.IsValidEmailAddress(userModel.Email))
+            if (!EmailSender.IsValidEmailAddress(userModel.Email))
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
@@ -71,7 +73,7 @@ namespace Bs.Calendar.Mvc.Services
         public void EditUser(UserEditVm userModel, bool delete)
         {
             var userToEdit = GetUser(userModel.UserId);
-            if(!EmailSender.IsValidEmailAddress(userModel.Email))
+            if (!EmailSender.IsValidEmailAddress(userModel.Email))
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
             }
@@ -80,7 +82,7 @@ namespace Bs.Calendar.Mvc.Services
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
 
-            if (userModel.Email != userToEdit.Email) 
+            if (userModel.Email != userToEdit.Email)
             {
                 SendMsgToUser(userToEdit);
             }
@@ -177,10 +179,20 @@ namespace Bs.Calendar.Mvc.Services
             return filteredUsers;
         }
 
-        private IQueryable<User> SearchByRole(IQueryable<User> users, string searchStr)
+        private IEnumerable<User> SearchByRole(IQueryable<User> users, string searchStr)
         {
-            return 
-                string.IsNullOrEmpty(searchStr) ? users : users.WhereIf(!String.IsNullOrEmpty(searchStr), u => u.Role.ToString().ToLower() == searchStr.ToLower());
+            searchStr = searchStr.Insert(1, searchStr[0].ToString(CultureInfo.InvariantCulture).ToUpper());
+            searchStr = searchStr.Remove(0, 1);
+
+            var filteredUsers = Enumerable.Empty<User>().AsQueryable();
+
+            if (string.IsNullOrEmpty(searchStr))
+                return users;            
+
+            var searchRole = (Roles)Enum.Parse(typeof(Roles), searchStr);
+            filteredUsers = filteredUsers.Concat(users.Where(user => user.Role == searchRole));
+
+            return filteredUsers;
         }
 
         private int getTotalPages(int count, int pageSize)

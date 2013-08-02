@@ -25,6 +25,7 @@ namespace Bs.Calendar.Mvc.Services
             var link = ajaxHelper.ActionLink(
                 linkText,
                 "List",
+                "Users",
                 new PagingVm(paginVm.SearchStr, sortByStr, paginVm.TotalPages, paginVm.Page),
                 options
                 );
@@ -39,6 +40,7 @@ namespace Bs.Calendar.Mvc.Services
             var link = ajaxHelper.ActionLink(
                 linkText,
                 "List",
+                "Users",
                 new PagingVm(paginVm.SearchStr, paginVm.SortByStr, paginVm.TotalPages, pageNumber),
                 options
                 );

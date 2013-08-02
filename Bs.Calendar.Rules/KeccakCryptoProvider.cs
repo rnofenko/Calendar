@@ -12,10 +12,9 @@ namespace Bs.Calendar.Rules
             return BitConverter.ToString(hash).Replace("-", "");
         }
 
-        public string GetHashWithSalt(string data)
-        {
-            var newData = String.Concat(data, Md5.GetMd5Hash(data));
-            return GetHash(newData);
+        public string GetHashWithSalt(string data, string salt)
+        {            
+            return GetHash(String.Concat(data, salt));
         }
     }
 }

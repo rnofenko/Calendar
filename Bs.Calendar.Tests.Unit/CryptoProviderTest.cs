@@ -27,14 +27,5 @@ namespace Bs.Calendar.Tests.Unit
             // act & assert
             return _cryptoProvider.GetHash(data).ToLower();
         }
-
-        [TestCase("", Result = "d41d8cd98f00b204e9800998ecf8427e"),
-         TestCase("md5", Result = "1bc29b36f623ba82aaf6724fd3b16718"),
-         TestCase("md4", Result = "c93d3bf7a7c4afe94b64e30c2ce39f4f")]
-        public string ShouldReturnCorrectMd5Hash(string data)
-        {
-            // act & assert
-            return Md5.GetMd5Hash(data).ToLower();
-        }
     }
 }

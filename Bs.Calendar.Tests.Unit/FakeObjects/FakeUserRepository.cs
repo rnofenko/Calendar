@@ -9,5 +9,11 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
         public override IQueryable<User> Load() {
             return Load(u => u.LiveState == LiveState.Active);
         }
+
+        public override void Save(User entity)
+        {
+            entity.FullName = string.Format("{0} {1}", entity.FirstName, entity.LastName);
+            base.Save(entity);
+        }
     }
 }

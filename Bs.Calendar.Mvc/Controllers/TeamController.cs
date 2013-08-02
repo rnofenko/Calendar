@@ -5,7 +5,7 @@ using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Simple")]
     public class TeamController : Controller
     {
         private readonly TeamService _service;

@@ -19,6 +19,8 @@ namespace Bs.Calendar.Tests.Int
 
         private User _user;
         private string _userPassword;
+        private string _userSalt;
+        private const int SALT_LENGTH = 128;
 
         [TestFixtureSetUp]
         public void Setup()
@@ -29,16 +31,19 @@ namespace Bs.Calendar.Tests.Int
 
             _roleProvider = new CalendarRoleProvider();
 
-            var crypto = new KeccakCryptoProvider();
+            var cryptoProvider = new KeccakCryptoProvider();
+            var saltProvider = new RandomSaltProvider();
+            var salt = saltProvider.GetSalt(SALT_LENGTH);
+
             _userPassword = "IrenAdler";
-            var keccak = crypto.GetHashWithSalt(_userPassword);
+            var keccak = cryptoProvider.GetHashWithSalt(_userPassword, salt);
 
             _user = new User
             {
                 Email = "holmes@email.com",
                 FirstName = "Sherlock",
                 LastName = "Holmes",
-                PasswordKeccakHash = keccak,
+                PasswordHash = keccak,
                 Role = Roles.Simple
             };
             _unit.User.Save(_user);                       
