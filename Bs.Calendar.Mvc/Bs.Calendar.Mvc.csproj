@@ -248,7 +248,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -297,6 +299,7 @@
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\PasswordRecovery.cshtml" />
     <Content Include="Views\Account\PasswordReset.cshtml" />
+    <Content Include="Views\Room\EditorTemplates\RoomEditVm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
