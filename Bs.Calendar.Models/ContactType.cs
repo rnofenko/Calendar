@@ -7,6 +7,6 @@
         Twitter = 2, 
         Skype = 3,
         Phone = 4,
-        UrlAdress = 5
+        Url = 5
     }
 }

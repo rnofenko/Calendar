@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -200,7 +201,7 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpGet]
         public ActionResult GetContactType(string contact)
         {
-            return Json(_service.GetContactType(contact), JsonRequestBehavior.AllowGet);
+            return Json(ContactTypeParser.GetContactType(contact), JsonRequestBehavior.AllowGet);
         }
     }
 }
