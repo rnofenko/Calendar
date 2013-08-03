@@ -9,6 +9,7 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
+using Bs.Calendar.Rules.Emails;
 using Microsoft.Ajax.Utilities;
 
 namespace Bs.Calendar.Mvc.Services
@@ -100,15 +101,9 @@ namespace Bs.Calendar.Mvc.Services
         private static void SendMsgToUser(User user)
         {
             var sender = new EmailSender();
-            const string subject = "Status has been changed";
             var body = string.Format("Hi {0}!\nYour account's status is {1} now.",
                 user.FullName, user.LiveState);
-            var msg = new MailMessage("binary-Calendar@gmail.com", user.Email)
-            {
-                Subject = subject,
-                Body = body
-            };
-            sender.SendEmail(msg);
+            sender.Send("Status has been changed", body, user.Email);
         }
 
         public UsersVm RetreiveList(PagingVm pagingVm)

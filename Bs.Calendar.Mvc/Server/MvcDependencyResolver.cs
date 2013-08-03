@@ -10,7 +10,7 @@ namespace Bs.Calendar.Mvc.Server
         {
             try
             {
-                return Core.Resolver.Resolve(serviceType);
+                return Core.Ioc.Resolve(serviceType);
             }
             catch
             {
@@ -22,7 +22,7 @@ namespace Bs.Calendar.Mvc.Server
         {
             try
             {
-                return Core.Resolver.ResolveAll(serviceType);
+                return Core.Ioc.ResolveAll(serviceType);
             }
             catch
             {

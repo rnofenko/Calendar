@@ -24,8 +24,8 @@ namespace Bs.Calendar.Tests.Int
         public void SetUp()
         {
             DiMvc.Register();
-            Resolver.RegisterType<IUserRepository, FakeUserRepository>();
-            _unit = Resolver.Resolve<RepoUnit>();
+            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
+            _unit = Ioc.Resolve<RepoUnit>();
 
             var cryptoProvider = new KeccakCryptoProvider();
             var saltProvider = new RandomSaltProvider();

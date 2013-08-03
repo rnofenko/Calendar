@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Net.Mail;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
+using Bs.Calendar.Rules.Emails;
 using FluentAssertions;
 using Moq;
 using Bs.Calendar.Core;
@@ -33,11 +34,11 @@ namespace Bs.Calendar.Tests.Unit
             };
 
             DiMvc.Register();
-            Resolver.RegisterType<IUserRepository, FakeUserRepository>();
+            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
 
             var repoUnit = new RepoUnit();
             _users.ForEach(u => repoUnit.User.Save(u));
-            _accountService = Resolver.Resolve<AccountService>();
+            _accountService = Ioc.Resolve<AccountService>();
         }
 
         [Test]
@@ -74,16 +75,16 @@ namespace Bs.Calendar.Tests.Unit
             var url = "localhost/";
             var moq = new Mock<EmailSender>();
 
-            moq.Setup(e => e.SendEmail(It.IsAny<MailMessage>()))
+            moq.Setup(e => e.Send("","",It.IsAny<string>()))
                .Callback<MailMessage>(m => mailMessage = m);
-            Resolver.RegisterInstance<EmailSender>(moq.Object);
+            Ioc.RegisterInstance<EmailSender>(moq.Object);
 
             //act
             _accountService.PasswordRecovery(_users[0].Email, url);
             var expectedUrl = string.Format("{0}PasswordReset/{1}/{2}", url, _users[0].Id,_users[0].PasswordRecovery.PasswordHash);
 
             //assert
-            moq.Verify(e => e.SendEmail(It.IsAny<MailMessage>()), Times.Once());
+            moq.Verify(e => e.Send("","",It.IsAny<string>()), Times.Once());
             mailMessage.Body.Should().Contain(expectedUrl);
             mailMessage.To.Contains(new MailAddress(_users[0].Email)).Should().BeTrue();
         }
@@ -139,7 +140,7 @@ namespace Bs.Calendar.Tests.Unit
             //assert
             user.PasswordRecovery.PasswordHash.Should().BeEmpty();
             user.PasswordRecovery.PasswordSalt.Should().BeEmpty();
-            user.PasswordHash.ShouldBeEquivalentTo(Resolver.Resolve<ICryptoProvider>().GetHashWithSalt("1234567","salt"));
+            user.PasswordHash.ShouldBeEquivalentTo(Ioc.Resolve<ICryptoProvider>().GetHashWithSalt("1234567", "salt"));
         }
     }
 }

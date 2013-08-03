@@ -49,7 +49,9 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="ContactTypeParser.cs" />
-    <Compile Include="EmailSender.cs" />
+    <Compile Include="Emails\EmailSender.cs" />
+    <Compile Include="Emails\IEmailProvider.cs" />
+    <Compile Include="Emails\StandardEmailProvider.cs" />
     <Compile Include="IConfig.cs" />
     <Compile Include="ICryptoProvider.cs" />
     <Compile Include="ISaltProvider.cs" />
