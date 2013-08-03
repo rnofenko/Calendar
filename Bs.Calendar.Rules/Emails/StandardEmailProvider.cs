@@ -1,25 +1,42 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Mail;
 
 namespace Bs.Calendar.Rules.Emails
 {
     public class StandardEmailProvider : IEmailProvider
     {
-        public void Send(MailMessage message)
+        public EmailData Send(EmailData email)
         {
-            if (message == null)
+            if (email == null)
             {
-                return;
+                return new EmailData {Result = "Email class is NULL."};
             }
-            message.From = new MailAddress("binary.calendar@gmail.com", "Binary Calendar");
-            var smtp = new SmtpClient
-                {
-                    Port = 587,
-                    Host = "smtp.gmail.com",
-                    Credentials = new NetworkCredential("binary.calendar", "binarystudio"),
-                };
-            smtp.EnableSsl = true;
-            smtp.Send(message);
+
+            try
+            {
+                var message = new MailMessage(new MailAddress("binary.calendar@gmail.com", "Binary Calendar"),
+                                              new MailAddress(email.Addresser, email.Addresser))
+                    {
+                        Subject = email.Subject,
+                        Body = email.Body
+                    };
+
+                var smtp = new SmtpClient
+                    {
+                        Port = 587,
+                        Host = "smtp.gmail.com",
+                        Credentials = new NetworkCredential("binary.calendar", "binarystudio"),
+                        EnableSsl = true
+                    };
+                smtp.Send(message);
+            }
+            catch (Exception exception)
+            {
+                email.Result = exception.Message;
+            }
+
+            return email;
         }
     }
 }

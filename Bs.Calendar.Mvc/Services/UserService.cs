@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
+using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
@@ -100,7 +101,7 @@ namespace Bs.Calendar.Mvc.Services
 
         private static void SendMsgToUser(User user)
         {
-            var sender = new EmailSender();
+            var sender = Ioc.Resolve<EmailSender>();
             var body = string.Format("Hi {0}!\nYour account's status is {1} now.",
                 user.FullName, user.LiveState);
             sender.Send("Status has been changed", body, user.Email);

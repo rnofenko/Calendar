@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Bs.Calendar.Core;
+using System.Threading.Tasks;
+using Bs.Calendar.Rules.Logs;
 
 namespace Bs.Calendar.Rules.Emails
 {
@@ -15,22 +16,15 @@ namespace Bs.Calendar.Rules.Emails
             _provider = provider;
         }
 
-        private const int THREADS_COUNT = 10;
-
         public static bool IsValidEmailAddress(string emailAddress)
         {
             var regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
             return regex.IsMatch(emailAddress);
         }
 
-        public EmailSender()
-        {
-            Console.WriteLine(ThreadPool.SetMaxThreads(THREADS_COUNT, THREADS_COUNT));
-        }
-
         public void Send(string subject, string body, string addresser)
         {
-
+            Send(subject, body, new List<string> {addresser});
         }
 
         public void Send(string subject, string body, IEnumerable<string> addressers)
@@ -40,7 +34,26 @@ namespace Bs.Calendar.Rules.Emails
                 return;
             }
 
-            
+            foreach (var addresser in addressers)
+            {
+                if (!IsValidEmailAddress(addresser))
+                {
+                    continue;
+                }
+
+                sendAync(new EmailData { Addresser = addresser, Body = body, Subject = subject });
+            }
+        }
+
+        private async void sendAync(EmailData email)
+        {
+            var task = Task<EmailData>.Factory.StartNew(() => _provider.Send(email));
+            await task;
+
+            if (task.Result.Result != null)
+            {
+                Logger.Error(task.Result.Result);
+            }
         }
     }
 }

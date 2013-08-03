@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="ContactTypeParser.cs" />
+    <Compile Include="Emails\EmailData.cs" />
     <Compile Include="Emails\EmailSender.cs" />
     <Compile Include="Emails\IEmailProvider.cs" />
     <Compile Include="Emails\StandardEmailProvider.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="ICryptoProvider.cs" />
     <Compile Include="ISaltProvider.cs" />
     <Compile Include="KeccakCryptoProvider.cs" />
+    <Compile Include="Logs\Logger.cs" />
     <Compile Include="PageCounter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomSaltProvider.cs" />

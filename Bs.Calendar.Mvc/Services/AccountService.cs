@@ -57,7 +57,7 @@ namespace Bs.Calendar.Mvc.Services
 
         private void sendMsgToAdmins(string emailAddress)
         {
-            var sender = new EmailSender();
+            var sender = Ioc.Resolve<EmailSender>();
             const string SUBJECT = "New user registration";
             var body = string.Format("Hi there!\nA new user with email {0} has been added to the calendar!",
                                      emailAddress);

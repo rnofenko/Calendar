@@ -2,5 +2,6 @@
 {
     public interface IEmailProvider
     {
+        EmailData Send(EmailData email);
     }
 }
