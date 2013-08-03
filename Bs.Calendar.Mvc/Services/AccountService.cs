@@ -96,7 +96,7 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.BirthDate = userEditVm.BirthDate;
             
             userToEdit.Contacts.Clear();
-            userToEdit.Contacts = userEditVm.Contacts;  
+            userToEdit.Contacts = userEditVm.Contacts.Where(c => c.Value != null).ToList();  
 
             _unit.User.Save(userToEdit);
         }
