@@ -129,7 +129,7 @@ namespace Bs.Calendar.Mvc.Services
 
         private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
         {
-            users = users.OrderByIf(string.IsNullOrEmpty(sortByStr), 
+            users = users.OrderByIf(string.IsNullOrEmpty(sortByStr),
                         user => user.Id);
 
             users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("Name"),
@@ -177,17 +177,19 @@ namespace Bs.Calendar.Mvc.Services
             return filteredUsers;
         }
 
-        private IEnumerable<User> SearchByRole(IQueryable<User> users, string searchStr)
+        private IQueryable<User> SearchByRole(IQueryable<User> users, string searchStr)
         {
-            searchStr = searchStr.Insert(1, searchStr[0].ToString(CultureInfo.InvariantCulture).ToUpper());
-            searchStr = searchStr.Remove(0, 1);
-
             var filteredUsers = Enumerable.Empty<User>().AsQueryable();
 
-            if (string.IsNullOrEmpty(searchStr))
-                return users;            
+            var searchRoleName = Enum.GetNames(typeof(Roles)).FirstOrDefault(role => role.ToLower().Contains(searchStr));
 
-            var searchRole = (Roles)Enum.Parse(typeof(Roles), searchStr);
+            if (searchRoleName == null)
+            {
+                return filteredUsers;
+            }
+
+            Roles searchRole = (Roles)Enum.Parse(typeof (Roles), searchRoleName);
+            
             filteredUsers = filteredUsers.Concat(users.Where(user => user.Role == searchRole));
 
             return filteredUsers;
