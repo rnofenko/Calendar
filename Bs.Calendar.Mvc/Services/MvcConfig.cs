@@ -1,20 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Services
 {
-    public class MvcConfig : IConfig 
+    public class MvcConfig : IConfig
     {
-        public bool SendEmail 
+        private bool? _sendEmail;
+
+        public bool SendEmail
         {
-            get 
+            get
             {
-                return ConfigurationManager.AppSettings["SendEmail"].Equals("true", StringComparison.OrdinalIgnoreCase);
+                if (_sendEmail == null)
+                {
+                    var parameter = ConfigurationManager.AppSettings["SendEmail"];
+                    _sendEmail = parameter != null && parameter.Equals("true", StringComparison.OrdinalIgnoreCase);
+                }
+
+                return _sendEmail.Value;
             }
+            set { _sendEmail = value; }
         }
     }
 }

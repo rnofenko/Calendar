@@ -4,7 +4,7 @@ using Microsoft.Practices.Unity;
 
 namespace Bs.Calendar.Core
 {
-    public class Resolver
+    public class Ioc
     {
         private static readonly IUnityContainer _container = new UnityContainer();
 

@@ -28,7 +28,7 @@ namespace Bs.Calendar.Tests.Int
             mock.Setup(p => p.HttpContext.Session).Returns(new Mock<HttpSessionStateBase>().Object);
 
             DiMvc.Register();
-            Resolver.RegisterType<IUserRepository, UserRepository>();
+            Ioc.RegisterType<IUserRepository, UserRepository>();
 
             _unit = new RepoUnit();
 

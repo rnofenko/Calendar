@@ -15,7 +15,7 @@ namespace Bs.Calendar.Mvc.Services
         public HomeService(UsersRules rules)
         {
             _rules = rules;
-            var unit = Resolver.Resolve<RepoUnit>();
+            var unit = Ioc.Resolve<RepoUnit>();
             var users = unit.User.Load();
             if (!users.Any())
             {

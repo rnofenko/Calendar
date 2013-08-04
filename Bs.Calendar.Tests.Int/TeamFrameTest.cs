@@ -22,7 +22,7 @@ namespace Bs.Calendar.Tests.Int
         public void SetUp() 
         {
             DiMvc.Register();
-            Resolver.RegisterType<ITeamRepository, TeamRepository>();
+            Ioc.RegisterType<ITeamRepository, TeamRepository>();
 
             _unit = new RepoUnit();
             _unit.Team.Save(new Team { Name = ".NET", Description = ".NET"});

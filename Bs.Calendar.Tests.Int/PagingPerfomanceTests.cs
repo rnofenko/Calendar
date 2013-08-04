@@ -34,9 +34,9 @@ namespace Bs.Calendar.Tests.Int
             mock.Setup(p => p.HttpContext.Session).Returns(new Mock<HttpSessionStateBase>().Object);
 
             DiMvc.Register();
-            Resolver.RegisterType<IUserRepository, UserRepository>();
+            Ioc.RegisterType<IUserRepository, UserRepository>();
 
-            _usersController = Resolver.Resolve<UsersController>();
+            _usersController = Ioc.Resolve<UsersController>();
             _usersController.ControllerContext = mock.Object;
         }
 

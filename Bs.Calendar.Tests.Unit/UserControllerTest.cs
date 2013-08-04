@@ -38,13 +38,13 @@ namespace Bs.Calendar.Tests.Unit
             mock.Setup(p => p.HttpContext.Session).Returns(new Mock<HttpSessionStateBase>().Object);
 
             DiMvc.Register();
-            Resolver.RegisterType<IUserRepository, FakeUserRepository>();
+            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
 
             var repoUnit = new RepoUnit();
             _users.ForEach(user => repoUnit.User.Save(user));
 
-            Resolver.RegisterInstance<RepoUnit>(repoUnit);
-            _userController = Resolver.Resolve<UsersController>();
+            Ioc.RegisterInstance<RepoUnit>(repoUnit);
+            _userController = Ioc.Resolve<UsersController>();
             _userController.ControllerContext = mock.Object;
         }
 

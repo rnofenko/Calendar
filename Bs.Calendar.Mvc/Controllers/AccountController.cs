@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -181,7 +182,8 @@ namespace Bs.Calendar.Mvc.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost,
+        ValidateAntiForgeryToken]
         public ActionResult PasswordReset(AccountVm model)
         {
             try
@@ -199,5 +201,11 @@ namespace Bs.Calendar.Mvc.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        
+        [HttpGet]
+        public ActionResult GetContactType(string contact)
+        {
+            return Json(ContactTypeParser.GetContactType(contact), JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -35,8 +35,8 @@ namespace Bs.Calendar.Tests.Int
                     LiveState = LiveState.Active
                 };
             DiMvc.Register();
-            Resolver.RegisterType<IUserRepository, FakeUserRepository>();
-            _unit = Resolver.Resolve<RepoUnit>();
+            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
+            _unit = Ioc.Resolve<RepoUnit>();
             _userService = new UserService(_unit);
             _userService.SaveUser(new UserEditVm(_user));
             _user = _unit.User.Get(u => u.Email == _user.Email);

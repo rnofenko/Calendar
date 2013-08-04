@@ -3,6 +3,7 @@ using System.Web.Security;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Rules;
+using Bs.Calendar.Rules.Emails;
 using Roles = Bs.Calendar.Models.Roles;
 
 namespace Bs.Calendar.Mvc.Services

@@ -26,8 +26,8 @@ namespace Bs.Calendar.Tests.Int
         public void Setup()
         {
             DiMvc.Register();
-            Resolver.RegisterType<IUserRepository, FakeUserRepository>();
-            _unit = Resolver.Resolve<RepoUnit>();
+            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
+            _unit = Ioc.Resolve<RepoUnit>();
 
             _roleProvider = new CalendarRoleProvider();
 

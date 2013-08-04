@@ -33,8 +33,8 @@ namespace Bs.Calendar.Tests.Unit
             moq.Setup(m => m.Load()).Returns(_users.AsQueryable());
 
             DiMvc.Register();
-            Resolver.RegisterInstance<IUserRepository>(moq.Object);
-            _userService = Resolver.Resolve<UserService>();
+            Ioc.RegisterInstance<IUserRepository>(moq.Object);
+            _userService = Ioc.Resolve<UserService>();
         }
 
         [Test]

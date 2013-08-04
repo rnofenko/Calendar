@@ -30,7 +30,7 @@
         @Html.AntiForgeryToken()
         @Html.HiddenFor(user => user.UserId)
 
-        <div class="centered seven columns">
+        <div class="centered seven columns danger alert">
             @Html.ValidationSummary()
         </div>
 
@@ -42,27 +42,27 @@
 
                 <ul>
                     <li class="field">
-                        @Html.LabelFor(user => user.FirstName, new { @class = "inline" })
+                        @Html.LabelFor(user => user.FirstName, new { @class = "inline  three columns" })
                         @Html.TextBoxFor(user => user.FirstName, new { @class = "wide text input" })
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => user.LastName, new { @class = "inline" })
+                        @Html.LabelFor(user => user.LastName, new { @class = "inline  three columns" })
                         @Html.TextBoxFor(user => user.LastName, new { @class = "wide text input" })
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => user.Email, new { @class = "inline" })
+                        @Html.LabelFor(user => user.Email, new { @class = "inline  three columns" })
                         @Html.TextBoxFor(user => user.Email, new { @class = "wide text input" })
                     </li>
                     
                     <li class="field">
-                        @Html.LabelFor(user => user.BirthDate, new { @class = "inline" })
+                        @Html.LabelFor(user => user.BirthDate, new { @class = "inline  three columns" })
                         @Html.CustomDateEditor(user => user.BirthDate)
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => user.Role, new { @class = "inline" })
+                        @Html.LabelFor(user => user.Role, new { @class = "inline  three columns" })
                         <div class="picker">
                             @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
                         </div>
@@ -73,32 +73,38 @@
                         if (Model.LiveState != LiveState.Deleted)
                         { 
                             <li>
-                                <label class="inline">Deleted</label>
+                                <label class="inline  three columns">Deleted</label>
                                 @Html.CheckBox("delete")
                             </li>
                         }
                     }
                 </ul>
-
-                <div class="medium secondary btn push_two three columns">
-                    <input type="submit" value=@btnName />
+            </fieldset>
+        </div>
+        
+        @Html.Partial("UserContacts");
+        
+        <div class="row">
+            <div class="centered seven columns">
+                <div class="medium secondary btn three columns">
+                    <input type="submit" value="@btnName"/>
                 </div>
 
                 <div class="medium default btn push_one three columns">
                     @Html.ActionLink("Back", "Index")
                 </div>
-
-
-            </fieldset>
+            </div>
         </div>
     }
 </div>
 
 @section Scripts {
-    <script src="/Scripts/jquery-2.0.2.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-}
-@section styles {
-    <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
+    
+    <script src="../../Scripts/Users/UserContacts.js"></script>
+    <script type="text/javascript">
+        var contactModel = ko.mapping.fromJS(@Html.Raw(Json.Encode(@Model)), mappingOption);
+        ko.applyBindings(new UserContactsVm(contactModel));
+    </script>
 }

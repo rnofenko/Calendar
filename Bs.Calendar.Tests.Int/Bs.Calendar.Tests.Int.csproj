@@ -67,6 +67,7 @@
     <Compile Include="TeamControllerTest.cs" />
     <Compile Include="TeamFrameTest.cs" />
     <Compile Include="TeamPagingTest.cs" />
+    <Compile Include="TestHelpers\ClientGenerator.cs" />
     <Compile Include="UserPagingTests.cs" />
     <Compile Include="EmailTest.cs" />
     <Compile Include="PagingPerfomanceTests.cs" />

@@ -31,8 +31,8 @@ namespace Bs.Calendar.Tests.Unit
             mockRepository.Setup(m => m.Load()).Returns(_rooms.AsQueryable());
 
             DiMvc.Register();
-            Core.Resolver.RegisterInstance<IRoomRepository>(mockRepository.Object);
-            _roomService = Core.Resolver.Resolve<RoomService>();
+            Core.Ioc.RegisterInstance<IRoomRepository>(mockRepository.Object);
+            _roomService = Core.Ioc.Resolve<RoomService>();
         }
 
         

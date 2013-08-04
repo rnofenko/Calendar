@@ -23,7 +23,7 @@ namespace Bs.Calendar.Tests.Unit
         public void Setup() 
         {
             DiMvc.Register();
-            Resolver.RegisterType<ITeamRepository, FakeTeamRepository>();
+            Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
 
             var team = new Team
             {
@@ -31,7 +31,7 @@ namespace Bs.Calendar.Tests.Unit
                 Description = ".NET TEAM"
             };
 
-            _teamService = Resolver.Resolve<TeamService>();
+            _teamService = Ioc.Resolve<TeamService>();
             _teamService.SaveTeam(new TeamEditVm(team));
             _teamController = new TeamController(_teamService);
         }
