@@ -61,7 +61,7 @@ namespace Bs.Calendar.Mvc.Services
                 Email = email,
                 PasswordHash = _crypto.GetHashWithSalt(password, salt),
                 PasswordSalt = salt,
-                Role = Roles.None,
+                Role = Roles.Simple,
                 LiveState = LiveState.NotApproved,
                 BirthDate = null
             };           

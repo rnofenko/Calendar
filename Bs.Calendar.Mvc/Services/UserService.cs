@@ -115,14 +115,21 @@ namespace Bs.Calendar.Mvc.Services
 
             users = sortByStr(users, pagingVm.SortByStr);
 
-            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
-            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
+            pagingVm = updatePagingVm(pagingVm, users);
 
             return new UsersVm
             {
-                Users = users.Skip((currentPage - 1) * PageSize).Take(PageSize).ToList(),
-                PagingVm = new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage)
+                Users = users.Skip((pagingVm.Page - 1) * PageSize).Take(PageSize).ToList(),
+                PagingVm = pagingVm
             };
+        }
+
+        private PagingVm updatePagingVm(PagingVm pagingVm, IQueryable<User> users)
+        {
+            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
+
+            return new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage);
         }
 
         private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
@@ -156,7 +163,7 @@ namespace Bs.Calendar.Mvc.Services
 
             filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
 
-            filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
+            //filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
 
             return filteredUsers.Distinct();
         }

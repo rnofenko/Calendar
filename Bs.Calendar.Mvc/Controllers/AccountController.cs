@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Web.Mvc;
 using System.Web.Security;
 using Bs.Calendar.Mvc.Services;
@@ -195,13 +194,6 @@ namespace Bs.Calendar.Mvc.Controllers
             }
             
             return RedirectToAction("Index", "Home");
-        }
-
-        
-        [HttpGet]
-        public ActionResult GetContactType(string contact)
-        {
-            return Json(ContactTypeParser.GetContactType(contact), JsonRequestBehavior.AllowGet);
         }
     }
 }

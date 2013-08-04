@@ -1,5 +1,5 @@
 ﻿//ViewModel
-function UserContactsVm(model) {
+function UserContactsVm(model, actionUrl) {
     var self = this;
 
     //Variables
@@ -10,7 +10,7 @@ function UserContactsVm(model) {
         var contact = { Value: ko.observable(""), ContactType: ko.observable("") };
 
         contact.Value.subscribe(function(changedContact) {
-            $.getJSON('GetContactType', { contact: changedContact }, function(data) {
+            $.getJSON(actionUrl, { contact: changedContact }, function (data) {
                 contact.ContactType(data);
             });
         });

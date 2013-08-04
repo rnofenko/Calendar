@@ -5,6 +5,7 @@
         public PagingVm()
         {
             Page = 1;
+            TotalPages = 1;
         }
 
         public PagingVm(string searchStr, string sortByStr, int totalPages, int page = 1)

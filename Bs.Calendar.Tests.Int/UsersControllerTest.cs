@@ -95,7 +95,7 @@ namespace Bs.Calendar.Tests.Int
                     FirstName = "George",
                     LastName = "Orwell",
                     Email = "orwell.george@gmail.com",
-                    Role = Roles.None,
+                    Role = Roles.Simple,
                     BirthDate = null,
                     LiveState = LiveState.Active
                 };
@@ -108,20 +108,6 @@ namespace Bs.Calendar.Tests.Int
         }
 
         [Test]
-        public void IsShownDetailsAppliesToSelectedUser()
-        {
-            // arrange
-            var user = _userService.GetAllUsers().First();
-
-            // act
-            var viewResult = new UsersController(_userService).Details(user.Id) as ViewResult;
-            var model = viewResult.Model as UserEditVm;
-
-            // assert
-            model.ShouldBeEquivalentTo(new UserEditVm(user));
-        }
-
-        [Test]
         public void ShouldModifyUserInfoAndSaveToTheDb()
         {
             // arrange
@@ -129,7 +115,7 @@ namespace Bs.Calendar.Tests.Int
             user.FirstName = "Big";
             user.LastName = "Brother";
             user.Email = "iamwatchingyou@gmail.com";
-            user.Role = Roles.None;
+            user.Role = Roles.Simple;
 
             // act
             new UsersController(_userService).Edit(new UserEditVm(user), false);
@@ -154,7 +140,7 @@ namespace Bs.Calendar.Tests.Int
                 FirstName = " OBrien",
                 LastName = "Agent",
                 Email = "obrien@gmail.com",
-                Role = Roles.None,
+                Role = Roles.Simple,
                 LiveState = LiveState.Active
             };
             _userService.SaveUser(userToDeleteVm);
