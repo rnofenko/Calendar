@@ -25,6 +25,10 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpPost]
         public ActionResult Login(AccountVm model, string returnUrl)
         {
+            if (model.Email == "Admin")
+            {
+                model.Email = "admin@gmail.com";
+            }
             if (ModelState.IsValid)
             {
                 if(_service.LoginUser(model))
@@ -52,7 +56,7 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(AccountVm account, string returnUrl)
+        public ActionResult Register(RegisterVm account, string returnUrl)
         {
             if (ModelState.IsValid)
             {

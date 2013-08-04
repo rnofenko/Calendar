@@ -4,8 +4,7 @@ namespace Bs.Calendar.Mvc.ViewModels
 {
     public class AccountVm
     {
-        [Required,
-        EmailAddress]
+        [Required]
         public string Email { get; set; }
 
         [Required]

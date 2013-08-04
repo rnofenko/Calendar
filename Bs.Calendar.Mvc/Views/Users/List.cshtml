@@ -1,4 +1,6 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm
+﻿@using System.Drawing
+@using Bs.Calendar.Models
+@model Bs.Calendar.Mvc.ViewModels.UsersVm
 @{
     var ajaxOptions = new AjaxOptions
     {
@@ -15,19 +17,23 @@ else
     <table>
         <thead>
             <tr>
+                <th></th>
                 <th>@Html.AjaxSortLink(@Model.PagingVm, "Name", ajaxOptions)</th>
                 <th>@Html.AjaxSortLink(@Model.PagingVm, "E-mail", ajaxOptions)</th>
-                <th>@Html.AjaxSortLink(@Model.PagingVm, "State", ajaxOptions)</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var user in Model.Users)
             {
-                <tr>
-                    <td>@user.FirstName @user.LastName</td>      
+                var notApprovedStyle = user.LiveState == LiveState.NotApproved ? "background-color: Yellow" : null;
+                var labelText = notApprovedStyle != null ? "Not approved" : user.LiveState.ToString();
+                <tr style="@notApprovedStyle">
+                    <td>
+                        <label for="name">@labelText</label>
+                    </td>
+                    <td id="name">@user.FirstName @user.LastName</td>      
                     <td>@user.Email</td>
-                    <td>@user.LiveState</td>
                     <td>           
                         <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
                         <div class="medium default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>

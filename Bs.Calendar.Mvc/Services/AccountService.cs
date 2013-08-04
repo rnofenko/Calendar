@@ -35,7 +35,7 @@ namespace Bs.Calendar.Mvc.Services
             return true;
         }
 
-        public bool? RegisterUser(AccountVm account, out MembershipCreateStatus status)
+        public bool? RegisterUser(RegisterVm account, out MembershipCreateStatus status)
         {
             _membershipProvider.CreateUser("", account.Password, account.Email, "", "", true, null, out status);
             if (status == MembershipCreateStatus.Success)
