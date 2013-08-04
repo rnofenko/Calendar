@@ -20,7 +20,7 @@ namespace Bs.Calendar.Rules
             var fromNormalized = NormalizeDate(from);
             var intoNormalized = NormalizeDate(into);
 
-            if (fromNormalized < intoNormalized)
+            if (fromNormalized <= intoNormalized)
             {
                 var returnedUsers =
                     _unit.User.Load(
