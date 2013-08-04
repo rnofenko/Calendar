@@ -40,7 +40,7 @@ namespace Bs.Calendar.Mvc.Services
             _membershipProvider.CreateUser("", account.Password, account.Email, "", "", true, null, out status);
             if (status == MembershipCreateStatus.Success)
             {
-                sendMsgToAdmins(account.Email);
+                //sendMsgToAdmins(account.Email);
                 FormsAuthentication.SetAuthCookie(account.Email, false);
                 return true;
             }

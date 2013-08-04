@@ -67,7 +67,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpPost,
         ValidateAntiForgeryToken]
-        public ActionResult Edit(UserEditVm model, bool delete)
+        public ActionResult Edit(UserEditVm model, bool active)
         {
             ModelState.Remove("userId");
             if (!ModelState.IsValid)
@@ -77,8 +77,8 @@ namespace Bs.Calendar.Mvc.Controllers
 
             try
             {
-                _service.EditUser(model, delete);
-                return delete ? RedirectToAction("Logout", "Account") : RedirectToAction("Index");
+                _service.EditUser(model, active);
+                return RedirectToAction("Index");
             }
             catch (WarningException exception)
             {

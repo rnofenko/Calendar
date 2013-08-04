@@ -72,7 +72,7 @@ namespace Bs.Calendar.Mvc.Services
             _unit.User.Delete(_unit.User.Get(id));
         }
 
-        public void EditUser(UserEditVm userModel, bool delete)
+        public void EditUser(UserEditVm userModel, bool active)
         {
             var userToEdit = GetUser(userModel.UserId);
             if (!EmailSender.IsValidEmailAddress(userModel.Email))
@@ -93,7 +93,9 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.LastName = userModel.LastName;
             userToEdit.Email = userModel.Email;
             userToEdit.Role = userModel.Role;
-            userToEdit.LiveState = delete ? LiveState.Deleted : userModel.LiveState;
+            userToEdit.LiveState = active
+                ? LiveState.Active
+                : userToEdit.LiveState == LiveState.NotApproved ? LiveState.NotApproved : LiveState.Deleted;
             userToEdit.BirthDate = userModel.BirthDate;
 
             _unit.User.Save(userToEdit);
