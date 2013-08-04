@@ -83,10 +83,13 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
-
             if (userModel.Email != userToEdit.Email)
             {
                 SendMsgToUser(userToEdit);
+            }
+            if (userModel.Contacts.Any(c => c.ContactType == ContactType.None)) {
+                throw new WarningException(string.Format("Contact \"{0}\" is not recognizable",
+                    userModel.Contacts.First(c => c.ContactType == ContactType.None).Value));
             }
 
             userToEdit.FirstName = userModel.FirstName;
@@ -95,6 +98,9 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.Role = userModel.Role;
             userToEdit.LiveState = delete ? LiveState.Deleted : userModel.LiveState;
             userToEdit.BirthDate = userModel.BirthDate;
+
+            userToEdit.Contacts.Clear();
+            userToEdit.Contacts = userModel.Contacts; 
 
             _unit.User.Save(userToEdit);
         }

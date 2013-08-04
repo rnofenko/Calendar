@@ -65,14 +65,4 @@ function ViewModel() {
     self.changeHandler = function () {
         self.updateList();
     };
-
-    self.highlight = function() {
-        alert('dsfs');
-    };
 }
-
-$(document).ready(function() {
-    $(".test").dblclick(function(data) {
-        var a = 1;
-    });
-});

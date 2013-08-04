@@ -3,7 +3,21 @@ function UserContactsVm(model, actionUrl) {
     var self = this;
 
     //Variables
-    self.model = model;
+    self.mappingOption = {
+        'Contacts': {
+            create: function(options) {
+                var contact = ko.mapping.fromJS(options.data);
+                contact.Value.subscribe(function(changedContact) {
+                    $.getJSON(actionUrl, { contact: changedContact }, function(data) {
+                        contact.ContactType(data);
+                    });
+                });
+                return contact;
+            }
+        }
+    };
+
+    self.model = ko.mapping.fromJS(model, self.mappingOption);
 
     //Methods
     self.addContact = function() {
@@ -49,18 +63,4 @@ function UserContactsVm(model, actionUrl) {
             $(element).attr("class", newClass);
         }
     };
-};
-
-var mappingOption = {
-    'Contacts': {
-        create: function (options) {
-            var contact = ko.mapping.fromJS(options.data);
-            contact.Value.subscribe(function (changedContact) {
-                $.getJSON('GetContactType', { contact: changedContact }, function (data) {
-                    contact.ContactType(data);
-                });
-            });
-            return contact;
-        }
-    }
 };

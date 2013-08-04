@@ -123,12 +123,6 @@ namespace Bs.Calendar.Mvc.Controllers
         ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditVm userEditVm)
         {
-            ModelState.Remove("userId");
-            if (!ModelState.IsValid)
-            {
-                return View(userEditVm);
-            }
-
             try 
             {
                 _service.EditUser(userEditVm);

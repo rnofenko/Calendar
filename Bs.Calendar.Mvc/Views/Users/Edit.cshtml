@@ -104,9 +104,9 @@
     
     <script src="../../Scripts/Users/UserContacts.js"></script>
     <script type="text/javascript">
-        var contactModel = ko.mapping.fromJS(@Html.Raw(Json.Encode(@Model)), mappingOption);
+        var url = '@Url.Action("GetContactType", "Users", null, Request.Url.Scheme)';
         $(document).ready(function() {
-            ko.applyBindings(new UserContactsVm(contactModel, '@Url.Action("GetContactType", "Users", null, Request.Url.Scheme)'));
+            ko.applyBindings(new UserContactsVm(@Html.Raw(Json.Encode(@Model)), url));
         });
     </script>
 }
