@@ -1,10 +1,10 @@
 ﻿//Types
-function Contact() {
+function Contact(data) {
     var self = this;
 
-    self.Id = 0;
-    self.Value = ko.observable("");
-    self.ContactType = ko.observable("");
+    self.Id = data.Id;
+    self.Value = ko.observable(data.Value);
+    self.ContactType = ko.observable(data.ContactType);
 
     self.test = ko.computed(function () {
         
@@ -13,30 +13,24 @@ function Contact() {
 }
 
 //ViewModel
-function UserContactsVm(model, actionUrl) {
+function UserContactsVm(newContacts) {
     var self = this;
+    self.Contacts = ko.observableArray();
 
-    //Variables
-    self.mappingOption = {
-        'Contacts': {
-            create: function(options) {
-                return ko.mapping.fromJS(options.data, {}, new Contact());
-            }
+    self.addContact = function(data) {
+        if (typeof data === "undefined" || data == self) {
+            data = { Id: 0, Value: "", ContactType: 0 };
         }
-    };
-
-    self.model = ko.mapping.fromJS(model, self.mappingOption);
-
-    //Methods
-    self.addContact = function() {
-        var contact = new Contact();           
-        if (self.model.Contacts == null) self.model.Contacts = ko.observableArray([]);
                 
-        self.model.Contacts.push(contact);
+        self.Contacts.push(new Contact(data));
     };
+
+    $.each(newContacts, function(key,value) {
+        self.addContact(value);
+    });
 
     self.removeContact = function(contact) {
-        self.model.Contacts.remove(contact);
+        self.Contacts.remove(contact);
     };
 
     self.indexedName = function (index, parameter) {
