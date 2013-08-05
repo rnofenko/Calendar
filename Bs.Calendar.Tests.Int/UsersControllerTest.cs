@@ -37,7 +37,7 @@ namespace Bs.Calendar.Tests.Int
             DiMvc.Register();
             Ioc.RegisterType<IUserRepository, FakeUserRepository>();
             _unit = Ioc.Resolve<RepoUnit>();
-            _userService = new UserService(_unit);
+            _userService = new UserService(_unit, null);
             _userService.SaveUser(new UserEditVm(_user));
             _user = _unit.User.Get(u => u.Email == _user.Email);
         }        

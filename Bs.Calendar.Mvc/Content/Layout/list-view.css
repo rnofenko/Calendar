@@ -1,7 +1,9 @@
-﻿th > a {
-    color: white;
-}
+﻿tr {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 
-th > a:hover {
-    color: white;
+    cursor: default;
 }

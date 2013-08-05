@@ -21,14 +21,14 @@ function ViewModel() {
         self.showArrow('#' + event.currentTarget.id);
 
         self.model.SortByStr(event.currentTarget.innerText.concat(self.arrowUp ? "" : "Desc"));
-        self.updateList();
+        self.updateList(self.model);
     };
 
     self.previousPage = function() {
         var page = Number(self.model.Page()) - 1;
         if (page >= 1) {
             self.model.Page(page);
-            self.updateList();
+            self.updateList(self.model);
         }
     };
 
@@ -36,7 +36,7 @@ function ViewModel() {
         var page = Number(self.model.Page()) + 1;
         if (page <= self.model.TotalPages()) {
             self.model.Page(page);
-            self.updateList();
+            self.updateList(self.model);
         }
     };
 
@@ -52,8 +52,8 @@ function ViewModel() {
         $(columnId).append($('<i/>', { "class": self.arrowUp ? "icon-up" : "icon-down" }));
     };
 
-    self.updateList = function() {
-        $.get("Users/List", self.model, function(htmlData) {
+    self.updateList = function(model) {
+        $.get("Users/List", model, function(htmlData) {
             $(self.listBodyId).html(htmlData);
             self.model.Page($(htmlData).filter("#listPage").val());
             self.model.TotalPages($(htmlData).filter("#listTotalPages").val());
@@ -63,6 +63,6 @@ function ViewModel() {
     };
 
     self.changeHandler = function () {
-        self.updateList();
+        self.updateList(self.model);
     };
 }

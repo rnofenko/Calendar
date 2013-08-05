@@ -18,11 +18,13 @@ namespace Bs.Calendar.Mvc.Services
     public class UserService
     {
         private readonly RepoUnit _unit;
+        private readonly ContactService _contactService;
         public int PageSize { get; set; }
 
-        public UserService(RepoUnit unit)
+        public UserService(RepoUnit unit, ContactService contactService)
         {
             PageSize = 7;
+            _contactService = contactService;
             _unit = unit;
         }
 
@@ -48,6 +50,8 @@ namespace Bs.Calendar.Mvc.Services
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
 
+            var contacts = _contactService.UpdateContacts(userModel.Contacts);
+
             var user = new User
             {
                 FirstName = userModel.FirstName,
@@ -55,7 +59,8 @@ namespace Bs.Calendar.Mvc.Services
                 Email = userModel.Email,
                 Role = userModel.Role,
                 LiveState = userModel.LiveState,
-                BirthDate = userModel.BirthDate
+                BirthDate = userModel.BirthDate,
+                Contacts = contacts
             };
             _unit.User.Save(user);
         }
@@ -87,10 +92,6 @@ namespace Bs.Calendar.Mvc.Services
             {
                 SendMsgToUser(userToEdit);
             }
-            if (userModel.Contacts.Any(c => c.ContactType == ContactType.None)) {
-                throw new WarningException(string.Format("Contact \"{0}\" is not recognizable",
-                    userModel.Contacts.First(c => c.ContactType == ContactType.None).Value));
-            }
 
             userToEdit.FirstName = userModel.FirstName;
             userToEdit.LastName = userModel.LastName;
@@ -99,8 +100,9 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.LiveState = delete ? LiveState.Deleted : userModel.LiveState;
             userToEdit.BirthDate = userModel.BirthDate;
 
+            var contacts = _contactService.UpdateContacts(userModel.Contacts);
             userToEdit.Contacts.Clear();
-            userToEdit.Contacts = userModel.Contacts; 
+            userToEdit.Contacts = contacts; 
 
             _unit.User.Save(userToEdit);
         }

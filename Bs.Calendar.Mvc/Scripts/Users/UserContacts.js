@@ -1,4 +1,13 @@
-﻿//ViewModel
+﻿//Types
+function Contact() {
+    var self = this;
+
+    self.Id = 0;
+    self.Value = ko.observable("").extend({ throttle: 400 });
+    self.ContactType = ko.observable("");
+}
+
+//ViewModel
 function UserContactsVm(model, actionUrl) {
     var self = this;
 
@@ -21,8 +30,8 @@ function UserContactsVm(model, actionUrl) {
 
     //Methods
     self.addContact = function() {
-        var contact = { Value: ko.observable(""), ContactType: ko.observable("") };
-
+        var contact = new Contact();
+        
         contact.Value.subscribe(function(changedContact) {
             $.getJSON(actionUrl, { contact: changedContact }, function (data) {
                 contact.ContactType(data);
@@ -38,7 +47,7 @@ function UserContactsVm(model, actionUrl) {
         self.model.Contacts.remove(contact);
     };
 
-    self.contactsIndexedName = function(index, parameter) {
+    self.indexedName = function (index, parameter) {
         return "Contacts[" + index + "]." + parameter;
     };
 

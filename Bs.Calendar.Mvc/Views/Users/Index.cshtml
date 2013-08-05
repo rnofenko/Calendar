@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Users";
+    var pagingVm = @Session["pagingVm"] ?? new PagingVm();
 }
 
 <div class="row">
@@ -25,15 +26,15 @@
     <table>
         <thead>
             <tr>
-                <th><a href="~" id="th-name" data-bind="click: headerClick">Name</a></th>
-                <th><a href="~" id="th-email" data-bind="click: headerClick">E-mail</a></th>
+                <th><div id="th-name" data-bind="click: headerClick">Name</div></th>
+                <th><div id="th-email" data-bind="click: headerClick">E-mail</div></th>
                 <th>Role</th>
                 <th>Action</th>
             </tr>
         </thead>
     
         <tbody id="list-body">
-            @Html.Action("List", @Session["pagingVm"] ?? new PagingVm())
+            @*@Html.Action("List", @Session["pagingVm"] ?? new PagingVm())*@
         </tbody>
     </table>
 </div>
@@ -63,14 +64,14 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryajax")
     <script src="../../Scripts/Users/UserList.js"></script>
+    <script src="../../Scripts/Layout/list-view.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
             var model = new ViewModel();
             ko.applyBindings(model);
-            model.updateList();
+            model.updateList(@Html.Raw(Json.Encode(@pagingVm)));
         });
     </script>
 }
