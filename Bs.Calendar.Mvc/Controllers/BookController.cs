@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Web.Http;
+using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
-    public class BookController : ApiController
+    public class BookController : Controller
     {
         private readonly BookService _service;
 
@@ -14,11 +14,22 @@ namespace Bs.Calendar.Mvc.Controllers
             _service = service;
         }
 
-        // GET: /Api/Book/
-        public List<Book> Get()
+        public JsonResult Get(int id)
         {
-            return _service.List();
+            var book = _service.Get(id);
+            var response = new JsonResult();
+            response.Data = book;
+            response.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+            return response;
         }
 
+        public JsonResult List()
+        {
+            var books = _service.Load();
+            var response = new JsonResult();
+            response.Data = books;
+            response.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+            return response;
+        }
     }
 }

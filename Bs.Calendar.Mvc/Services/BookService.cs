@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 
@@ -22,7 +20,7 @@ namespace Bs.Calendar.Mvc.Services
             return book;
         }
 
-        public List<Book> List()
+        public List<Book> Load()
         {
             var books = _repoUnit.Book.Load();
             return books.ToList();
