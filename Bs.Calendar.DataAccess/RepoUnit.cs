@@ -39,7 +39,7 @@ namespace Bs.Calendar.DataAccess
 
         private T getRepository<T>() where T : IContexable
         {
-            var repository = Resolver.Resolve<T>();
+            var repository = Ioc.Resolve<T>();
             repository.SetContext(getContext());
 
             return repository;

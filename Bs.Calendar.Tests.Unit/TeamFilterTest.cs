@@ -35,8 +35,8 @@ namespace Bs.Calendar.Tests.Unit
             moq.Setup(m => m.Load()).Returns(_teams.AsQueryable());
 
             DiMvc.Register();
-            Resolver.RegisterInstance<ITeamRepository>(moq.Object);
-            _teamService = Resolver.Resolve<TeamService>();
+            Ioc.RegisterInstance<ITeamRepository>(moq.Object);
+            _teamService = Ioc.Resolve<TeamService>();
         }
 
 

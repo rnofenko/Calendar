@@ -33,7 +33,7 @@ namespace Bs.Calendar.Tests.Int.TestHelpers
                         FullName = "Test Test",
                         FirstName = "Test",
                         LastName = "Test",
-                        Role = Roles.None,
+                        Role = Roles.Simple,
                         LiveState = LiveState.Active
                     };
 

@@ -1,34 +1,19 @@
-﻿using NUnit.Framework;
+﻿using Bs.Calendar.Models;
+using Bs.Calendar.Rules;
+using NUnit.Framework;
 
 namespace Bs.Calendar.Tests.Unit
 {
-    public enum ContactType
-    {
-        None = 0,
-        Email,
-        Twitter,
-        Skype,
-        Phone,
-        Url
-    }
 
     [TestFixture]
     internal class ContactTypeParserTest
     {
-        private ContactTypeParser _parser;
-
-        [SetUp]
-        public void Arrange()
-        {
-            _parser = new ContactTypeParser();
-        }
-
         [TestCase("rnofenko@gmail.com", Result = ContactType.Email)]
         [TestCase("art.trubitsyn@gmail.com", Result = ContactType.Email)]
         public ContactType ContactParserShouldReturnEmailTypeIfInputStringIsEmail(string inputString)
         {
             // act && assert
-            return _parser.GetContactType(inputString);
+            return ContactTypeParser.GetContactType(inputString);
         }
 
         [TestCase("@rnofenko", Result = ContactType.Twitter)]
@@ -36,7 +21,7 @@ namespace Bs.Calendar.Tests.Unit
         public ContactType ContactParserShouldReturnTwitterTypeIfInputStringIsTwitterAccount(string inputString)
         {
             // act && assert
-            return _parser.GetContactType(inputString);
+            return ContactTypeParser.GetContactType(inputString);
         }
 
         [TestCase("r_nofenko", Result = ContactType.Skype)]
@@ -44,7 +29,7 @@ namespace Bs.Calendar.Tests.Unit
         public ContactType ContactParserShouldReturnSkypeTypeIfInputStringIsSkypeAccount(string inputString)
         {
             // act && assert
-            return _parser.GetContactType(inputString);
+            return ContactTypeParser.GetContactType(inputString);
         }
 
         [TestCase("+380502342671", Result = ContactType.Phone)]
@@ -56,7 +41,7 @@ namespace Bs.Calendar.Tests.Unit
         public ContactType ContactParserShouldReturnPhoneTypeIfInputStringIsPhoneNumber(string inputString)
         {
             // act && assert
-            return _parser.GetContactType(inputString);
+            return ContactTypeParser.GetContactType(inputString);
         }
 
         [TestCase("rnofenko.com", Result = ContactType.Url)]
@@ -67,15 +52,7 @@ namespace Bs.Calendar.Tests.Unit
         public ContactType ContactParserShouldReturnUrlTypeIfInputStringIsUrl(string inputString)
         {
             // act && assert
-            return _parser.GetContactType(inputString);
-        }
-
-        public class ContactTypeParser
-        {
-            public ContactType GetContactType(string inputString)
-            {
-                return ContactType.None;
-            }
+            return ContactTypeParser.GetContactType(inputString);
         }
     }
 }

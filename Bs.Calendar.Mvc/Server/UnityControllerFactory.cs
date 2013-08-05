@@ -11,7 +11,7 @@ namespace Bs.Calendar.Mvc.Server
 
             if (null != controllerType)
             {
-                result = Core.Resolver.Resolve(controllerType) as IController;
+                result = Core.Ioc.Resolve(controllerType) as IController;
             }
 
             return result;

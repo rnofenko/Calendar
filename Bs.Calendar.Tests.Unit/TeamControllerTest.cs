@@ -23,7 +23,7 @@ namespace Bs.Calendar.Tests.Unit
         public void Setup() 
         {
             DiMvc.Register();
-            Resolver.RegisterType<ITeamRepository, FakeTeamRepository>();
+            Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
 
             var team = new Team
             {
@@ -31,7 +31,7 @@ namespace Bs.Calendar.Tests.Unit
                 Description = ".NET TEAM"
             };
 
-            _teamService = Resolver.Resolve<TeamService>();
+            _teamService = Ioc.Resolve<TeamService>();
             _teamService.SaveTeam(new TeamEditVm(team));
             _teamController = new TeamController(_teamService);
         }
@@ -52,20 +52,6 @@ namespace Bs.Calendar.Tests.Unit
 
             // assert
             count.ShouldBeEquivalentTo(quantity + 1);
-        }
-
-        [Test]
-        public void Should_Show_Team_Details() 
-        {
-            // arrange
-            var team = _teamService.GetAllTeams().First();
-
-            // act
-            var viewResult = _teamController.Details(team.Id) as ViewResult;
-            var model = viewResult.Model as TeamEditVm;
-
-            // assert
-            model.ShouldBeEquivalentTo(new TeamEditVm(team));
         }
 
         [Test]

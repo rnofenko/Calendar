@@ -35,14 +35,14 @@ namespace Bs.Calendar.Tests.Unit
             };
 
             DiMvc.Register();
-            Resolver.RegisterType<IUserRepository, FakeUserRepository>();
+            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
 
             _repoUnit = new RepoUnit();
-            Resolver.RegisterInstance<RepoUnit>(_repoUnit);
+            Ioc.RegisterInstance<RepoUnit>(_repoUnit);
 
             users.ForEach(user => _repoUnit.User.Save(user));
-            
-            _accountService = Resolver.Resolve<AccountService>();
+
+            _accountService = Ioc.Resolve<AccountService>();
         }
 
         [Test]

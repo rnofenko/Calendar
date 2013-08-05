@@ -42,27 +42,27 @@
 
                 <ul>
                     <li class="field">
-                        @Html.LabelFor(user => user.FirstName, new { @class = "inline  three columns" })
+                        @Html.LabelFor(user => user.FirstName, new { @class = "inline three columns" })
                         @Html.TextBoxFor(user => user.FirstName, new { @class = "wide text input" })
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => user.LastName, new { @class = "inline  three columns" })
+                        @Html.LabelFor(user => user.LastName, new { @class = "inline three columns" })
                         @Html.TextBoxFor(user => user.LastName, new { @class = "wide text input" })
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => user.Email, new { @class = "inline  three columns" })
+                        @Html.LabelFor(user => user.Email, new { @class = "inline three columns" })
                         @Html.TextBoxFor(user => user.Email, new { @class = "wide text input" })
                     </li>
                     
                     <li class="field">
-                        @Html.LabelFor(user => user.BirthDate, new { @class = "inline  three columns" })
+                        @Html.LabelFor(user => user.BirthDate, new { @class = "inline three columns" })
                         @Html.CustomDateEditor(user => user.BirthDate)
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => user.Role, new { @class = "inline  three columns" })
+                        @Html.LabelFor(user => user.Role, new { @class = "inline three columns" })
                         <div class="picker">
                             @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
                         </div>
@@ -104,7 +104,9 @@
     
     <script src="../../Scripts/Users/UserContacts.js"></script>
     <script type="text/javascript">
-        var contactModel = ko.mapping.fromJS(@Html.Raw(Json.Encode(@Model)), mappingOption);
-        ko.applyBindings(new UserContactsVm(contactModel));
+        var url = '@Url.Action("GetContactType", "Users", null, Request.Url.Scheme)';
+        $(document).ready(function() {
+            ko.applyBindings(new UserContactsVm(@Html.Raw(Json.Encode(@Model)), url));
+        });
     </script>
 }

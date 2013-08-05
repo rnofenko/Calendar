@@ -5,10 +5,12 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
+using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
+using Bs.Calendar.Rules.Emails;
 using Microsoft.Ajax.Utilities;
 
 namespace Bs.Calendar.Mvc.Services
@@ -81,10 +83,13 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
-
             if (userModel.Email != userToEdit.Email)
             {
                 SendMsgToUser(userToEdit);
+            }
+            if (userModel.Contacts.Any(c => c.ContactType == ContactType.None)) {
+                throw new WarningException(string.Format("Contact \"{0}\" is not recognizable",
+                    userModel.Contacts.First(c => c.ContactType == ContactType.None).Value));
             }
 
             userToEdit.FirstName = userModel.FirstName;
@@ -94,21 +99,18 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.LiveState = delete ? LiveState.Deleted : userModel.LiveState;
             userToEdit.BirthDate = userModel.BirthDate;
 
+            userToEdit.Contacts.Clear();
+            userToEdit.Contacts = userModel.Contacts; 
+
             _unit.User.Save(userToEdit);
         }
 
         private static void SendMsgToUser(User user)
         {
-            var sender = new EmailSender();
-            const string subject = "Status has been changed";
+            var sender = Ioc.Resolve<EmailSender>();
             var body = string.Format("Hi {0}!\nYour account's status is {1} now.",
                 user.FullName, user.LiveState);
-            var msg = new MailMessage("binary-Calendar@gmail.com", user.Email)
-            {
-                Subject = subject,
-                Body = body
-            };
-            sender.SendEmail(msg);
+            sender.Send("Status has been changed", body, user.Email);
         }
 
         public UsersVm RetreiveList(PagingVm pagingVm)
@@ -119,14 +121,21 @@ namespace Bs.Calendar.Mvc.Services
 
             users = sortByStr(users, pagingVm.SortByStr);
 
-            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
-            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
+            pagingVm = updatePagingVm(pagingVm, users);
 
             return new UsersVm
             {
-                Users = users.Skip((currentPage - 1) * PageSize).Take(PageSize).ToList(),
-                PagingVm = new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage)
+                Users = users.Skip((pagingVm.Page - 1) * PageSize).Take(PageSize).ToList(),
+                PagingVm = pagingVm
             };
+        }
+
+        private PagingVm updatePagingVm(PagingVm pagingVm, IQueryable<User> users)
+        {
+            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
+
+            return new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage);
         }
 
         private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
@@ -160,7 +169,7 @@ namespace Bs.Calendar.Mvc.Services
 
             filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
 
-            filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
+            //filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
 
             return filteredUsers.Distinct();
         }

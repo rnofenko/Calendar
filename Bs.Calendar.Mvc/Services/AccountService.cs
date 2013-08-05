@@ -2,13 +2,13 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Net.Mail;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 using System.Web.Security;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Core;
+using Bs.Calendar.Rules.Emails;
 using Roles = Bs.Calendar.Models.Roles;
 
 namespace Bs.Calendar.Mvc.Services
@@ -40,7 +40,7 @@ namespace Bs.Calendar.Mvc.Services
             _membershipProvider.CreateUser("", account.Password, account.Email, "", "", true, null, out status);
             if (status == MembershipCreateStatus.Success)
             {
-                SendMsgToAdmins(account.Email);
+                sendMsgToAdmins(account.Email);
                 FormsAuthentication.SetAuthCookie(account.Email, false);
                 return true;
             }
@@ -55,24 +55,14 @@ namespace Bs.Calendar.Mvc.Services
             return null;
         }
 
-        private static void SendMsgToAdmins(string emailAddress)
+        private void sendMsgToAdmins(string emailAddress)
         {
-            var sender = new EmailSender();
-            const string subject = "New user registration";
+            var sender = Ioc.Resolve<EmailSender>();
+            const string SUBJECT = "New user registration";
             var body = string.Format("Hi there!\nA new user with email {0} has been added to the calendar!",
-                emailAddress);
-            using (var unit = new RepoUnit())
-            {
-                foreach (var admin in unit.User.Load(u => u.Role == Roles.Admin).ToList())
-                {
-                    var msg = new MailMessage(emailAddress, admin.Email)
-                    {
-                        Subject = subject,
-                        Body = body
-                    };
-                    sender.SendEmail(msg);
-                }
-            }
+                                     emailAddress);
+
+            sender.Send(SUBJECT, body, _unit.User.Load(u => u.Role == Roles.Admin).Select(x => x.Email));
         }
 
         public User GetUser(int userId)
@@ -99,6 +89,11 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException(string.Format("User with email {0} already exists", userEditVm.Email));
             }
+            if (userEditVm.Contacts.Any(c => c.ContactType == ContactType.None))
+            {
+                throw new WarningException(string.Format("Contact \"{0}\" is not recognizable", 
+                    userEditVm.Contacts.First(c => c.ContactType == ContactType.None).Value));
+            }
 
             userToEdit.FirstName = userEditVm.FirstName;
             userToEdit.LastName = userEditVm.LastName;
@@ -122,13 +117,13 @@ namespace Bs.Calendar.Mvc.Services
 
             var passwordRecovery = user.PasswordRecovery ?? (user.PasswordRecovery = new PasswordRecovery());
             passwordRecovery.Date = DateTime.Now;
-            passwordRecovery.PasswordSalt = Resolver.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
-            passwordRecovery.PasswordHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString(CultureInfo.InvariantCulture), passwordRecovery.PasswordSalt);
+            passwordRecovery.PasswordSalt = Ioc.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
+            passwordRecovery.PasswordHash = Ioc.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString(CultureInfo.InvariantCulture), passwordRecovery.PasswordSalt);
             _unit.User.Save(user);
-            
-            var sender = Resolver.Resolve<EmailSender>();
+
+            var sender = Ioc.Resolve<EmailSender>();
             var message = string.Format("{0}/PasswordReset/{1}/{2}", url.Remove(url.LastIndexOf('/')), user.Id, passwordRecovery.PasswordHash);
-            sender.SendEmail(new MailMessage("info@binary-studio.com", email, "Password Recovery", message));
+            sender.Send("Password Recovery", message, email);
         }
 
         public AccountVm CheckToken(int id, string token)
@@ -153,27 +148,12 @@ namespace Bs.Calendar.Mvc.Services
                 throw new WarningException("Something went wrong, try again");
             }
 
-            user.PasswordSalt = Resolver.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
-            user.PasswordHash = Resolver.Resolve<ICryptoProvider>().GetHashWithSalt(model.Password, user.PasswordSalt);
+            user.PasswordSalt = Ioc.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
+            user.PasswordHash = Ioc.Resolve<ICryptoProvider>().GetHashWithSalt(model.Password, user.PasswordSalt);
             user.PasswordRecovery.PasswordHash = "";
             user.PasswordRecovery.PasswordSalt = "";
 
             _unit.User.Save(user);
-        }
-
-        public ContactType GetContactType(string contact)
-        {
-            if (string.IsNullOrEmpty(contact)) return ContactType.None;
-
-            if (contact.StartsWith("@")) return ContactType.Twitter;
-            
-            if (EmailSender.IsValidEmailAddress(contact)) return ContactType.Email;
-
-            if (contact.All(char.IsNumber)) return ContactType.Phone;
-
-            if (Uri.IsWellFormedUriString(contact, UriKind.Absolute)) return ContactType.UrlAdress;
-
-            return ContactType.Skype;
         }
     }
 }
