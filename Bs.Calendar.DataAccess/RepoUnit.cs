@@ -8,8 +8,9 @@ namespace Bs.Calendar.DataAccess
     {
         private CalendarContext _context;
         private IUserRepository _user;
-		private IRoomRepository _room;
+        private IRoomRepository _room;
         private ITeamRepository _team;
+        private IBookRepository _book;
 
         public IUserRepository User
         {
@@ -19,6 +20,11 @@ namespace Bs.Calendar.DataAccess
         public IRoomRepository Room
         {
             get { return _room ?? (_room = getRepository<IRoomRepository>()); }
+        }
+
+        public IBookRepository Book
+        {
+            get { return _book ?? (_book = getRepository<IBookRepository>()); }
         }
 
 		public ITeamRepository Team

@@ -83,10 +83,13 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
-
             if (userModel.Email != userToEdit.Email)
             {
                 SendMsgToUser(userToEdit);
+            }
+            if (userModel.Contacts.Any(c => c.ContactType == ContactType.None)) {
+                throw new WarningException(string.Format("Contact \"{0}\" is not recognizable",
+                    userModel.Contacts.First(c => c.ContactType == ContactType.None).Value));
             }
 
             userToEdit.FirstName = userModel.FirstName;
@@ -95,6 +98,9 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.Role = userModel.Role;
             userToEdit.LiveState = delete ? LiveState.Deleted : userModel.LiveState;
             userToEdit.BirthDate = userModel.BirthDate;
+
+            userToEdit.Contacts.Clear();
+            userToEdit.Contacts = userModel.Contacts; 
 
             _unit.User.Save(userToEdit);
         }
@@ -115,14 +121,21 @@ namespace Bs.Calendar.Mvc.Services
 
             users = sortByStr(users, pagingVm.SortByStr);
 
-            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
-            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
+            pagingVm = updatePagingVm(pagingVm, users);
 
             return new UsersVm
             {
-                Users = users.Skip((currentPage - 1) * PageSize).Take(PageSize).ToList(),
-                PagingVm = new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage)
+                Users = users.Skip((pagingVm.Page - 1) * PageSize).Take(PageSize).ToList(),
+                PagingVm = pagingVm
             };
+        }
+
+        private PagingVm updatePagingVm(PagingVm pagingVm, IQueryable<User> users)
+        {
+            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
+
+            return new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage);
         }
 
         private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
@@ -156,7 +169,7 @@ namespace Bs.Calendar.Mvc.Services
 
             filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
 
-            filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
+            //filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
 
             return filteredUsers.Distinct();
         }

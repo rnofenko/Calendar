@@ -89,6 +89,11 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException(string.Format("User with email {0} already exists", userEditVm.Email));
             }
+            if (userEditVm.Contacts.Any(c => c.ContactType == ContactType.None))
+            {
+                throw new WarningException(string.Format("Contact \"{0}\" is not recognizable", 
+                    userEditVm.Contacts.First(c => c.ContactType == ContactType.None).Value));
+            }
 
             userToEdit.FirstName = userEditVm.FirstName;
             userToEdit.LastName = userEditVm.LastName;
@@ -96,7 +101,7 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.BirthDate = userEditVm.BirthDate;
             
             userToEdit.Contacts.Clear();
-            userToEdit.Contacts = userEditVm.Contacts.Where(c => c.Value != null).ToList();  
+            userToEdit.Contacts = userEditVm.Contacts;  
 
             _unit.User.Save(userToEdit);
         }

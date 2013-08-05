@@ -29,9 +29,9 @@ namespace Bs.Calendar.Tests.Unit
         {
             _users = new List<User>
             {
-                new User {Id = 1, Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.None, LiveState = LiveState.Active},
-                new User {Id = 2, Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.None, LiveState = LiveState.Active},
-                new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.None, LiveState = LiveState.Active}
+                new User {Id = 1, Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.Simple, LiveState = LiveState.Active},
+                new User {Id = 2, Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.Simple, LiveState = LiveState.Active},
+                new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.Simple, LiveState = LiveState.Active}
             };
 
             var mock = new Mock<ControllerContext>();
@@ -49,24 +49,9 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
-        public void Can_View_Details_Of_User()
-        {
-            //arrange
-            var testUser = _users[0];
-
-            //act
-            var viewResult = _userController.Details(testUser.Id) as ViewResult;
-            var userEditVm = viewResult.Model as UserEditVm;
-
-            //assert
-            userEditVm.UserId.ShouldBeEquivalentTo(testUser.Id);
-            userEditVm.Email.ShouldBeEquivalentTo(testUser.Email);
-        }
-
-        [Test]
         public void Can_Create_Users() {
             //arrange
-            var testUserVm = new UserEditVm(0, "Alexandr", "Fomkin", "0000@gmail.com", Roles.None, null, LiveState.Active);
+            var testUserVm = new UserEditVm(0, "Alexandr", "Fomkin", "0000@gmail.com", Roles.Simple, null, LiveState.Active);
 
             //act
             _userController.Create(testUserVm);

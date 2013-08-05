@@ -59,19 +59,6 @@ namespace Bs.Calendar.Tests.Int
         }
 
         [Test]
-        public void Should_Show_Team_Details() {
-            // arrange
-            var team = _teamService.GetAllTeams().First();
-
-            // act
-            var viewResult = _teamController.Details(team.Id) as ViewResult;
-            var model = viewResult.Model as TeamEditVm;
-
-            // assert
-            model.ShouldBeEquivalentTo(new TeamEditVm(team));
-        }
-
-        [Test]
         public void Should_Edit_Team() {
             // arrange
             var team = _teamService.GetAllTeams().Last();

@@ -26,11 +26,6 @@ namespace Bs.Calendar.Mvc.Controllers
             return View();
         }
 
-        public ActionResult Details(int id) 
-        {
-            return PassUserIntoTheView("Details", id);
-        }
-
         public ActionResult Create() 
         {
             return View("Edit", null);

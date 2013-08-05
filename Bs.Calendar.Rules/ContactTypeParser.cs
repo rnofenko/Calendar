@@ -29,7 +29,7 @@ namespace Bs.Calendar.Rules
 
         private static bool isTwitter(string contact)
         {
-            return contact.StartsWith("@");
+            return Regex.IsMatch(contact, @"^@[a-zA-Z0-9_]+$");
         }
 
         private static bool isEmail(string contact)
@@ -44,7 +44,7 @@ namespace Bs.Calendar.Rules
 
         private static bool isSkype(string contact)
         {
-            return Regex.IsMatch(contact, @"[a-zA-Z][a-zA-Z0-9_\-\,\.]");
+            return Regex.IsMatch(contact, @"^[a-zA-Z][a-zA-Z0-9_\-\,\.]{5,31}$");
         }
 
         private static bool isUrl(string contact)
