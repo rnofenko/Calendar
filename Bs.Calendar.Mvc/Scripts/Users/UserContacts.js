@@ -3,8 +3,13 @@ function Contact() {
     var self = this;
 
     self.Id = 0;
-    self.Value = ko.observable("").extend({ throttle: 400 });
+    self.Value = ko.observable("");
     self.ContactType = ko.observable("");
+
+    self.test = ko.computed(function () {
+        
+        $.getJSON("/Users/GetContactType", { contact: self.Value() }, self.ContactType);
+    }, this).extend({ throttle: 400 });
 }
 
 //ViewModel
@@ -15,13 +20,7 @@ function UserContactsVm(model, actionUrl) {
     self.mappingOption = {
         'Contacts': {
             create: function(options) {
-                var contact = ko.mapping.fromJS(options.data);
-                contact.Value.subscribe(function(changedContact) {
-                    $.getJSON(actionUrl, { contact: changedContact }, function(data) {
-                        contact.ContactType(data);
-                    });
-                });
-                return contact;
+                return ko.mapping.fromJS(options.data, {}, new Contact());
             }
         }
     };
@@ -30,14 +29,7 @@ function UserContactsVm(model, actionUrl) {
 
     //Methods
     self.addContact = function() {
-        var contact = new Contact();
-        
-        contact.Value.subscribe(function(changedContact) {
-            $.getJSON(actionUrl, { contact: changedContact }, function (data) {
-                contact.ContactType(data);
-            });
-        });
-                
+        var contact = new Contact();           
         if (self.model.Contacts == null) self.model.Contacts = ko.observableArray([]);
                 
         self.model.Contacts.push(contact);

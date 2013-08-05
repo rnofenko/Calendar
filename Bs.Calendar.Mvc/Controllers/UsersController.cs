@@ -100,6 +100,7 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
+        [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult GetContactType(string contact) {
             return Json(ContactTypeParser.GetContactType(contact), JsonRequestBehavior.AllowGet);
         }
