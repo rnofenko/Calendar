@@ -13,6 +13,21 @@
         },
         owner: this
     });
+
+    self._orderby = "Id";
+    self.toggle_orderby = function (k, event)
+    {
+        var key = event.target.id.substring(3);
+        if (self._orderby == key)
+        {
+            key = "-" + key;
+        }
+        $("#order_" + self._orderby).toggleClass('hide');
+        self._orderby = key;
+        $("#order_" + self._orderby).toggleClass('hide');
+        self.LoadData();
+    };
+
     self.books = ko.observableArray();
 
     self.BookVm = function(source)
@@ -38,7 +53,9 @@
 
     self.LoadData = function ()
     {
-        var data = {};
+        var data = {
+            orderby: self._orderby
+        };
         if (self._searchStr != "")
         {
             data['search'] = self._searchStr;

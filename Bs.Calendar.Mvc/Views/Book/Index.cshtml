@@ -24,8 +24,16 @@
         <table>
             <thead>
                 <tr>
-                    <th>Book title</th>
-                    <th>Author</th>
+                    <th data-bind="click: toggle_orderby" id="th_Title">
+                        <span class="hide" id="order_-Title"><i class="icon-down"></i></span>
+                        <span class="hide" id="order_Title" ><i class="icon-up"></i></span>
+                        Book title
+                    </th>
+                    <th data-bind="click: toggle_orderby" id="th_Author">
+                        <span class="hide" id="order_-Author"><i class="icon-down"></i></span>
+                        <span class="hide" id="order_Author" ><i class="icon-up"></i></span>
+                        Author
+                    </th>
                     <th>Actions</th>
                 </tr>
             </thead>
