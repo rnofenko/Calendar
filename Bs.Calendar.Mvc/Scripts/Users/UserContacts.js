@@ -5,10 +5,30 @@ function Contact(data) {
     self.Id = data.Id;
     self.Value = ko.observable(data.Value);
     self.ContactType = ko.observable(data.ContactType);
-
+    self.Icon = ko.observable("");
+    
     ko.computed(function () {    
         $.getJSON("/Users/GetContactType", { contact: self.Value() }, self.ContactType);
     }, this).extend({ throttle: 400 });
+
+    ko.computed(function () {
+        switch (self.ContactType()) {
+            case 0:
+                self.Icon(self.Value() == "" ? "" : "icon-cancel-circled"); break;
+            case 1:
+                self.Icon("icon-mail"); break;
+            case 2:
+                self.Icon("icon-twitter"); break;
+            case 3:
+                self.Icon("icon-skype"); break;
+            case 4:
+                self.Icon("icon-phone"); break;
+            case 5:
+                self.Icon("icon-globe"); break;
+            default:
+                self.Icon("");
+        }
+    }, this);
 }
 
 //ViewModel
@@ -20,7 +40,6 @@ function UserContactsVm(newContacts) {
         if (typeof data === "undefined" || data == self) {
             data = { Id: 0, Value: "", ContactType: 0 };
         }
-
         self.Contacts.push(new Contact(data));
     };
 
@@ -34,27 +53,5 @@ function UserContactsVm(newContacts) {
 
     self.indexedName = function (index, parameter) {
         return "Contacts[" + index + "]." + parameter;
-    };
-
-    //Custom Bindings
-    ko.bindingHandlers.contactImage = {
-        update: function(element, valueAccessor) {
-            var valueUnwrapped = ko.unwrap(valueAccessor());
-            var newClass = "";
-
-            switch (valueUnwrapped) {
-                case 1:
-                    newClass = "icon-mail"; break;
-                case 2:
-                    newClass = "icon-twitter"; break;
-                case 3:
-                    newClass = "icon-skype"; break;
-                case 4:
-                    newClass = "icon-phone"; break;
-                case 5:
-                    newClass = "icon-globe";
-            }
-            $(element).attr("class", newClass);
-        }
     };
 };
