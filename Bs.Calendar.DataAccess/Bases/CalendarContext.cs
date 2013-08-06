@@ -8,6 +8,7 @@ namespace Bs.Calendar.DataAccess.Bases
     {
         public IDbSet<User> Users { get; set; }
         public IDbSet<Room> Rooms { get; set; }
+        public IDbSet<Book> Books { get; set; }
         public IDbSet<Team> Teams { get; set; }
         
         public CalendarContext()

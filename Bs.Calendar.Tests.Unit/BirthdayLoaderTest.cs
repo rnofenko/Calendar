@@ -41,7 +41,8 @@ namespace Bs.Calendar.Tests.Unit
             var users = _rules.LoadUsersByBirthday(date, date);
 
             //assert
-            users.Should().NotBeNull();
+            users.Should().Should().NotBeNull();
+            users.Should().NotBeEmpty();
         }
 
         [Test]

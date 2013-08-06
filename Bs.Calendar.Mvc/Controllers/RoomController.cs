@@ -75,12 +75,6 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
-        public ActionResult Details(int id)
-        {
-            return PassRoomIntoTheView("Details", id);
-        }
-
-        [HttpGet]
         public ActionResult Edit(int id)
         {
             return PassRoomIntoTheView("Edit", id);

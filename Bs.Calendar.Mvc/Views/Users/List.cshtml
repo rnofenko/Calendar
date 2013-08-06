@@ -1,74 +1,19 @@
-﻿@using System.Drawing
-@using Bs.Calendar.Models
-@model Bs.Calendar.Mvc.ViewModels.UsersVm
-@{
-    var ajaxOptions = new AjaxOptions
-    {
-        UpdateTargetId = "user-table",
-        HttpMethod = "Get"
-    };
-}
-@if (!Model.Users.Any())
+﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm
+
+<input id="listPage" hidden="true" value="@Model.PagingVm.Page">
+<input id="listTotalPages" hidden="true" value="@Model.PagingVm.TotalPages">
+<input id="listSearchStr" hidden="true" value="@Model.PagingVm.SearchStr">
+<input id="listSortByStr" hidden="true" value="@Model.PagingVm.SortByStr">
+
+@foreach (var user in Model.Users)
 {
-    <div class="danger alert centered four columns">Sorry, no such user!</div>
+    <tr ondblclick="RowDblClick('@Url.Action("Edit", "Users", new {id = user.Id})')">
+        <td>@user.FirstName @user.LastName</td>      
+        <td>@user.Email</td>
+        <td>@user.LiveState</td>
+        <td>           
+            <div class="default btn">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
+        </td>
+    </tr>
 }
-else
-{
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th>@Html.AjaxSortLink(@Model.PagingVm, "Name", ajaxOptions)</th>
-                <th>@Html.AjaxSortLink(@Model.PagingVm, "E-mail", ajaxOptions)</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model.Users)
-            {
-                var notApprovedStyle = user.LiveState == LiveState.NotApproved ? "background-color: Yellow" : null;
-                var labelText = notApprovedStyle != null ? "Not approved" : user.LiveState.ToString();
-                <tr style="@notApprovedStyle">
-                    <td>
-                        <label for="name">@labelText</label>
-                    </td>
-                    <td id="name">@user.FirstName @user.LastName</td>      
-                    <td>@user.Email</td>
-                    <td>           
-                        <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
-                        <div class="medium default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <div class="row">
-        <div class="two columns">
-            @using (Ajax.BeginForm("List", "Users", ajaxOptions))
-            {
-                @Html.HiddenFor(user => user.PagingVm.SearchStr)
-                @Html.HiddenFor(user => user.PagingVm.SortByStr)
-                <div class="field">
-                    <input class="text input" type="text" name="PagingVm.Page" placeholder="@Model.PagingVm.Page">
-                </div>
-            }
-        </div>
-            
-        <div class="four columns">
-            <div class="default alert  eight columns">
-                <div>of @Model.PagingVm.TotalPages</div>
-            </div>
-        </div>
-
-        <div class="primary label push_six two columns">
-            @Html.AjaxPageLink(@Model.PagingVm, "Previous", @Model.PagingVm.Page - 1, ajaxOptions)
-        </div>
-
-        <div class="primary label two columns">
-            @Html.AjaxPageLink(@Model.PagingVm, "Next", @Model.PagingVm.Page + 1, ajaxOptions)
-        </div>
-    </div>
-}
-
 

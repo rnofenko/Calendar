@@ -1,0 +1,57 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.BookEditVm
+@{
+    ViewBag.Title = "Create Book";
+    var btnName = "Create";
+    var id = 0;
+    var bookTitle = "New book";
+
+    if (Model != null && Model.BookId != 0)
+    {
+        btnName = "Update";
+        id = Model.BookId;
+        bookTitle = Model.Title;
+        ViewBag.Title = "Edit Book";
+    }
+}
+
+<div class="row">
+    <div class="centered seven columns default alert">
+        <h4 class="centered four columns">@ViewBag.Title</h4>
+    </div>
+</div>
+
+<div class="row">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(book => book.BookId)
+        <div class="centered seven columns">
+            @Html.ValidationSummary()
+        </div>
+
+        <div class="row">
+            <fieldset class="centered seven columns">
+                <legend>
+                    <h4>@bookTitle</h4>
+                </legend>
+                       
+                @Html.EditorForModel()
+
+                <div class="medium secondary btn three columns">
+                    <input type="submit" value="@btnName"/>
+                </div>
+
+                <div class="medium default btn push_one three columns">
+                    @Html.ActionLink("Back", "Index")
+                </div>
+            
+                @if (id != 0)
+                {
+                    <div class="medium info btn three columns push_one">
+                        @Html.ActionLink("Delete", "Delete", new {id})
+                    </div>
+                }  
+            </fieldset>
+        </div>
+    }
+</div>

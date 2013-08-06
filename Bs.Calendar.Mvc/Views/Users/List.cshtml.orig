@@ -1,44 +1,66 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm
-
+<<<<<<< HEAD
+﻿@using System.Drawing
+@using Bs.Calendar.Models
+@model Bs.Calendar.Mvc.ViewModels.UsersVm
+@{
+    var ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "user-table",
+        HttpMethod = "Get"
+    };
+}
 @if (!Model.Users.Any())
 {
-    <div class="danger alert three columns">Sorry, no such user!</div>
+    <div class="danger alert centered four columns">Sorry, no such user!</div>
 }
-else {
+else
+{
     <table>
         <thead>
             <tr>
-<<<<<<< HEAD
-                <th>Id</th>
-                <th>Name</th>
-                <th>E-mail</th>
-                <th>Role</th>
-=======
-                <th>@Html.AjaxSortLink(@Model, "Name")</th>
-                <th>@Html.AjaxSortLink(@Model, "E-mail")</th>
->>>>>>> a40ca3f358c6b4003ade52656438679de923236f
+                <th></th>
+                <th>@Html.AjaxSortLink(@Model.PagingVm, "Name", ajaxOptions)</th>
+                <th>@Html.AjaxSortLink(@Model.PagingVm, "E-mail", ajaxOptions)</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var user in Model.Users)
             {
-                <tr>
-<<<<<<< HEAD
-                    <td>@user.Id</td>
-=======
->>>>>>> a40ca3f358c6b4003ade52656438679de923236f
-                    <td>@user.FirstName @user.LastName</td>      
+                var notApprovedStyle = user.LiveState == LiveState.NotApproved ? "background-color: Yellow" : null;
+                var labelText = notApprovedStyle != null ? "Not approved" : user.LiveState.ToString();
+                <tr style="@notApprovedStyle">
+                    <td>
+                        <label for="name">@labelText</label>
+                    </td>
+                    <td id="name">@user.FirstName @user.LastName</td>      
                     <td>@user.Email</td>
-                    <td>@user.Role</td>
                     <td>           
-                        <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new { id = user.Id })</div>
+                        <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
                         <div class="medium default btn icon-right icon-info">@Html.ActionLink("Details", "Details", new {id = user.Id})</div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-    
-    @Html.AjaxPageLinks(@Model)
+=======
+﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm
+>>>>>>> 5ff9cae31c6ad7540828d014c6466579ac562531
+
+<input id="listPage" hidden="true" value="@Model.PagingVm.Page">
+<input id="listTotalPages" hidden="true" value="@Model.PagingVm.TotalPages">
+<input id="listSearchStr" hidden="true" value="@Model.PagingVm.SearchStr">
+<input id="listSortByStr" hidden="true" value="@Model.PagingVm.SortByStr">
+
+@foreach (var user in Model.Users)
+{
+    <tr ondblclick="RowDblClick('@Url.Action("Edit", "Users", new {id = user.Id})')">
+        <td>@user.FirstName @user.LastName</td>      
+        <td>@user.Email</td>
+        <td>@user.LiveState</td>
+        <td>           
+            <div class="default btn">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
+        </td>
+    </tr>
 }
+

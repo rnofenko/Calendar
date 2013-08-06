@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -16,12 +17,14 @@ namespace Bs.Calendar.Mvc.Services
     public class AccountService
     {
         private readonly RepoUnit _unit;
+        private readonly ContactService _contactService;
         private readonly CalendarMembershipProvider _membershipProvider;
         private const int SALT_LENGTH = 128;
 
-        public AccountService(RepoUnit unit, CalendarMembershipProvider provider)
+        public AccountService(RepoUnit unit, ContactService contactService, CalendarMembershipProvider provider)
         {
             _unit = unit;
+            _contactService = contactService;
             _membershipProvider = provider;
         }
 
@@ -89,14 +92,14 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException(string.Format("User with email {0} already exists", userEditVm.Email));
             }
-
             userToEdit.FirstName = userEditVm.FirstName;
             userToEdit.LastName = userEditVm.LastName;
             userToEdit.Email = userEditVm.Email;
             userToEdit.BirthDate = userEditVm.BirthDate;
-            
+
+            var contacts = _contactService.UpdateContacts(userEditVm.Contacts);
             userToEdit.Contacts.Clear();
-            userToEdit.Contacts = userEditVm.Contacts.Where(c => c.Value != null).ToList();  
+            userToEdit.Contacts = contacts;  
 
             _unit.User.Save(userToEdit);
         }

@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -25,11 +26,6 @@ namespace Bs.Calendar.Mvc.Controllers
         public ActionResult Index()
         {
             return View();
-        }
-        
-        public ActionResult Details(int id)
-        {
-            return PassUserIntoTheView("Details", id);
         }
 
         public ActionResult Create()
@@ -77,13 +73,7 @@ namespace Bs.Calendar.Mvc.Controllers
         ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditVm model, bool active)
         {
-            ModelState.Remove("userId");
-            if (!ModelState.IsValid)
-            {
-                return View("Edit", model);
-            }
-
-            try
+           try
             {
                 _service.EditUser(model, active);
                 return RedirectToAction("Index");
@@ -115,6 +105,12 @@ namespace Bs.Calendar.Mvc.Controllers
             Session["pagingVm"] = usersVm.PagingVm;
 
             return PartialView(usersVm);
+        }
+
+        [HttpGet]
+        [OutputCache(NoStore = true, Duration = 0)]
+        public ActionResult GetContactType(string contact) {
+            return Json(ContactTypeParser.GetContactType(contact), JsonRequestBehavior.AllowGet);
         }
     }
 }

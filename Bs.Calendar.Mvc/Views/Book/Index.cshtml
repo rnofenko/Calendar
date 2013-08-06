@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Books";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="centered seven columns default alert">
+        <h4 class="centered three columns">@ViewBag.Title</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class = "three columns">
+        <div class="medium primary btn">
+            <a href="/Book/Create">Create</a>
+        </div>
+    </div>
+    <div class="field three columns push_six">
+        <input class="search input" type="text" name="searchStr" placeholder="Find room by name"/>
+    </div>
+</div>
+
+<div class="row">
+    <div class ="twelve columns centered">
+        <table>
+            <thead>
+                <tr>
+                    <th>Book title</th>
+                    <th>Author</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody data-bind="template: { name: 'book-template', foreach: books }">
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/html" id="book-template">
+    <tr>
+        <td data-bind="text: title"> </td>
+        <td data-bind="text: author"> </td>
+        <td>
+            <div class="medium default btn icon-right icon-pencil">
+                <a data-bind="attr: { href: getEditLink() }">Edit</a>
+            </div>
+        </td>
+    </tr>
+</script>
+
+
+@section Scripts {
+    <script src="../../Scripts/Books/BooksVm.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            ko.applyBindings(new BooksVm());
+        });
+    </script>
+}

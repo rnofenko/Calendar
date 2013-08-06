@@ -15,11 +15,13 @@ namespace Bs.Calendar.Mvc.Services
     public class UserService
     {
         private readonly RepoUnit _unit;
+        private readonly ContactService _contactService;
         public int PageSize { get; set; }
 
-        public UserService(RepoUnit unit)
+        public UserService(RepoUnit unit, ContactService contactService)
         {
             PageSize = 7;
+            _contactService = contactService;
             _unit = unit;
         }
 
@@ -45,6 +47,8 @@ namespace Bs.Calendar.Mvc.Services
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
 
+            var contacts = _contactService.UpdateContacts(userModel.Contacts);
+
             var user = new User
             {
                 FirstName = userModel.FirstName,
@@ -52,7 +56,8 @@ namespace Bs.Calendar.Mvc.Services
                 Email = userModel.Email,
                 Role = userModel.Role,
                 LiveState = userModel.LiveState,
-                BirthDate = userModel.BirthDate
+                BirthDate = userModel.BirthDate,
+                Contacts = contacts
             };
             _unit.User.Save(user);
         }
@@ -103,7 +108,6 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
-
             if (userModel.Email != userToEdit.Email)
             {
                 SendMsgToUser(userToEdit);
@@ -117,6 +121,10 @@ namespace Bs.Calendar.Mvc.Services
                 ? LiveState.Active
                 : userToEdit.LiveState == LiveState.NotApproved ? LiveState.NotApproved : LiveState.Deleted;
             userToEdit.BirthDate = userModel.BirthDate;
+
+            var contacts = _contactService.UpdateContacts(userModel.Contacts);
+            userToEdit.Contacts.Clear();
+            userToEdit.Contacts = contacts; 
 
             _unit.User.Save(userToEdit);
         }
@@ -137,14 +145,21 @@ namespace Bs.Calendar.Mvc.Services
 
             users = sortByStr(users, pagingVm.SortByStr);
 
-            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
-            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
+            pagingVm = updatePagingVm(pagingVm, users);
 
             return new UsersVm
             {
-                Users = users.Skip((currentPage - 1) * PageSize).Take(PageSize).ToList(),
-                PagingVm = new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage)
+                Users = users.Skip((pagingVm.Page - 1) * PageSize).Take(PageSize).ToList(),
+                PagingVm = pagingVm
             };
+        }
+
+        private PagingVm updatePagingVm(PagingVm pagingVm, IQueryable<User> users)
+        {
+            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
+
+            return new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage);
         }
 
         private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
@@ -178,7 +193,7 @@ namespace Bs.Calendar.Mvc.Services
 
             filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
 
-            filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
+            //filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
 
             return filteredUsers.Distinct();
         }

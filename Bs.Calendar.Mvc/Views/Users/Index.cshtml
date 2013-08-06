@@ -1,11 +1,8 @@
 ﻿@using Bs.Calendar.Mvc.ViewModels
+
 @{
     ViewBag.Title = "Users";
-
-    var ajaxOptions = new AjaxOptions {
-        UpdateTargetId = "user-table",
-        HttpMethod = "Get"
-    };
+    var pagingVm = @Session["pagingVm"] ?? new PagingVm();
 }
 
 <div class="row">
@@ -14,32 +11,67 @@
     </div>
 </div>
     
+
 <div class="row">
-    <div class="sixteen colgrid">
-        <div class="row">
-            <div class="one columns">
-                <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
-            </div>
+    <div class="one columns">
+        <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
+    </div>
         
-            @using (Ajax.BeginForm("List", "Users", ajaxOptions))
-            {
-                <div class="field push_eleven four columns">
-                    <input class="search input" type="text" name="searchStr" placeholder="Find user"/>
-                </div>
-            }
-        </div>
-        
-        <div class="row">
-            <div id="user-table">
-                @Html.Action("List", new {pagingVm = @Session["pagingVm"] ?? new PagingVm()})
-            </div>
-        </div>
+    <div class="field push_eight three columns">
+        <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }"/>
     </div>
 </div>
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryajax")
-}
+      
+<div class="row">
+    <table>
+        <thead>
+            <tr>
+                <th><div id="th-name" data-bind="click: headerClick">Name</div></th>
+                <th><div id="th-email" data-bind="click: headerClick">E-mail</div></th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+    
+        <tbody id="list-body">
+            @*@Html.Action("List", @Session["pagingVm"] ?? new PagingVm())*@
+        </tbody>
+    </table>
+</div>
+
+<div class="row" data-bind="visible : model.TotalPages() > 0">
+    <div class="two columns">
+        <div class="field">
+            <input class="text input" type="text" name="PagingVm.Page" data-bind="value: model.Page, event: { change: changeHandler }">
+        </div>
+    </div>
+            
+    <div class="two columns default alert" data-bind="text : 'of ' + model.TotalPages()">
+       
+    </div>
+
+    <div class="primary label push_four two columns">
+        <a href="~" data-bind="click: previousPage">Previous</a>
+    </div>
+
+    <div class="primary label two columns">
+        <a href="~" data-bind="click : nextPage">Next</a>
+    </div>
+</div>
 
 @section styles {
     <link href="@Url.Content("~/Content/Layout/list-view.css")" rel="stylesheet"/>
+}
+
+@section Scripts {
+    <script src="../../Scripts/Users/UserList.js"></script>
+    <script src="../../Scripts/Layout/list-view.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var model = new ViewModel();
+            ko.applyBindings(model);
+            model.updateList(@Html.Raw(Json.Encode(@pagingVm)));
+        });
+    </script>
 }

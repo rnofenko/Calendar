@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Account details";
-    var isDisplay = ViewContext.ViewData.ModelState.IsValid ? "none" : "inline";
 }
 
 <div class="row">
@@ -69,15 +68,18 @@
     }
 </div>
 
+
+
+
 @section Scripts {
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     
     <script src="../../Scripts/Users/UserContacts.js"></script>
     <script type="text/javascript">
-        var contactModel = ko.mapping.fromJS(@Html.Raw(Json.Encode(@Model)), mappingOption);
-        ko.applyBindings(new UserContactsVm(contactModel));
+        var url = '@Url.Action("GetContactType", "Users", null, Request.Url.Scheme)';
+        $(document).ready(function() {
+            ko.applyBindings(new UserContactsVm(@Html.Raw(Json.Encode(@Model)), url));
+        });
     </script>
 }
-
-

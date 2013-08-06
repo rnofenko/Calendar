@@ -4,12 +4,12 @@
             <h4>Contacts</h4>
         </legend>
 
-        <ul data-bind="foreach: model.Contacts">
+        <ul data-bind="foreach: Contacts">
             <li class="field">
                 <div class="row">
                     <div class="push_one two columns"><i data-bind="contactImage: ContactType"></i></div>
-                    <input data-bind="value: ContactType, attr: { name: $root.contactsIndexedName($index(), 'ContactType') }" type="hidden">
-                    <input class="wide text input eight columns" type="text" data-bind="value: Value, valueUpdate: 'afterkeydown', attr: { name: $root.contactsIndexedName($index(), 'Value') }">
+                    <input data-bind="value: ContactType, attr: { name: $root.indexedName($index(), 'ContactType') }" type="hidden">
+                    <input class="wide text input eight columns" type="text" data-bind="value: Value, valueUpdate: 'afterkeydown', attr: { name: $root.indexedName($index(), 'Value') }">
                     <div data-bind="click: $root.removeContact" class="one columns" style="cursor: pointer"><i class="icon-cancel"></i></div>       
                 </div>
             </li>   

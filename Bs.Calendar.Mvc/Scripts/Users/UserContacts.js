@@ -1,30 +1,39 @@
-﻿//ViewModel
-function UserContactsVm(model) {
+﻿//Types
+function Contact(data) {
     var self = this;
 
-    //Variables
-    self.model = model;
+    self.Id = data.Id;
+    self.Value = ko.observable(data.Value);
+    self.ContactType = ko.observable(data.ContactType);
 
-    //Methods
-    self.addContact = function() {
-        var contact = { Value: ko.observable(""), ContactType: ko.observable("") };
+    self.test = ko.computed(function () {
+        
+        $.getJSON("/Users/GetContactType", { contact: self.Value() }, self.ContactType);
+    }, this).extend({ throttle: 400 });
+}
 
-        contact.Value.subscribe(function(changedContact) {
-            $.getJSON('GetContactType', { contact: changedContact }, function(data) {
-                contact.ContactType(data);
-            });
-        });
+//ViewModel
+function UserContactsVm(newContacts) {
+    var self = this;
+    self.Contacts = ko.observableArray();
+
+    self.addContact = function(data) {
+        if (typeof data === "undefined" || data == self) {
+            data = { Id: 0, Value: "", ContactType: 0 };
+        }
                 
-        if (self.model.Contacts == null) self.model.Contacts = ko.observableArray([]);
-                
-        self.model.Contacts.push(contact);
+        self.Contacts.push(new Contact(data));
     };
+
+    $.each(newContacts, function(key,value) {
+        self.addContact(value);
+    });
 
     self.removeContact = function(contact) {
-        self.model.Contacts.remove(contact);
+        self.Contacts.remove(contact);
     };
 
-    self.contactsIndexedName = function(index, parameter) {
+    self.indexedName = function (index, parameter) {
         return "Contacts[" + index + "]." + parameter;
     };
 
@@ -49,18 +58,4 @@ function UserContactsVm(model) {
             $(element).attr("class", newClass);
         }
     };
-};
-
-var mappingOption = {
-    'Contacts': {
-        create: function (options) {
-            var contact = ko.mapping.fromJS(options.data);
-            contact.Value.subscribe(function (changedContact) {
-                $.getJSON('GetContactType', { contact: changedContact }, function (data) {
-                    contact.ContactType(data);
-                });
-            });
-            return contact;
-        }
-    }
 };
