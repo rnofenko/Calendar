@@ -60,6 +60,10 @@ namespace Bs.Calendar.Mvc.Services
 
         private static IEnumerable<Book> _search(IEnumerable<Book> books, string @searchStr)
         {
+            if (String.IsNullOrEmpty(searchStr))
+            {
+                return books;
+            }
             return books.Where(book =>
                                book.Author.ToLower().Contains(searchStr) || book.Title.ToLower().Contains(searchStr));
         }

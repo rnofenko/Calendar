@@ -1,7 +1,18 @@
 ﻿window.BooksVm = function ()
 {
     var self = this;
-    
+
+    self._searchStr = "";
+    self.searchStr = ko.computed({
+        write: function (value) {
+            self._searchStr = value;
+            self.LoadData();
+        },
+        read: function () {
+            return self._searchStr;
+        },
+        owner: this
+    });
     self.books = ko.observableArray();
 
     self.BookVm = function(source)
@@ -18,6 +29,7 @@
 
     self.recieveData = function (data)
     {
+        self.books.removeAll();
         for (var i = 0; i < data.length; ++i)
         {
             self.books.push(new self.BookVm(data[i]));
@@ -26,10 +38,16 @@
 
     self.LoadData = function ()
     {
+        var data = {};
+        if (self._searchStr != "")
+        {
+            data['search'] = self._searchStr;
+        }
         $.ajax(
             {
                 url: "/Book/List",
                 type: "GET",
+                data: data,
                 dataType: "json",
                 success: self.recieveData,
             });
