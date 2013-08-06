@@ -20,12 +20,17 @@
         @Html.Partial("Footer")
 
         @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryajax")
         @Scripts.Render("~/bundles/Gumby")
         @Scripts.Render("~/Scripts/all")
-        @Scripts.Render("~/bundles/jqueryajax")
         @Scripts.Render("~/bundles/Knockout")
         @Scripts.Render("~/Scripts/Rooms/ColorPicker.js")
         @RenderSection("scripts", required: false)
+        
+        <script>
+            window.Gumby.init();
+        </script>
+
     </body>
 </html>
 

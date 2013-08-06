@@ -118,7 +118,7 @@ namespace Bs.Calendar.Mvc.Services
             var users = _unit.User.Load();
 
             users = searchByStr(users, pagingVm.SearchStr);
-
+            users = SearchByRole(users, pagingVm.IncludeAdmins, pagingVm.IncludeNotApproved);
             users = sortByStr(users, pagingVm.SortByStr);
 
             pagingVm = updatePagingVm(pagingVm, users);
@@ -188,20 +188,10 @@ namespace Bs.Calendar.Mvc.Services
             return filteredUsers;
         }
 
-        private IEnumerable<User> SearchByRole(IQueryable<User> users, string searchStr)
+        private IQueryable<User> SearchByRole(IQueryable<User> users, bool includeAdmins = false, bool includeNotApproved = false)
         {
-            searchStr = searchStr.Insert(1, searchStr[0].ToString(CultureInfo.InvariantCulture).ToUpper());
-            searchStr = searchStr.Remove(0, 1);
-
-            var filteredUsers = Enumerable.Empty<User>().AsQueryable();
-
-            if (string.IsNullOrEmpty(searchStr))
-                return users;            
-
-            var searchRole = (Roles)Enum.Parse(typeof(Roles), searchStr);
-            filteredUsers = filteredUsers.Concat(users.Where(user => user.Role == searchRole));
-
-            return filteredUsers;
+            return users.Where(user => (includeAdmins || !includeAdmins && user.Role != Roles.Admin) &&
+                                       (user.LiveState != LiveState.Deleted && (includeNotApproved || !includeNotApproved && user.LiveState != LiveState.NotApproved)));
         }
 
         private int getTotalPages(int count, int pageSize)

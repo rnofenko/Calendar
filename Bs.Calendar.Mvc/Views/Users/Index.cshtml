@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Users";
+    ViewBag.HiddenTitle = "Search settings";
 }
 
 <div class="row">
@@ -15,10 +16,25 @@
     <div class="one columns">
         <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
     </div>
-        
-    <div class="field push_eight three columns">
+   
+    @Html.Partial("SearchSettings")
+
+    <div class="field append push_seven three columns">
         <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }"/>
+        <div class="btn default medium">
+            <a href="#" class="switch" gumby-trigger="#search_settings"><i class="icon-cog"></i></a>
+        </div>
     </div>
+    
+    @*<div class="field append push_seven three columns">
+        <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }"/>
+        <div class="btn default medium">
+            <a href="#" id="search_settings_open"><i class="icon-user"></i></a>
+        </div>
+        <div class="btn secondary medium">
+            <a href="#" id="search_settings_open"><i class="icon-lock"></i></a>
+        </div>
+    </div>*@
 </div>
       
 <div class="row">
@@ -63,11 +79,14 @@
 }
 
 @section Scripts {
+    
     @Scripts.Render("~/bundles/jqueryajax")
+
     <script src="../../Scripts/Users/UserList.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
+            
             var model = new ViewModel();
             ko.applyBindings(model);
             model.updateList();

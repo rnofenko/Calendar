@@ -314,6 +314,7 @@
     <Content Include="Views\Book\Index.cshtml" />
     <Content Include="Views\Book\Edit.cshtml" />
     <Content Include="Views\Book\EditorTemplates\BookEditVm.cshtml" />
+    <Content Include="Views\Users\SearchSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
