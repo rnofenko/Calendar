@@ -4,14 +4,15 @@
 <input id="listTotalPages" hidden="true" value="@Model.PagingVm.TotalPages">
 <input id="listSearchStr" hidden="true" value="@Model.PagingVm.SearchStr">
 <input id="listSortByStr" hidden="true" value="@Model.PagingVm.SortByStr">
+
 @foreach (var user in Model.Users)
 {
-    <tr>
+    <tr ondblclick="RowDblClick('@Url.Action("Edit", "Users", new {id = user.Id})')">
         <td>@user.FirstName @user.LastName</td>      
         <td>@user.Email</td>
         <td>@user.LiveState</td>
-        <td>
-            <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
+        <td>           
+            <div class="default btn">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
         </td>
     </tr>
 }

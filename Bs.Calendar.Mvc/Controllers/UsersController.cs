@@ -65,13 +65,7 @@ namespace Bs.Calendar.Mvc.Controllers
         ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditVm model, bool delete)
         {
-            ModelState.Remove("userId");
-            if (!ModelState.IsValid)
-            {
-                return View("Edit", model);
-            }
-
-            try
+           try
             {
                 _service.EditUser(model, delete);
                 return delete ? RedirectToAction("Logout", "Account") : RedirectToAction("Index");
@@ -106,6 +100,7 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
+        [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult GetContactType(string contact) {
             return Json(ContactTypeParser.GetContactType(contact), JsonRequestBehavior.AllowGet);
         }

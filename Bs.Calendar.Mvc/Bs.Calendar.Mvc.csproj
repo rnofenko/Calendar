@@ -204,6 +204,7 @@
     <Content Include="Scripts\Gumby\gumby.min.js" />
     <Content Include="Scripts\Knockout\knockout-2.3.0.js" />
     <Content Include="Scripts\Knockout\knockout.mapping-latest.js" />
+    <Content Include="Scripts\Layout\list-view.js" />
     <Content Include="Scripts\Rooms\ColorPicker.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
     <Compile Include="Controllers\TeamController.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="Services\BookService.cs" />
     <Compile Include="Services\CalendarMembershipProvider.cs" />
     <Compile Include="Services\CalendarRoleProvider.cs" />
+    <Compile Include="Services\ContactService.cs" />
     <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\CustomHtmlHelpers.cs" />
     <Compile Include="Services\MvcConfig.cs" />
