@@ -10,5 +10,10 @@ namespace Bs.Calendar.DataAccess
             entity.FullName = string.Format("{0} {1}", entity.FirstName, entity.LastName);
             base.Save(entity);
         }
+
+        public override System.Linq.IQueryable<User> Load()
+        {
+            return Load(u => u.LiveState != LiveState.Deleted);
+        }
     }
 }

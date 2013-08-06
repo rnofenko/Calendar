@@ -1,5 +1,7 @@
 using System.ComponentModel;
 using System.Web.Mvc;
+using Bs.Calendar.Core;
+using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
@@ -49,15 +51,23 @@ namespace Bs.Calendar.Mvc.Controllers
 
             try
             {
-                model.LiveState = LiveState.NotApproved;
-                _service.SaveUser(model);
-                return RedirectToAction("Index");
+                if (_service.CreateUser(model))
+                {
+                    return RedirectToAction("Index");
+                }
+                return View("Details", model);
             }
             catch (WarningException exception)
             {
                 ModelState.AddModelError("", exception.Message);
                 return View("Edit", model);
             }
+        }
+
+        public ActionResult RecoverUser(UserEditVm model)
+        {
+            _service.RecoverUser(model.Email);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Edit(int id)

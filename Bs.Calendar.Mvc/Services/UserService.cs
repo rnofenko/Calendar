@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
-using System.Net.Mail;
 using System.Text.RegularExpressions;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
@@ -11,7 +9,6 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Rules.Emails;
-using Microsoft.Ajax.Utilities;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -70,6 +67,25 @@ namespace Bs.Calendar.Mvc.Services
         public void DeleteUser(int id)
         {
             _unit.User.Delete(_unit.User.Get(id));
+        }
+
+        public bool CreateUser(UserEditVm userEditVm)
+        {
+            var dbUser = _unit.User.Get(u => u.Email == userEditVm.Email);
+            if (dbUser != null)
+            {
+                userEditVm.FirstName = dbUser.FirstName;
+                userEditVm.LastName = dbUser.LastName;
+                userEditVm.Role = dbUser.Role;
+
+                if (dbUser.LiveState == LiveState.Deleted)
+                {
+                    userEditVm.LiveState = dbUser.LiveState;
+                }
+                return false;
+            }
+            SaveUser(userEditVm);
+            return true;
         }
 
         public void EditUser(UserEditVm userModel, bool active)
@@ -203,6 +219,13 @@ namespace Bs.Calendar.Mvc.Services
         private int getRangedPage(int page, int totalPages)
         {
             return page <= 1 ? 1 : page > totalPages ? totalPages : page;
+        }
+
+        public void RecoverUser(string email)
+        {
+            var userToRecover = _unit.User.Get(u => u.Email == email);
+            userToRecover.LiveState = LiveState.NotApproved;
+            _unit.User.Save(userToRecover);
         }
     }
 }
