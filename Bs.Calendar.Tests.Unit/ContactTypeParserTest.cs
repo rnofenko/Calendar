@@ -6,7 +6,7 @@ namespace Bs.Calendar.Tests.Unit
 {
 
     [TestFixture]
-    internal class ContactTypeParserTest
+    public class ContactTypeParserTest
     {
         [TestCase("rnofenko@gmail.com", Result = ContactType.Email)]
         [TestCase("art.trubitsyn@gmail.com", Result = ContactType.Email)]
@@ -26,6 +26,7 @@ namespace Bs.Calendar.Tests.Unit
 
         [TestCase("r_nofenko", Result = ContactType.Skype)]
         [TestCase("art713", Result = ContactType.Skype)]
+        [TestCase("j*hn-nash", Result = ContactType.None)]
         public ContactType ContactParserShouldReturnSkypeTypeIfInputStringIsSkypeAccount(string inputString)
         {
             // act && assert

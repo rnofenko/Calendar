@@ -1,4 +1,5 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.UsersVm
+﻿@using Bs.Calendar.Models
+@model Bs.Calendar.Mvc.ViewModels.UsersVm
 
 <input id="listPage" hidden="true" value="@Model.PagingVm.Page">
 <input id="listTotalPages" hidden="true" value="@Model.PagingVm.TotalPages">
@@ -7,12 +8,17 @@
 
 @foreach (var user in Model.Users)
 {
-    <tr ondblclick="RowDblClick('@Url.Action("Edit", "Users", new {id = user.Id})')">
-        <td>@user.FirstName @user.LastName</td>      
+    var notApprovedStyle = user.LiveState == LiveState.NotApproved ? "background-color: Yellow" : null;
+    var labelText = notApprovedStyle != null ? "Not approved" : user.LiveState.ToString();
+    
+    <tr ondblclick="RowDblClick('@Url.Action("Edit", "Users", new { id = user.Id })')" style="@notApprovedStyle">
+        <td>
+            <label for="name">@labelText</label>
+        </td>
+        <td id="name">@user.FirstName @user.LastName</td>
         <td>@user.Email</td>
-        <td>@user.LiveState</td>
-        <td>           
-            <div class="default btn">@Html.ActionLink("Edit", "Edit", new {id = user.Id})</div>
+        <td>
+            <div class="default btn">@Html.ActionLink("Edit", "Edit", new { id = user.Id })</div>
         </td>
     </tr>
 }

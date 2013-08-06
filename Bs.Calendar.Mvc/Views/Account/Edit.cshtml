@@ -77,9 +77,8 @@
     
     <script src="../../Scripts/Users/UserContacts.js"></script>
     <script type="text/javascript">
-        var url = '@Url.Action("GetContactType", "Users", null, Request.Url.Scheme)';
         $(document).ready(function() {
-            ko.applyBindings(new UserContactsVm(@Html.Raw(Json.Encode(@Model)), url));
+            ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts)));
         });
     </script>
 }

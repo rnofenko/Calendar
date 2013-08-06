@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
-using System.Net.Mail;
 using System.Text.RegularExpressions;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
@@ -11,7 +9,6 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Rules.Emails;
-using Microsoft.Ajax.Utilities;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -77,7 +74,30 @@ namespace Bs.Calendar.Mvc.Services
             _unit.User.Delete(_unit.User.Get(id));
         }
 
-        public void EditUser(UserEditVm userModel, bool delete)
+        public bool CreateUser(UserEditVm userEditVm)
+        {
+            var dbUser = _unit.User.Get(u => u.Email == userEditVm.Email);
+            if (dbUser != null)
+            {
+                userEditVm.FirstName = dbUser.FirstName;
+                userEditVm.LastName = dbUser.LastName;
+                userEditVm.Role = dbUser.Role;
+
+                if (dbUser.LiveState == LiveState.Deleted)
+                {
+                    userEditVm.LiveState = dbUser.LiveState;
+                }
+                return false;
+            }
+            userEditVm.LiveState = LiveState.NotApproved;
+            SaveUser(userEditVm);
+            dbUser = _unit.User.Get(u => u.Email == userEditVm.Email);
+            dbUser.PasswordHash = userEditVm.Email;
+            _unit.User.Save(dbUser);
+            return true;
+        }
+
+        public void EditUser(UserEditVm userModel, bool active)
         {
             var userToEdit = GetUser(userModel.UserId);
             if (!EmailSender.IsValidEmailAddress(userModel.Email))
@@ -97,7 +117,9 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.LastName = userModel.LastName;
             userToEdit.Email = userModel.Email;
             userToEdit.Role = userModel.Role;
-            userToEdit.LiveState = delete ? LiveState.Deleted : userModel.LiveState;
+            userToEdit.LiveState = active
+                ? LiveState.Active
+                : userToEdit.LiveState == LiveState.NotApproved ? LiveState.NotApproved : LiveState.Deleted;
             userToEdit.BirthDate = userModel.BirthDate;
 
             var contacts = _contactService.UpdateContacts(userModel.Contacts);
@@ -120,7 +142,7 @@ namespace Bs.Calendar.Mvc.Services
             var users = _unit.User.Load();
 
             users = searchByStr(users, pagingVm.SearchStr);
-            users = SearchByRole(users, pagingVm.IncludeAdmins, pagingVm.IncludeNotApproved);
+
             users = sortByStr(users, pagingVm.SortByStr);
 
             pagingVm = updatePagingVm(pagingVm, users);
@@ -142,7 +164,7 @@ namespace Bs.Calendar.Mvc.Services
 
         private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
         {
-            users = users.OrderByIf(string.IsNullOrEmpty(sortByStr), 
+            users = users.OrderByIf(string.IsNullOrEmpty(sortByStr),
                         user => user.Id);
 
             users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("Name"),
@@ -171,7 +193,7 @@ namespace Bs.Calendar.Mvc.Services
 
             filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
 
-            //filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
+            filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
 
             return filteredUsers.Distinct();
         }
@@ -190,10 +212,20 @@ namespace Bs.Calendar.Mvc.Services
             return filteredUsers;
         }
 
-        private IQueryable<User> SearchByRole(IQueryable<User> users, bool includeAdmins = false, bool includeNotApproved = false)
+        private IQueryable<User> SearchByRole(IQueryable<User> users, string searchStr)
         {
-            return users.Where(user => (includeAdmins || !includeAdmins && user.Role != Roles.Admin) &&
-                                       (user.LiveState != LiveState.Deleted && (includeNotApproved || !includeNotApproved && user.LiveState != LiveState.NotApproved)));
+            var filteredUsers = Enumerable.Empty<User>().AsQueryable();
+            var searchRoleName = Enum.GetNames(typeof(Roles)).FirstOrDefault(role => role.ToLower().Contains(searchStr));
+
+            if (searchRoleName == null)
+            {
+                return filteredUsers;
+            }
+
+            var searchRole = (Roles)Enum.Parse(typeof (Roles), searchRoleName);
+            
+            filteredUsers = filteredUsers.Concat(users.Where(user => user.Role == searchRole));
+            return filteredUsers;
         }
 
         private int getTotalPages(int count, int pageSize)
@@ -204,6 +236,13 @@ namespace Bs.Calendar.Mvc.Services
         private int getRangedPage(int page, int totalPages)
         {
             return page <= 1 ? 1 : page > totalPages ? totalPages : page;
+        }
+
+        public void RecoverUser(string email)
+        {
+            var userToRecover = _unit.User.Get(u => u.Email == email);
+            userToRecover.LiveState = LiveState.NotApproved;
+            _unit.User.Save(userToRecover);
         }
     }
 }

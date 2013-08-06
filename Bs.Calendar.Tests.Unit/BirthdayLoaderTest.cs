@@ -60,7 +60,8 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
-        public void LoadUsersByBirthday_Should_Track_Year() {
+        public void LoadUsersByBirthday_Should_Track_Year() 
+        {
             //arrange
             var user = new User { BirthDate = new DateTime(1991, 02, 27)};
             _unit.User.Save(user);

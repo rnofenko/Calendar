@@ -7,7 +7,7 @@ using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly UserService _service;
@@ -30,7 +30,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Create()
         {
-            return View("Edit", null);
+            return View("Edit", new UserEditVm());
         }
 
         [HttpPost,
@@ -45,15 +45,23 @@ namespace Bs.Calendar.Mvc.Controllers
 
             try
             {
-                model.LiveState = LiveState.NotApproved;
-                _service.SaveUser(model);
-                return RedirectToAction("Index");
+                if (_service.CreateUser(model))
+                {
+                    return RedirectToAction("Index");
+                }
+                return View("Details", model);
             }
             catch (WarningException exception)
             {
                 ModelState.AddModelError("", exception.Message);
                 return View("Edit", model);
             }
+        }
+
+        public ActionResult RecoverUser(UserEditVm model)
+        {
+            _service.RecoverUser(model.Email);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Edit(int id)
@@ -63,12 +71,12 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpPost,
         ValidateAntiForgeryToken]
-        public ActionResult Edit(UserEditVm model, bool delete)
+        public ActionResult Edit(UserEditVm model, bool active)
         {
            try
             {
-                _service.EditUser(model, delete);
-                return delete ? RedirectToAction("Logout", "Account") : RedirectToAction("Index");
+                _service.EditUser(model, active);
+                return RedirectToAction("Index");
             }
             catch (WarningException exception)
             {

@@ -1,4 +1,4 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.AccountVm
+﻿@model Bs.Calendar.Mvc.ViewModels.RegisterVm
 
 @{
     ViewBag.Title = "Register";
@@ -22,6 +22,10 @@
                     <label for="Password">Password</label>
                     <input class="password input" type="password" name="Password" id="Password" placeholder="Your password" />
                     @Html.ValidationMessageFor(model => model.Password)
+                </li>
+                <li class="field">
+                    <label for="ConfirmPassword">Password</label>
+                    <input class="password input" type="password" name="ConfirmPassword" id="ConfirmPassword" placeholder="Confirm password" />
                 </li>
                 <li>
                     <div class="medium primary btn">

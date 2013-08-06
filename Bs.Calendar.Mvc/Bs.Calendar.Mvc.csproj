@@ -189,22 +189,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\gumby\gumby.css" />
     <Content Include="Content\Rooms\ColorPicker.css" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BookController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Content Include="Content\css\gumby.css" />
-    <Content Include="Content\css\gumby2.css" />
-    <Content Include="Content\gumby.css" />
     <Content Include="Content\Layout\layout.css" />
     <Content Include="Content\Layout\list-view.css" />
     <Content Include="Images\binaryLogo.png" />
     <Content Include="Scripts\Books\BooksVm.js" />
+    <Content Include="Scripts\Gumby\gumby.init.js" />
+    <Content Include="Scripts\Gumby\gumby.js" />
     <Content Include="Scripts\Gumby\gumby.min.js" />
+    <Content Include="Scripts\Gumby\jquery.mobile.custom.min.js" />
+    <Content Include="Scripts\Gumby\ui\gumby.checkbox.js" />
+    <Content Include="Scripts\Gumby\ui\gumby.fittext.js" />
+    <Content Include="Scripts\Gumby\ui\gumby.fixed.js" />
+    <Content Include="Scripts\Gumby\ui\gumby.navbar.js" />
+    <Content Include="Scripts\Gumby\ui\gumby.radiobtn.js" />
+    <Content Include="Scripts\Gumby\ui\gumby.retina.js" />
+    <Content Include="Scripts\Gumby\ui\gumby.skiplink.js" />
+    <Content Include="Scripts\Gumby\ui\gumby.tabs.js" />
+    <Content Include="Scripts\Gumby\ui\gumby.toggleswitch.js" />
+    <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
     <Content Include="Scripts\Knockout\knockout-2.3.0.js" />
     <Content Include="Scripts\Knockout\knockout.mapping-latest.js" />
     <Content Include="Scripts\Layout\list-view.js" />
+    <Content Include="Scripts\modernizr-2.6.2.min.js" />
     <Content Include="Scripts\Rooms\ColorPicker.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
     <Compile Include="Controllers\TeamController.cs" />
@@ -232,6 +244,7 @@
     <Compile Include="ViewModels\PagingVm.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\AccountVm.cs" />
+    <Compile Include="ViewModels\RegisterVm.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />
     <Compile Include="ViewModels\TeamEditVm.cs" />
@@ -317,6 +330,7 @@
     <Content Include="Views\Book\Edit.cshtml" />
     <Content Include="Views\Book\EditorTemplates\BookEditVm.cshtml" />
     <Content Include="Views\Users\SearchSettings.cshtml" />
+    <Content Include="Views\Users\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

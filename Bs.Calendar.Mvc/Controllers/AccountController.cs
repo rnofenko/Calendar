@@ -52,7 +52,7 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(AccountVm account, string returnUrl)
+        public ActionResult Register(RegisterVm account, string returnUrl)
         {
             if (ModelState.IsValid)
             {

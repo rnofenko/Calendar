@@ -1,15 +1,19 @@
 ﻿@using Bs.Calendar.Models
+@using Bs.Calendar.Mvc.ViewModels
 @model Bs.Calendar.Mvc.ViewModels.UserEditVm
 @{
+    var btnName = "Create";
     var userRoles = (from object role in Enum.GetValues(typeof(Bs.Calendar.Models.Roles)) select role.ToString()).ToList();
-    var btnName = Model == null ? "Create" : "Update";
     var userId = 0;
+    var isActive = true;     
 
     if (Model != null && Model.UserId != 0)
     {
+        btnName = "Update";
         userId = Model.UserId;
         ViewBag.Title = "Edit User";
         ViewBag.User = Model.FirstName + " " + Model.LastName;
+        isActive = Model.LiveState == LiveState.Active;        
     }
     else
     {
@@ -55,7 +59,7 @@
                         @Html.LabelFor(user => user.Email, new { @class = "inline three columns" })
                         @Html.TextBoxFor(user => user.Email, new { @class = "wide text input" })
                     </li>
-                    
+
                     <li class="field">
                         @Html.LabelFor(user => user.BirthDate, new { @class = "inline three columns" })
                         @Html.CustomDateEditor(user => user.BirthDate)
@@ -67,16 +71,12 @@
                             @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
                         </div>
                     </li>
-
                     @if (userId != 0)
-                    {
-                        if (Model.LiveState != LiveState.Deleted)
-                        { 
-                            <li>
-                                <label class="inline  three columns">Deleted</label>
-                                @Html.CheckBox("delete")
-                            </li>
-                        }
+                    {                        
+                        <li>
+                            <label class="inline  three columns">Active</label>
+                            @Html.CheckBox("active", isActive)
+                        </li>
                     }
                 </ul>
             </fieldset>
@@ -101,12 +101,11 @@
 @section Scripts {
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-    
+
     <script src="../../Scripts/Users/UserContacts.js"></script>
-    <script type="text/javascript">
-        var url = '@Url.Action("GetContactType", "Users", null, Request.Url.Scheme)';
+    <script type="text/javascript"> 
         $(document).ready(function() {
-            ko.applyBindings(new UserContactsVm(@Html.Raw(Json.Encode(@Model.Contacts)), url));
+            ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts), url));
         });
     </script>
 }

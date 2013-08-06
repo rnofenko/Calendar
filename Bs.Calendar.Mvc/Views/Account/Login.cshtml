@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Login";    
     var recover = ViewBag.Recover ?? false;
+    var recoveryText = recover == true ? "Account recovery" : "Login";
+    var buttonText = recover == true ? "Recovery" : "Login";
 }
 
 @using(Html.BeginForm())
@@ -16,17 +18,17 @@
                 </h3>
             }
             </li>
-            <li><h2>Login</h2></li>
+            <li><h2>@recoveryText</h2></li>
             <li>Please enter your email name and password. @Html.ActionLink("Register", "Register") if you don't have an account. You can also @Html.ActionLink("Recover Password", "PasswordRecovery")</li>
             <li class="field">
                 <label for="Email">Login</label>
-                <input class="email input" type="email" name="Email" id="Email" placeholder="Your email" /> @Html.ValidationMessageFor(model => model.Email)</li>
+                <input class="input" type="text" name="Email" id="Email" placeholder="Your email" /> @Html.ValidationMessageFor(model => model.Email)</li>
             <li class="field">
                 <label for="Password">Password</label>
                 <input class="password input" type="password" name="Password" id="Password" placeholder="Your password" />@Html.ValidationMessageFor(model => model.Password)
             </li>
             <li>
-                <div class="medium primary btn"><input type="submit" value="Login"/></div>
+                <div class="medium primary btn"><input type="submit" value="@buttonText"/></div>
             </li>
             <li>@Html.ValidationSummary(true, "Login was unsuccessful. Please correct the errors and try again.")</li>            
         </ul>        

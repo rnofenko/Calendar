@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Web.Mvc.Html;
+using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Services
@@ -33,6 +37,11 @@ namespace Bs.Calendar.Mvc.Services
             return link;
         }
 
+        public static IHtmlString RawJson(this HtmlHelper html, object value)
+        {
+            return html.Raw(Json.Encode(value ?? new Object()));
+        }
+
         public static MvcHtmlString AjaxPageLink(this HtmlHelper html, PagingVm paginVm, string linkText, int pageNumber, AjaxOptions options)
         {
             var ajaxHelper = new AjaxHelper(html.ViewContext, html.ViewDataContainer);
@@ -54,7 +63,6 @@ namespace Bs.Calendar.Mvc.Services
 
             var tag = htmlHelper.EditorFor(user => user.BirthDate).ToString();
             tag = tag.Insert(tag.IndexOf("text-box", StringComparison.InvariantCulture), "wide text input ");
-            //tag = tag.Insert(6, " data-bind=\"value: model.BirthDate\"");
             return new MvcHtmlString(tag);
         }
     }
