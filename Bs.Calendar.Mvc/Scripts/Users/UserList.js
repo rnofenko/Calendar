@@ -97,4 +97,22 @@ function ViewModel() {
         if ($("#IncludeNotApproved").hasClass("checked") != self.model.IncludeNotApproved())
             $("#IncludeNotApproved").click();
     };
+    
+    self.chekedFlagsToString = ko.computed(function () {
+
+        var adminsFlag = self.model.IncludeAdmins();
+        var notApprovedFlag = self.model.IncludeNotApproved();
+
+        var noteMessage = "";
+        
+        if (adminsFlag && notApprovedFlag)
+            noteMessage += "Anybody";
+        else if (adminsFlag)
+            noteMessage += "Any role";
+        else if (notApprovedFlag)
+            noteMessage += "Any state";
+
+        return noteMessage;
+        
+    }, self);
 }

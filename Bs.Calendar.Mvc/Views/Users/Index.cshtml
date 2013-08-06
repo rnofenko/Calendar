@@ -10,20 +10,23 @@
         <h4 class="centered two columns">@ViewBag.Title</h4>
     </div>
 </div>
-    
+
+@Html.Partial("SearchSettings")
 
 <div class="row">
     <div class="one columns">
         <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
     </div>
-   
-    @Html.Partial("SearchSettings")
-
-    <div class="field append push_seven three columns">
-        <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }"/>
+    <div class="append push_five field three columns">
         <div class="btn default medium">
             <a href="#" class="switch" gumby-trigger="#search_settings"><i class="icon-cog"></i></a>
         </div>
+        <div class="btn default medium" data-bind="visible: chekedFlagsToString().length > 0">
+            <li class="default alert" data-bind="text: chekedFlagsToString"></li>
+        </div>
+    </div>
+    <div class="field three columns">
+        <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }"/>
     </div>
     
     @*<div class="field append push_seven three columns">
