@@ -2,6 +2,9 @@
 {
     var self = this;
 
+    self.page = ko.observable(1);
+    self.TotalPages = ko.observable(1);
+
     self._searchStr = "";
     self.searchStr = ko.computed({
         write: function (value) {
@@ -45,6 +48,9 @@
     self.recieveData = function (data)
     {
         self.books.removeAll();
+        self.TotalPages(data['TotalPages']);
+        self.page(data['CurrentPage']);
+        data = data['Data'];
         for (var i = 0; i < data.length; ++i)
         {
             self.books.push(new self.BookVm(data[i]));
@@ -54,7 +60,8 @@
     self.LoadData = function ()
     {
         var data = {
-            orderby: self._orderby
+            orderby: self._orderby,
+            page: self.page
         };
         if (self._searchStr != "")
         {
