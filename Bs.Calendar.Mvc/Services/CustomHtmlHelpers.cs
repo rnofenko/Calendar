@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Web.Mvc.Html;
+using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Services
@@ -31,6 +35,12 @@ namespace Bs.Calendar.Mvc.Services
                 );
 
             return link;
+        }
+
+        public static IHtmlString ContactsRaw(this HtmlHelper html, UserEditVm userModel)
+        {
+            var contacts = userModel != null ? userModel.Contacts : new List<Contact>();
+            return html.Raw(Json.Encode(contacts));
         }
 
         public static MvcHtmlString AjaxPageLink(this HtmlHelper html, PagingVm paginVm, string linkText, int pageNumber, AjaxOptions options)
