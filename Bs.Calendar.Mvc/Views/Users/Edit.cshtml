@@ -106,7 +106,7 @@
     <script type="text/javascript">
         var url = '@Url.Action("GetContactType", "Users", null, Request.Url.Scheme)';      
         $(document).ready(function() {
-            ko.applyBindings(new UserContactsVm(@Html.ContactsRaw(@Model), url));
+            ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts), url));
         });
     </script>
 }

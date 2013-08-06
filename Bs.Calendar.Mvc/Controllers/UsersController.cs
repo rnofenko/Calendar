@@ -30,7 +30,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Create()
         {
-            return View("Edit", null);
+            return View("Edit", new UserEditVm());
         }
 
         [HttpPost,
