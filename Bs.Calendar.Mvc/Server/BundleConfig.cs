@@ -9,10 +9,11 @@ namespace Bs.Calendar.Mvc.Server
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/modernizr-2.6.2.js",
+                "~/Scripts/modernizr-2.6.2.min.js",
                 "~/Scripts/jquery.unobtrusive-ajax.min.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/Gumby").Include(
-                "~/Scripts/Gumby/gumby.js"));
+                "~/Scripts/Gumby/gumby.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Knockout").Include(
                 "~/Scripts/Knockout/knockout-2.3.0.js",
