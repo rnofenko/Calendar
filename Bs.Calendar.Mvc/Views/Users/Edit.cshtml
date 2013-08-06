@@ -1,17 +1,18 @@
 ﻿@using Bs.Calendar.Models
 @model Bs.Calendar.Mvc.ViewModels.UserEditVm
 @{
+    var btnName = "Create";
     var userRoles = (from object role in Enum.GetValues(typeof(Bs.Calendar.Models.Roles)) select role.ToString()).ToList();
-    var btnName = Model == null ? "Create" : "Update";
     var userId = 0;
-    var isActive = true;
+    var isActive = true;     
 
     if (Model != null && Model.UserId != 0)
     {
+        btnName = "Update";
         userId = Model.UserId;
         ViewBag.Title = "Edit User";
         ViewBag.User = Model.FirstName + " " + Model.LastName;
-        isActive = Model.LiveState == LiveState.Active ? true : false;
+        isActive = Model.LiveState == LiveState.Active;        
     }
     else
     {

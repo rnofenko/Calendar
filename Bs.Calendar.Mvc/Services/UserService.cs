@@ -196,7 +196,6 @@ namespace Bs.Calendar.Mvc.Services
         private IQueryable<User> SearchByRole(IQueryable<User> users, string searchStr)
         {
             var filteredUsers = Enumerable.Empty<User>().AsQueryable();
-
             var searchRoleName = Enum.GetNames(typeof(Roles)).FirstOrDefault(role => role.ToLower().Contains(searchStr));
 
             if (searchRoleName == null)
@@ -204,10 +203,9 @@ namespace Bs.Calendar.Mvc.Services
                 return filteredUsers;
             }
 
-            Roles searchRole = (Roles)Enum.Parse(typeof (Roles), searchRoleName);
+            var searchRole = (Roles)Enum.Parse(typeof (Roles), searchRoleName);
             
             filteredUsers = filteredUsers.Concat(users.Where(user => user.Role == searchRole));
-
             return filteredUsers;
         }
 

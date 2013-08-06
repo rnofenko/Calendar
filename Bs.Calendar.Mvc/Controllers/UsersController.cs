@@ -1,7 +1,5 @@
 using System.ComponentModel;
 using System.Web.Mvc;
-using Bs.Calendar.Core;
-using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
