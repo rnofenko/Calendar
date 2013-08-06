@@ -12,7 +12,7 @@ namespace Bs.Calendar.Mvc.Server
                 "~/Scripts/jquery.unobtrusive-ajax.min.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/Gumby").Include(
-                "~/Scripts/Gumby/gumby.min.js"));
+                "~/Scripts/Gumby/gumby.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Knockout").Include(
                 "~/Scripts/Knockout/knockout-2.3.0.js",
