@@ -6,8 +6,7 @@ function Contact(data) {
     self.Value = ko.observable(data.Value);
     self.ContactType = ko.observable(data.ContactType);
 
-    self.test = ko.computed(function () {
-        
+    ko.computed(function () {    
         $.getJSON("/Users/GetContactType", { contact: self.Value() }, self.ContactType);
     }, this).extend({ throttle: 400 });
 }
@@ -21,7 +20,7 @@ function UserContactsVm(newContacts) {
         if (typeof data === "undefined" || data == self) {
             data = { Id: 0, Value: "", ContactType: 0 };
         }
-                
+
         self.Contacts.push(new Contact(data));
     };
 
