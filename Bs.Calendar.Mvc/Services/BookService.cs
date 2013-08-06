@@ -23,12 +23,12 @@ namespace Bs.Calendar.Mvc.Services
             return book;
         }
 
-        public List<Book> Load(string orderby, string searchStr)
+        public IEnumerable<Book> Load(string orderby, string searchStr)
         {
             IEnumerable<Book> books = _repoUnit.Book.Load();
             books = _search(books, searchStr);
             books = _orderBy (books, orderby);
-            return books.ToList();
+            return books;
         }
 
         private static IEnumerable<Book> _orderBy(IEnumerable<Book> books, string @orderby)
