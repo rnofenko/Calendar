@@ -84,7 +84,11 @@ namespace Bs.Calendar.Mvc.Services
                 }
                 return false;
             }
+            userEditVm.LiveState = LiveState.NotApproved;
             SaveUser(userEditVm);
+            dbUser = _unit.User.Get(u => u.Email == userEditVm.Email);
+            dbUser.PasswordHash = userEditVm.Email;
+            _unit.User.Save(dbUser);
             return true;
         }
 

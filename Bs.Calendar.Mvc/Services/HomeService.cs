@@ -22,7 +22,7 @@ namespace Bs.Calendar.Mvc.Services
                 var defaultUser = new User
                 {
                     BirthDate = DateTime.Now,
-                    Email = "admin@gmail.com",
+                    Email = "Admin",
                     FirstName = "Admin",
                     LastName = "Admin",
                     LiveState = LiveState.Active,

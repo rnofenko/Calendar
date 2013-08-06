@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Web.Mvc;
 using System.Web.Security;
 using Bs.Calendar.Mvc.Services;
@@ -26,10 +25,6 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpPost]
         public ActionResult Login(AccountVm model, string returnUrl)
         {
-            if (model.Email == "Admin")
-            {
-                model.Email = "admin@gmail.com";
-            }
             if (ModelState.IsValid)
             {
                 if(_service.LoginUser(model))
