@@ -193,7 +193,7 @@ namespace Bs.Calendar.Mvc.Services
 
             filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
 
-            //filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
+            filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
 
             return filteredUsers.Distinct();
         }
