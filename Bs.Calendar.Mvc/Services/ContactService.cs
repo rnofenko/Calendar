@@ -13,6 +13,8 @@ namespace Bs.Calendar.Mvc.Services
         public List<Contact> UpdateContacts(List<Contact> contacts)
         {
             contacts = contacts ?? new List<Contact>();
+            //contacts = contacts.Where(c => !string.IsNullOrEmpty(c.Value)).ToList();
+            contacts.RemoveAll(c => string.IsNullOrEmpty(c.Value));
 
             if (contacts.Any(c => c.ContactType == ContactType.None && !string.IsNullOrEmpty(c.Value))) 
             {
@@ -20,7 +22,7 @@ namespace Bs.Calendar.Mvc.Services
                     contacts.First(c => c.ContactType == ContactType.None).Value));
             }
 
-            return contacts.Where(c => !string.IsNullOrEmpty(c.Value)).ToList();
+            return contacts;
         }
     }
 }
