@@ -14,15 +14,15 @@ namespace Bs.Calendar.Rules
         {
             var contactType = ContactType.None;
 
-            //contactType = isSkype(contact) ? ContactType.Skype : contactType;
+            contactType = isSkype(contact) ? ContactType.Skype : contactType;
 
             contactType = isUrl(contact) ? ContactType.Url : contactType;
 
-            //contactType = isTwitter(contact) ? ContactType.Twitter : contactType;
+            contactType = isTwitter(contact) ? ContactType.Twitter : contactType;
 
-            //contactType = isEmail(contact) ? ContactType.Email : contactType;
+            contactType = isEmail(contact) ? ContactType.Email : contactType;
 
-            //contactType = isPhone(contact) ? ContactType.Phone : contactType;
+            contactType = isPhone(contact) ? ContactType.Phone : contactType;
      
             return contactType;
         }
@@ -49,8 +49,7 @@ namespace Bs.Calendar.Rules
 
         private static bool isUrl(string contact)
         {
-            //return Regex.IsMatch(contact, @"(http(s)?://)?([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?");
-            return Regex.IsMatch(contact, @"([\w-]+\.)+");
+            return Regex.IsMatch(contact, @"^(http(s)?://)?([\w-%]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?");
         }
 
     }

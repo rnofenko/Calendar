@@ -75,7 +75,6 @@
     <Compile Include="TeamFilterTest.cs" />
     <Compile Include="UserControllerTest.cs" />
     <Compile Include="UserFilterTest.cs" />
-    <Compile Include="UserRoleFilterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
