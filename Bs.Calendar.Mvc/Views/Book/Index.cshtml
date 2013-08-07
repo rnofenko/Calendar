@@ -42,23 +42,23 @@
             </tbody>
         </table>
     </div>
-    <div class="row">
+    <div class="row" data-bind="visible: shouldShowPager">
         
-        <div class="append field four columns">
-            <input class="text input" type="text" placeholder="page number" />
-            <span class="adjoined"> page of 5 </span>
+        <div class="append field two columns">
+            <input class="text input" type="number" data-bind="value: page"/>
+            <span class="adjoined"> page of <span data-bind="text: TotalPages"></span> </span>
         </div>
         
         
-        <div class="two columns pull_right">
+        <div class="two columns pull_right" data-bind="visible: shouldShowNextPage">
             <div class="primary btn twelve columns">
-                <a href="#">Next</a>
+                <a href="#" data-bind="click: nextPage">Next</a>
             </div>
         </div>
 
-        <div class="two columns pull_right">
+        <div class="two columns pull_right" data-bind="visible: shouldShowPrevPage">
             <div class="primary btn twelve columns">
-                <a href="#">Previous</a>
+                <a href="#" data-bind="click: prevPage">Previous</a>
             </div>
         </div>
     </div>
