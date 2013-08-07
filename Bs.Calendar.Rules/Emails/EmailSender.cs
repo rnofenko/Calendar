@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,14 +34,20 @@ namespace Bs.Calendar.Rules.Emails
                 return;
             }
 
-            foreach (var addresser in addressers)
-            {
-                if (!IsValidEmailAddress(addresser))
-                {
-                    continue;
-                }
+            var list = addressers
+                .Where(IsValidEmailAddress)
+                .Select(x => new EmailData {Addresser = x, Body = body, Subject = subject})
+                .ToList();
 
-                sendAync(new EmailData { Addresser = addresser, Body = body, Subject = subject });
+            var thread = new Thread(sendInThread);
+            thread.Start(list);
+        }
+
+        private void sendInThread(object list)
+        {
+            foreach (var email in (List<EmailData>)list)
+            {
+                sendAync(email);
             }
         }
 
