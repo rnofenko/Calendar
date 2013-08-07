@@ -13,11 +13,11 @@ namespace Bs.Calendar.Mvc.ViewModels
         public GenericPagingVm(IEnumerable<T> data, int page)
         {
             PageSize = 7;
-            var skip = (CurrentPage - 1)*PageSize;
-            Data = data.Skip(skip).Take(PageSize);
             CurrentPage = page;
             var count = data.Count();
             TotalPages = Rules.PageCounter.GetTotalPages(count, PageSize);
+            var skip = (CurrentPage - 1) * PageSize;
+            Data = data.Skip(skip).Take(PageSize);
         }
     }
 }
