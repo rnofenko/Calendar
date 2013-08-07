@@ -1,5 +1,4 @@
 ﻿@using Bs.Calendar.Models
-@using Bs.Calendar.Mvc.ViewModels
 @model Bs.Calendar.Mvc.ViewModels.UserEditVm
 @{
     var btnName = "Create";
@@ -105,7 +104,7 @@
     <script src="../../Scripts/Users/UserContacts.js"></script>
     <script type="text/javascript"> 
         $(document).ready(function() {
-            ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts), url));
+            ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts)));
         });
     </script>
 }
