@@ -101,6 +101,20 @@ namespace Bs.Calendar.Tests.Unit
             users.Count().Should().Be(1);
         }
 
-  
+        [Test]
+        public void Should_not_ruturn_users_When_Birthdate_is_null()
+        {
+            //arrange
+
+            _unit.User.Save(new User { BirthDate = null });
+
+            //act
+
+            var users = _rules.LoadUsersByBirthday(DateTime.MinValue, DateTime.MaxValue);
+
+            //assert
+
+            users.Should().BeEmpty();
+        }
     }
 }

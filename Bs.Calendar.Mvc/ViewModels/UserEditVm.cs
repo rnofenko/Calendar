@@ -25,7 +25,7 @@ namespace Bs.Calendar.Mvc.ViewModels
             LastName = user.LastName;
             Email = user.Email;
             Role = user.Role;
-            BirthDate = user.BirthDate ?? DateTime.Today;
+            BirthDate = user.BirthDate;
             LiveState = user.LiveState;
             Contacts = new List<Contact>(user.Contacts);
         }
@@ -52,8 +52,7 @@ namespace Bs.Calendar.Mvc.ViewModels
 
         [DataType(DataType.Date),
         Display(Name = "Birth date"),
-        DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true),
-        Required(ErrorMessage = "Birth date is required!")]
+        DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? BirthDate { get; set; }
 
         public string UserLogin

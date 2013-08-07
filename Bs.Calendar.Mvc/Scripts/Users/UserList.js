@@ -81,10 +81,19 @@ function ViewModel() {
 
         /* Save new settings and update list of users */
 
-        self.model.IncludeAdmins($("#IncludeAdmins").hasClass("checked"));
-        self.model.IncludeNotApproved($("#IncludeNotApproved").hasClass("checked"));
+        var includeAdmins = $("#IncludeAdmins").hasClass("checked");
+        var includeNotApproved = $("#IncludeNotApproved").hasClass("checked");
+        
+        if (includeAdmins != self.model.IncludeAdmins() ||
+            includeNotApproved != self.model.IncludeNotApproved()) {
+            
+            self.model.IncludeAdmins(includeAdmins);
+            self.model.IncludeNotApproved(includeNotApproved);
+            
+            self.updateList(self.model);
+        }
 
-        self.updateList();
+        $("#search_settings").removeClass("active");
     };
 
     self.exitCancel = function () {
@@ -96,6 +105,8 @@ function ViewModel() {
 
         if ($("#IncludeNotApproved").hasClass("checked") != self.model.IncludeNotApproved())
             $("#IncludeNotApproved").click();
+        
+        $("#search_settings").removeClass("active");
     };
     
     self.chekedFlagsToString = ko.computed(function () {

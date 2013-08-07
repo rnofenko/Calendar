@@ -7,7 +7,7 @@ using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly UserService _service;

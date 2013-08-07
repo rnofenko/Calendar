@@ -75,7 +75,6 @@
     <Compile Include="TestHelpers\FastDbInitializer.cs" />
     <Compile Include="UsersControllerTest.cs" />
     <Compile Include="UserFrameTest.cs" />
-    <Compile Include="UsersRulesTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bs.Calendar.Core\Bs.Calendar.Core.csproj">

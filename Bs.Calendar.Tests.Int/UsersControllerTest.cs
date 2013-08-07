@@ -88,7 +88,7 @@ namespace Bs.Calendar.Tests.Int
         [Test]
         public void ShouldAddNewUserToTheDb()
         {
-            // arrange             
+            // arrange
             var quantaty = _userService.GetAllUsers().Count();
             var user = new User
                 {
