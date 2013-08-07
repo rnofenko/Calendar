@@ -55,6 +55,7 @@ namespace Bs.Calendar.Tests.Unit
         [TestCase("050 234 26 71", Result = ContactType.Phone)]
         [TestCase("050 23 42 671", Result = ContactType.Phone)]
         [TestCase("+38 050 23 42 671", Result = ContactType.Phone)]
+        [TestCase("+38 050 2***671", Result = ContactType.None)]
         public ContactType ContactParserShouldReturnPhoneTypeIfInputStringIsPhoneNumber(string inputString)
         {
             // act && assert
