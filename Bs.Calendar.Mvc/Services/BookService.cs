@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -21,11 +23,51 @@ namespace Bs.Calendar.Mvc.Services
             return book;
         }
 
-        public List<Book> Load()
+        public List<Book> Load(string orderby, string searchStr)
         {
-            var books = _repoUnit.Book.Load();
+            IEnumerable<Book> books = _repoUnit.Book.Load();
+            books = _search(books, searchStr);
+            books = _orderBy (books, orderby);
             return books.ToList();
         }
+
+        private static IEnumerable<Book> _orderBy(IEnumerable<Book> books, string @orderby)
+        {
+            bool asc = true;
+            if (!String.IsNullOrEmpty(orderby))
+            {
+                orderby = orderby.ToLower();
+                if (orderby[0] == '-')
+                {
+                    asc = false;
+                    orderby = orderby.Substring(1);
+                }
+            }
+            if (orderby == "title")
+            {
+                return asc ? books.OrderBy(book => book.Title) : books.OrderByDescending(book => book.Title);
+            }
+            if (orderby == "author")
+            {
+                return asc ? books.OrderBy(book => book.Author) : books.OrderByDescending(book => book.Author);
+            }
+            //            if (orderby == "code")
+            //            {
+            //                return asc ? books.OrderBy(book => book.Code) : books.OrderByDescending(book => book.Code);
+            //            }
+            return asc ? books.OrderBy(book => book.Id) : books.OrderByDescending(book => book.Id);
+        }
+
+        private static IEnumerable<Book> _search(IEnumerable<Book> books, string @searchStr)
+        {
+            if (String.IsNullOrEmpty(searchStr))
+            {
+                return books;
+            }
+            return books.Where(book =>
+                               book.Author.ToLower().Contains(searchStr) || book.Title.ToLower().Contains(searchStr));
+        }
+
 
         public bool IsValid(BookEditVm book)
         {

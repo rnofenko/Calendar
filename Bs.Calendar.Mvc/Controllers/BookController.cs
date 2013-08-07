@@ -16,25 +16,23 @@ namespace Bs.Calendar.Mvc.Controllers
             _service = service;
         }
 
-        public JsonResult Get(int id)
+        public ActionResult Get(int id)
         {
             var book = _service.Get(id);
-            var response = new JsonResult();
-            response.Data = book;
-            response.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-            return response;
+            if (book != null)
+            {
+                return Json(book, JsonRequestBehavior.AllowGet);
+            }
+            return HttpNotFound();
         }
 
         public JsonResult List()
         {
-            var books = _service.Load();
-            var response = new JsonResult();
-            response.Data = books;
-            response.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-            return response;
+            var orderby = Request["orderby"];
+            var searchStr = Request["search"];
+            var books = _service.Load(orderby, searchStr);
+            return Json(books, JsonRequestBehavior.AllowGet);
         }
-
-
 
         public ActionResult Index()
         {
