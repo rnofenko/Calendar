@@ -10,7 +10,7 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
     public class FakeBaseRepository<T> : IRepository<T> where T : class, IEntityId
     {
         private static int _id;
-        private static readonly List<T> _entities = new List<T>();
+        private readonly List<T> _entities = new List<T>();
 
         public void Dispose()
         {
