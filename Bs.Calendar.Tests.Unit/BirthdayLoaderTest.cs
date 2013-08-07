@@ -49,6 +49,22 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
+        public void LoadUsersByBirthday_Should_Return_Users_When_Period_Crosses_Monthes() {
+            //arrange
+            _generator.StartingWith(new DateTime(1, 1, 15));
+            var users = Builder<User>.CreateListOfSize(31).All()
+                                     .With(x => x.LiveState = LiveState.Active)
+                                     .With(x => x.BirthDate = _generator.Generate()).Build().ToList();
+            users.ForEach(user => _unit.User.Save(user));
+
+            //act
+            var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 1, 15), new DateTime(1, 2, 28));
+
+            //assert
+            bornUsers.Count().Should().Be(31);
+        }
+
+        [Test]
         public void LoadUsersByBirthday_Should_Return_Users_Within_Many_Monthes() {
             //arrange
             _generator.StartingWith(new DateTime(15, 1, 1));
@@ -65,6 +81,35 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
+        public void LoadUsersByBirthday_Should_Not_Take_Care_About_Year() {
+            //arrange
+            _unit.User.Save(new User {LiveState = LiveState.Active, BirthDate = new DateTime(2033, 1, 02)});
+            _unit.User.Save(new User { LiveState = LiveState.Active, BirthDate = new DateTime(3000, 1, 20) });
+
+            //act
+            var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 1, 1), new DateTime(1, 1, 30));
+
+            //assert
+            bornUsers.Count().Should().Be(2);
+        }
+
+        [Test]
+        public void LoadUsersByBirthday_Should_Return_Users_Within_Year() {
+            //arrange
+            _generator.StartingWith(new DateTime(15, 1, 1));
+            var users = Builder<User>.CreateListOfSize(365).All()
+                                     .With(x => x.LiveState = LiveState.Active)
+                                     .With(x => x.BirthDate = _generator.Generate()).Build().ToList();
+            users.ForEach(user => _unit.User.Save(user));
+
+            //act
+            var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 1, 1), new DateTime(1, 12, 31));
+
+            //assert
+            bornUsers.Count().Should().Be(365);
+        }
+
+        [Test]
         public void LoadUsersByBirthday_Should_Return_Users_When_Period_Equals_One_Day()
         {
             //arrange
@@ -78,8 +123,10 @@ namespace Bs.Calendar.Tests.Unit
             bornUsers.Count().Should().Be(2);
         }
 
+
+#warning no assert
         [Test]
-        public int LoadUsersByBirthday_Should_Return_Users_When_Date_Period_Crosses_Over_Year()
+        public void LoadUsersByBirthday_Should_Return_Users_When_Date_Period_Crosses_Over_Year()
         {
             // arrange
             for (int i = 1; i <= 12; i++)
@@ -88,10 +135,12 @@ namespace Bs.Calendar.Tests.Unit
             }
 
             // act 
-            var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 06, 25), new DateTime(1, 06, 24));
+            var bornUsers1 = _rules.LoadUsersByBirthday(new DateTime(1, 06, 25), new DateTime(1, 06, 24));
+            var bornUsers2 = _rules.LoadUsersByBirthday(new DateTime(1, 06, 1), new DateTime(1, 05, 31));
 
             // assert
-            return bornUsers.Count();
+            bornUsers1.Count().Should().Be(12);
+            bornUsers2.Count().ShouldBeEquivalentTo(12);
         }
 
         [Test]
@@ -118,6 +167,7 @@ namespace Bs.Calendar.Tests.Unit
             users.Count().Should().Be(1);
         }
 
+#warning year doesn't matter
         [Test]
         public void LoadUsersByBirthday_Should_Return_Empty_List_When_BirthDate_Is_Null()
         {
@@ -139,9 +189,102 @@ namespace Bs.Calendar.Tests.Unit
                                      .With(x => x.LiveState = LiveState.Deleted)
                                      .With(x => x.BirthDate = _generator.Generate()).Build().ToList();
             users.ForEach(user => _unit.User.Save(user));
+            _unit.User.Save(new User {LiveState = LiveState.Active, BirthDate = new DateTime(1, 1, 3)});
 
             //act
             var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 1, 1), new DateTime(1, 1, 31));
+
+            //assert
+            bornUsers.Count().ShouldBeEquivalentTo(1);
+        }
+
+        [Test]
+        public void LoadUsersByBirthday_Should_Consider_Last_Day_Of_Period() {
+            //arrange
+            _generator.StartingWith(new DateTime(1, 1, 20));
+            var users = Builder<User>.CreateListOfSize(12).All()
+                                     .With(x => x.LiveState = LiveState.Active)
+                                     .With(x => x.BirthDate = _generator.Generate()).Build().ToList();
+            users.ForEach(user => _unit.User.Save(user));
+
+            //act
+            var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 1, 1), new DateTime(1, 1, 31));
+
+            //assert
+            bornUsers.Count().Should().Be(12);
+        }
+
+        [Test]
+        public void LoadUsersByBirthday_Should_Consider_First_Day_Of_Period() {
+            //arrange
+            _generator.StartingWith(new DateTime(1, 1, 20));
+            var users = Builder<User>.CreateListOfSize(2).All()
+                                     .With(x => x.LiveState = LiveState.Active)
+                                     .With(x => x.BirthDate = _generator.Generate()).Build().ToList();
+            users.ForEach(user => _unit.User.Save(user));
+
+            //act
+            var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 1, 20), new DateTime(1, 1, 21));
+
+            //assert
+            bornUsers.Count().Should().Be(2);
+        }
+
+        [Test]
+        public void LoadUsersByBirthday_Should_Not_Return_Users_Outside_Period() {
+            //arrange
+            _generator.StartingWith(new DateTime(1, 1, 1));
+            var users = Builder<User>.CreateListOfSize(60).All()
+                                     .With(x => x.LiveState = LiveState.Active)
+                                     .With(x => x.BirthDate = _generator.Generate()).Build().ToList();
+            users.ForEach(user => _unit.User.Save(user));
+
+            //act
+            var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 1, 1), new DateTime(1, 1, 31));
+
+            //assert
+            bornUsers.Count().Should().Be(31);
+        }
+
+        [Test]
+        public void LoadUsersByBirthday_Should_Return_Users_Within_2_Day_Period_That_Crosses_Year() {
+            //arrange
+            _unit.User.Save(new User { LiveState = LiveState.Active, BirthDate = new DateTime(1, 12, 30) });
+            _unit.User.Save(new User {LiveState = LiveState.Active, BirthDate = new DateTime(1, 12, 31)});
+            _unit.User.Save(new User { LiveState = LiveState.Active, BirthDate = new DateTime(1, 1, 1) });
+
+            //act
+            var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 12, 31), new DateTime(1, 1, 1));
+
+            //assert
+            bornUsers.Count().Should().Be(2);
+        }
+
+        [Test]
+        public void LoadUsersByBirthday_Should_Not_Throw_Exception_And_Not_Load_Deleted_Users_When_Birthdate_Is_Null()
+        {
+            //arrange
+            _unit.User.Save(new User { LiveState = LiveState.Deleted, BirthDate = null });
+            _unit.User.Save(new User { LiveState = LiveState.Deleted, BirthDate = null });
+
+            //act
+            var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 1, 1), new DateTime(1, 12, 31));
+
+            //assert
+            bornUsers.Should().BeEmpty();
+        }
+
+        [Test]
+        public void LoadUsersByBirthday_Should_Not_Return_User_Without_Birthdays()
+        {
+            //arrange
+            _unit.User.Save(new User { LiveState = LiveState.Deleted, BirthDate = new DateTime(1, 5, 09) });
+            _unit.User.Save(new User { LiveState = LiveState.Deleted, BirthDate = new DateTime(1, 5, 10) });
+            _unit.User.Save(new User { LiveState = LiveState.Deleted, BirthDate = new DateTime(1, 5, 20) });
+            _unit.User.Save(new User { LiveState = LiveState.Deleted, BirthDate = new DateTime(1, 5, 21) });
+
+            //act
+            var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 5, 11), new DateTime(1, 5, 19));
 
             //assert
             bornUsers.Should().BeEmpty();

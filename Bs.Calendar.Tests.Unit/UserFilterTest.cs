@@ -40,7 +40,7 @@ namespace Bs.Calendar.Tests.Unit
             _users = users;
 
             var moq = new Mock<IUserRepository>();
-            moq.Setup(m => m.Load()).Returns(_users.AsQueryable());
+            moq.Setup(m => m.Load()).Returns(_users.Where(u => u.LiveState == LiveState.Active).AsQueryable());
 
             DiMvc.Register();
             Ioc.RegisterInstance<IUserRepository>(moq.Object);
