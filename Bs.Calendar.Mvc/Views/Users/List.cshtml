@@ -8,8 +8,23 @@
 
 @foreach (var user in Model.Users)
 {
-    var notApprovedStyle = user.LiveState == LiveState.NotApproved ? "background-color: Yellow" : null;
-    var labelText = notApprovedStyle != null ? "Not approved" : user.LiveState.ToString();
+    string notApprovedStyle = null;
+    string labelText;
+
+    switch (user.LiveState)
+    {
+        case (LiveState.Active | LiveState.NotApproved):
+            notApprovedStyle = "background-color: Yellow";
+            labelText = "Active, not approved";
+            break;
+        case LiveState.NotApproved:
+            notApprovedStyle = "background-color: Yellow";
+            labelText = "Not approved";
+            break;
+        default:
+            labelText = user.LiveState.ToString();
+            break;
+    }
     
     <tr ondblclick="RowDblClick('@Url.Action("Edit", "Users", new { id = user.Id })')" style="@notApprovedStyle">
         <td>

@@ -1,11 +1,10 @@
 ﻿@using Bs.Calendar.Models
-@using Bs.Calendar.Mvc.ViewModels
 @model Bs.Calendar.Mvc.ViewModels.UserEditVm
 @{
     var btnName = "Create";
     var userRoles = (from object role in Enum.GetValues(typeof(Bs.Calendar.Models.Roles)) select role.ToString()).ToList();
     var userId = 0;
-    var isActive = true;     
+    var isDeleted = false;
 
     if (Model != null && Model.UserId != 0)
     {
@@ -13,7 +12,7 @@
         userId = Model.UserId;
         ViewBag.Title = "Edit User";
         ViewBag.User = Model.FirstName + " " + Model.LastName;
-        isActive = Model.LiveState == LiveState.Active;        
+        isDeleted = Model.LiveState == LiveState.Deleted;
     }
     else
     {
@@ -74,8 +73,8 @@
                     @if (userId != 0)
                     {                        
                         <li>
-                            <label class="inline  three columns">Active</label>
-                            @Html.CheckBox("active", isActive)
+                            <label class="inline  three columns">Deleted</label>
+                            @Html.CheckBox("deleted", isDeleted)
                         </li>
                     }
                 </ul>
@@ -93,6 +92,13 @@
                 <div class="medium default btn push_one three columns">
                     @Html.ActionLink("Back", "Index")
                 </div>
+                
+                @if (Model.LiveState.HasFlag(LiveState.NotApproved))
+                {
+                    <div class="medium warning btn push_one three columns">
+                        @Html.ActionLink("Approve", "ApproveUser", Model)
+                    </div>
+                }
             </div>
         </div>
     }

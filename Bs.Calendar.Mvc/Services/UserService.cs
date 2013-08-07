@@ -89,7 +89,7 @@ namespace Bs.Calendar.Mvc.Services
                 }
                 return false;
             }
-            userEditVm.LiveState = LiveState.NotApproved;
+            userEditVm.LiveState = LiveState.NotApproved | LiveState.Active;
             SaveUser(userEditVm);
             dbUser = _unit.User.Get(u => u.Email == userEditVm.Email);
             dbUser.PasswordHash = userEditVm.Email;
@@ -97,7 +97,7 @@ namespace Bs.Calendar.Mvc.Services
             return true;
         }
 
-        public void EditUser(UserEditVm userModel, bool active)
+        public void EditUser(UserEditVm userModel, bool deleted)
         {
             var userToEdit = GetUser(userModel.UserId);
             if (!EmailSender.IsValidEmailAddress(userModel.Email))
@@ -117,9 +117,7 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.LastName = userModel.LastName;
             userToEdit.Email = userModel.Email;
             userToEdit.Role = userModel.Role;
-            userToEdit.LiveState = active
-                ? LiveState.Active
-                : userToEdit.LiveState == LiveState.NotApproved ? LiveState.NotApproved : LiveState.Deleted;
+            userToEdit.LiveState = deleted ? LiveState.Deleted : userToEdit.LiveState;
             userToEdit.BirthDate = userModel.BirthDate;
 
             var contacts = _contactService.UpdateContacts(userModel.Contacts);

@@ -64,6 +64,12 @@ namespace Bs.Calendar.Mvc.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult ApproveUser(UserEditVm model)
+        {
+            _service.UpdateUserState(model.UserId, LiveState.Active);
+            return RedirectToAction("Index");
+        }
+
         public ActionResult Edit(int id)
         {
             return PassUserIntoTheView("Edit", id);
@@ -71,11 +77,11 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpPost,
         ValidateAntiForgeryToken]
-        public ActionResult Edit(UserEditVm model, bool active)
+        public ActionResult Edit(UserEditVm model, bool deleted)
         {
            try
             {
-                _service.EditUser(model, active);
+                _service.EditUser(model, deleted);
                 return RedirectToAction("Index");
             }
             catch (WarningException exception)
