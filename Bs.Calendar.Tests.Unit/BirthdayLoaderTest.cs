@@ -78,6 +78,8 @@ namespace Bs.Calendar.Tests.Unit
             bornUsers.Count().Should().Be(2);
         }
 
+
+#warning no assert
         [Test]
         public int LoadUsersByBirthday_Should_Return_Users_When_Date_Period_Crosses_Over_Year()
         {
@@ -118,6 +120,7 @@ namespace Bs.Calendar.Tests.Unit
             users.Count().Should().Be(1);
         }
 
+#warning year doesn't matter
         [Test]
         public void LoadUsersByBirthday_Should_Return_Empty_List_When_BirthDate_Is_Null()
         {
