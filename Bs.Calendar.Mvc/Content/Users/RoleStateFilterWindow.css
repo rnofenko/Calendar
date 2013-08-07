@@ -1,0 +1,8 @@
+﻿#search_settings > .content {
+
+    width: 25%;
+    padding: 10px;
+
+    min-height: 45%;
+    max-height: 50%;
+}

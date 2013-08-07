@@ -1,14 +1,14 @@
 ﻿@{
-    ViewBag.SearchWindowTitle = "Search settings";
+    ViewBag.SearchWindowTitle = "Filter settings";
 
-    ViewBag.IncludeAdminsPrompt = "Admins included";
-    ViewBag.IncludeNotApprovedPrompt = "Not approved included";
+    ViewBag.IncludeAdminsPrompt = "Exclude admins";
+    ViewBag.IncludeNotApprovedPrompt = "Exclude inactive";
 }
 
 <!-- modal window with searching settings -->
-<div class="modal" id="search_settings">
+<div class="modal" id="filter_settings">
     <div class="content">
-        <a class="close switch" gumby-trigger="|#search_settings">
+        <a class="close switch" gumby-trigger="|#filter_settings">
             <i class="icon-cancel"></i>
         </a>
         <div class="row">
@@ -20,11 +20,11 @@
                     <legend><h3>@ViewBag.SearchWindowTitle</h3></legend>
                     <ul>
                         <li class="field">
-                            <label class="checkbox" id="IncludeAdmins">
+                            <label class="checkbox" id="ExcludeAdmins">
                                 <input type="checkbox">
                                 <span></span> @ViewBag.IncludeAdminsPrompt
                             </label>
-                            <label class="checkbox" id="IncludeNotApproved">
+                            <label class="checkbox" id="ExcludeNotApproved">
                                 <input type="checkbox">
                                 <span></span> @ViewBag.IncludeNotApprovedPrompt
                             </label>
@@ -34,11 +34,11 @@
             </form>
             
             <p class="btn secondary medium">
-                <a href="#" data-bind="click: exitAccept" gumby-trigger="|#search_settings">Accept</a>
+                <a href="#" data-bind="click: exitAccept" gumby-trigger="|#filter_settings">Accept</a>
             </p>
             
             <p class="btn default medium">
-                <a href="#" data-bind="click: exitCancel" gumby-trigger="|#search_settings">Cancel</a>
+                <a href="#" data-bind="click: exitCancel" gumby-trigger="|#filter_settings">Cancel</a>
             </p>
 
             <!---->

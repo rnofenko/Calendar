@@ -8,7 +8,7 @@
             TotalPages = 1;
         }
 
-        public PagingVm(string searchStr, string sortByStr, int totalPages, int page = 1)
+        public PagingVm(string searchStr, string sortByStr, int totalPages, int page = 1, bool ExcludeAdmins = false, bool ExcludeNotApproved = false)
         {
             SearchStr = searchStr;
             SortByStr = sortByStr;
@@ -29,7 +29,7 @@
 
         public int TotalPages { get; set; }
 
-        public bool IncludeAdmins { get; set; }
-        public bool IncludeNotApproved { get; set; }
+        public bool ExcludeAdmins { get; set; }
+        public bool ExcludeNotApproved { get; set; }
     }
 }

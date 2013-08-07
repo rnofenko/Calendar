@@ -5,8 +5,8 @@
     self.SortByStr = ko.observable();
     self.SearchStr = ko.observable();
     
-    self.IncludeAdmins = ko.observable();
-    self.IncludeNotApproved = ko.observable();
+    self.ExcludeAdmins = ko.observable();
+    self.ExcludeNotApproved = ko.observable();
 }
 
 function ViewModel() {
@@ -19,8 +19,8 @@ function ViewModel() {
         Page: ko.observable(),
         TotalPages: ko.observable(),
         
-        IncludeAdmins: ko.observable(false),
-        IncludeNotApproved: ko.observable(false)
+        ExcludeAdmins: ko.observable(false),
+        ExcludeNotApproved: ko.observable(false)
     };
 
     self.arrowUp = false;
@@ -81,47 +81,49 @@ function ViewModel() {
 
         /* Save new settings and update list of users */
 
-        var includeAdmins = $("#IncludeAdmins").hasClass("checked");
-        var includeNotApproved = $("#IncludeNotApproved").hasClass("checked");
+        var excludeAdmins = $("#ExcludeAdmins").hasClass("checked");
+        var excludeNotApproved = $("#ExcludeNotApproved").hasClass("checked");
         
-        if (includeAdmins != self.model.IncludeAdmins() ||
-            includeNotApproved != self.model.IncludeNotApproved()) {
+        if (excludeAdmins != self.model.ExcludeAdmins() ||
+            excludeNotApproved != self.model.ExcludeNotApproved()) {
             
-            self.model.IncludeAdmins(includeAdmins);
-            self.model.IncludeNotApproved(includeNotApproved);
+            self.model.ExcludeAdmins(excludeAdmins);
+            self.model.ExcludeNotApproved(excludeNotApproved);
             
             self.updateList(self.model);
         }
 
-        $("#search_settings").removeClass("active");
+        $("#filter_settings").removeClass("active");
     };
 
     self.exitCancel = function () {
 
         /* Revert checkboxes to the last state */
 
-        if ($("#IncludeAdmins").hasClass("checked") != self.model.IncludeAdmins())
-            $("#IncludeAdmins").click();
+        if ($("#ExcludeAdmins").hasClass("checked") != self.model.ExcludeAdmins())
+            $("#ExcludeAdmins").click();
 
-        if ($("#IncludeNotApproved").hasClass("checked") != self.model.IncludeNotApproved())
-            $("#IncludeNotApproved").click();
+        if ($("#ExcludeNotApproved").hasClass("checked") != self.model.ExcludeNotApproved())
+            $("#ExcludeNotApproved").click();
         
-        $("#search_settings").removeClass("active");
+        $("#filter_settings").removeClass("active");
     };
     
     self.chekedFlagsToString = ko.computed(function () {
 
-        var adminsFlag = self.model.IncludeAdmins();
-        var notApprovedFlag = self.model.IncludeNotApproved();
+        var adminsFlag = self.model.ExcludeAdmins();
+        var notApprovedFlag = self.model.ExcludeNotApproved();
 
-        var noteMessage = "";
+        var noteMessage = "filter: ";
         
         if (adminsFlag && notApprovedFlag)
-            noteMessage += "Anybody";
+            noteMessage += "admins, inactive";
         else if (adminsFlag)
-            noteMessage += "Any role";
+            noteMessage += "admins";
         else if (notApprovedFlag)
-            noteMessage += "Any state";
+            noteMessage += "inactive";
+        else
+            noteMessage += "none";
 
         return noteMessage;
         
