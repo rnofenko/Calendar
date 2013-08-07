@@ -83,7 +83,8 @@ window.BooksVm = function ()
     self.BookVm = function(source)
     {
         var _self = this;
-        _self.id= source.Id;
+        _self.id = source.Id;
+        _self.code = source.Code;
         _self.author = source.Author;
         _self.title = source.Title;
         _self.getEditLink = function()

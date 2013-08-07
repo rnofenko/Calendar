@@ -4,7 +4,6 @@ using System.Linq;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
-using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -43,6 +42,10 @@ namespace Bs.Calendar.Mvc.Services
                     orderby = orderby.Substring(1);
                 }
             }
+            if (orderby == "code")
+            {
+                return asc ? books.OrderBy(book => book.Code) : books.OrderByDescending(book => book.Code);
+            }
             if (orderby == "title")
             {
                 return asc ? books.OrderBy(book => book.Title) : books.OrderByDescending(book => book.Title);
@@ -51,10 +54,6 @@ namespace Bs.Calendar.Mvc.Services
             {
                 return asc ? books.OrderBy(book => book.Author) : books.OrderByDescending(book => book.Author);
             }
-            //            if (orderby == "code")
-            //            {
-            //                return asc ? books.OrderBy(book => book.Code) : books.OrderByDescending(book => book.Code);
-            //            }
             return asc ? books.OrderBy(book => book.Id) : books.OrderByDescending(book => book.Id);
         }
 
@@ -65,13 +64,17 @@ namespace Bs.Calendar.Mvc.Services
                 return books;
             }
             return books.Where(book =>
-                               book.Author.ToLower().Contains(searchStr) || book.Title.ToLower().Contains(searchStr));
+                               book.Code.ToLower().Contains(searchStr)
+                               || book.Author.ToLower().Contains(searchStr)
+                               || book.Title.ToLower().Contains(searchStr));
         }
 
 
         public bool IsValid(BookEditVm book)
         {
             bool result = true;
+            result = result && (book.Code != string.Empty);
+            result = result && !(_repoUnit.Book.Load(b => b.Code == book.Code).Any());
             result = result && (book.Title != string.Empty);
             result = result && (book.Author != string.Empty);
             return result;
@@ -85,6 +88,7 @@ namespace Bs.Calendar.Mvc.Services
         public void Save(BookEditVm bookModel)
         {
             var book = Get(bookModel.BookId) ?? new Book();
+            book.Code = bookModel.Code;
             book.Title = bookModel.Title;
             book.Author = bookModel.Author;
             _repoUnit.Book.Save(book);

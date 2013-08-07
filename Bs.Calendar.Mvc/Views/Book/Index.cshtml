@@ -24,6 +24,11 @@
         <table>
             <thead>
                 <tr>
+                    <th data-bind="click: toggle_orderby" id="th_Code">
+                        <span class="hide" id="order_-Code"><i class="icon-down"></i></span>
+                        <span class="hide" id="order_Code" ><i class="icon-up"></i></span>
+                        Code
+                    </th>
                     <th data-bind="click: toggle_orderby" id="th_Title">
                         <span class="hide" id="order_-Title"><i class="icon-down"></i></span>
                         <span class="hide" id="order_Title" ><i class="icon-up"></i></span>
@@ -66,6 +71,7 @@
 
 <script type="text/html" id="book-template">
     <tr>
+        <td data-bind="text: code"> </td>
         <td data-bind="text: title"> </td>
         <td data-bind="text: author"> </td>
         <td>
