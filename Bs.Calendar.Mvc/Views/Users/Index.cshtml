@@ -10,16 +10,41 @@
         <h4 class="centered two columns">@ViewBag.Title</h4>
     </div>
 </div>
-    
+
+@Html.Partial("SearchSettings")
 
 <div class="row">
     <div class="one columns">
         <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
     </div>
-        
-    <div class="field push_eight three columns">
-        <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }"/>
+    <div class="pull_right six columns">
+        <div class="row">
+            <div class="push_one prepend field five columns">
+                <div class="btn default medium" data-bind="visible: chekedFlagsToString().length &gt; 0">
+                    <li class="default alert" data-bind="text: chekedFlagsToString">Active users</li>
+                </div>
+                <div class="btn default medium" title="Search settings">
+                    <a href="#" class="switch active" gumby-trigger="#search_settings"><i class="icon-cog"></i></a>
+                </div>
+            </div>
+            <div class="field six columns">
+                <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }">
+            </div>
+        </div>
     </div>
+    
+    @* Modal alternative: need icons
+
+    <div class="field append push_seven three columns">
+        <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }"/>
+        <div class="btn default medium">
+            <a href="#" id="search_settings_open"><i class="icon-user"></i></a>
+        </div>
+        <div class="btn secondary medium">
+            <a href="#" id="search_settings_open"><i class="icon-lock"></i></a>
+        </div>
+    </div>
+    *@
 </div>
       
 <div class="row">
@@ -69,6 +94,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            
             var model = new ViewModel();
             ko.applyBindings(model);
             model.updateList(@Html.Raw(Json.Encode(@pagingVm)));

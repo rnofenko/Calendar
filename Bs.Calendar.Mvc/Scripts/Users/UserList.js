@@ -4,13 +4,24 @@
     self.Page = ko.observable();
     self.SortByStr = ko.observable();
     self.SearchStr = ko.observable();
+    
+    self.IncludeAdmins = ko.observable();
+    self.IncludeNotApproved = ko.observable();
 }
 
 function ViewModel() {
     var self = this;
 
     //Variables
-    self.model = {SearchStr : ko.observable(""), SortByStr : ko.observable(""), Page : ko.observable(), TotalPages : ko.observable()};
+    self.model = {
+        SearchStr: ko.observable(""),
+        SortByStr: ko.observable(""),
+        Page: ko.observable(),
+        TotalPages: ko.observable(),
+        
+        IncludeAdmins: ko.observable(false),
+        IncludeNotApproved: ko.observable(false)
+    };
 
     self.arrowUp = false;
     self.currColumnId = "";
@@ -65,4 +76,43 @@ function ViewModel() {
     self.changeHandler = function () {
         self.updateList(self.model);
     };
+    
+    self.exitAccept = function () {
+
+        /* Save new settings and update list of users */
+
+        self.model.IncludeAdmins($("#IncludeAdmins").hasClass("checked"));
+        self.model.IncludeNotApproved($("#IncludeNotApproved").hasClass("checked"));
+
+        self.updateList();
+    };
+
+    self.exitCancel = function () {
+
+        /* Revert checkboxes to the last state */
+
+        if ($("#IncludeAdmins").hasClass("checked") != self.model.IncludeAdmins())
+            $("#IncludeAdmins").click();
+
+        if ($("#IncludeNotApproved").hasClass("checked") != self.model.IncludeNotApproved())
+            $("#IncludeNotApproved").click();
+    };
+    
+    self.chekedFlagsToString = ko.computed(function () {
+
+        var adminsFlag = self.model.IncludeAdmins();
+        var notApprovedFlag = self.model.IncludeNotApproved();
+
+        var noteMessage = "";
+        
+        if (adminsFlag && notApprovedFlag)
+            noteMessage += "Anybody";
+        else if (adminsFlag)
+            noteMessage += "Any role";
+        else if (notApprovedFlag)
+            noteMessage += "Any state";
+
+        return noteMessage;
+        
+    }, self);
 }

@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.SearchWindowTitle = "Search settings";
+
+    ViewBag.IncludeAdminsPrompt = "Admins included";
+    ViewBag.IncludeNotApprovedPrompt = "Not approved included";
+}
+
+<!-- modal window with searching settings -->
+<div class="modal" id="search_settings">
+    <div class="content">
+        <a class="close switch" gumby-trigger="|#search_settings">
+            <i class="icon-cancel"></i>
+        </a>
+        <div class="row">
+            
+            <!-- Input form -->
+               
+            <form>
+                <fieldset>
+                    <legend><h3>@ViewBag.SearchWindowTitle</h3></legend>
+                    <ul>
+                        <li class="field">
+                            <label class="checkbox" id="IncludeAdmins">
+                                <input type="checkbox">
+                                <span></span> @ViewBag.IncludeAdminsPrompt
+                            </label>
+                            <label class="checkbox" id="IncludeNotApproved">
+                                <input type="checkbox">
+                                <span></span> @ViewBag.IncludeNotApprovedPrompt
+                            </label>
+                        </li>
+                    </ul>
+                </fieldset>
+            </form>
+            
+            <p class="btn secondary medium">
+                <a href="#" class="switch" data-bind="click: exitAccept" gumby-trigger="|#search_settings">Accept</a>
+            </p>
+            
+            <p class="btn default medium">
+                <a href="#" class="switch" data-bind="click: exitCancel" gumby-trigger="|#search_settings">Cancel</a>
+            </p>
+
+            <!---->
+            
+        </div>
+
+    </div>
+</div>
+<!---->

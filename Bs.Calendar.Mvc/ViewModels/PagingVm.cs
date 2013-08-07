@@ -28,5 +28,8 @@
         public int Page { get; set; }
 
         public int TotalPages { get; set; }
+
+        public bool IncludeAdmins { get; set; }
+        public bool IncludeNotApproved { get; set; }
     }
 }

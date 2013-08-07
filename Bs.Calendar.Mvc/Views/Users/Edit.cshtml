@@ -111,7 +111,7 @@
     <script src="../../Scripts/Users/UserContacts.js"></script>
     <script type="text/javascript"> 
         $(document).ready(function() {
-            ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts), url));
+            ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts)));
         });
     </script>
 }
