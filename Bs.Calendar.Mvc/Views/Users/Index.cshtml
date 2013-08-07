@@ -17,19 +17,25 @@
     <div class="one columns">
         <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
     </div>
-    <div class="append push_five field three columns">
-        <div class="btn default medium">
-            <a href="#" class="switch" gumby-trigger="#search_settings"><i class="icon-cog"></i></a>
+    <div class="pull_right six columns">
+        <div class="row">
+            <div class="push_one prepend field five columns">
+                <div class="btn default medium" data-bind="visible: chekedFlagsToString().length &gt; 0">
+                    <li class="default alert" data-bind="text: chekedFlagsToString">Active users</li>
+                </div>
+                <div class="btn default medium" title="Search settings">
+                    <a href="#" class="switch active" gumby-trigger="#search_settings"><i class="icon-cog"></i></a>
+                </div>
+            </div>
+            <div class="field six columns">
+                <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }">
+            </div>
         </div>
-        <div class="btn default medium" data-bind="visible: chekedFlagsToString().length > 0">
-            <li class="default alert" data-bind="text: chekedFlagsToString"></li>
-        </div>
-    </div>
-    <div class="field three columns">
-        <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }"/>
     </div>
     
-    @*<div class="field append push_seven three columns">
+    @* Modal alternative: need icons
+
+    <div class="field append push_seven three columns">
         <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }"/>
         <div class="btn default medium">
             <a href="#" id="search_settings_open"><i class="icon-user"></i></a>
@@ -37,7 +43,8 @@
         <div class="btn secondary medium">
             <a href="#" id="search_settings_open"><i class="icon-lock"></i></a>
         </div>
-    </div>*@
+    </div>
+    *@
 </div>
       
 <div class="row">
