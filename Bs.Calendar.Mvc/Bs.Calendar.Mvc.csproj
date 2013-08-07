@@ -197,6 +197,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Content\Layout\layout.css" />
     <Content Include="Content\Layout\list-view.css" />
+    <Content Include="Content\Users\RoleStateFilterWindow.css" />
     <Content Include="Images\binaryLogo.png" />
     <Content Include="Scripts\Books\BooksVm.js" />
     <Content Include="Scripts\Gumby\gumby.init.js" />
@@ -329,7 +330,7 @@
     <Content Include="Views\Book\Index.cshtml" />
     <Content Include="Views\Book\Edit.cshtml" />
     <Content Include="Views\Book\EditorTemplates\BookEditVm.cshtml" />
-    <Content Include="Views\Users\SearchSettings.cshtml" />
+    <Content Include="Views\Users\FilterSettings.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>

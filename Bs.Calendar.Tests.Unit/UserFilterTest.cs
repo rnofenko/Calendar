@@ -40,7 +40,7 @@ namespace Bs.Calendar.Tests.Unit
             _users = users;
 
             var moq = new Mock<IUserRepository>();
-            moq.Setup(m => m.Load()).Returns(_users.AsQueryable());
+            moq.Setup(m => m.Load()).Returns(_users.Where(u => u.LiveState == LiveState.Active).AsQueryable());
 
             DiMvc.Register();
             Ioc.RegisterInstance<IUserRepository>(moq.Object);
@@ -67,7 +67,7 @@ namespace Bs.Calendar.Tests.Unit
 
 
         [Test]
-        public void Should_Return_User_When_Filter_By_Name() 
+        public void Should_Return_User_When_Filter_By_Name()
         {
             //arrange
 
@@ -155,73 +155,13 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
-        public void Should_return_active_simple_users_When_IncludeNotApproved_is_false_and_IncludeAdmins_is_false()
+        public void Should_return_all_users_When_ExcludeNotApproved_is_false_and_ExcludeAdmins_is_false()
         {
             //arrange
 
             Setup(_usersForRoleAndStateFilteringTest);
 
-            var pagingVm = new PagingVm { SearchStr = string.Empty, IncludeNotApproved = false, IncludeAdmins = false };
-
-            //act
-
-            var listPage = _userService.RetreiveList(pagingVm).Users;
-
-            //assert
-
-            var rightResult = new User[] { _users[1] }; //Correct order of records in result
-
-            listPage.ShouldAllBeEquivalentTo(rightResult);
-        }
-
-        [Test]
-        public void Should_return_active_simple_and_admin_users_When_IncludeNotApproved_is_false_and_IncludeAdmins_is_true()
-        {
-            //arrange
-
-            Setup(_usersForRoleAndStateFilteringTest);
-
-            var pagingVm = new PagingVm { SearchStr = string.Empty, IncludeNotApproved = false, IncludeAdmins = true };
-
-            //act
-
-            var listPage = _userService.RetreiveList(pagingVm).Users;
-
-            //assert
-
-            var rightResult = new User[] { _users[0], _users[1] }; //Correct order of records in result
-
-            listPage.ShouldAllBeEquivalentTo(rightResult);
-        }
-
-        [Test]
-        public void Should_return_active_and_not_approved_simple_users_When_IncludeNotApproved_is_true_and_IncludeAdmins_is_false()
-        {
-            //arrange
-
-            Setup(_usersForRoleAndStateFilteringTest);
-
-            var pagingVm = new PagingVm { SearchStr = string.Empty, IncludeNotApproved = true, IncludeAdmins = false };
-
-            //act
-
-            var listPage = _userService.RetreiveList(pagingVm).Users;
-
-            //assert
-
-            var rightResult = new User[] { _users[1], _users[5] }; //Correct order of records in result
-
-            listPage.ShouldAllBeEquivalentTo(rightResult);
-        }
-
-        [Test]
-        public void Should_return_active_and_not_approved_simple_users_When_IncludeNotApproved_is_true_and_IncludeAdmins_is_true()
-        {
-            //arrange
-
-            Setup(_usersForRoleAndStateFilteringTest);
-
-            var pagingVm = new PagingVm { SearchStr = string.Empty, IncludeNotApproved = true, IncludeAdmins = true };
+            var pagingVm = new PagingVm { SearchStr = string.Empty, ExcludeNotApproved = false, ExcludeAdmins = false };
 
             //act
 
@@ -235,15 +175,13 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
-        public void Should_not_return_deleted_users(
-            [Values(true, false)] bool IncludeNotApproved,
-            [Values(true, false)] bool IncludeAdmins)
+        public void Should_return_active_and_not_approved_admin_users_When_ExcludeNotApproved_is_false_and_ExcludeAdmins_is_true()
         {
             //arrange
 
             Setup(_usersForRoleAndStateFilteringTest);
 
-            var pagingVm = new PagingVm { SearchStr = string.Empty, IncludeNotApproved = IncludeNotApproved, IncludeAdmins = IncludeAdmins };
+            var pagingVm = new PagingVm { SearchStr = string.Empty, ExcludeNotApproved = false, ExcludeAdmins = true };
 
             //act
 
@@ -251,9 +189,49 @@ namespace Bs.Calendar.Tests.Unit
 
             //assert
 
-            var excludedRecords = new User[] { _users[2], _users[3] }; //Records that must not be presented in result
+            var rightResult = new User[] { _users[1], _users[5] }; //Correct order of records in result
 
-            listPage.Should().NotIntersectWith(excludedRecords);
+            listPage.ShouldAllBeEquivalentTo(rightResult);
+        }
+
+        [Test]
+        public void Should_return_active_and_simple_and_admin_users_When_ExcludeNotApproved_is_true_and_ExcludeAdmins_is_false()
+        {
+            //arrange
+
+            Setup(_usersForRoleAndStateFilteringTest);
+
+            var pagingVm = new PagingVm { SearchStr = string.Empty, ExcludeNotApproved = true, ExcludeAdmins = false };
+
+            //act
+
+            var listPage = _userService.RetreiveList(pagingVm).Users;
+
+            //assert
+
+            var rightResult = new User[] { _users[0], _users[1] }; //Correct order of records in result
+
+            listPage.ShouldAllBeEquivalentTo(rightResult);
+        }
+
+        [Test]
+        public void Should_return_active_simple_users_When_ExcludeNotApproved_is_true_and_ExcludeAdmins_is_true()
+        {
+            //arrange
+
+            Setup(_usersForRoleAndStateFilteringTest);
+
+            var pagingVm = new PagingVm { SearchStr = string.Empty, ExcludeNotApproved = true, ExcludeAdmins = true };
+
+            //act
+
+            var listPage = _userService.RetreiveList(pagingVm).Users;
+
+            //assert
+
+            var rightResult = new User[] { _users[1] }; //Correct order of records in result
+
+            listPage.ShouldAllBeEquivalentTo(rightResult);
         }
     }
 }

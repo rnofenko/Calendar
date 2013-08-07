@@ -11,40 +11,34 @@
     </div>
 </div>
 
-@Html.Partial("SearchSettings")
+@Html.Partial("FilterSettings")
 
 <div class="row">
     <div class="one columns">
-        <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
+        <button class="medium primary btn"><a href="/Users/Create">Create</a></button>
     </div>
-    <div class="pull_right six columns">
+    <div class="pull_right field four columns">
         <div class="row">
-            <div class="push_one prepend field five columns">
-                <div class="btn default medium" data-bind="visible: chekedFlagsToString().length &gt; 0">
-                    <li class="default alert" data-bind="text: chekedFlagsToString">Active users</li>
-                </div>
-                <div class="btn default medium" title="Search settings">
-                    <a href="#" class="switch active" gumby-trigger="#search_settings"><i class="icon-cog"></i></a>
-                </div>
-            </div>
-            <div class="field six columns">
+            <div class="field nine columns">
                 <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }">
             </div>
+            <div class="field three columns">
+                <div class="btn default medium" title="Filter settings">
+                    <a href="#" class="switch active" gumby-trigger="#filter_settings">
+                        <i class="icon-menu"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div data-bind="attr: { class: 
+                model.ExcludeAdmins() || model.ExcludeNotApproved()
+                ? 'success label twelve columns'
+                : 'info label twelve columns' }" class="info label twelve columns">
+                <div class="label" data-bind="text: chekedFlagsToString"></div>
+            </div>
         </div>
     </div>
-    
-    @* Modal alternative: need icons
-
-    <div class="field append push_seven three columns">
-        <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }"/>
-        <div class="btn default medium">
-            <a href="#" id="search_settings_open"><i class="icon-user"></i></a>
-        </div>
-        <div class="btn secondary medium">
-            <a href="#" id="search_settings_open"><i class="icon-lock"></i></a>
-        </div>
-    </div>
-    *@
 </div>
       
 <div class="row">
@@ -93,8 +87,7 @@
     <script src="../../Scripts/Layout/list-view.js"></script>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            
+        $(document).ready(function () {        
             var model = new ViewModel();
             ko.applyBindings(model);
             model.updateList(@Html.Raw(Json.Encode(@pagingVm)));

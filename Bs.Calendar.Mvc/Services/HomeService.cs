@@ -21,7 +21,7 @@ namespace Bs.Calendar.Mvc.Services
             {
                 var defaultUser = new User
                 {
-                    BirthDate = DateTime.Now,
+                    BirthDate = null,
                     Email = "Admin",
                     FirstName = "Admin",
                     LastName = "Admin",

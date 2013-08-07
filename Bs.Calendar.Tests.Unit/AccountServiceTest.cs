@@ -57,6 +57,7 @@ namespace Bs.Calendar.Tests.Unit
             var editedUser = _repoUnit.User.Get(testUserId);
 
             //assert
+
             editedUser.Email.ShouldBeEquivalentTo(testUserVm.Email);
             editedUser.FirstName.ShouldBeEquivalentTo(testUserVm.FirstName);
             editedUser.LastName.ShouldBeEquivalentTo(testUserVm.LastName);

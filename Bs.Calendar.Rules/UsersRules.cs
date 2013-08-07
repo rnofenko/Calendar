@@ -25,6 +25,7 @@ namespace Bs.Calendar.Rules
                 var returnedUsers =
                     _unit.User.Load(
                         u =>
+                            u.BirthDate != null &&
                             u.LiveState != LiveState.Deleted &&
                             ((DateTime) u.BirthDate).Month*100 + ((DateTime) u.BirthDate).Day >= fromNormalized &&
                             ((DateTime) u.BirthDate).Month*100 + ((DateTime) u.BirthDate).Day <= intoNormalized);
@@ -35,10 +36,12 @@ namespace Bs.Calendar.Rules
             if (fromNormalized > intoNormalized)
             {
                 var u1 = _unit.User.Load(u =>
+                            u.BirthDate != null &&
                             u.LiveState != LiveState.Deleted &&
                             NormalizeDate((DateTime) u.BirthDate) >= fromNormalized &&
                             NormalizeDate((DateTime) u.BirthDate) <= 1231);
                 var u2 = _unit.User.Load(u =>
+                            u.BirthDate != null &&
                             u.LiveState != LiveState.Deleted &&
                             NormalizeDate((DateTime) u.BirthDate) >= 101 &&
                             NormalizeDate((DateTime) u.BirthDate) <= intoNormalized);

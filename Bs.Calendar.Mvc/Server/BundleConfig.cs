@@ -28,7 +28,9 @@ namespace Bs.Calendar.Mvc.Server
             var css = new Bundle("~/Content/css", new CssMinify());
             css.Include("~/Content/gumby/gumby.css");
             css.Include("~/Content/Rooms/ColorPicker.css");
+            css.Include("~/Content/Users/RoleStateFilterWindow.css");
             css.Include("~/Content/Layout/layout.css");
+
             BundleTable.Bundles.Add(css);
         }
     }
