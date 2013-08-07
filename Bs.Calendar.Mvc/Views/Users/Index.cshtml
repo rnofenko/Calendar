@@ -93,8 +93,7 @@
     <script src="../../Scripts/Layout/list-view.js"></script>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            
+        $(document).ready(function () {        
             var model = new ViewModel();
             ko.applyBindings(model);
             model.updateList(@Html.Raw(Json.Encode(@pagingVm)));

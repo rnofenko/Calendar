@@ -40,8 +40,7 @@ namespace Bs.Calendar.Tests.Unit
             _users = users;
 
             var moq = new Mock<IUserRepository>();
-            //Attention. In UserRepository::Load() we've got filtering by LiveState and here we take all records. Need to be corrected.
-            moq.Setup(m => m.Load()).Returns(_users.AsQueryable());
+            moq.Setup(m => m.Load()).Returns(_users.Where(u => u.LiveState == LiveState.Active).AsQueryable());
 
             DiMvc.Register();
             Ioc.RegisterInstance<IUserRepository>(moq.Object);
