@@ -140,7 +140,7 @@ namespace Bs.Calendar.Mvc.Services
             var users = _unit.User.Load();
 
             users = searchByStr(users, pagingVm.SearchStr);
-            users = searchByRoleAndState(users, pagingVm.ExcludeAdmins, pagingVm.ExcludeNotApproved);
+            users = searchByRoleAndState(users, pagingVm.RolesFilter, pagingVm.StateFilter);
             users = sortByStr(users, pagingVm.SortByStr);
 
             pagingVm = updatePagingVm(pagingVm, users);
@@ -226,13 +226,13 @@ namespace Bs.Calendar.Mvc.Services
             return filteredUsers;
         }
 
-        private IQueryable<User> searchByRoleAndState(IQueryable<User> users, bool excludeAdmins = false, bool excludeNotApproved = false)
+        private IQueryable<User> searchByRoleAndState(IQueryable<User> users, Roles showRoles = Roles.Simple, LiveState showStates = LiveState.Active)
         {
+            //Can't use Enum::HasFlag(), because LINQ to Entity operates only with primitive types
+
             return users
-                .Where(user => 
-                user.LiveState != LiveState.Deleted &&
-                (!excludeAdmins || excludeAdmins && user.Role != Roles.Admin) &&
-                (!excludeNotApproved || excludeNotApproved && user.LiveState != LiveState.NotApproved));
+                .Where(user => (showRoles & user.Role) == user.Role &&
+                               (showStates & user.LiveState) == user.LiveState);
         }
 
         private int getTotalPages(int count, int pageSize)

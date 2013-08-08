@@ -64,6 +64,6 @@ namespace Bs.Calendar.Mvc.ViewModels
 
         public LiveState LiveState { get; set; }
 
-        public List<Contact> Contacts { get; set; } 
+        public List<Contact> Contacts { get; set; }
     }
 }

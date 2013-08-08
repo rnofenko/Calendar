@@ -24,7 +24,7 @@
             </div>
             <div class="field three columns">
                 <div class="btn default medium" title="Filter settings">
-                    <a href="#" class="switch active" gumby-trigger="#filter_settings">
+                    <a href="#"  data-bind="click: resetFlags" gumby-trigger="#filter_settings">
                         <i class="icon-menu"></i>
                     </a>
                 </div>
@@ -32,9 +32,9 @@
         </div>
         <div class="row">
             <div data-bind="attr: { class: 
-                model.ExcludeAdmins() || model.ExcludeNotApproved()
+                model.ShowAdmins() || model.ShowNotApproved() || model.ShowDeleted()
                 ? 'success label twelve columns'
-                : 'info label twelve columns' }" class="info label twelve columns">
+                : 'info label twelve columns' }">
                 <div class="label" data-bind="text: chekedFlagsToString"></div>
             </div>
         </div>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
@@ -16,7 +17,7 @@ namespace Bs.Calendar.Tests.Unit
     class UserFilterTest
     {
         private UserService _userService;
-        private List<User> _users;
+        private static List<User> _users;
 
         private List<User> _usersForStringSearchAndFiltering = new List<User>
             {
@@ -40,7 +41,7 @@ namespace Bs.Calendar.Tests.Unit
             _users = users;
 
             var moq = new Mock<IUserRepository>();
-            moq.Setup(m => m.Load()).Returns(_users.Where(u => u.LiveState == LiveState.Active).AsQueryable());
+            moq.Setup(m => m.Load()).Returns(_users.AsQueryable());
 
             DiMvc.Register();
             Ioc.RegisterInstance<IUserRepository>(moq.Object);
@@ -52,7 +53,7 @@ namespace Bs.Calendar.Tests.Unit
         {
             //arrange
 
-            Setup(_usersForRoleAndStateFilteringTest);
+            Setup(_usersForStringSearchAndFiltering);
 
             var testEmail = _users[0].Email;
             var pagingVm = new PagingVm {SearchStr = testEmail};
@@ -71,7 +72,7 @@ namespace Bs.Calendar.Tests.Unit
         {
             //arrange
 
-            Setup(_usersForRoleAndStateFilteringTest);
+            Setup(_usersForStringSearchAndFiltering);
 
             var testUser = _users[0];
             var pagingVm = new PagingVm { SearchStr = testUser.FirstName};
@@ -154,14 +155,25 @@ namespace Bs.Calendar.Tests.Unit
             users.Count().ShouldBeEquivalentTo(_users.Count);
         }
 
-        [Test]
-        public void Should_return_all_users_When_ExcludeNotApproved_is_false_and_ExcludeAdmins_is_false()
+        [Test,
+        TestCase(true, true, true, new []{ 2, 4 }),
+        TestCase(false, true, true, new []{ 4 }),
+        TestCase(true, true, false, new []{ 2, 3, 4, 5 }),
+        TestCase(false, true, false, new []{ 4, 5 }),
+        TestCase(true, false, true, new []{ 2 }),
+        TestCase(false, false, true, new []{ 0, 2, 4 }),
+        TestCase(true, false, false, new []{ 2, 3 }),
+        TestCase(false, false, false, new []{0, 1, 2, 3, 4, 5})
+        ]
+        public void Should_return_records_corresponding_to_selected_role_and_state_filters(bool showDeleted, bool showNotApproved, bool showAdmins, int[] expected)
         {
             //arrange
 
             Setup(_usersForRoleAndStateFilteringTest);
 
-            var pagingVm = new PagingVm { SearchStr = string.Empty, ExcludeNotApproved = false, ExcludeAdmins = false };
+            var pagingVm = new PagingVm { SearchStr = string.Empty, ShowDeleted = showDeleted, ShowNotApproved = showNotApproved, ShowAdmins = showAdmins};
+
+            var expectedResult = _users.Where((user, index) => expected.Contains(index)); //Select correct records in the right order
 
             //act
 
@@ -169,69 +181,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //assert
 
-            var rightResult = new User[] { _users[0], _users[1], _users[4], _users[5] }; //Correct order of records in result
-
-            listPage.ShouldAllBeEquivalentTo(rightResult);
-        }
-
-        [Test]
-        public void Should_return_active_and_not_approved_admin_users_When_ExcludeNotApproved_is_false_and_ExcludeAdmins_is_true()
-        {
-            //arrange
-
-            Setup(_usersForRoleAndStateFilteringTest);
-
-            var pagingVm = new PagingVm { SearchStr = string.Empty, ExcludeNotApproved = false, ExcludeAdmins = true };
-
-            //act
-
-            var listPage = _userService.RetreiveList(pagingVm).Users;
-
-            //assert
-
-            var rightResult = new User[] { _users[1], _users[5] }; //Correct order of records in result
-
-            listPage.ShouldAllBeEquivalentTo(rightResult);
-        }
-
-        [Test]
-        public void Should_return_active_and_simple_and_admin_users_When_ExcludeNotApproved_is_true_and_ExcludeAdmins_is_false()
-        {
-            //arrange
-
-            Setup(_usersForRoleAndStateFilteringTest);
-
-            var pagingVm = new PagingVm { SearchStr = string.Empty, ExcludeNotApproved = true, ExcludeAdmins = false };
-
-            //act
-
-            var listPage = _userService.RetreiveList(pagingVm).Users;
-
-            //assert
-
-            var rightResult = new User[] { _users[0], _users[1] }; //Correct order of records in result
-
-            listPage.ShouldAllBeEquivalentTo(rightResult);
-        }
-
-        [Test]
-        public void Should_return_active_simple_users_When_ExcludeNotApproved_is_true_and_ExcludeAdmins_is_true()
-        {
-            //arrange
-
-            Setup(_usersForRoleAndStateFilteringTest);
-
-            var pagingVm = new PagingVm { SearchStr = string.Empty, ExcludeNotApproved = true, ExcludeAdmins = true };
-
-            //act
-
-            var listPage = _userService.RetreiveList(pagingVm).Users;
-
-            //assert
-
-            var rightResult = new User[] { _users[1] }; //Correct order of records in result
-
-            listPage.ShouldAllBeEquivalentTo(rightResult);
+            listPage.ShouldAllBeEquivalentTo(expectedResult);
         }
     }
 }
