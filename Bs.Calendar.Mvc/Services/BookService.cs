@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
@@ -70,14 +71,24 @@ namespace Bs.Calendar.Mvc.Services
         }
 
 
-        public bool IsValid(BookEditVm book)
+        public void Validate(BookEditVm book)
         {
-            bool result = true;
-            result = result && (book.Code != string.Empty);
-            result = result && !(_repoUnit.Book.Load(b => b.Code == book.Code).Any());
-            result = result && (book.Title != string.Empty);
-            result = result && (book.Author != string.Empty);
-            return result;
+            if (string.IsNullOrEmpty(book.Code))
+            {
+                throw new WarningException(string.Format("Code must be specified"));
+            }
+            if (string.IsNullOrEmpty(book.Title))
+            {
+                throw new WarningException(string.Format("Title must be specified"));
+            }
+            if (string.IsNullOrEmpty(book.Author))
+            {
+                throw new WarningException(string.Format("Author must be specified"));
+            }
+            if (_repoUnit.Book.Load(b => b.Code == book.Code).Any())
+            {
+                throw new WarningException(string.Format("Code must be unique"));
+            }
         }
 
         public void Delete(int id)
@@ -87,6 +98,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public void Save(BookEditVm bookModel)
         {
+            Validate(bookModel);
             var book = Get(bookModel.BookId) ?? new Book();
             book.Code = bookModel.Code;
             book.Title = bookModel.Title;

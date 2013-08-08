@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
@@ -83,26 +84,32 @@ namespace Bs.Calendar.Mvc.Controllers
         public ActionResult Create(BookEditVm book)
         {
             ModelState.Remove("BookId");
-            if (ModelState.IsValid && _service.IsValid(book))
+            try
             {
                 _service.Save(book);
                 return RedirectToAction("Index");
             }
-
-            return View("Edit", book);
+            catch (WarningException exception)
+            {
+                ModelState.AddModelError("", exception.Message);
+                return View("Edit", book);
+            }
         }
 
         [HttpPost,
          ValidateAntiForgeryToken]
         public ActionResult Edit(BookEditVm book)
         {
-            if (ModelState.IsValid && _service.IsValid(book))
+            try
             {
                 _service.Save(book);
                 return RedirectToAction("Index");
             }
-
-            return View("Edit", book);
+            catch (WarningException exception)
+            {
+                ModelState.AddModelError("", exception.Message);
+                return View("Edit", book);
+            }
         }
     }
 }
