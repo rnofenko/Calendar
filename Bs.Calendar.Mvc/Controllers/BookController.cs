@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
@@ -31,7 +31,22 @@ namespace Bs.Calendar.Mvc.Controllers
             var orderby = Request["orderby"];
             var searchStr = Request["search"];
             var books = _service.Load(orderby, searchStr);
-            return Json(books, JsonRequestBehavior.AllowGet);
+            var page = Request["page"];
+            var pageNumber = 0;
+            try
+            {
+                pageNumber = Convert.ToInt32(page);
+            }
+            catch
+            {
+                pageNumber = 0;
+            }
+            if (pageNumber < 1)
+            {
+                return Json(books, JsonRequestBehavior.AllowGet);
+            }
+            var pager = new GenericPagingVm<Book>(books, pageNumber);
+            return Json(pager, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Index()
@@ -69,26 +84,32 @@ namespace Bs.Calendar.Mvc.Controllers
         public ActionResult Create(BookEditVm book)
         {
             ModelState.Remove("BookId");
-            if (ModelState.IsValid && _service.IsValid(book))
+            try
             {
                 _service.Save(book);
                 return RedirectToAction("Index");
             }
-
-            return View("Edit", book);
+            catch (WarningException exception)
+            {
+                ModelState.AddModelError("", exception.Message);
+                return View("Edit", book);
+            }
         }
 
         [HttpPost,
          ValidateAntiForgeryToken]
         public ActionResult Edit(BookEditVm book)
         {
-            if (ModelState.IsValid && _service.IsValid(book))
+            try
             {
                 _service.Save(book);
                 return RedirectToAction("Index");
             }
-
-            return View("Edit", book);
+            catch (WarningException exception)
+            {
+                ModelState.AddModelError("", exception.Message);
+                return View("Edit", book);
+            }
         }
     }
 }

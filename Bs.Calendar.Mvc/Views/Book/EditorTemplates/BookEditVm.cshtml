@@ -1,17 +1,11 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.BookEditVm
 
-@{
-    var Title = "";
-    var Author = "";
-
-    if (Model != null && Model.BookId != 0)
-    {
-        Title = Model.Title;
-        Author = Model.Author;
-    }
-}
-
 <ul>
+    <li class="field">
+        @Html.LabelFor(book => book.Code, new {@class = "inline"})
+        @Html.TextBoxFor(book => book.Code, new {@class = "wide text input pull_right"})
+    </li>
+
     <li class="field">
         @Html.LabelFor(book => book.Title, new {@class = "inline"})
         @Html.TextBoxFor(book => book.Title, new {@class = "wide text input pull_right"})

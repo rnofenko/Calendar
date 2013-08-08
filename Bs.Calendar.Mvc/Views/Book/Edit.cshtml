@@ -15,8 +15,8 @@
 }
 
 <div class="row">
-    <div class="centered seven columns default alert">
-        <h4 class="centered four columns">@ViewBag.Title</h4>
+    <div class="centered seven columns default alert text-center">
+        <h4>@ViewBag.Title</h4>
     </div>
 </div>
 
@@ -25,7 +25,7 @@
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(book => book.BookId)
-        <div class="centered seven columns">
+        <div class="centered seven columns danger alert">
             @Html.ValidationSummary()
         </div>
 
@@ -55,3 +55,10 @@
         </div>
     }
 </div>
+
+
+@section Scripts {
+    <script src="/Scripts/jquery-2.0.2.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}

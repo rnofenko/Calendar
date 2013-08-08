@@ -3,8 +3,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row">
-    <div class="centered seven columns default alert">
-        <h4 class="centered three columns">@ViewBag.Title</h4>
+    <div class="centered seven columns default alert text-center">
+        <h4>@ViewBag.Title</h4>
     </div>
 </div>
 
@@ -24,6 +24,11 @@
         <table>
             <thead>
                 <tr>
+                    <th data-bind="click: toggle_orderby" id="th_Code">
+                        <span class="hide" id="order_-Code"><i class="icon-down"></i></span>
+                        <span class="hide" id="order_Code" ><i class="icon-up"></i></span>
+                        Code
+                    </th>
                     <th data-bind="click: toggle_orderby" id="th_Title">
                         <span class="hide" id="order_-Title"><i class="icon-down"></i></span>
                         <span class="hide" id="order_Title" ><i class="icon-up"></i></span>
@@ -42,10 +47,31 @@
             </tbody>
         </table>
     </div>
+    <div class="row" data-bind="visible: shouldShowPager">
+        
+        <div class="append field two columns">
+            <input class="text input" type="number" data-bind="value: page"/>
+            <span class="adjoined"> page of <span data-bind="text: TotalPages"></span> </span>
+        </div>
+        
+        
+        <div class="two columns pull_right" data-bind="visible: shouldShowNextPage">
+            <div class="primary btn twelve columns">
+                <a href="#" data-bind="click: nextPage">Next</a>
+            </div>
+        </div>
+
+        <div class="two columns pull_right" data-bind="visible: shouldShowPrevPage">
+            <div class="primary btn twelve columns">
+                <a href="#" data-bind="click: prevPage">Previous</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/html" id="book-template">
     <tr>
+        <td data-bind="text: code"> </td>
         <td data-bind="text: title"> </td>
         <td data-bind="text: author"> </td>
         <td>
