@@ -75,19 +75,19 @@ namespace Bs.Calendar.Mvc.Services
         {
             if (string.IsNullOrEmpty(book.Code))
             {
-                throw new WarningException(string.Format("Code must be specified"));
+                throw new WarningException(string.Format("Code should be specified"));
             }
             if (string.IsNullOrEmpty(book.Title))
             {
-                throw new WarningException(string.Format("Title must be specified"));
+                throw new WarningException(string.Format("Title should be specified"));
             }
             if (string.IsNullOrEmpty(book.Author))
             {
-                throw new WarningException(string.Format("Author must be specified"));
+                throw new WarningException(string.Format("Author should be specified"));
             }
             if (_repoUnit.Book.Load(b => b.Code == book.Code).Any())
             {
-                throw new WarningException(string.Format("Code must be unique"));
+                throw new WarningException(string.Format("Code should be unique"));
             }
         }
 
