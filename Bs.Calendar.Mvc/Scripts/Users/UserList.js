@@ -68,6 +68,9 @@ function ViewModel() {
             self.model.TotalPages($(htmlData).filter("#listTotalPages").val());
             self.model.SearchStr($(htmlData).filter("#listSearchStr").val());
             self.model.SortByStr($(htmlData).filter("#listSortByStr").val());
+            self.model.ShowAdmins($(htmlData).filter("#listShowAdmins").val());
+            self.model.ShowDeleted($(htmlData).filter("#listShowDeleted").val());
+            self.model.ShowNotApproved($(htmlData).filter("#listShowNotApproved").val());
         }, "html");
     };
 

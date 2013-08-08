@@ -116,7 +116,7 @@ namespace Bs.Calendar.Mvc.Services
             var passwordRecovery = user.PasswordRecovery ?? (user.PasswordRecovery = new PasswordRecovery());
             passwordRecovery.Date = DateTime.Now;
             passwordRecovery.PasswordSalt = Ioc.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
-            passwordRecovery.PasswordHash = Ioc.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString(CultureInfo.InvariantCulture), passwordRecovery.PasswordSalt);
+            passwordRecovery.PasswordHash = Ioc.Resolve<ICryptoProvider>().GetHashWithSalt(Guid.NewGuid().ToString(), passwordRecovery.PasswordSalt);
             _unit.User.Save(user);
 
             var sender = Ioc.Resolve<EmailSender>();

@@ -24,7 +24,7 @@ namespace Bs.Calendar.Mvc.ViewModels
         }
 
         public PagingVm(PagingVm pagingVm)
-            : this(pagingVm.SearchStr, pagingVm.SortByStr, pagingVm.TotalPages, pagingVm.Page)
+            : this(pagingVm.SearchStr, pagingVm.SortByStr, pagingVm.TotalPages, pagingVm.Page, pagingVm.ShowDeleted, pagingVm.ShowAdmins, pagingVm.ShowNotApproved)
         {
         }
 

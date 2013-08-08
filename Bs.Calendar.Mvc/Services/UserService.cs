@@ -154,10 +154,12 @@ namespace Bs.Calendar.Mvc.Services
 
         private PagingVm updatePagingVm(PagingVm pagingVm, IQueryable<User> users)
         {
-            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
-            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
+            var newPagingVm = new PagingVm(pagingVm);
 
-            return new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage);
+            newPagingVm.TotalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            newPagingVm.Page = PageCounter.GetRangedPage(pagingVm.Page, newPagingVm.TotalPages);
+
+            return newPagingVm;
         }
 
         private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)

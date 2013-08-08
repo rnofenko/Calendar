@@ -5,6 +5,9 @@
 <input id="listTotalPages" hidden="true" value="@Model.PagingVm.TotalPages">
 <input id="listSearchStr" hidden="true" value="@Model.PagingVm.SearchStr">
 <input id="listSortByStr" hidden="true" value="@Model.PagingVm.SortByStr">
+<input id="listShowAdmins" hidden="true" value="@Model.PagingVm.ShowAdmins">
+<input id="listShowDeleted" hidden="true" value="@Model.PagingVm.ShowDeleted">
+<input id="listShowNotApproved" hidden="true" value="@Model.PagingVm.ShowNotApproved">
 
 @foreach (var user in Model.Users)
 {
