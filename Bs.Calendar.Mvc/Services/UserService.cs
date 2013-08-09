@@ -250,9 +250,9 @@ namespace Bs.Calendar.Mvc.Services
             //Select users with unknown parameters only if corresponding flags are set to true (even if filter value is stated apparently)
 
             return users
-                .Where(user => selectUnknownRole ? (showRoles & user.Role) == user.Role : (showRoles & user.Role) != 0 &&
-                               selectUnknownStatus ? (showStatus & user.Live) == user.Live : (showStatus & user.Live) != 0 &&
-                               selectUnknownState ? (showApproveState & user.ApproveState) == user.ApproveState : (showApproveState & user.ApproveState) != 0);
+                .Where(user => (selectUnknownRole ? (showRoles & user.Role) == user.Role : (showRoles & user.Role) != 0) &&
+                               (selectUnknownStatus ? (showStatus & user.Live) == user.Live : (showStatus & user.Live) != 0) &&
+                               (selectUnknownState ? (showApproveState & user.ApproveState) == user.ApproveState : (showApproveState & user.ApproveState) != 0));
         }
 
         private int getTotalPages(int count, int pageSize)

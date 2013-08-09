@@ -58,7 +58,7 @@ namespace Bs.Calendar.Tests.Unit
             Setup(_usersForStringSearchAndFiltering);
 
             var testEmail = _users[0].Email;
-            var pagingVm = new PagingVm {SearchStr = testEmail};
+            var pagingVm = new PagingVm(true, true, true, true, true, true) { SearchStr = testEmail };
 
             //act
             var users = _userService.RetreiveList(pagingVm).Users;
@@ -77,7 +77,7 @@ namespace Bs.Calendar.Tests.Unit
             Setup(_usersForStringSearchAndFiltering);
 
             var testUser = _users[0];
-            var pagingVm = new PagingVm { SearchStr = testUser.FirstName};
+            var pagingVm = new PagingVm(true, true, true, true, true, true) { SearchStr = testUser.FirstName };
 
             //act
             var users = _userService.RetreiveList(pagingVm).Users;
@@ -89,20 +89,23 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
-        public void Should_Return_Many_Users_When_Filter_By_Similar_Name() 
+        public void Should_return_all_users_with_specified_name_When_search_by_name() 
         {
             //arrange
 
             Setup(_usersForStringSearchAndFiltering);
 
             var testUser = _users[1];
-            var pagingVm = new PagingVm { SearchStr = testUser.FirstName };
+            var pagingVm = new PagingVm(true, true, true, true, true, true) { SearchStr = testUser.FirstName };
 
             //act
+            
             var users = _userService.RetreiveList(pagingVm).Users;
 
             //assert
+            
             users.Count().ShouldBeEquivalentTo(2);
+
             users.First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
             users.Skip(1).First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
         }
@@ -143,28 +146,20 @@ namespace Bs.Calendar.Tests.Unit
 
 
         [Test]
-        public void Should_Return_All_Users_When_Filter_By_Empty_String() 
+        public void Should_Return_All_Users_When_Filter_By_Empty_String()
         {
             //arrange
 
             Setup(_usersForStringSearchAndFiltering);
 
-            var pagingVm = new PagingVm { SearchStr = string.Empty};
+            var pagingVm = new PagingVm(true, true, true, true, true, true) { SearchStr = string.Empty};
 
             //act
             var users = _userService.RetreiveList(pagingVm).Users;
+
             //assert
             users.Count().ShouldBeEquivalentTo(_users.Count);
         }
-
-        //Live = Active,	ApproveStates = Approved,	Role = Admin 
-        //Live = Active,	ApproveStates = Approved,	Role = Simple 
-        //Live = Active,	ApproveStates = NotApproved, Role = Admin 
-        //Live = Active,	ApproveStates = NotApproved, Role = Simple 
-        //Live = Deleted,	ApproveStates = Approved,	Role = Admin 
-        //Live = Deleted,	ApproveStates = Approved,	Role = Simple 
-        //Live = Deleted,	ApproveStates = NotApproved, Role = Admin 
-        //Live = Deleted,	ApproveStates = NotApproved,	Role = Simple
 
         [Test,
         TestCase(true, true, true, new []{ 0, 1, 2, 3, 4, 5, 6, 7 }),
@@ -183,13 +178,7 @@ namespace Bs.Calendar.Tests.Unit
 
             Setup(_usersForRoleAndStateFilteringTest);
 
-            var pagingVm = new PagingVm
-                               {
-                                   SearchStr = string.Empty,
-                                   ShowDeleted = showDeleted,
-                                   ShowNotApproved = showNotApproved,
-                                   ShowAdmins = showAdmins
-                               };
+            var pagingVm = new PagingVm(showDeleted, showAdmins, showNotApproved) { SearchStr = string.Empty };
 
             _userService.PageSize = _users.Count(); //Don't take paging filter in count
 
