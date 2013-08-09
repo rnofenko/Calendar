@@ -133,7 +133,7 @@ namespace Bs.Calendar.Mvc.Services
 
             var contacts = _contactService.UpdateContacts(userModel.Contacts);
             userToEdit.Contacts.Clear();
-            userToEdit.Contacts = contacts; 
+            userToEdit.Contacts = contacts;
 
             _unit.User.Save(userToEdit);
         }
@@ -142,7 +142,9 @@ namespace Bs.Calendar.Mvc.Services
         {
             var sender = Ioc.Resolve<EmailSender>();
             var body = string.Format("Hi, {0}!\nYour account's status is {1} and {2} now.",
-                user.FullName, user.Live, user.ApproveState);
+                user.FullName,
+                user.Live == LiveStatuses.Active ? "active" : "deleted",
+                user.ApproveState == ApproveStates.Approved ? "approved" : "not approved");
 
             sender.Send("Status has been changed", body, user.Email);
         }
