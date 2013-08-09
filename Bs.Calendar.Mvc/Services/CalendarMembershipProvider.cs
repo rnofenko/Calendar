@@ -62,8 +62,10 @@ namespace Bs.Calendar.Mvc.Services
                 PasswordHash = _crypto.GetHashWithSalt(password, salt),
                 PasswordSalt = salt,
                 Role = Roles.Simple,
-                LiveState = LiveState.NotApproved,
-                BirthDate = null
+                BirthDate = null,
+
+                ApproveState = ApproveStates.NotApproved,
+                Live = LiveStatuses.Active
             };           
             using (var unit = new RepoUnit())
             {

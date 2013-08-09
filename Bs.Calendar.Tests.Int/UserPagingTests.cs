@@ -32,8 +32,8 @@ namespace Bs.Calendar.Tests.Int
             Ioc.RegisterType<IUserRepository, UserRepository>();
 
             _unit = new RepoUnit();
-            _unit.User.Save(new User { Email = "aaa@bbb.com", FullName = "aaa ddd", FirstName = "aaa", LastName = "ddd", LiveState = LiveState.Active});
-            _unit.User.Save(new User { Email = "ccc@ddd.com", FullName = "aaa bbb", FirstName = "aaa", LastName = "bbb", LiveState = LiveState.Active });
+            _unit.User.Save(new User { Email = "aaa@bbb.com", FullName = "aaa ddd", FirstName = "aaa", LastName = "ddd", Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved});
+            _unit.User.Save(new User { Email = "ccc@ddd.com", FullName = "aaa bbb", FirstName = "aaa", LastName = "bbb", Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved });
 
             var userService = new UserService(_unit, null);
             userService.PageSize = _pageSize = 1;

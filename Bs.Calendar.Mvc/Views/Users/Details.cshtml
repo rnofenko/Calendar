@@ -5,16 +5,16 @@
     ViewBag.Title = "User Details";
 }
 
-@switch (Model.LiveState)
+@switch (Model.Live)
 {
-    case LiveState.Deleted:
+    case LiveStatuses.Deleted:
         <div class="row">
             <div class="centered seven columns alert">
                 <h4>User with email @Model.Email already exists but you can @Html.ActionLink("recover it", "RecoverUser", Model)</h4>
             </div>
         </div>
         break;
-    case 0:
+    case LiveStatuses.Active:
         <div class="row">
             <div class="centered seven columns alert">
                 <h4>User with email @Model.Email already exists!</h4>

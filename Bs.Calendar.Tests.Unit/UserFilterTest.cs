@@ -28,14 +28,14 @@ namespace Bs.Calendar.Tests.Unit
 
         private List<User> _usersForRoleAndStateFilteringTest = new List<User>
             {
-                new User {LiveState = LiveState.Active, Role = Roles.Admin},
-                new User {LiveState = LiveState.Active, Role = Roles.Simple},
-                new User {LiveState = LiveState.Deleted, Role = Roles.Admin},
-                new User {LiveState = LiveState.Deleted, Role = Roles.Simple},
-                new User {LiveState = LiveState.NotApproved, Role = Roles.Admin},
-                new User {LiveState = LiveState.NotApproved, Role = Roles.Simple},
-                new User {LiveState = LiveState.Deleted | LiveState.NotApproved, Role = Roles.Admin},
-                new User {LiveState = LiveState.Deleted | LiveState.NotApproved, Role = Roles.Simple}
+                new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Admin },
+                new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Simple },
+                new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved, Role = Roles.Admin },
+                new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved, Role = Roles.Simple },
+                new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.Approved, Role = Roles.Admin },
+                new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.Approved, Role = Roles.Simple },
+                new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.NotApproved, Role = Roles.Admin },
+                new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.NotApproved, Role = Roles.Simple }
             };
 
         private void Setup(List<User> users)
@@ -157,16 +157,26 @@ namespace Bs.Calendar.Tests.Unit
             users.Count().ShouldBeEquivalentTo(_users.Count);
         }
 
+        //Live = Active,	ApproveStates = Approved,	Role = Admin 
+        //Live = Active,	ApproveStates = Approved,	Role = Simple 
+        //Live = Active,	ApproveStates = NotApproved, Role = Admin 
+        //Live = Active,	ApproveStates = NotApproved, Role = Simple 
+        //Live = Deleted,	ApproveStates = Approved,	Role = Admin 
+        //Live = Deleted,	ApproveStates = Approved,	Role = Simple 
+        //Live = Deleted,	ApproveStates = NotApproved, Role = Admin 
+        //Live = Deleted,	ApproveStates = NotApproved,	Role = Simple
+
         [Test,
         TestCase(true, true, true, new []{ 0, 1, 2, 3, 4, 5, 6, 7 }),
-        TestCase(false, true, true, new []{ 0, 1, 4, 5, 6, 7}),
+        TestCase(false, true, true, new []{ 0, 1, 2, 3}),
         TestCase(true, true, false, new []{ 1, 3, 5, 7 }),
-        TestCase(false, true, false, new []{ 1, 5, 7 }),
-        TestCase(true, false, true, new []{ 0, 1, 2, 3, 6, 7 }),
+        TestCase(false, true, false, new []{ 1, 3 }),
+        TestCase(true, false, true, new []{ 0, 1, 4, 5 }),
         TestCase(false, false, true, new []{ 0, 1 }),
-        TestCase(true, false, false, new []{ 1, 3, 7}),
+        TestCase(true, false, false, new []{ 1, 5 }),
         TestCase(false, false, false, new []{1})
         ]
+        //showDeleted, showNotApproved, showAdmins
         public void Should_return_records_corresponding_to_selected_role_and_state_filters(bool showDeleted, bool showNotApproved, bool showAdmins, int[] expected)
         {
             //arrange

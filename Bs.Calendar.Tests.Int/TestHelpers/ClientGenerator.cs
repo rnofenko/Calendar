@@ -22,11 +22,13 @@ namespace Bs.Calendar.Tests.Int.TestHelpers
                 {
                     var user = new User
                         {
-                            Email = "test" + i + "@gmail.com",
+                            Email = string.Format("test{0}@gmail.com", i),
                             FirstName = "Test" + i,
                             LastName = "Test",
                             Role = Roles.Simple,
-                            LiveState = LiveState.Active
+
+                            Live = LiveStatuses.Active,
+                            ApproveState = ApproveStates.Approved
                         };
 
                     unit.User.Save(user);

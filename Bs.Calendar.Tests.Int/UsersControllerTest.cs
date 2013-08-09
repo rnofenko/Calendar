@@ -32,7 +32,8 @@ namespace Bs.Calendar.Tests.Int
                     LastName = "Smith",
                     Email = "bigbrother1984@gmail.com",
                     Role = Roles.Simple,
-                    LiveState = LiveState.Active
+                    Live = LiveStatuses.Active,
+                    ApproveState = ApproveStates.Approved
                 };
             DiMvc.Register();
             Ioc.RegisterType<IUserRepository, FakeUserRepository>();
@@ -52,7 +53,8 @@ namespace Bs.Calendar.Tests.Int
                     LastName = "Goldstein",
                     Email = "bigbrother1984@gmail.com",
                     Role = Roles.Simple,
-                    LiveState = LiveState.Active
+                    Live = LiveStatuses.Active,
+                    ApproveState = ApproveStates.Approved
                 };
 
             // act
@@ -66,8 +68,8 @@ namespace Bs.Calendar.Tests.Int
         public void CanNotAddNewUserWithExistingInTheDbEmailEvenIfUserWithThisEmaisIsDeleted()
         {
             // arrange
-            _user.LiveState = LiveState.Deleted;
-            _userService.UpdateUserState(_user.Id, LiveState.Deleted);
+            _user.Live = LiveStatuses.Deleted;
+            _userService.UpdateUserState(_user.Id, _user.ApproveState, _user.Live);
 
             var userToAdd = new User
             {
@@ -75,7 +77,8 @@ namespace Bs.Calendar.Tests.Int
                 LastName = "Htims",
                 Email = "bigbrother1984@gmail.com",
                 Role = Roles.Simple,
-                LiveState = LiveState.Active
+
+                Live = LiveStatuses.Active
             };
 
             // act
@@ -97,7 +100,8 @@ namespace Bs.Calendar.Tests.Int
                     Email = "orwell.george@gmail.com",
                     Role = Roles.Simple,
                     BirthDate = null,
-                    LiveState = LiveState.Active
+
+                    Live = LiveStatuses.Active
                 };
 
             // act
@@ -141,7 +145,8 @@ namespace Bs.Calendar.Tests.Int
                 LastName = "Agent",
                 Email = "obrien@gmail.com",
                 Role = Roles.Simple,
-                LiveState = LiveState.Active
+
+                Live = LiveStatuses.Active
             };
             _userService.SaveUser(userToDeleteVm);
 
@@ -151,7 +156,7 @@ namespace Bs.Calendar.Tests.Int
             new UsersController(_userService).Delete(new UserEditVm(userToDelete));
 
             // assert
-            _unit.User.Get(userToDelete.Id).LiveState.Should().Be(LiveState.Deleted);
+            _unit.User.Get(userToDelete.Id).Live.Should().Be(LiveStatuses.Deleted);
         }
 
         [TestFixtureTearDown]

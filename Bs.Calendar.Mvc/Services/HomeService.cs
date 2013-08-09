@@ -25,10 +25,12 @@ namespace Bs.Calendar.Mvc.Services
                     Email = "Admin",
                     FirstName = "Admin",
                     LastName = "Admin",
-                    LiveState = LiveState.Active,
                     Role = Roles.Admin,
                     PasswordHash = "Admin",
-                    PasswordSalt = ""
+                    PasswordSalt = "",
+
+                    Live = LiveStatuses.Active,
+                    ApproveState = ApproveStates.Approved
                 };
                 unit.User.Save(defaultUser);
             }

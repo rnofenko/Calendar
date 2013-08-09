@@ -24,13 +24,14 @@ namespace Bs.Calendar.Models
         public string PasswordHash { get; set; }
 
         public string PasswordSalt { get; set; }
-        
-        public LiveState LiveState { get; set; }
 
         public DateTime? BirthDate { get; set; }
 
         public virtual PasswordRecovery PasswordRecovery { get; set; }
 
         public virtual ICollection<Contact> Contacts { get; set; }
+
+        public LiveStatuses Live { get; set; }
+        public ApproveStates ApproveState { get; set; }
     }
 }

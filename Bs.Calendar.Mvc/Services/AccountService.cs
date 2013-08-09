@@ -32,7 +32,9 @@ namespace Bs.Calendar.Mvc.Services
         {
             if (!_membershipProvider.ValidateUser(model.Email, model.Password)) return false;
             var user = _unit.User.Get(u => u.Email == model.Email);
-            user.LiveState = user.LiveState == LiveState.Deleted ? LiveState.NotApproved : user.LiveState;
+
+            user.ApproveState = user.Live == LiveStatuses.Deleted ? ApproveStates.NotApproved : user.ApproveState;
+
             _unit.User.Save(user);
             FormsAuthentication.SetAuthCookie(model.Email, true);
             return true;
@@ -41,20 +43,24 @@ namespace Bs.Calendar.Mvc.Services
         public bool? RegisterUser(RegisterVm account, out MembershipCreateStatus status)
         {
             _membershipProvider.CreateUser("", account.Password, account.Email, "", "", true, null, out status);
+
             if (status == MembershipCreateStatus.Success)
             {
                 //sendMsgToAdmins(account.Email);
                 FormsAuthentication.SetAuthCookie(account.Email, false);
                 return true;
             }
+
             if (status == MembershipCreateStatus.DuplicateEmail)
             {
                 var user = _unit.User.Get(u => u.Email == account.Email);
-                if (user.LiveState == LiveState.Deleted)
+
+                if (user.Live == LiveStatuses.Deleted)
                 {
                     return false;
                 }
             }
+
             return null;
         }
 
@@ -116,7 +122,7 @@ namespace Bs.Calendar.Mvc.Services
             var passwordRecovery = user.PasswordRecovery ?? (user.PasswordRecovery = new PasswordRecovery());
             passwordRecovery.Date = DateTime.Now;
             passwordRecovery.PasswordSalt = Ioc.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
-            passwordRecovery.PasswordHash = Ioc.Resolve<ICryptoProvider>().GetHashWithSalt(DateTime.Now.ToString(CultureInfo.InvariantCulture), passwordRecovery.PasswordSalt);
+            passwordRecovery.PasswordHash = Ioc.Resolve<ICryptoProvider>().GetHashWithSalt(Guid.NewGuid().ToString(), passwordRecovery.PasswordSalt);
             _unit.User.Save(user);
 
             var sender = Ioc.Resolve<EmailSender>();

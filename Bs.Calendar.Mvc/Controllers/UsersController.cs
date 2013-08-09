@@ -66,7 +66,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult ApproveUser(UserEditVm model)
         {
-            _service.UpdateUserState(model.UserId, LiveState.Active);
+            _service.UpdateUserState(model.UserId, ApproveStates.Approved, LiveStatuses.Active);
             return RedirectToAction("Index");
         }
 
@@ -100,7 +100,7 @@ namespace Bs.Calendar.Mvc.Controllers
         ValidateAntiForgeryToken]
         public ActionResult Delete(UserEditVm model)
         {
-            _service.UpdateUserState(model.UserId, LiveState.Deleted);
+            _service.UpdateUserState(model.UserId, model.ApproveState, LiveStatuses.Deleted);
             return RedirectToAction("Index");
         }
 

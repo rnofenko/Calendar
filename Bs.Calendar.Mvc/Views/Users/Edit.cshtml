@@ -12,7 +12,8 @@
         userId = Model.UserId;
         ViewBag.Title = "Edit User";
         ViewBag.User = Model.FirstName + " " + Model.LastName;
-        isDeleted = Model.LiveState == LiveState.Deleted;
+        
+        isDeleted = Model.Live == LiveStatuses.Deleted;
     }
     else
     {
@@ -93,7 +94,7 @@
                     @Html.ActionLink("Back", "Index")
                 </div>
                 
-                @if (Model.LiveState.HasFlag(LiveState.NotApproved))
+                @if (Model.ApproveState == ApproveStates.NotApproved)
                 {
                     <div class="medium warning btn push_one three columns">
                         @Html.ActionLink("Approve", "ApproveUser", Model)

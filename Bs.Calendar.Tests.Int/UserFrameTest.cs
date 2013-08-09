@@ -32,8 +32,8 @@ namespace Bs.Calendar.Tests.Int
 
             _unit = new RepoUnit();
 
-            _unit.User.Save(new User { Email = "aaa@bbb.com", FirstName = "aaa", LastName = "bbb", LiveState = LiveState.Active, Role = Roles.Admin});
-            _unit.User.Save(new User { Email = "ccc@ddd.com", FirstName = "ccc", LastName = "ddd", LiveState = LiveState.Active, Role = Roles.Simple});
+            _unit.User.Save(new User { Email = "aaa@bbb.com", FirstName = "aaa", LastName = "bbb", Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Admin });
+            _unit.User.Save(new User { Email = "ccc@ddd.com", FirstName = "ccc", LastName = "ddd", Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Simple});
 
             _usersController = new UsersController(new UserService(_unit, null));
             _usersController.ControllerContext = mock.Object;

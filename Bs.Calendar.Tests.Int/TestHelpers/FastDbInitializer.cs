@@ -29,12 +29,14 @@ namespace Bs.Calendar.Tests.Int.TestHelpers
                 {
                     var user = new User
                     {
-                        Email = "test" + randomizer.Next(_userCount) + "@gmail.com",
+                        Email = string.Format("test{0}@gmail.com", randomizer.Next(_userCount)),
                         FullName = "Test Test",
                         FirstName = "Test",
                         LastName = "Test",
                         Role = Roles.Simple,
-                        LiveState = LiveState.Active
+
+                        Live = LiveStatuses.Active,
+                        ApproveState = ApproveStates.Approved
                     };
 
                     context = AddToContext(context, user, i, 1000, true);

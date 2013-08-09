@@ -22,11 +22,12 @@ namespace Bs.Calendar.Tests.Unit
         public void Setup() {
             _users = new List<User>
             {
-                new User {Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", LiveState = LiveState.Active},
-                new User {Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", LiveState = LiveState.Active},
-                new User {Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", LiveState = LiveState.Active},
-                new User {Email = "0000@gmail.com", FirstName = "Alex", LastName = "Sinov", LiveState = LiveState.Active}
+                new User {Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved},
+                new User {Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved},
+                new User {Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved},
+                new User {Email = "0000@gmail.com", FirstName = "Alex", LastName = "Sinov", Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved}
             };
+
             _users.ForEach(user => user.FullName = string.Format("{0} {1}", user.FirstName, user.LastName));
 
             var moq = new Mock<IUserRepository>();

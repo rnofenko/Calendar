@@ -85,7 +85,7 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException(string.Format("Author should be specified"));
             }
-            if (_repoUnit.Book.Load(b => b.Code == book.Code).Any())
+            if (_repoUnit.Book.Load(b => b.Code == book.Code && b.Id != book.BookId).Any())
             {
                 throw new WarningException(string.Format("Code should be unique"));
             }

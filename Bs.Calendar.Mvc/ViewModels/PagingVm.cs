@@ -25,9 +25,7 @@ namespace Bs.Calendar.Mvc.ViewModels
         }
 
         public PagingVm(PagingVm pagingVm)
-            : this(
-            pagingVm.SearchStr, pagingVm.SortByStr, pagingVm.TotalPages, pagingVm.Page,
-            pagingVm.ShowDeleted, pagingVm.ShowAdmins, pagingVm.ShowNotApproved)
+            : this(pagingVm.SearchStr, pagingVm.SortByStr, pagingVm.TotalPages, pagingVm.Page, pagingVm.ShowDeleted, pagingVm.ShowAdmins, pagingVm.ShowNotApproved)
         {
         }
 
@@ -40,16 +38,23 @@ namespace Bs.Calendar.Mvc.ViewModels
             }
         }
 
-        public LiveState StateFilter
+        public LiveStatuses LiveStatusFilter
+        {   
+            get
+            {
+                var liveStatus = LiveStatuses.Active;
+
+                return ShowDeleted ? liveStatus | LiveStatuses.Deleted : liveStatus;
+            }
+        }
+
+        public ApproveStates ApproveStateFilter
         {
             get
             {
-                var state = LiveState.Active;
+                var approveState = ApproveStates.Approved;
 
-                state |= ShowNotApproved ? LiveState.NotApproved : 0;
-                state |= ShowDeleted ? LiveState.Deleted: 0;
-
-                return state;
+                return ShowNotApproved ? approveState | ApproveStates.NotApproved : approveState;
             }
         }
 

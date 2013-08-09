@@ -28,9 +28,9 @@ namespace Bs.Calendar.Tests.Unit
         {
             _users = new List<User>()
             {
-                new User {Id = 1, Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.Simple, LiveState = LiveState.Active},
-                new User {Id = 2, Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.Simple, LiveState = LiveState.Active},
-                new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.Simple, LiveState = LiveState.Active}
+                new User {Id = 1, Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.Simple, Live = LiveStatuses.Active},
+                new User {Id = 2, Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.Simple, Live = LiveStatuses.Active},
+                new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.Simple, Live = LiveStatuses.Active}
             };
 
             DiMvc.Register();

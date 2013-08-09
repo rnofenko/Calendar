@@ -28,10 +28,10 @@ namespace Bs.Calendar.Tests.Unit
             var users = new List<User>
             {
                 new User { Email = "12345@gmail.com", FullName = "Saveli Bondini", FirstName = "Saveli", 
-                    LastName = "Bondini", BirthDate = DateTime.Now, Role = Roles.Simple,LiveState = LiveState.Active},
+                    LastName = "Bondini", BirthDate = DateTime.Now, Role = Roles.Simple, Live = LiveStatuses.Active},
                     
                 new User { Email = "00000@gmail.com", FullName = "Oleg Shepelev", FirstName = "Oleg", 
-                    LastName = "Shepelev", BirthDate = DateTime.Now, Role = Roles.Simple,LiveState = LiveState.Active},
+                    LastName = "Shepelev", BirthDate = DateTime.Now, Role = Roles.Simple, Live = LiveStatuses.Active},
             };
 
             DiMvc.Register();
@@ -50,7 +50,7 @@ namespace Bs.Calendar.Tests.Unit
         {
             //arrange
             var testUserId = _repoUnit.User.Get(user => user.Email == "12345@gmail.com").Id;
-            var testUserVm = new UserEditVm(testUserId, "Toto", "Koko", "54321@gmail.com", Roles.Simple, new DateTime(1991, 09, 20), LiveState.Active);
+            var testUserVm = new UserEditVm(testUserId, "Toto", "Koko", "54321@gmail.com", Roles.Simple, new DateTime(1991, 09, 20), LiveStatuses.Active, ApproveStates.Approved);
 
             //act
             _accountService.EditUser(testUserVm);
@@ -68,7 +68,7 @@ namespace Bs.Calendar.Tests.Unit
         public void Cannot_Edit_Account_Role_And_LiveState() {
             //arrange
             var testUserId = _repoUnit.User.Get(user => user.Email == "00000@gmail.com").Id;
-            var testUserVm = new UserEditVm(testUserId, "Toto", "Koko", "99999@gmail.com", Roles.Admin, new DateTime(1991, 09, 20), LiveState.Deleted);
+            var testUserVm = new UserEditVm(testUserId, "Toto", "Koko", "99999@gmail.com", Roles.Admin, new DateTime(1991, 09, 20), LiveStatuses.Deleted, ApproveStates.Approved);
 
             //act
             _accountService.EditUser(testUserVm);
@@ -76,7 +76,7 @@ namespace Bs.Calendar.Tests.Unit
 
             //assert
             editedUser.Role.ShouldBeEquivalentTo(Roles.Simple);
-            editedUser.LiveState.ShouldBeEquivalentTo(LiveState.Active);
+            editedUser.Live.ShouldBeEquivalentTo(LiveStatuses.Active);
         }
     }
 }
