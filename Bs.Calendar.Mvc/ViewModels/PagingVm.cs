@@ -4,11 +4,20 @@ namespace Bs.Calendar.Mvc.ViewModels
 {
     public class PagingVm
     {
-        public PagingVm()
+        public PagingVm(
+            bool showDeleted = false, bool showAdmins = false, bool showNotApproved = true,
+            bool showUnknownLiveStatus = false, bool showUnknownRole = false, bool showUnknownApproveState = false)
         {
             Page = 1;
             TotalPages = 1;
-            ShowNotApproved = true;
+
+            ShowNotApproved = showNotApproved;
+            ShowAdmins = showAdmins;
+            ShowDeleted = showDeleted;
+
+            ShowUnknownApproveState = showUnknownApproveState;
+            ShowUnknownLiveStatus = showUnknownLiveStatus;
+            ShowUnknownRole = showUnknownRole;
         }
 
         public PagingVm(string searchStr, string sortByStr, int totalPages, int page = 1,
@@ -69,5 +78,9 @@ namespace Bs.Calendar.Mvc.ViewModels
         public bool ShowAdmins { get; set; }
         public bool ShowNotApproved { get; set; }
         public bool ShowDeleted { get; set; }
+
+        public bool ShowUnknownRole { get; set; }
+        public bool ShowUnknownLiveStatus { get; set; }
+        public bool ShowUnknownApproveState { get; set; }
     }
 }

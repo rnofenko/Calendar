@@ -152,7 +152,9 @@ namespace Bs.Calendar.Mvc.Services
             var users = _unit.User.Load();
 
             users = searchByStr(users, pagingVm.SearchStr);
-            users = searchByRoleAndState(users, pagingVm.RolesFilter, pagingVm.LiveStatusFilter, pagingVm.ApproveStateFilter);
+            users = searchByRoleAndState(users, pagingVm.RolesFilter, pagingVm.LiveStatusFilter, pagingVm.ApproveStateFilter,
+                                         pagingVm.ShowUnknownRole, pagingVm.ShowUnknownLiveStatus, pagingVm.ShowUnknownApproveState);
+
             users = sortByStr(users, pagingVm.SortByStr);
 
             pagingVm = updatePagingVm(pagingVm, users);
@@ -241,13 +243,16 @@ namespace Bs.Calendar.Mvc.Services
         }
 
         private IQueryable<User> searchByRoleAndState(
-            IQueryable<User> users, Roles showRoles = Roles.Simple,
-            LiveStatuses showStatus = LiveStatuses.Active, ApproveStates showApproveState = ApproveStates.NotApproved)
+            IQueryable<User> users, Roles showRoles = (Roles)~0,
+            LiveStatuses showStatus = (LiveStatuses)~0, ApproveStates showApproveState = (ApproveStates)~0,
+            bool selectUnknownRole = false, bool selectUnknownStatus = false, bool selectUnknownState = false)
         {
+            //Select users with unknown parameters only if corresponding flags are set to true (even if filter value is stated apparently)
+
             return users
-                .Where(user => (showRoles & user.Role) != 0 &&
-                               (showStatus & user.Live) != 0 &&
-                               (showApproveState & user.ApproveState) != 0);
+                .Where(user => selectUnknownRole ? (showRoles & user.Role) == user.Role : (showRoles & user.Role) != 0 &&
+                               selectUnknownStatus ? (showStatus & user.Live) == user.Live : (showStatus & user.Live) != 0 &&
+                               selectUnknownState ? (showApproveState & user.ApproveState) == user.ApproveState : (showApproveState & user.ApproveState) != 0);
         }
 
         private int getTotalPages(int count, int pageSize)
