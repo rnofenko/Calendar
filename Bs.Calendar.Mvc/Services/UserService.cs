@@ -157,7 +157,9 @@ namespace Bs.Calendar.Mvc.Services
             var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
             var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
 
-            return new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage);
+            return new PagingVm(
+                pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage,
+                pagingVm.ShowDeleted, pagingVm.ShowAdmins, pagingVm.ShowNotApproved);
         }
 
         private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
@@ -231,8 +233,8 @@ namespace Bs.Calendar.Mvc.Services
             //Can't use Enum::HasFlag(), because LINQ to Entity operates only with primitive types
 
             return users
-                .Where(user => (showRoles & user.Role) == user.Role &&
-                               (showStates & user.LiveState) == user.LiveState);
+                .Where(user => (showRoles & user.Role) != 0 &&  //Filter contains user's role flag
+                               (showStates & user.LiveState) != 0);     //User's state flags intersect with filter flags
         }
 
         private int getTotalPages(int count, int pageSize)

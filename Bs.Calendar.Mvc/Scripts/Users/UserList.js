@@ -4,6 +4,10 @@
     self.Page = ko.observable();
     self.SortByStr = ko.observable();
     self.SearchStr = ko.observable();
+
+    self.ShowAdmins = ko.observable();
+    self.ShowNotApproved = ko.observable();
+    self.ShowDeleted = ko.observable();
 }
 
 function ViewModel() {
@@ -17,7 +21,7 @@ function ViewModel() {
         TotalPages: ko.observable(),
         
         ShowAdmins: ko.observable(false),
-        ShowNotApproved: ko.observable(true),
+        ShowNotApproved: ko.observable(false),
         ShowDeleted: ko.observable(false)
     };
 
@@ -61,7 +65,8 @@ function ViewModel() {
         $(columnId).append($('<i/>', { "class": self.arrowUp ? "icon-up" : "icon-down" }));
     };
 
-    self.updateList = function(model) {
+    self.updateList = function (model) {
+
         $.get("Users/List", model, function(htmlData) {
             $(self.listBodyId).html(htmlData);
             self.model.Page($(htmlData).filter("#listPage").val());
@@ -90,11 +95,11 @@ function ViewModel() {
             self.model.ShowAdmins(showAdmins);
             self.model.ShowNotApproved(showNotApproved);
             self.model.ShowDeleted(showDeleted);
-            
+            console.log(self.model);
             self.updateList(self.model);
         }
 
-        self.toggleModal();
+        self.resetFlags();
     };
 
     self.resetFlags = function () {
@@ -130,9 +135,20 @@ function ViewModel() {
             noteMessage.push("Deleted");
         
         if (noteMessage.length == 0)
-            noteMessage.push("All");
+            noteMessage.push("Default");
 
         return noteMessage.join(", ");
         
     }, self);
+
+    self.updateModal = function (model) {
+
+        console.log(self.model.ShowAdmins(), self.model.ShowNotApproved(), self.model.ShowDeleted());
+
+        self.model.ShowAdmins(model.ShowAdmins);
+        self.model.ShowNotApproved(model.ShowNotApproved);
+        self.model.ShowDeleted(model.ShowDeleted);
+
+        console.log(self.model.ShowAdmins(), self.model.ShowNotApproved(), self.model.ShowDeleted());
+    };
 }

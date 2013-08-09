@@ -8,6 +8,7 @@ namespace Bs.Calendar.Mvc.ViewModels
         {
             Page = 1;
             TotalPages = 1;
+            ShowNotApproved = true;
         }
 
         public PagingVm(string searchStr, string sortByStr, int totalPages, int page = 1,
@@ -24,7 +25,9 @@ namespace Bs.Calendar.Mvc.ViewModels
         }
 
         public PagingVm(PagingVm pagingVm)
-            : this(pagingVm.SearchStr, pagingVm.SortByStr, pagingVm.TotalPages, pagingVm.Page)
+            : this(
+            pagingVm.SearchStr, pagingVm.SortByStr, pagingVm.TotalPages, pagingVm.Page,
+            pagingVm.ShowDeleted, pagingVm.ShowAdmins, pagingVm.ShowNotApproved)
         {
         }
 
@@ -32,8 +35,8 @@ namespace Bs.Calendar.Mvc.ViewModels
         { 
             get
             {
-                var role = Roles.Admin;
-                return ShowAdmins ? role : Roles.Simple | role;
+                var role = Roles.Simple;
+                return ShowAdmins ? role | Roles.Admin : role;
             }
         }
 
@@ -41,15 +44,10 @@ namespace Bs.Calendar.Mvc.ViewModels
         {
             get
             {
-                var state = LiveState.Deleted | LiveState.NotApproved;
+                var state = LiveState.Active;
 
-                if(!ShowNotApproved && !ShowDeleted)
-                {
-                    return state | LiveState.Active;
-                }
-                
-                state = !ShowNotApproved ? state ^ LiveState.NotApproved : state;
-                state = !ShowDeleted ? state ^ LiveState.Deleted : state;
+                state |= ShowNotApproved ? LiveState.NotApproved : 0;
+                state |= ShowDeleted ? LiveState.Deleted: 0;
 
                 return state;
             }

@@ -33,7 +33,9 @@ namespace Bs.Calendar.Tests.Unit
                 new User {LiveState = LiveState.Deleted, Role = Roles.Admin},
                 new User {LiveState = LiveState.Deleted, Role = Roles.Simple},
                 new User {LiveState = LiveState.NotApproved, Role = Roles.Admin},
-                new User {LiveState = LiveState.NotApproved, Role = Roles.Simple}
+                new User {LiveState = LiveState.NotApproved, Role = Roles.Simple},
+                new User {LiveState = LiveState.Deleted | LiveState.NotApproved, Role = Roles.Admin},
+                new User {LiveState = LiveState.Deleted | LiveState.NotApproved, Role = Roles.Simple}
             };
 
         private void Setup(List<User> users)
@@ -156,14 +158,14 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test,
-        TestCase(true, true, true, new []{ 2, 4 }),
-        TestCase(false, true, true, new []{ 4 }),
-        TestCase(true, true, false, new []{ 2, 3, 4, 5 }),
-        TestCase(false, true, false, new []{ 4, 5 }),
-        TestCase(true, false, true, new []{ 2 }),
-        TestCase(false, false, true, new []{ 0, 2, 4 }),
-        TestCase(true, false, false, new []{ 2, 3 }),
-        TestCase(false, false, false, new []{0, 1, 2, 3, 4, 5})
+        TestCase(true, true, true, new []{ 0, 1, 2, 3, 4, 5, 6, 7 }),
+        TestCase(false, true, true, new []{ 0, 1, 4, 5, 6, 7}),
+        TestCase(true, true, false, new []{ 1, 3, 5, 7 }),
+        TestCase(false, true, false, new []{ 1, 5, 7 }),
+        TestCase(true, false, true, new []{ 0, 1, 2, 3, 6, 7 }),
+        TestCase(false, false, true, new []{ 0, 1 }),
+        TestCase(true, false, false, new []{ 1, 3, 7}),
+        TestCase(false, false, false, new []{1})
         ]
         public void Should_return_records_corresponding_to_selected_role_and_state_filters(bool showDeleted, bool showNotApproved, bool showAdmins, int[] expected)
         {
@@ -171,7 +173,15 @@ namespace Bs.Calendar.Tests.Unit
 
             Setup(_usersForRoleAndStateFilteringTest);
 
-            var pagingVm = new PagingVm { SearchStr = string.Empty, ShowDeleted = showDeleted, ShowNotApproved = showNotApproved, ShowAdmins = showAdmins};
+            var pagingVm = new PagingVm
+                               {
+                                   SearchStr = string.Empty,
+                                   ShowDeleted = showDeleted,
+                                   ShowNotApproved = showNotApproved,
+                                   ShowAdmins = showAdmins
+                               };
+
+            _userService.PageSize = _users.Count(); //Don't take paging filter in count
 
             var expectedResult = _users.Where((user, index) => expected.Contains(index)); //Select correct records in the right order
 
