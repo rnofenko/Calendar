@@ -22,16 +22,22 @@ namespace Bs.Calendar.Tests.Unit
         private AccountService _accountService;
         private RepoUnit _repoUnit;
 
-        [TestFixtureSetUp]
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            Ioc.RegisterInstance<RepoUnit>(new RepoUnit());
+        }
+
+        [SetUp]
         public void SetUp()
         {
             var users = new List<User>
             {
                 new User { Email = "12345@gmail.com", FullName = "Saveli Bondini", FirstName = "Saveli", 
-                    LastName = "Bondini", BirthDate = DateTime.Now, Role = Roles.Simple, Live = LiveStatuses.Active},
+                    LastName = "Bondini", BirthDate = DateTime.Now, Role = Roles.Simple, Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved, Contacts = new List<Contact>()},
                     
                 new User { Email = "00000@gmail.com", FullName = "Oleg Shepelev", FirstName = "Oleg", 
-                    LastName = "Shepelev", BirthDate = DateTime.Now, Role = Roles.Simple, Live = LiveStatuses.Active},
+                    LastName = "Shepelev", BirthDate = DateTime.Now, Role = Roles.Simple, Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved, Contacts = new List<Contact>()},
             };
 
             DiMvc.Register();
@@ -67,16 +73,20 @@ namespace Bs.Calendar.Tests.Unit
         [Test]
         public void Cannot_Edit_Account_Role_And_LiveState() {
             //arrange
+
             var testUserId = _repoUnit.User.Get(user => user.Email == "00000@gmail.com").Id;
             var testUserVm = new UserEditVm(testUserId, "Toto", "Koko", "99999@gmail.com", Roles.Admin, new DateTime(1991, 09, 20), LiveStatuses.Deleted, ApproveStates.Approved);
 
             //act
+
             _accountService.EditUser(testUserVm);
             var editedUser = _repoUnit.User.Get(testUserId);
 
             //assert
+
             editedUser.Role.ShouldBeEquivalentTo(Roles.Simple);
             editedUser.Live.ShouldBeEquivalentTo(LiveStatuses.Active);
+            editedUser.ApproveState.ShouldBeEquivalentTo(ApproveStates.NotApproved);
         }
     }
 }

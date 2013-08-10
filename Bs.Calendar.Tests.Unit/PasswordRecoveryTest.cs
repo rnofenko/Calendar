@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Net.Mail;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
@@ -22,6 +23,7 @@ namespace Bs.Calendar.Tests.Unit
     {
         private List<User> _users;
         private AccountService _accountService;
+        private RepoUnit _repoUnit;
 
         [TestFixtureSetUp]
         public void SetUp()
@@ -36,8 +38,8 @@ namespace Bs.Calendar.Tests.Unit
             DiMvc.Register();
             Ioc.RegisterType<IUserRepository, FakeUserRepository>();
 
-            var repoUnit = new RepoUnit();
-            _users.ForEach(u => repoUnit.User.Save(u));
+            _repoUnit = new RepoUnit();
+            _users.ForEach(u => _repoUnit.User.Save(u));
             _accountService = Ioc.Resolve<AccountService>();
         }
 

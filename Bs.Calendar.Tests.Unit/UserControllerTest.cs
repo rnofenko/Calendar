@@ -24,6 +24,13 @@ namespace Bs.Calendar.Tests.Unit
     {
         private UsersController _userController;
         private List<User> _users;
+        private RepoUnit _repoUnit;
+
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            Ioc.RegisterInstance<RepoUnit>(new RepoUnit());
+        }
 
         [SetUp]
         public void SetUp()
@@ -41,10 +48,10 @@ namespace Bs.Calendar.Tests.Unit
             DiMvc.Register();
             Ioc.RegisterType<IUserRepository, FakeUserRepository>();
 
-            var repoUnit = new RepoUnit();
-            _users.ForEach(user => repoUnit.User.Save(user));
+            _repoUnit = new RepoUnit();
+            _users.ForEach(user => _repoUnit.User.Save(user));
 
-            Ioc.RegisterInstance<RepoUnit>(repoUnit);
+            Ioc.RegisterInstance<RepoUnit>(_repoUnit);
             _userController = Ioc.Resolve<UsersController>();
             _userController.ControllerContext = mock.Object;
         }

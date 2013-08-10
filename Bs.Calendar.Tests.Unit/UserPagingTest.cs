@@ -18,8 +18,15 @@ namespace Bs.Calendar.Tests.Unit
         private UserService _userService;
         private List<User> _users;
 
-        [TestFixtureSetUp]
-        public void Setup() {
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            Ioc.RegisterInstance<RepoUnit>(new RepoUnit());
+        }
+
+        [SetUp]
+        public void Setup()
+        {
             _users = new List<User>
             {
                 new User {Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini"},

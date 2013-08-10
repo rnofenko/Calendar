@@ -7,7 +7,8 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
     public class FakeUserRepository : FakeBaseRepository<User>, IUserRepository
     {
         public override IQueryable<User> Load() {
-            return Load(u => u.Live == LiveStatuses.Active);
+            //return Load(u => u.Live == LiveStatuses.Active);
+            return base.Load();
         }
 
         public override void Save(User entity)

@@ -7,6 +7,7 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Tests.Unit.FakeObjects;
 using Moq;
 using NUnit.Framework;
 using FluentAssertions;
@@ -17,7 +18,14 @@ namespace Bs.Calendar.Tests.Unit
     class UserFilterTest
     {
         private UserService _userService;
-        private static List<User> _users;
+        private List<User> _users;
+        private RepoUnit _repoUnit;
+
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            Ioc.RegisterInstance<RepoUnit>(new RepoUnit());
+        }
 
         private List<User> _usersForStringSearchAndFiltering = new List<User>
             {
@@ -40,13 +48,23 @@ namespace Bs.Calendar.Tests.Unit
 
         private void Setup(List<User> users)
         {
-            _users = users;
+            _users = users.ToList(); //Create list copy for test independency
 
-            var moq = new Mock<IUserRepository>();
-            moq.Setup(m => m.Load()).Returns(_users.AsQueryable());
+            //var moq = new Mock<IUserRepository>();
+            
+            //moq.Setup(m => m.Load()).Returns(_users.AsQueryable());
+
+            //DiMvc.Register();
+            //Ioc.RegisterInstance<IUserRepository>(moq.Object);
+            //_userService = Ioc.Resolve<UserService>();
 
             DiMvc.Register();
-            Ioc.RegisterInstance<IUserRepository>(moq.Object);
+            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
+
+            _repoUnit = new RepoUnit();
+            _users.ForEach(user => _repoUnit.User.Save(user));
+
+            Ioc.RegisterInstance<RepoUnit>(_repoUnit);
             _userService = Ioc.Resolve<UserService>();
         }
 
@@ -89,7 +107,7 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
-        public void Should_return_all_users_with_specified_name_When_search_by_name() 
+        public void Should_return_all_users_with_full_name_containing_specified_name_When_search_by_name() 
         {
             //arrange
 
