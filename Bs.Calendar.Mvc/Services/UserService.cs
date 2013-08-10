@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Bs.Calendar.Core;
@@ -16,6 +17,7 @@ namespace Bs.Calendar.Mvc.Services
     {
         private readonly RepoUnit _unit;
         private readonly ContactService _contactService;
+        private const int SALT_LENGTH = 128;
         public int PageSize { get; set; }
 
         public UserService(RepoUnit unit, ContactService contactService)
@@ -250,6 +252,22 @@ namespace Bs.Calendar.Mvc.Services
             var userToRecover = _unit.User.Get(u => u.Email == email);
             userToRecover.LiveState = LiveState.NotApproved;
             _unit.User.Save(userToRecover);
+        }
+
+        public void ResetPassword(string email)
+        {
+            var user = _unit.User.Get(u => u.Email == email);
+
+            var saltProvider = Ioc.Resolve<ISaltProvider>();
+            var newPassword = saltProvider.GetSalt(7);
+            
+            user.PasswordSalt = saltProvider.GetSalt(SALT_LENGTH);
+            user.PasswordHash = Ioc.Resolve<ICryptoProvider>().GetHashWithSalt(newPassword, user.PasswordSalt);
+            _unit.User.Save(user);
+
+            var sender = Ioc.Resolve<EmailSender>();
+            var message = string.Format("Hi {0}! \nYour password has been changed to this new password {1} because of security policy of our web site.", user.FullName, newPassword);
+            sender.Send("Password reset", message, email);
         }
     }
 }
