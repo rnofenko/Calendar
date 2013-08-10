@@ -66,7 +66,8 @@ namespace Bs.Calendar.Mvc.Services
 
                 ApproveState = ApproveStates.NotApproved,
                 Live = LiveStatuses.Active
-            };           
+            };
+
             using (var unit = new RepoUnit())
             {
                 unit.User.Save(user);

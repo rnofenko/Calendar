@@ -5,6 +5,7 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Rules;
+using Bs.Calendar.Tests.Int.TestHelpers;
 using Bs.Calendar.Tests.Unit.FakeObjects;
 using FluentAssertions;
 using NUnit.Framework;
