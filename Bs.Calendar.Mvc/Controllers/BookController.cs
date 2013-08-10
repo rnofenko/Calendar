@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
-using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 
@@ -10,10 +8,12 @@ namespace Bs.Calendar.Mvc.Controllers
     public class BookController : Controller
     {
         private readonly BookService _service;
+        private readonly BookHistoryService _bookHistoryServiceservice;
 
-        public BookController(BookService service)
+        public BookController(BookService service, BookHistoryService bookHistoryServiceservice)
         {
             _service = service;
+            _bookHistoryServiceservice = bookHistoryServiceservice;
         }
 
         public ActionResult Get(int id)
@@ -34,6 +34,12 @@ namespace Bs.Calendar.Mvc.Controllers
             return Json(books, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult BookHistoryList(int id)
+        {
+            var bookHistory = _bookHistoryServiceservice.GetBookHistory(id);
+            return Json(bookHistory, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -49,6 +55,12 @@ namespace Bs.Calendar.Mvc.Controllers
             var book = _service.Get(id);
             return book != null ? (ActionResult) View("Edit", new BookEditVm(book)) : HttpNotFound();
         }
+        
+        public ActionResult Details(int id)
+        {
+            var book = _service.Get(id);
+            return book != null ? (ActionResult) View("Details", new BookEditVm(book)) : HttpNotFound();
+        }        
 
         public ActionResult Delete(int id)
         {
