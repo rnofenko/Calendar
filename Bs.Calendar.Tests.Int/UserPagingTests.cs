@@ -17,7 +17,7 @@ using NUnit.Framework;
 namespace Bs.Calendar.Tests.Int
 {
     [TestFixture]
-    class PagingAndSortingTests
+    class UserPagingTest
     {
         private RepoUnit _repoUnit;
         private UsersController _usersController;
