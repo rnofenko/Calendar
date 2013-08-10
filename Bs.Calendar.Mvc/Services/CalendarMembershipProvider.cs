@@ -127,6 +127,7 @@ namespace Bs.Calendar.Mvc.Services
             }
 
             if (user == null) return null;
+
             var memUser = new MembershipUser("CalendarMembershipProvider",
                 user.FullName,
                 user.Id, user.Email,
@@ -139,6 +140,7 @@ namespace Bs.Calendar.Mvc.Services
                 DateTime.MinValue,
                 DateTime.Now,
                 DateTime.Now);
+
             return memUser;
         }
 
