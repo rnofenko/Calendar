@@ -40,6 +40,10 @@
         {
             return "/Book/Edit/" + _self.id;
         };
+        _self.getDetailsLink = function ()
+        {
+            return "/Book/Details/" + _self.id;
+        };
     };
 
     self.recieveData = function (data)
