@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,6 +10,7 @@ using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Core;
+using Bs.Calendar.Tests.Unit.FakeObjects;
 using Moq;
 using NUnit.Framework;
 using FluentAssertions;
@@ -18,77 +20,97 @@ namespace Bs.Calendar.Tests.Int
     [TestFixture]
     class UserFrameTest
     {
-        private RepoUnit _unit;
+        private RepoUnit _repoUnit;
         private UsersController _usersController;
+        private List<User> _users;
+
+        private int _lastDbRecordId;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
+            _users = new List<User>()
+                         {
+                             new User { Email = "aaa@bbb.com", FullName = "aaa ddd", FirstName = "aaa", LastName = "ddd", Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Simple },
+                             new User { Email = "ccc@ddd.com", FullName = "aaa bbb", FirstName = "aaa", LastName = "bbb", Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Admin }
+                         };
+
             var mock = new Mock<ControllerContext>();
             mock.Setup(p => p.HttpContext.Session).Returns(new Mock<HttpSessionStateBase>().Object);
 
             DiMvc.Register();
             Ioc.RegisterType<IUserRepository, UserRepository>();
 
-            _unit = new RepoUnit();
+            _repoUnit = new RepoUnit();
 
-            _unit.User.Save(new User { Email = "aaa@bbb.com", FirstName = "aaa", LastName = "bbb", Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Admin });
-            _unit.User.Save(new User { Email = "ccc@ddd.com", FirstName = "ccc", LastName = "ddd", Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Simple});
+            var lastRecord = _repoUnit.User.Load().ToList().LastOrDefault();
+            _lastDbRecordId = lastRecord == null ? 0 : lastRecord.Id;
 
-            _usersController = new UsersController(new UserService(_unit, null));
+            _users.ForEach(user => _repoUnit.User.Save(user));
+
+            _usersController = new UsersController(new UserService(_repoUnit, null));
             _usersController.ControllerContext = mock.Object;
         }
 
         [TestFixtureTearDown]
         public void TearDown()
         {
-            var user1 = _unit.User.Get(user => user.FirstName.Equals(
-                                       "aaa", StringComparison.InvariantCulture));
-            var user2 = _unit.User.Get(user => user.FirstName.Equals(
-                                       "ccc", StringComparison.InvariantCulture));
-            _unit.User.Delete(user1);
-            _unit.User.Delete(user2);
+            _users.ForEach(user => _repoUnit.User.Delete(user));
         }
 
         [Test]
-        public void Can_Provide_All_Users()
+        public void Should_return_all_users_When_no_filter_is_applied()
         {
             //act
-            var usersView = _usersController.List(new PagingVm()) as PartialViewResult;
+
+            var usersView = _usersController.List(new PagingVm(true, true, true, true, true, true)) as PartialViewResult;
             var users = usersView.Model as UsersVm;
 
             //assert
-            users.Users.Count().Should().BeGreaterOrEqualTo(2);
+
+            users.Users.Count(user => user.Id > _lastDbRecordId).ShouldBeEquivalentTo(_users.Count);
         }
 
         [Test]
-        public void Can_Search_Users()
+        public void Should_return_user_When_searching_exisiting_user_by_his_email()
         {
             //arrange
-            var pagingVm = new PagingVm();
-            pagingVm.SearchStr = "ccc@ddd.com";
+
+            var searchedUser = _users[0];
+            var pagingVm = new PagingVm(true, true, true, true, true, true) { SearchStr = searchedUser.Email };
 
             //act
-            var usersView = _usersController.List(pagingVm) as PartialViewResult;
-            var users = usersView.Model as UsersVm;
-            var user = users.Users.First();
 
-            //assert
-            user.Email.ShouldBeEquivalentTo(pagingVm.SearchStr);
-        }
-
-        [Test]
-        public void CanSearchUsersByRole()
-        {
-            //arrange
-            var pagingVm = new PagingVm { SearchStr = "Admin" };
-
-            //act
             var usersView = _usersController.List(pagingVm) as PartialViewResult;
             var users = usersView.Model as UsersVm;
 
             //assert
-            users.Users.Should().Contain(u => u.Role.ToString() == "Admin");
+
+            var foundUsers = users.Users.Where(userFromView => userFromView.Id > _lastDbRecordId);
+            
+            foundUsers.Count().ShouldBeEquivalentTo(1);
+            foundUsers.First().Email.ShouldBeEquivalentTo(searchedUser.Email);
+        }
+
+        [Test,
+        TestCase(Roles.Simple),
+        TestCase(Roles.Admin)]
+        public void Should_return_all_users_with_corresponding_roles_When_search_by_role(Roles roleToSearch)
+        {
+            //arrange
+
+            var pagingVm = new PagingVm(true, true, true, true, true, true) { SearchStr = roleToSearch.ToString() };
+
+            //act
+
+            var usersView = _usersController.List(pagingVm) as PartialViewResult;
+            var users = usersView.Model as UsersVm;
+
+            //assert
+
+            var foundUsers = users.Users.Where(user => user.Id > _lastDbRecordId);
+            foundUsers.Count().ShouldBeEquivalentTo(1);
+            foundUsers.First().Role.ShouldBeEquivalentTo(roleToSearch);
         }
     }
 }
