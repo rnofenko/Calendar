@@ -182,19 +182,23 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
-        public void LoadUsersByBirthday_Should_Not_Return_Deleted_Users() {
+        public void LoadUsersByBirthday_Should_Not_Return_Deleted_Users()
+        {
             //arrange
+
             _generator.StartingWith(new DateTime(1, 1, 1));
             var users = Builder<User>.CreateListOfSize(31).All()
                                      .With(x => x.Live = LiveStatuses.Deleted)
                                      .With(x => x.BirthDate = _generator.Generate()).Build().ToList();
             users.ForEach(user => _repoUnit.User.Save(user));
-            _repoUnit.User.Save(new User { Live = LiveStatuses.Deleted, BirthDate = new DateTime(1, 1, 3)});
+            _repoUnit.User.Save(new User { Live = LiveStatuses.Active, BirthDate = new DateTime(1, 1, 3)});
 
             //act
+
             var bornUsers = _rules.LoadUsersByBirthday(new DateTime(1, 1, 1), new DateTime(1, 1, 31));
 
             //assert
+
             bornUsers.Count().ShouldBeEquivalentTo(1);
         }
 

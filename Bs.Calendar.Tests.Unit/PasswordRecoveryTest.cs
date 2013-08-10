@@ -25,7 +25,7 @@ namespace Bs.Calendar.Tests.Unit
         private AccountService _accountService;
         private RepoUnit _repoUnit;
 
-        [TestFixtureSetUp]
+        [SetUp]
         public void SetUp()
         {
             _users = new List<User>()
@@ -40,6 +40,9 @@ namespace Bs.Calendar.Tests.Unit
 
             _repoUnit = new RepoUnit();
             _users.ForEach(u => _repoUnit.User.Save(u));
+
+            Ioc.RegisterInstance<RepoUnit>(_repoUnit);
+
             _accountService = Ioc.Resolve<AccountService>();
         }
 

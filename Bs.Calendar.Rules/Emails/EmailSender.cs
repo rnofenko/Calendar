@@ -7,7 +7,13 @@ using Bs.Calendar.Rules.Logs;
 
 namespace Bs.Calendar.Rules.Emails
 {
-    public class EmailSender
+    public interface IEmailSender
+    {
+        void Send(string subject, string body, string addresser);
+        void Send(string subject, string body, IEnumerable<string> addressers);
+    }
+
+    public class EmailSender : IEmailSender
     {
         private readonly IEmailProvider _provider;
 

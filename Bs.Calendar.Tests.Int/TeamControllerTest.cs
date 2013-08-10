@@ -20,7 +20,8 @@ namespace Bs.Calendar.Tests.Int
         private TeamController _teamController;
 
         [TestFixtureSetUp]
-        public void SetUp() {
+        public void SetUp()
+        {
             DiMvc.Register();
             Ioc.RegisterType<ITeamRepository, TeamRepository>();
 
