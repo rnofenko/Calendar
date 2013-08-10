@@ -7,7 +7,7 @@ using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly UserService _service;
@@ -115,7 +115,8 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpGet]
         [OutputCache(NoStore = true, Duration = 0)]
-        public ActionResult GetContactType(string contact) {
+        public ActionResult GetContactType(string contact) 
+        {
             return Json(ContactTypeParser.GetContactType(contact), JsonRequestBehavior.AllowGet);
         }
     }

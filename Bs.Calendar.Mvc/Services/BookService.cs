@@ -4,7 +4,6 @@ using System.Linq;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
-using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -27,7 +26,7 @@ namespace Bs.Calendar.Mvc.Services
         {
             IEnumerable<Book> books = _repoUnit.Book.Load();
             books = _search(books, searchStr);
-            books = _orderBy (books, orderby);
+            books = _orderBy(books, orderby);
             return books.ToList();
         }
 
@@ -88,6 +87,6 @@ namespace Bs.Calendar.Mvc.Services
             book.Title = bookModel.Title;
             book.Author = bookModel.Author;
             _repoUnit.Book.Save(book);
-        }
+        }        
     }
 }
