@@ -11,6 +11,7 @@ namespace Bs.Calendar.DataAccess
         private IRoomRepository _room;
         private ITeamRepository _team;
         private IBookRepository _book;
+        private IBookHistoryRepository _bookHistory;
 
         public IUserRepository User
         {
@@ -30,6 +31,11 @@ namespace Bs.Calendar.DataAccess
 		public ITeamRepository Team
         {
             get { return _team ?? (_team = getRepository<ITeamRepository>()); }
+        }  
+        
+        public IBookHistoryRepository BookHistory
+        {
+            get { return _bookHistory ?? (_bookHistory = getRepository<IBookHistoryRepository>()); }
         }    
 		
         private CalendarContext getContext()

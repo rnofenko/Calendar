@@ -51,6 +51,8 @@
     <Compile Include="Bases\CalendarContext.cs" />
     <Compile Include="Bases\IContexable.cs" />
     <Compile Include="Bases\IRepository.cs" />
+    <Compile Include="BookHistoryRepository.cs" />
+    <Compile Include="IBookHistoryRepository.cs" />
     <Compile Include="IBookRepository.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="DiDataAccess.cs" />
