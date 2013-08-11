@@ -1,35 +1,38 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Diagnostics;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 
 namespace Bs.Calendar.Tests.Int.TestHelpers
 {
-    public class FastDbInitializer : DropCreateDatabaseIfModelChanges<CalendarContext>
+    public class FastDbInitializer : DropCreateDatabaseAlways<CalendarContext>
     {
-        private readonly int _userCount;
+        private readonly int UserCount;
 
         public FastDbInitializer(int userCount)
         {
-            _userCount = userCount;
+            UserCount = userCount;
         }
 
 
         protected override void Seed(CalendarContext context) {
+
             if (context == null)
                 context = new CalendarContext();
 
             context.Configuration.AutoDetectChangesEnabled = false;
             context.Configuration.ValidateOnSaveEnabled = false;
+
             var randomizer = new Random();
 
             try
             {
-                for (int i = 1; i < _userCount; i++)
+                for (int i = 1; i < UserCount; i++)
                 {
                     var user = new User
                     {
-                        Email = string.Format("test{0}@gmail.com", randomizer.Next(_userCount)),
+                        Email = string.Format("test{0}@gmail.com", randomizer.Next(UserCount)),
                         FullName = "Test Test",
                         FirstName = "Test",
                         LastName = "Test",

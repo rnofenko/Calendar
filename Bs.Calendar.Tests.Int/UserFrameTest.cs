@@ -43,12 +43,18 @@ namespace Bs.Calendar.Tests.Int
 
             _repoUnit = new RepoUnit();
 
-            var lastRecord = _repoUnit.User.Load().ToList().LastOrDefault();
-            _lastDbRecordId = lastRecord == null ? 0 : lastRecord.Id;
+            var lastRecord = _repoUnit.User.Load();
+            _lastDbRecordId = !lastRecord.Any() ? 0 : lastRecord.Max(user => user.Id);
 
             _users.ForEach(user => _repoUnit.User.Save(user));
 
-            _usersController = new UsersController(new UserService(_repoUnit, null));
+            var service = new UserService(_repoUnit, null)
+                              {
+                                  PageSize = lastRecord.Count() + _users.Count //Prevent paging
+                              };
+
+            _usersController = new UsersController(service);
+
             _usersController.ControllerContext = mock.Object;
         }
 
