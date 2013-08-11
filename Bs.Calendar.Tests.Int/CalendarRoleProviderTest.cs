@@ -78,9 +78,8 @@ namespace Bs.Calendar.Tests.Int
         }
 
         [TestCase(Roles.Admin),
-        TestCase(Roles.Simple),
-        TestCase(Roles.None)]
-        public void ShouldReturnEmailsOfTheUsersWithGivenRole(Roles role)
+        TestCase(Roles.Simple)]
+        public void Should_return_emails_of_users_associated_with_specified_role(Roles role)
         {
             //arrange
             
