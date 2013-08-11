@@ -26,6 +26,12 @@ namespace Bs.Calendar.Tests.Int
         private string _userSalt;
         private const int SALT_LENGTH = 128;
 
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            _repoUnit.User.Delete(_user);
+        }
+
         [TestFixtureSetUp]
         public void Setup()
         {

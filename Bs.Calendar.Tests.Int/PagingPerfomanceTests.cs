@@ -21,47 +21,33 @@ namespace Bs.Calendar.Tests.Int
     {
         private UsersController _usersController;
 
-        private RepoUnit _repoUnit;
-        private int _userCount;
-        private int _lasKnownId;
-
         [TestFixtureTearDown]
         public void TearDown()
         {
-            //Remove all new records
+            Database.SetInitializer(new FastDbInitializer(0));
 
-            for (int i = ++_lasKnownId; i < _userCount + _lasKnownId; ++i)
-                _repoUnit.User.Delete(_repoUnit.User.Get(i));
+            try
+            {
+                var _context = new CalendarContext();
+                _context.Database.Initialize(true);
+            }
+            catch { /* Do nothing */ }
         }
         
         [TestFixtureSetUp]
         public void SetUp()
         {
-            //Database.SetInitializer(new FastDbInitializer(1000));
+            Database.SetInitializer(new FastDbInitializer(1000));
 
-            //try
-            //{
-            //    var _context = new CalendarContext();
-            //    _context.Database.Initialize(true);
-            //}
-            //catch { /* Do nothing */ }
+            try
+            {
+                var _context = new CalendarContext();
+                _context.Database.Initialize(true);
+            }
+            catch { /* Do nothing */ }
 
             DiMvc.Register();
             Ioc.RegisterType<IUserRepository, UserRepository>();
-
-            //Recreating database is something better, because the way used now may cause index overflow later
-
-            _repoUnit = new RepoUnit();
-
-            var lastRecord = _repoUnit.User.Load();
-            _lasKnownId = !lastRecord.Any() ? 0 : lastRecord.Max(user => user.Id);
-
-            _userCount = 1000;
-
-            for (int i = 0; i < _userCount; ++i)
-            {
-                _repoUnit.User.Save(new User());
-            }
 
             var mock = new Mock<ControllerContext>();
             mock.Setup(p => p.HttpContext.Session).Returns(new Mock<HttpSessionStateBase>().Object);

@@ -53,9 +53,9 @@ namespace Bs.Calendar.Tests.Int.TestHelpers
             }
             finally
             {
-                if (context != null)
-                    context.Dispose();
-            }         
+                //if (context != null)
+                //    context.Dispose();
+            }
         }
 
         private CalendarContext AddToContext(CalendarContext context,
