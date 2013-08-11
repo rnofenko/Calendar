@@ -28,7 +28,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Create() 
         {
-            return View("Edit", null);
+            return View("Edit", new TeamEditVm());
         }
 
         [HttpPost,
@@ -61,7 +61,9 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             ModelState.Remove("TeamId");
             if (!ModelState.IsValid)
-                return View("Edit", model);
+            {
+                return PassUserIntoTheView("Edit", model.TeamId);
+            }
 
             try
             {
@@ -91,6 +93,12 @@ namespace Bs.Calendar.Mvc.Controllers
         public ActionResult List(PagingVm pagingVm) 
         {
             return PartialView(_service.RetreiveList(pagingVm));
+        }
+
+        [HttpGet]
+        public JsonResult GetAllUsers(int teamId)
+        {
+            return Json(_service.GetAllUsers(teamId), JsonRequestBehavior.AllowGet);
         }
     }
 }

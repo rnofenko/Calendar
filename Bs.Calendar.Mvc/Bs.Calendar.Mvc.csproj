@@ -197,6 +197,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Content\Layout\layout.css" />
     <Content Include="Content\Layout\list-view.css" />
+    <Content Include="Content\Teams\TeamEdit.css" />
     <Content Include="Content\Users\RoleStateFilterWindow.css" />
     <Content Include="Images\binaryLogo.png" />
     <Content Include="Scripts\Books\BooksVm.js" />
@@ -276,6 +277,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Teams\TeamEdit.js" />
     <Content Include="Scripts\Users\UserContacts.js" />
     <Content Include="Scripts\Users\UserList.js" />
     <Content Include="Web.config">

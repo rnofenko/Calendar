@@ -6,7 +6,7 @@
     if (Model != null && Model.TeamId != 0) {
         teamId = Model.TeamId;
         ViewBag.Title = "Edit Team";
-        ViewBag.Team = "Current Team";
+        ViewBag.Team = Model.Name;
     } else {
         ViewBag.Title = "Create Team";
         ViewBag.Team = "New Team";
@@ -29,47 +29,72 @@
         </div>
 
         <div class="row">
-            <fieldset class="centered seven columns">
-                <legend>
-                    <h4>@ViewBag.Team</h4>
-                </legend>
-                              
-                <ul>
-                    <li class="field">
-                        @Html.LabelFor(team => team.Name, new {@class = "inline"})
-                        @Html.TextBoxFor(team => team.Name, new {@class = "wide text input"})
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(team => team.Description, new {@class = "inline"})
-                        @Html.TextAreaFor(team => team.Description, new {@class = "textarea input", @rows = 3})
-                    </li>
-                </ul>
-
-                <div class="medium secondary btn three columns">
-                    <input type="submit" value=@btnName />
-                </div>
-
-                <div class="medium default btn push_one three columns">
-                    @Html.ActionLink("Back", "Index")
-                </div>
+            <div class="prepend field four columns">
+                @Html.LabelFor(team => team.Name, new {@class = "adjoined"})
+                @Html.TextBoxFor(team => team.Name, new {@class = "xwide text input"})
+            </div>
             
-                @if (teamId != 0)
-                {
-                    <div class="medium info btn three columns push_one">
-                        @Html.ActionLink("Delete", "Delete", new {id =  teamId})
-                    </div>
-                }  
-            </fieldset>
+            <div class="medium metro rounded btn warning  two columns icon-right icon-user-add pull_right" data-bind="click : clickAllUsers, visible : showTeamUsers()"><a href="#">Add Users</a></div>
+            <div class="medium metro rounded btn default two columns icon-right icon-users pull_right" data-bind="click : clickTeamUsers, visible : !showTeamUsers()"><a href="#">Team</a></div>
         </div>
+        
+        <div class="row team-header" data-bind="foreach: userColumns">
+            <div data-bind="text : title"></div>
+        </div>
+        
+        <div class="row team-column" data-bind="foreach : userColumns, visible : teamUserIds().length > 0 && showTeamUsers()">
+            <div data-bind="template: { name : 'team-template', foreach : teamUsers }"></div>
+        </div>
+        
+         <div class="row team-column" data-bind="visible : !showTeamUsers(), foreach : userColumns">
+            <div data-bind="template: { name : 'team-template', foreach : allUsers }"></div>
+        </div>
+        
+        <div data-bind="foreach : teamUserIds">
+            <input type="hidden" name="TeamUserIds" data-bind="value : $data">    
+        </div>
+        
+        
+        <br/>
+        <div class="row">
+            <div class="medium info btn two columns push_one pull_right" data-bind="visible : teamId != 0">
+                @Html.ActionLink("Delete", "Delete", new {id = teamId})
+            </div>
+
+            <div class="medium default btn two two push_one columns pull_right">
+                @Html.ActionLink("Back", "Index")
+            </div>
+            
+            <div class="medium secondary btn two columns pull_right">
+                <input type="submit" value=@btnName />
+            </div>
+        </div>
+        
     }
 </div>
 
+
+<script type="text/html" id="team-template">
+    <div class="row">
+        <span data-bind="text : Name"></span>
+        <i data-bind="click : function() { $root.moveUser($parent, $data) }, attr : { class : $root.iconClass}"></i>
+    </div>
+</script>
+
+@section styles {
+    <link href="../../Content/Teams/TeamEdit.css" rel="stylesheet"/>
+}
+
 @section Scripts {
-    <script src="/Scripts/jquery-2.0.2.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-}
-@section styles {
-    <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
+    <script src="../../Scripts/Teams/TeamEdit.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var arr = "@Model.HeaderPattern".split(',');
+            var model = new TeamUsersVm(@Html.RawJson(@Model), arr);
+            ko.applyBindings(model);
+        });
+    </script>
 }

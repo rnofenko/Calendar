@@ -16,14 +16,14 @@ else
     <table>
         <thead>
             <tr>
-                <th>@Html.AjaxSortLink(@Model.PagingVm, "Name", ajaxOptions)</th>
+                <th>Name</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var team in Model.Teams)
             {
-                <tr>
+                <tr ondblclick="RowDblClick('@Url.Action("Edit", "Team", new { id = team.Id })')">
                     <td>@team.Name</td>      
                     <td>           
                         <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = team.Id})</div>

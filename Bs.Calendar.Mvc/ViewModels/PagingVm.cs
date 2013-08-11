@@ -38,6 +38,10 @@ namespace Bs.Calendar.Mvc.ViewModels
         {
         }
 
+        public PagingVm()
+        {
+        }
+
         public Roles RolesFilter
         { 
             get

@@ -7,6 +7,7 @@ namespace Bs.Calendar.Mvc.Services
     public class MvcConfig : IConfig
     {
         private bool? _sendEmail;
+        private string _teamHeaderPattern;
 
         public bool SendEmail
         {
@@ -21,6 +22,18 @@ namespace Bs.Calendar.Mvc.Services
                 return _sendEmail.Value;
             }
             set { _sendEmail = value; }
+        }
+
+        public string TeamHeaderPattern
+        {
+            get
+            {
+                if (_teamHeaderPattern == null)
+                {
+                    _teamHeaderPattern = ConfigurationManager.AppSettings["TeamHeaderPattern"];
+                }
+                return _teamHeaderPattern;
+            }
         }
     }
 }
