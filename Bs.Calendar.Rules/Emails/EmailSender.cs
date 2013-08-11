@@ -28,12 +28,12 @@ namespace Bs.Calendar.Rules.Emails
             return regex.IsMatch(emailAddress);
         }
 
-        public void Send(string subject, string body, string addresser)
+        virtual public void Send(string subject, string body, string addresser)
         {
             Send(subject, body, new List<string> {addresser});
         }
 
-        public void Send(string subject, string body, IEnumerable<string> addressers)
+        virtual public void Send(string subject, string body, IEnumerable<string> addressers)
         {
             if (!Config.Instance.SendEmail)
             {

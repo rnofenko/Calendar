@@ -120,6 +120,7 @@ namespace Bs.Calendar.Mvc.Services
             }
 
             var passwordRecovery = user.PasswordRecovery ?? (user.PasswordRecovery = new PasswordRecovery());
+
             passwordRecovery.Date = DateTime.Now;
             passwordRecovery.PasswordSalt = Ioc.Resolve<ISaltProvider>().GetSalt(SALT_LENGTH);
             passwordRecovery.PasswordHash = Ioc.Resolve<ICryptoProvider>().GetHashWithSalt(Guid.NewGuid().ToString(), passwordRecovery.PasswordSalt);

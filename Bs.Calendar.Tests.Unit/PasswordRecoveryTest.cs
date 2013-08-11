@@ -7,7 +7,6 @@ using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Rules.Emails;
 using FluentAssertions;
-using Moq;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
@@ -15,6 +14,8 @@ using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Tests.Unit.FakeObjects;
 using NUnit.Framework;
+
+using Moq;
 
 namespace Bs.Calendar.Tests.Unit
 {
@@ -36,6 +37,8 @@ namespace Bs.Calendar.Tests.Unit
             };
 
             DiMvc.Register();
+
+            Ioc.RegisterType<IEmailProvider, StandardEmailProvider>();
             Ioc.RegisterType<IUserRepository, FakeUserRepository>();
 
             _repoUnit = new RepoUnit();
@@ -77,13 +80,18 @@ namespace Bs.Calendar.Tests.Unit
         {
             //arrange
 
-            var mailMessage = new MailMessage();
+            MailMessage mailMessage = null;
 
             var url = "localhost/";
+            var moq = new Mock<EmailSender>(Ioc.Resolve<IEmailProvider>());
 
-            var moq = new Mock<IEmailSender>(Ioc.Resolve<IEmailProvider>());
-            moq.Setup(e => e.Send("", "", It.IsAny<string>())).Callback<MailMessage>(m => mailMessage = m);
-            Ioc.RegisterInstance<IEmailSender>(moq.Object);
+            moq.Setup(e => e.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Callback<string, string, string>((subject, body, to) =>
+                                                      {
+                                                          mailMessage = new MailMessage("binary.calendar@gmail.com", to, subject, body);
+                                                      });
+
+            Ioc.RegisterInstance<EmailSender>(moq.Object);
 
             //act
 
@@ -91,10 +99,10 @@ namespace Bs.Calendar.Tests.Unit
             var expectedUrl = string.Format("{0}PasswordReset/{1}/{2}", url, _users[0].Id,_users[0].PasswordRecovery.PasswordHash);
 
             //assert
-            
-            moq.Verify(e => e.Send("","",It.IsAny<string>()), Times.Once());
+
             mailMessage.Body.Should().Contain(expectedUrl);
             mailMessage.To.Contains(new MailAddress(_users[0].Email)).Should().BeTrue();
+            moq.Verify(e => e.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
         }
 
         [Test]
