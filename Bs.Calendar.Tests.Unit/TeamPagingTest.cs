@@ -9,6 +9,7 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Tests.Unit.FakeObjects;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -20,9 +21,11 @@ namespace Bs.Calendar.Tests.Unit
     {
         private TeamService _teamService;
         private List<Team> _teams;
+        private RepoUnit _repoUnit;
 
         [TestFixtureSetUp]
-        public void Setup() {
+        public void Setup()
+        {
             _teams = new List<Team>
             {
                 new Team {Name = ".NET", Description = ".NET team"},
@@ -31,24 +34,30 @@ namespace Bs.Calendar.Tests.Unit
                 new Team {Name = ".D", Description = ".D team"}
             };
 
-            var moq = new Mock<ITeamRepository>();
-            moq.Setup(m => m.Load()).Returns(_teams.AsQueryable());
-
             DiMvc.Register();
-            Ioc.RegisterInstance<ITeamRepository>(moq.Object);
+            Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
+
+            _repoUnit = new RepoUnit();
+            _teams.ForEach(team => _repoUnit.Team.Save(team));
+
+            Ioc.RegisterInstance<RepoUnit>(_repoUnit);
             _teamService = Ioc.Resolve<TeamService>();
         }
 
         [Test]
-        public void Can_Paginate_Teams() {
+        public void Can_Paginate_Teams()
+        {
             //arrange
+
             _teamService.PageSize = 2;
 
             //act
+
             var teamPage1 = _teamService.RetreiveList(new PagingVm { Page = 1 }).Teams;
             var teamPage2 = _teamService.RetreiveList(new PagingVm { Page = 2 }).Teams;
 
             //assert
+
             teamPage1.Count().ShouldBeEquivalentTo(_teamService.PageSize);
             teamPage2.Count().ShouldBeEquivalentTo(_teamService.PageSize);
 
@@ -60,7 +69,8 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
-        public void Can_Sort_Teams() {
+        public void Can_Sort_Teams()
+        {
             //arrange
             _teamService.PageSize = _teams.Count;
 

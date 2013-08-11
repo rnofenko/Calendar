@@ -9,6 +9,7 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Tests.Unit.FakeObjects;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -20,6 +21,7 @@ namespace Bs.Calendar.Tests.Unit
     {
         private TeamService _teamService;
         private List<Team> _teams;
+        private RepoUnit _repoUnit;
 
         [TestFixtureSetUp]
         public void Setup()
@@ -31,11 +33,13 @@ namespace Bs.Calendar.Tests.Unit
                 new Team {Name = ".C++", Description = ".C++ team"}
             };
 
-            var moq = new Mock<ITeamRepository>();
-            moq.Setup(m => m.Load()).Returns(_teams.AsQueryable());
-
             DiMvc.Register();
-            Ioc.RegisterInstance<ITeamRepository>(moq.Object);
+            Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
+
+            _repoUnit = new RepoUnit();
+            _teams.ForEach(team => _repoUnit.Team.Save(team));
+
+            Ioc.RegisterInstance<RepoUnit>(_repoUnit);
             _teamService = Ioc.Resolve<TeamService>();
         }
 
@@ -86,12 +90,16 @@ namespace Bs.Calendar.Tests.Unit
         public void Should_Return_All_Teams_When_Filter_By_Empty_String() 
         {
             //arrange
+
             var pagingVm = new PagingVm { SearchStr = string.Empty };
 
             //act
+
             var teams = _teamService.RetreiveList(pagingVm).Teams;
+
             //assert
-            teams.Count().ShouldBeEquivalentTo(_teams.Count);
+
+            teams.ShouldAllBeEquivalentTo(_teams);
         }
     }
 }

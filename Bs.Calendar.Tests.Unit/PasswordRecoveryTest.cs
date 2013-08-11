@@ -76,19 +76,22 @@ namespace Bs.Calendar.Tests.Unit
         public void Can_Form_Recovery_Link_And_Send_Email()
         {
             //arrange
-            var mailMessage = new MailMessage();
-            var url = "localhost/";
-            var moq = new Mock<EmailSender>();
 
-            moq.Setup(e => e.Send("","",It.IsAny<string>()))
-               .Callback<MailMessage>(m => mailMessage = m);
-            Ioc.RegisterInstance<EmailSender>(moq.Object);
+            var mailMessage = new MailMessage();
+
+            var url = "localhost/";
+
+            var moq = new Mock<IEmailSender>(Ioc.Resolve<IEmailProvider>());
+            moq.Setup(e => e.Send("", "", It.IsAny<string>())).Callback<MailMessage>(m => mailMessage = m);
+            Ioc.RegisterInstance<IEmailSender>(moq.Object);
 
             //act
+
             _accountService.PasswordRecovery(_users[0].Email, url);
             var expectedUrl = string.Format("{0}PasswordReset/{1}/{2}", url, _users[0].Id,_users[0].PasswordRecovery.PasswordHash);
 
             //assert
+            
             moq.Verify(e => e.Send("","",It.IsAny<string>()), Times.Once());
             mailMessage.Body.Should().Contain(expectedUrl);
             mailMessage.To.Contains(new MailAddress(_users[0].Email)).Should().BeTrue();

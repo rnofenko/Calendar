@@ -37,5 +37,10 @@ namespace Bs.Calendar.Core
         {
             _container.RegisterInstance(type, instance);
         }
+
+        public static void Teardown(object instance)
+        {
+            _container.Teardown(instance);
+        }
     }
 }
