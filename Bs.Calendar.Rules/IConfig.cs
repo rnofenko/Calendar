@@ -3,5 +3,7 @@
     public interface IConfig
     {
         bool SendEmail { get; set; }
+
+        string TeamHeaderPattern { get; }
     }
 }

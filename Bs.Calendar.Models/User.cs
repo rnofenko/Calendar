@@ -33,5 +33,7 @@ namespace Bs.Calendar.Models
 
         public LiveStatuses Live { get; set; }
         public ApproveStates ApproveState { get; set; }
+
+        public virtual ICollection<Team> Teams { get; set; } 
     }
 }
