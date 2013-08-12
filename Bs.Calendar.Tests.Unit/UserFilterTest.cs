@@ -179,6 +179,10 @@ namespace Bs.Calendar.Tests.Unit
             users.Count().ShouldBeEquivalentTo(_users.Count);
         }
 
+#warning Паше
+#warning почему идет строка с пробелом после каждой строки кода?
+#warning к чему этот комментарйй? //showDeleted, showNotApproved, showAdmins
+#warning что за магические цифры, сделай так, чтоб были каких пользователей мы ожидаем? { 0, 1, 2, 3, 4, 5, 6, 7 })
         [Test,
         TestCase(true, true, true, new []{ 0, 1, 2, 3, 4, 5, 6, 7 }),
         TestCase(false, true, true, new []{ 0, 1, 2, 3}),
