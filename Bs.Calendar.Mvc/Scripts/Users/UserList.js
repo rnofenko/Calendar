@@ -128,7 +128,7 @@ function ViewModel() {
         var noteMessage = [];
 
         if (self.model.ShowAdmins())
-            noteMessage.push("Admins");
+            noteMessage.push("Only Admins");
         if (self.model.ShowNotApproved())
             noteMessage.push("Not approved");
         if (self.model.ShowDeleted())
