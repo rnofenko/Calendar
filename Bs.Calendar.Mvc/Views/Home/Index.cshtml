@@ -41,3 +41,15 @@ else
         </table>
     </div>
 }
+@Html.Partial("Calendar")
+
+
+@section scripts
+{
+    <script src="../../Scripts/Home/calendar.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            ko.applyBindings(new MonthVm());
+        });
+    </script>
+}

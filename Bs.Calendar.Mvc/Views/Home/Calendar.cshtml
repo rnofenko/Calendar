@@ -1,0 +1,25 @@
+﻿<div class="row">
+    <table class = "twelve columns">
+        <thead>
+        	<th>Sun</th>
+        	<th>Mon</th>
+        	<th>Tue</th>
+        	<th>Wed</th>
+        	<th>Thu</th>
+        	<th>Fri</th>
+        	<th>Sat</th>
+        </thead>
+        <tbody id="calendar_body" data-bind="template: {name : 'week-template', foreach:weeks}">
+        </tbody>
+    </table>
+</div>
+
+<script type="text/html" id="week-template">
+    <tr data-bind="template: { name: 'day-template', foreach: days }">
+    </tr>
+</script>
+
+<script type="text/html" id="day-template">
+    <td data-bind="text:day_title">
+    </td>
+</script>
