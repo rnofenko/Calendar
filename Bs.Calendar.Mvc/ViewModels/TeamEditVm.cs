@@ -34,25 +34,8 @@ namespace Bs.Calendar.Mvc.ViewModels
         [StringLength(50)]
         public string Description { get; set; }
 
-        public List<TeamUserVm> Users { get; set; }
-        public List<int> TeamUserIds { get; set; } 
+        public List<TeamUserVm> Users { get; set; } 
 
         public string HeaderPattern { get; set; }
-    }
-
-    public class TeamUserVm
-    {
-        public TeamUserVm(User user)
-        {
-            UserId = user.Id;
-            Name = string.Format("{0} {1}.", user.LastName, user.FirstName[0]);
-        }
-
-        public TeamUserVm()
-        {
-        }
-
-        public int UserId { get; set; }
-        public string Name { get; set; }
     }
 }

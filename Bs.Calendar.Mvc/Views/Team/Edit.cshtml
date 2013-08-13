@@ -20,8 +20,7 @@
 </div>
 
 <div class="row">
-    @using (Html.BeginForm())
-    {
+    <form data-bind="submit : onSubmit">
         @Html.AntiForgeryToken()
         @Html.HiddenFor(team => team.TeamId)
         <div class="centered seven columns">
@@ -31,33 +30,30 @@
         <div class="row">
             <div class="prepend field four columns">
                 @Html.LabelFor(team => team.Name, new {@class = "adjoined"})
-                @Html.TextBoxFor(team => team.Name, new {@class = "xwide text input"})
+                @Html.TextBoxFor(team => team.Name, new {@class = "xwide text input", data_bind = "value : teamModel.Name"})
             </div>
             
             <div class="medium metro rounded btn warning  two columns icon-right icon-user-add pull_right" data-bind="click : clickAllUsers, visible : showTeamUsers()"><a href="#">Add Users</a></div>
-            <div class="medium metro rounded btn default two columns icon-right icon-users pull_right" data-bind="click : clickTeamUsers, visible : !showTeamUsers()"><a href="#">Team</a></div>
+            <div class="medium metro rounded btn default two columns pull_right" data-bind="click : clickTeamUsers, visible : !showTeamUsers()"><a href="#">Team Users</a></div>
         </div>
         
-        <div class="row team-header" data-bind="foreach: userColumns">
-            <div data-bind="text : title"></div>
-        </div>
         
-        <div class="row team-column" data-bind="foreach : userColumns, visible : teamUserIds().length > 0 && showTeamUsers()">
-            <div data-bind="template: { name : 'team-template', foreach : teamUsers }"></div>
+        <div class="row" data-bind="visible : showTeamUsers()">
+            <ul class="four_up tiles" data-bind="foreach : teamModel.Users">
+                <li data-bind="click: function () { UserClick('/Users/Edit', UserId())}">
+                    <span data-bind="text : Name"></span> 
+                    <i class="icon-cancel-squared pull_right" data-bind="click : $root.removeUser"></i>
+                </li>
+            </ul>
         </div>
-        
-         <div class="row team-column" data-bind="visible : !showTeamUsers(), foreach : userColumns">
-            <div data-bind="template: { name : 'team-template', foreach : allUsers }"></div>
+
+        <div class="row" data-bind="visible: !showTeamUsers()">
+            @Html.Partial("ColumnUserList")
         </div>
-        
-        <div data-bind="foreach : teamUserIds">
-            <input type="hidden" name="TeamUserIds" data-bind="value : $data">    
-        </div>
-        
         
         <br/>
         <div class="row">
-            <div class="medium info btn two columns push_one pull_right" data-bind="visible : teamId != 0">
+            <div class="medium info btn two columns push_one pull_right" data-bind="visible : teamModel.TeamId() != 0">
                 @Html.ActionLink("Delete", "Delete", new {id = teamId})
             </div>
 
@@ -70,30 +66,16 @@
             </div>
         </div>
         
-    }
+    </form>
 </div>
 
 
-<script type="text/html" id="team-template">
-    <div class="row">
-        <span data-bind="text : Name"></span>
-        <i data-bind="click : function() { $root.moveUser($parent, $data) }, attr : { class : $root.iconClass}"></i>
-    </div>
-</script>
 
-@section styles {
-    <link href="../../Content/Teams/TeamEdit.css" rel="stylesheet"/>
-}
 
 @section Scripts {
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-    <script src="../../Scripts/Teams/TeamEdit.js"></script>
-
     <script type="text/javascript">
         $(document).ready(function() {
-            var arr = "@Model.HeaderPattern".split(',');
-            var model = new TeamUsersVm(@Html.RawJson(@Model), arr);
+            var model = new TeamUsersVm(@Html.RawJson(@Model));
             ko.applyBindings(model);
         });
     </script>

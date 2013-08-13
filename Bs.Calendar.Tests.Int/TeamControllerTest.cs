@@ -52,7 +52,7 @@ namespace Bs.Calendar.Tests.Int
             };
 
             // act
-            _teamService.SaveTeam(new TeamEditVm(team));
+            _teamService.CreateTeam(new TeamEditVm(team));
             var count = _teamService.GetAllTeams().Count();
 
             // assert
@@ -76,7 +76,7 @@ namespace Bs.Calendar.Tests.Int
         [Test]
         public void Should_Delete_Team() {
             // arrange
-            _teamService.SaveTeam(new TeamEditVm { Name = "LOGO", Description = "LOGO" });
+            _teamService.CreateTeam(new TeamEditVm { Name = "LOGO", Description = "LOGO" });
             var teamToDelete = _teamService.GetAllTeams().First(team => team.Name.Equals("LOGO"));
 
             // act

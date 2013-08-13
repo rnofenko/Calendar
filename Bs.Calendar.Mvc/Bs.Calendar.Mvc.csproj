@@ -269,6 +269,7 @@
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />
     <Compile Include="ViewModels\TeamEditVm.cs" />
+    <Compile Include="ViewModels\TeamUserVm.cs" />
     <Compile Include="ViewModels\UsersVm.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="ViewModels\UserEditVm.cs" />
@@ -354,6 +355,8 @@
     <Content Include="Views\Users\FilterSettings.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
+
+    <Content Include="Views\Shared\ColumnUserList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

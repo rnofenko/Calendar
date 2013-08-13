@@ -38,7 +38,7 @@ namespace Bs.Calendar.Mvc.Services
             return _unit.Team.Load().ToList();
         }
 
-        public void SaveTeam(TeamEditVm teamModel) 
+        public void CreateTeam(TeamEditVm teamModel) 
         {
             validateTeam(teamModel);
 
@@ -66,13 +66,18 @@ namespace Bs.Calendar.Mvc.Services
             team.Name = teamVm.Name;
             team.Description = teamVm.Description;
 
-            if (team.Users != null) team.Users.Clear();
-
-            team.Users = teamVm.TeamUserIds != null
-                             ? _unit.User.Load(u => teamVm.TeamUserIds.Contains(u.Id)).ToList()
-                             : null;
+            addUsersToTeam(team, teamVm.Users);
 
             _unit.Team.Save(team);
+        }
+
+        private void addUsersToTeam(Team team, IEnumerable<TeamUserVm> users)
+        {
+            if (team.Users != null) team.Users.Clear();
+            if (users == null) return;
+
+            var userIds = users.Select(u => u.UserId);
+            team.Users = _unit.User.Load(u => userIds.Contains(u.Id)).ToList();
         }
 
         private void validateTeam(TeamEditVm teamVm, Team editedTeam = null)

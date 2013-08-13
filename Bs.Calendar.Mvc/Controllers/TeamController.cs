@@ -41,7 +41,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
             try 
             {
-                _service.SaveTeam(model);
+                _service.CreateTeam(model);
                 return RedirectToAction("Index");
             } 
             catch (WarningException exception) 
@@ -68,6 +68,11 @@ namespace Bs.Calendar.Mvc.Controllers
             try
             {
                 _service.EditTeam(model);
+
+                if (Request.IsAjaxRequest())
+                {
+                    return Json(new {redirectToUrl = Url.Action("Index")});
+                }
                 return RedirectToAction("Index");
             } 
             catch (WarningException exception) 
