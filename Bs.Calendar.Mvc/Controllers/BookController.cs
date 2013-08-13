@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Web.Mvc;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
@@ -8,12 +9,12 @@ namespace Bs.Calendar.Mvc.Controllers
     public class BookController : Controller
     {
         private readonly BookService _service;
-        private readonly BookHistoryService _bookHistoryServiceservice;
+        private readonly BookHistoryService _bookHistoryService;
 
-        public BookController(BookService service, BookHistoryService bookHistoryServiceservice)
+        public BookController(BookService service, BookHistoryService bookHistoryService)
         {
             _service = service;
-            _bookHistoryServiceservice = bookHistoryServiceservice;
+            _bookHistoryService = bookHistoryService;
         }
 
         public ActionResult Get(int id)
@@ -34,12 +35,6 @@ namespace Bs.Calendar.Mvc.Controllers
             return Json(books, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult BookHistoryList(int id)
-        {
-            var bookHistory = _bookHistoryServiceservice.GetBookHistory(id);
-            return Json(bookHistory, JsonRequestBehavior.AllowGet);
-        }
-
         public ActionResult Index()
         {
             return View();
@@ -58,9 +53,23 @@ namespace Bs.Calendar.Mvc.Controllers
         
         public ActionResult Details(int id)
         {
-            var book = _service.Get(id);
-            return book != null ? (ActionResult) View("Details", new BookEditVm(book)) : HttpNotFound();
-        }        
+            try
+            {
+                return View("Details", _bookHistoryService.GetBookHistories(id));
+            }
+            catch (WarningException)
+            {
+                return HttpNotFound();
+            }            
+        }
+
+        [HttpPost,
+        ValidateAntiForgeryToken]
+        public ActionResult Details(BookHistoryVm model)
+        {
+            _bookHistoryService.AddRecord(model);
+            return RedirectToAction("Details");
+        }
 
         public ActionResult Delete(int id)
         {

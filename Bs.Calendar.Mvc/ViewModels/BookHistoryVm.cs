@@ -1,48 +1,37 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using Bs.Calendar.Core;
+using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 
 namespace Bs.Calendar.Mvc.ViewModels
 {
     public class BookHistoryVm
     {
-        public BookHistoryVm()
-        {            
-        }
-
-        //public BookHistoryVm(Book book, User user, DateTime returnDate)
-        //{
-        //    BookId = book.Id;
-        //    BookTitle = book.Title;
-        //    BookAuthor = book.Author;
-
-        //    UserId = user.Id;
-        //    UserFullName = user.FullName;
-
-        //    TakeDate = DateTime.Now;
-        //    ReturnDate = returnDate;
-        //}
-
-        public BookHistoryVm(Book book, User user, BookHistory bookHistory )
-        {
-            BookId = book.Id;
-            BookTitle = book.Title;
-            BookAuthor = book.Author;
-
-            UserId = user.Id;
-            UserFullName = user.FullName;
-
-            TakeDate = bookHistory.TakeDate;
-            ReturnDate = bookHistory.ReturnDate;
-        }
+        public List<BookHistory> BookHistoryList { get; set; }
 
         public int BookId { get; set; }
         public string BookTitle { get; set; }
         public string BookAuthor { get; set; }
 
-        public int UserId { get; set; }
-        public string UserFullName { get; set; }
-        
-        public DateTime TakeDate { get; set; }
-        public DateTime ReturnDate { get; set; }
+        public BookHistoryVm(Book book)
+        {
+            var repoUnit = Ioc.Resolve<RepoUnit>();
+
+            BookId = book.Id;
+            BookTitle = book.Title;
+            BookAuthor = book.Author;
+
+            BookHistoryList = new List<BookHistory>();
+            var bookHistories = repoUnit.BookHistory.Load(h => h.BookId == book.Id);
+            foreach (var bookHistory in bookHistories)
+            {
+                BookHistoryList.Add(bookHistory);
+            }
+        }
+
+        public BookHistoryVm()
+        {
+            
+        }
     }
 }

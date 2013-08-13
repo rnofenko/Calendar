@@ -4,12 +4,14 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web.Security;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Rules.Emails;
+using Roles = Bs.Calendar.Models.Roles;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -30,6 +32,13 @@ namespace Bs.Calendar.Mvc.Services
         public User GetUser(int userId)
         {
             var user = _unit.User.Get(userId);
+            return user;
+        }
+
+        public User GetCurrentUser()
+        {
+            var membershipUserEmail = Membership.GetUser().Email;
+            var user = _unit.User.Get(u => u.Email == membershipUserEmail);
             return user;
         }
 

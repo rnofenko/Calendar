@@ -1,19 +1,20 @@
 ﻿<table data-bind="visible: bookHistory().length > 0">
     <thead>
-        <th>User</th>
+        <th>User name</th>
         <th>Take date</th>
         <th>Return date</th>
     </thead>
     <tbody data-bind="foreach: bookHistory">
         <tr>
             <td>
-                <a data-bind="text: userFullName"></a>
+                <a data-bind="text: userFullName"></a>                
+                <input type="hidden" data-bind="value: userId, attr: { name: $root.indexedName($index(), 'UserId') }"/>
             </td>
             <td>
-                <input type="date" data-bind="value: takeDate" style="background-color: yellow">
+                <input type="date" data-bind="value: takeDate, attr: { name: $root.indexedName($index(), 'TakeDate') }" style="background-color: yellow">
             </td>
             <td>
-                <input type="date" data-bind="value: returnDate" style="background-color: greenyellow">
+                <input type="date" data-bind="value: returnDate, attr: { name: $root.indexedName($index(), 'ReturnDate') }" style="background-color: greenyellow">
             </td>
         </tr>
     </tbody>

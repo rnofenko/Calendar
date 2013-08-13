@@ -9,6 +9,6 @@ namespace Bs.Calendar.Models
         public int UserId { get; set; }
         public DateTime TakeDate { get; set; }
         public DateTime ReturnDate { get; set; }
-        //public DirectionEnum DirectionEnum { get; set; }
+        public DirectionEnums OrderDirection { get; set; }
     }
 }

@@ -6,8 +6,7 @@ using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Controllers
-{
-    [Authorize(Roles = "Admin")]
+{    
     public class UsersController : Controller
     {
         private readonly UserService _service;
@@ -17,17 +16,40 @@ namespace Bs.Calendar.Mvc.Controllers
             _service = service;
         }
 
+        public ActionResult GetCurrentUserId()
+        {
+            var user = _service.GetCurrentUser();
+            if (user != null)
+            {
+                return Json(user.Id, JsonRequestBehavior.AllowGet);
+            }
+            return HttpNotFound();
+        }
+
+        public ActionResult GetUserFullName(int id)
+        {
+            var user = _service.GetUser(id);
+            if (user != null)
+            {
+                return Json(user.FullName, JsonRequestBehavior.AllowGet);
+            }
+            return HttpNotFound();
+        }
+
+        [Authorize(Roles = "Admin")]
         private ActionResult PassUserIntoTheView(string view, int id)
         {
             var user = _service.GetUser(id);
             return user != null ? (ActionResult)View(view, new UserEditVm(user)) : HttpNotFound();
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View("Edit", new UserEditVm());
@@ -35,6 +57,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpPost,
         ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create(UserEditVm model)
         {
             ModelState.Remove("userId");
@@ -58,18 +81,21 @@ namespace Bs.Calendar.Mvc.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult RecoverUser(UserEditVm model)
         {
             _service.RecoverUser(model.Email);
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult ApproveUser(UserEditVm model)
         {
             _service.UpdateUserState(model.UserId, LiveState.Active);
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int id)
         {
             return PassUserIntoTheView("Edit", id);
@@ -77,6 +103,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpPost,
         ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(UserEditVm model, bool deleted)
         {
            try
@@ -91,6 +118,7 @@ namespace Bs.Calendar.Mvc.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
             return PassUserIntoTheView("Delete", id);
@@ -98,6 +126,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpPost,
         ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(UserEditVm model)
         {
             _service.UpdateUserState(model.UserId, LiveState.Deleted);
@@ -105,6 +134,7 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public ActionResult List(PagingVm pagingVm)
         {
             var usersVm = _service.RetreiveList(pagingVm);
@@ -115,6 +145,7 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpGet]
         [OutputCache(NoStore = true, Duration = 0)]
+        [Authorize(Roles = "Admin")]
         public ActionResult GetContactType(string contact) 
         {
             return Json(ContactTypeParser.GetContactType(contact), JsonRequestBehavior.AllowGet);

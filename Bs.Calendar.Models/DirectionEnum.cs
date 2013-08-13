@@ -1,6 +1,6 @@
 ﻿namespace Bs.Calendar.Models
 {
-    public enum DirectionEnum
+    public enum DirectionEnums
     {
         Take = 1,
         Return

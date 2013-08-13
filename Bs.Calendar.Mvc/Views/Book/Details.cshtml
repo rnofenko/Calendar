@@ -1,42 +1,55 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.BookEditVm
+﻿@model Bs.Calendar.Mvc.ViewModels.BookHistoryVm
 @{
     ViewBag.Title = "Details";
 
-    var id = 0;
-
-    if (Model != null && Model.BookId != 0)
+    if (Model != null)
     {
-        id = Model.BookId;
+        
     }
 }
 
-<div class="row">    
-    <div class="centered seven columns">
-        <ul>
-            <li class="field">
-                <h3>@Model.Title</h3>
-            </li>
-            <li class="field">
-                <strong>@Model.Author</strong>
-                <div class="medium info btn icon-left icon-book three columns pull_right" data-bind="click: addBookHistory"><a href="#">Order</a></div>
-            </li>
-        </ul>
+@using (@Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-        @Html.Partial("BookHistoryList")
-                
-        <div class="medium default btn two columns pull_right">
-            @Html.ActionLink("Back", "Index")
+    <input type="hidden" name = "BookId" value="@Model.BookId"/>    
+
+    <div class="row">
+        <div class="centered seven columns">
+            <ul>
+                <li class="field">
+                    <h3>@Model.BookTitle</h3>
+                </li>
+                <li class="field">
+                    <strong>@Model.BookAuthor</strong>
+                    <div class="medium info btn icon-left icon-book three columns pull_right"
+                         id="OrderButton"
+                         data-bind="visible: showOrder, click: addBookHistory">
+                        <a href="#" >Order</a>
+                    </div>
+                </li>
+            </ul>
+
+            @Html.Partial("BookHistoryList")
+
+            <div class="medium default btn two columns pull_right">
+                @Html.ActionLink("Back", "Index")
+            </div>
+            <div class="medium default btn two columns pull_right" 
+                 data-bind="visible: showOk, attr: { name: 'OkButton' }">
+                <input type="submit" value="Ok" />
+            </div>
         </div>
     </div>
-</div>
+}
 
 @section scripts
 {
     <script src="../../Scripts/Books/BookHistoryList.js"></script>
     <script type="text/javascript">
-        $(document).ready(function ()
+        $(document).ready(function () 
         {
-            var model = new BookHistoryVm(@id);
+            var model = new BookHistoryVm(@Html.RawJson(@Model.BookHistoryList));
             ko.applyBindings(model);
         });
     </script>
