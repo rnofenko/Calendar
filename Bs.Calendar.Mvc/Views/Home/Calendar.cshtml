@@ -1,0 +1,32 @@
+﻿<div class="row">
+    <table class = "twelve columns rounded">
+        <thead>
+        	<th></th>
+        	<th>Sun</th>
+        	<th>Mon</th>
+        	<th>Tue</th>
+        	<th>Wed</th>
+        	<th>Thu</th>
+        	<th>Fri</th>
+        	<th>Sat</th>
+        </thead>
+        <tbody id="calendar_body" data-bind="template: {name : 'week-template', foreach:weeks}">
+        </tbody>
+    </table>
+</div>
+
+<script type="text/html" id="week-template">
+    <tr data-bind="template: { name: 'day-template', foreach: days }">
+    </tr>
+</script>
+
+<script type="text/html" id="day-template">
+    <td>
+    	<span data-bind="text:day_title"></span>
+    	<div data-bind="template: { name: 'event-template', foreach: events }">
+    </td>
+</script>
+
+<script type="text/html" id="event-template">
+    <div data-bind="html: event_content" class="danger alert"></div>
+</script>
