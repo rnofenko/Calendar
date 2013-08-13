@@ -1,16 +1,7 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.TeamEditVm
 @{ 
-    var btnName = Model == null ? "Create" : "Update";
-    var teamId = 0;
-
-    if (Model != null && Model.TeamId != 0) {
-        teamId = Model.TeamId;
-        ViewBag.Title = "Edit Team";
-        ViewBag.Team = Model.Name;
-    } else {
-        ViewBag.Title = "Create Team";
-        ViewBag.Team = "New Team";
-    }
+    var btnName = Model.TeamId == 0 ? "Create" : "Update";
+    ViewBag.Title = Model.TeamId != 0 ? "Edit Team" : "Create Team";
 }
 
 <div class="row">
@@ -54,7 +45,7 @@
         <br/>
         <div class="row">
             <div class="medium info btn two columns push_one pull_right" data-bind="visible : teamModel.TeamId() != 0">
-                @Html.ActionLink("Delete", "Delete", new {id = teamId})
+                @Html.ActionLink("Delete", "Delete", new {id = Model.TeamId})
             </div>
 
             <div class="medium default btn two two push_one columns pull_right">
@@ -68,9 +59,6 @@
         
     </form>
 </div>
-
-
-
 
 @section Scripts {
     <script type="text/javascript">

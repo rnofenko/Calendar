@@ -31,24 +31,22 @@ namespace Bs.Calendar.Mvc.Controllers
             return View("Edit", new TeamEditVm());
         }
 
-        [HttpPost,
-        ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAjax]
         public ActionResult Create(TeamEditVm model)
         {
-            ModelState.Remove("TeamId");
-            if (!ModelState.IsValid)
-                return View("Edit", model);
-
+            if (!ModelState.IsValid) return View("Edit", model);            
             try 
             {
                 _service.CreateTeam(model);
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
             } 
             catch (WarningException exception) 
             {
                 ModelState.AddModelError("", exception.Message);
-                return View("Edit", model);
+                //return View("Edit", model);
             }
+            return Json(new { redirectToUrl = Url.Action("Index") });
         }
 
         public ActionResult Edit(int id) 
@@ -57,29 +55,19 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAjax]
         public ActionResult Edit(TeamEditVm model) 
         {
-            ModelState.Remove("TeamId");
-            if (!ModelState.IsValid)
-            {
-                return PassUserIntoTheView("Edit", model.TeamId);
-            }
-
+            if (!ModelState.IsValid) return View(model);
             try
             {
                 _service.EditTeam(model);
-
-                if (Request.IsAjaxRequest())
-                {
-                    return Json(new {redirectToUrl = Url.Action("Index")});
-                }
-                return RedirectToAction("Index");
             } 
             catch (WarningException exception) 
             {
                 ModelState.AddModelError("", exception.Message);
-                return View(model);
             }
+            return Json(new { redirectToUrl = Url.Action("Index") });
         }
 
         public ActionResult Delete(int id)

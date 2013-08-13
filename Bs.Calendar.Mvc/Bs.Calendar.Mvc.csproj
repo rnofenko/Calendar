@@ -260,6 +260,7 @@
     <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\CustomHtmlHelpers.cs" />
     <Compile Include="Services\MvcConfig.cs" />
+    <Compile Include="Services\ValidateAjaxAttribute.cs" />
     <Compile Include="ViewModels\BookEditVm.cs" />
     <Compile Include="ViewModels\GenericPagingVm.cs" />
     <Compile Include="ViewModels\PagingVm.cs" />
@@ -355,7 +356,6 @@
     <Content Include="Views\Users\FilterSettings.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
-
     <Content Include="Views\Shared\ColumnUserList.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -56,16 +56,31 @@ function TeamUsersVm(editModel) {
         self.showTeamUsers(true);
     };
 
+    self.actionUrl = function() {
+        if (self.teamModel.TeamId() != 0) return "/Team/Edit";
+        return "/Team/Create";
+    };
+
     self.onSubmit = function(formElement) {
         if ($(formElement).valid()) {
             $.ajax({
-                url: '/Team/Edit',
+                url: self.actionUrl(),
                 data: JSON.stringify(ko.toJS(self.teamModel)),
                 success: function (data) { window.location.href = data.redirectToUrl; },
+                error: self.onError,
                 type: 'POST',
                 contentType: 'application/json, charset=utf-8',
                 dataType: 'json'
             });
         }
+    };
+
+    self.onError = function (data) {
+        $("div[class|='validation-summary'] > ul").empty();
+        $.each(data.responseJSON, function(key, object) {
+            $.each(object.errors, function(index, value) {
+                $("div[class|='validation-summary'] > ul").append("<li class='danger alert'>" + value + "</li>");
+            });
+        });
     };
 }

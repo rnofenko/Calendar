@@ -62,12 +62,10 @@ namespace Bs.Calendar.Mvc.Services
         private void saveTeam(TeamEditVm teamVm, Team editedTeam = null)
         {
             var team = editedTeam ?? new Team();
-
             team.Name = teamVm.Name;
             team.Description = teamVm.Description;
 
             addUsersToTeam(team, teamVm.Users);
-
             _unit.Team.Save(team);
         }
 
