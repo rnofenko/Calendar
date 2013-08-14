@@ -81,12 +81,35 @@ namespace Bs.Calendar.Mvc.Services
             _repoUnit.Book.Delete(_repoUnit.Book.Get(id));
         }
 
-        public void Save(BookEditVm bookModel)
+        public void AddRecord(BookHistoryVm bookHistoryModel)
         {
-            var book = Get(bookModel.BookId) ?? new Book();
-            book.Title = bookModel.Title;
-            book.Author = bookModel.Author;
+            _repoUnit.BookHistory.Save(new BookHistory
+            {
+                BookId = bookHistoryModel.BookId,
+                TakeDate = bookHistoryModel.TakeDate,
+                ReturnDate = bookHistoryModel.ReturnDate,
+                UserId = bookHistoryModel.UserId
+                //OrderDirection = 
+            });            
+        }
+
+        public void Save(BookEditVm bookHistoryModel)
+        {
+            var book = Get(bookHistoryModel.BookId) ?? new Book();
+            book.Title = bookHistoryModel.Title;            
+            book.Author = bookHistoryModel.Author;
+            _repoUnit.Book.Save(book);            
+        }
+
+        public void Save(BookHistoryVm model)
+        {
+            var book = Get(model.BookId) ?? new Book
+            {
+                Title = model.BookTitle,
+                Author = model.BookAuthor
+            };
+
             _repoUnit.Book.Save(book);
-        }        
+        }
     }
 }

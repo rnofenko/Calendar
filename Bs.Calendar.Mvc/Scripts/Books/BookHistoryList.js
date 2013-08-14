@@ -1,6 +1,6 @@
 ﻿function BookHistory(source)
 {
-    var _self = this;    
+    var _self = this;
 
     _self.userId = ko.observable(source.UserId);
     _self.userFullName = ko.observable();
@@ -21,22 +21,50 @@
     _self.returnDate = new Date(parseInt(source.ReturnDate.substr(6))).toISOString().substr(0, 10);
 }
 
+function People(id, name)
+{
+    var self = this;
+
+    self.peopleId = id;
+    self.peopleName = name;
+}
+
 function BookHistoryVm(param)
 {
     var self = this;
     self.bookHistory = ko.observableArray();
-    
-    self.showOrder = ko.observable(true);
-    self.showOk = ko.observable(false);
+
+    self.peoples = ko.observableArray();
+
+    ko.computed(function ()
+    {
+        $.getJSON("/Users/GetAllUsers", {},
+            function (data)
+            {
+                $.each(data, function (index, item)
+                {
+                    self.peoples.push(new People(index, item));
+                });
+            });
+    }, this);
+
+    self.showAdd = ko.observable(false);
+    self.showList = ko.observable(true);
+
     self.show = function ()
     {
-        self.showOrder(false);
-        self.showOk(false);
+        self.showAdd(true);
+        self.showList(false);
     };
-    $("#OrderButton").on("click", function() {
-        self.showOk(true);
+    $("#SaveHistoryButton").on("click", function ()
+    {
+        self.showAdd(false);
+        self.showList(true);
     });
 
+    self.takeDate = ko.observable(new Date().toJSON());
+    self.returnDate = ko.observable(new Date().toJSON());
+            
     self.addBookHistory = function (data)
     {
         if (typeof data === "undefined" || data == self)

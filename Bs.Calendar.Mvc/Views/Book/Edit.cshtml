@@ -1,5 +1,5 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.BookEditVm
-@{
+﻿@model Bs.Calendar.Mvc.ViewModels.BookHistoryVm
+@{    
     ViewBag.Title = "Create Book";
     var btnName = "Create";
     var id = 0;
@@ -9,7 +9,7 @@
     {
         btnName = "Update";
         id = Model.BookId;
-        bookTitle = Model.Title;
+        bookTitle = Model.BookTitle;
         ViewBag.Title = "Edit Book";
     }
 }
@@ -35,7 +35,14 @@
                     <h4>@bookTitle</h4>
                 </legend>
 
-                @Html.EditorForModel()
+                <div class="field">
+                    @Html.LabelFor(model => model.BookTitle, new { @class = "inline three columns" })
+                    @Html.TextBoxFor(model => model.BookTitle, new { @class = "wide text input" })
+                </div>
+                <div class="field">
+                    @Html.LabelFor(model => model.BookAuthor, new { @class = "inline three columns" })
+                    @Html.TextBoxFor(model => model.BookAuthor, new { @class = "wide text input" })
+                </div>
 
                 <div class="medium secondary btn three columns">
                     <input type="submit" value="@btnName"/>
@@ -50,8 +57,44 @@
                     <div class="medium info btn three columns push_one">
                         @Html.ActionLink("Delete", "Delete", new { id })
                     </div>
-                }                                
-            </fieldset>            
-        </div>        
+                }
+            </fieldset>
+            @if (id != 0)
+            {
+                <div class="centered seven columns">
+
+                    <div class="medium info btn icon-left icon-book three columns pull_right"
+                        id="AddButton"
+                        data-bind="click: show">
+                        <a href="#">Add</a>
+                    </div>
+
+                    <div data-bind="visible: showAdd">
+                        @Html.Partial("AddBookHistory")
+                        <div class="medium info btn icon-left icon-book three columns pull_right" id="SaveHistoryButton">
+                            <input type="submit" value="Save" />
+                        </div>
+                    </div>
+                    <div data-bind="visible: showList">
+                        @Html.Partial("BookHistoryList")
+                    </div>
+                </div>
+            }
+        </div>
     }
 </div>
+
+@if (id != 0)
+{
+    @section scripts
+    {
+        <script src="../../Scripts/Books/BookHistoryList.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function ()
+            {
+                var model = new BookHistoryVm(@Html.RawJson(@Model.BookHistoryList));
+                ko.applyBindings(model);
+            }); 
+        </script>
+    }
+}

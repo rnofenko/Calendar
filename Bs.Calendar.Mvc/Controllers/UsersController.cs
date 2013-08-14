@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
@@ -14,6 +17,12 @@ namespace Bs.Calendar.Mvc.Controllers
         public UsersController(UserService service)
         {
             _service = service;
+        }
+
+        public JsonResult GetAllUsers()
+        {
+            var users = _service.GetAllUsers().ToDictionary(user => user.Id.ToString(), user => user.FullName);
+            return Json(users, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetCurrentUserId()

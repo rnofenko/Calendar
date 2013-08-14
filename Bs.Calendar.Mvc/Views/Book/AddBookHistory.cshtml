@@ -1,0 +1,22 @@
+﻿<table>
+    <thead>
+        <th>User</th>
+        <th>Take date</th>
+        <th>Return date</th>
+        <th>Order</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <select data-bind="options: $root.peoples, optionsValue: 'peopleId', optionsText: 'peopleName'" name="UserId"></select>
+            </td>
+            <td>
+                <input type="date" data-bind="value: $root.takeDate" name="TakeDate" style="background-color: yellow">
+            </td>
+            <td>
+                <input type="date" data-bind="value: $root.returnDate" name="ReturnDate" style="background-color: greenyellow">
+            </td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>

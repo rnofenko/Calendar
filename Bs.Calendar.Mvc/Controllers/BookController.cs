@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Web.Mvc;
+using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 
@@ -45,30 +46,44 @@ namespace Bs.Calendar.Mvc.Controllers
             return View("Edit", null);
         }
 
-        public ActionResult Edit(int id)
+        [HttpPost,
+         ValidateAntiForgeryToken]
+        public ActionResult Create(BookHistoryVm book)
         {
-            var book = _service.Get(id);
-            return book != null ? (ActionResult) View("Edit", new BookEditVm(book)) : HttpNotFound();
+            ModelState.Remove("BookId");
+            if (ModelState.IsValid)
+            {
+                _service.Save(book);
+                return RedirectToAction("Index");
+            }
+
+            return View("Edit", new BookHistoryVm());
         }
-        
-        public ActionResult Details(int id)
+
+        public ActionResult Edit(int id)
         {
             try
             {
-                return View("Details", _bookHistoryService.GetBookHistories(id));
+                return View("Edit", _bookHistoryService.GetBookHistories(id));
             }
             catch (WarningException)
             {
                 return HttpNotFound();
-            }            
+            }
         }
 
         [HttpPost,
-        ValidateAntiForgeryToken]
-        public ActionResult Details(BookHistoryVm model)
+         ValidateAntiForgeryToken]
+        public ActionResult Edit(BookHistoryVm book)
         {
-            _bookHistoryService.AddRecord(model);
-            return RedirectToAction("Details");
+            if (ModelState.IsValid)
+            {
+                _service.Save(book);
+                _service.AddRecord(book);
+                return RedirectToAction("Index");
+            }
+
+            return View("Edit", _bookHistoryService.GetBookHistories(book.BookId));
         }
 
         public ActionResult Delete(int id)
@@ -83,33 +98,6 @@ namespace Bs.Calendar.Mvc.Controllers
             }
 
             return RedirectToAction("Index");
-        }
-
-        [HttpPost,
-         ValidateAntiForgeryToken]
-        public ActionResult Create(BookEditVm book)
-        {
-            ModelState.Remove("BookId");
-            if (ModelState.IsValid && _service.IsValid(book))
-            {
-                _service.Save(book);
-                return RedirectToAction("Index");
-            }
-
-            return View("Edit", book);
-        }
-
-        [HttpPost,
-         ValidateAntiForgeryToken]
-        public ActionResult Edit(BookEditVm book)
-        {
-            if (ModelState.IsValid && _service.IsValid(book))
-            {
-                _service.Save(book);
-                return RedirectToAction("Index");
-            }
-
-            return View("Edit", book);
         }
     }
 }
