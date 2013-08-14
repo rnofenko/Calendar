@@ -10,7 +10,7 @@
     self.ShowDeleted = ko.observable();
 }
 
-function ViewModel() {
+function UserFrame() {
     var self = this;
 
     //Variables
@@ -81,9 +81,6 @@ function ViewModel() {
     };
     
     self.exitAccept = function () {
-
-        /* Save new settings and update list of users */
-
         var showAdmins = $("#adminsPrompt").hasClass("checked");
         var showNotApproved = $("#notApprovedPrompt").hasClass("checked");
         var showDeleted = $("#deletedPrompt").hasClass("checked");
@@ -103,9 +100,6 @@ function ViewModel() {
     };
 
     self.resetFlags = function () {
-
-        /* Revert checkboxes to the last state */
-
         if ($("#adminsPrompt").hasClass("checked") != self.model.ShowAdmins())
             $("#adminsPrompt").click();
 
@@ -119,7 +113,6 @@ function ViewModel() {
     };
 
     self.toggleModal = function() {
-
         $("#filter_settings").toggleClass("active");
     };
     

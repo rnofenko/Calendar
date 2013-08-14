@@ -9,6 +9,7 @@ using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Rules.Emails;
 using Roles = Bs.Calendar.Models.Roles;
@@ -132,7 +133,7 @@ namespace Bs.Calendar.Mvc.Services
             }
             if (userModel.Email != userToEdit.Email)
             {
-                SendMsgToUser(userToEdit);
+                sendMsgToUser(userToEdit);
             }
 
             userToEdit.FirstName = userModel.FirstName;
@@ -149,7 +150,7 @@ namespace Bs.Calendar.Mvc.Services
             _unit.User.Save(userToEdit);
         }
 
-        private static void SendMsgToUser(User user)
+        private static void sendMsgToUser(User user)
         {
             var sender = Ioc.Resolve<EmailSender>();
             var body = string.Format("Hi, {0}!\nYour account's status is {1} and {2} now.",

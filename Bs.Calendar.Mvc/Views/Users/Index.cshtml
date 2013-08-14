@@ -1,8 +1,7 @@
-﻿@using Bs.Calendar.Mvc.ViewModels
+﻿@model Bs.Calendar.Mvc.ViewModels.Users.UserFilterVm
 
 @{
     ViewBag.Title = "Users";
-    var pagingVm = @Session["pagingVm"] ?? new PagingVm();
 }
 
 <div class="row">
@@ -15,7 +14,9 @@
 
 <div class="row">
     <div class="one columns">
-        <button class="medium primary btn"><a href="/Users/Create">Create</a></button>
+        <button class="medium primary btn">
+            <a href="@Url.Action("Create")">Create</a>
+        </button>
     </div>
     <div class="pull_right field four columns">
         <div class="row">
@@ -53,7 +54,6 @@
         </thead>
     
         <tbody id="list-body">
-            @*@Html.Action("List", @Session["pagingVm"] ?? new PagingVm())*@
         </tbody>
     </table>
 </div>
@@ -86,9 +86,9 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            currentViewModel = @Html.Raw(Json.Encode(@pagingVm));
+            var currentViewModel = '@Html.Raw(Json.Encode(Model))';
 
-            var model = new ViewModel();
+            var model = new UserFrame();
             
             model.updateModal(currentViewModel);
             ko.applyBindings(model);
