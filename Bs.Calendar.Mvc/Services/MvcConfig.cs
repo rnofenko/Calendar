@@ -6,8 +6,29 @@ namespace Bs.Calendar.Mvc.Services
 {
     public class MvcConfig : IConfig
     {
+        private int? _pageSize;
         private bool? _sendEmail;
         private string _teamHeaderPattern;
+
+        public int PageSize
+        {
+            get
+            {
+                if (!_pageSize.HasValue)
+                {
+                    const int pageSizeByDefault = 7;
+
+                    int pageSize;
+                    _pageSize = int.TryParse(ConfigurationManager.AppSettings["PageSize"], out pageSize) ? pageSize : pageSizeByDefault;
+                }
+
+                return _pageSize.Value;
+            }
+            set
+            {
+                _pageSize = value;
+            }
+        }
 
         public bool SendEmail
         {
@@ -16,7 +37,7 @@ namespace Bs.Calendar.Mvc.Services
                 if (_sendEmail == null)
                 {
                     var parameter = ConfigurationManager.AppSettings["SendEmail"];
-                    _sendEmail = parameter != null && parameter.Equals("true", StringComparison.OrdinalIgnoreCase);
+                    _sendEmail = parameter != null && parameter.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase);
                 }
 
                 return _sendEmail.Value;

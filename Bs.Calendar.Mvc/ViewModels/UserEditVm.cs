@@ -39,6 +39,23 @@ namespace Bs.Calendar.Mvc.ViewModels
         {
         }
 
+        public User Map()
+        {
+            return new User
+                       {
+                           Id = UserId,
+                           FirstName = FirstName,
+                           LastName = LastName,
+                           Email = Email,
+                           BirthDate = BirthDate,
+                           Contacts = new List<Contact>(Contacts),
+
+                           Role = Role,
+                           Live = Live,
+                           ApproveState = ApproveState
+                       };
+        }
+
         public int UserId { get; set; }
 
         [StringLength(50),
@@ -65,9 +82,9 @@ namespace Bs.Calendar.Mvc.ViewModels
             get { return Email; }
         }
 
-        public Roles Role { get; set; }
-
         public List<Contact> Contacts { get; set; }
+
+        public Roles Role { get; set; }
 
         public LiveStatuses Live {get; set; }
         public ApproveStates ApproveState { get; set; }

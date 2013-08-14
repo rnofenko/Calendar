@@ -8,8 +8,14 @@ namespace Bs.Calendar.Mvc.ViewModels
 {
     public class UsersVm
     {
-        public IEnumerable<User> Users { get; set; }
+        public UsersVm(IEnumerable<User> users, UserFilterVm userFilterVm)
+        {
+            Users = users ?? Enumerable.Empty<User>();
+            UserFilterVm = userFilterVm;
+        }
 
+        public IEnumerable<User> Users { get; set; }
         public PagingVm PagingVm { get; set; }
+        public UserFilterVm UserFilterVm { get; set; }
     }
 }

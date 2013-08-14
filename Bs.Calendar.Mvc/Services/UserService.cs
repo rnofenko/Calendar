@@ -16,11 +16,9 @@ namespace Bs.Calendar.Mvc.Services
     {
         private readonly RepoUnit _unit;
         private readonly ContactService _contactService;
-        public int PageSize { get; set; }
 
         public UserService(RepoUnit unit, ContactService contactService)
         {
-            PageSize = 7;
             _contactService = contactService;
             _unit = unit;
         }
@@ -47,21 +45,8 @@ namespace Bs.Calendar.Mvc.Services
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
 
-            var contacts = _contactService.UpdateContacts(userModel.Contacts);
-
-            var user = new User
-            {
-                FirstName = userModel.FirstName,
-                LastName = userModel.LastName,
-                Email = userModel.Email,
-                Role = userModel.Role,
-                BirthDate = userModel.BirthDate,
-                Contacts = contacts,
-
-                Live = userModel.Live,
-                ApproveState = userModel.ApproveState
-            };
-            _unit.User.Save(user);
+            _contactService.UpdateContacts(userModel.Contacts);
+            _unit.User.Save(userModel.Map());
         }
 
         public void UpdateUserState(int userModelId, ApproveStates approveState = ApproveStates.NotApproved, LiveStatuses liveState = LiveStatuses.Active)
@@ -101,8 +86,10 @@ namespace Bs.Calendar.Mvc.Services
             userEditVm.Live = LiveStatuses.Active;
 
             SaveUser(userEditVm);
+
             dbUser = _unit.User.Get(u => u.Email == userEditVm.Email);
             dbUser.PasswordHash = userEditVm.Email;
+
             _unit.User.Save(dbUser);
 
             return true;
@@ -111,6 +98,7 @@ namespace Bs.Calendar.Mvc.Services
         public void EditUser(UserEditVm userModel, bool deleted)
         {
             var userToEdit = GetUser(userModel.UserId);
+
             if (!EmailSender.IsValidEmailAddress(userModel.Email))
             {
                 throw new WarningException(string.Format("{0} - is not valid email address", userModel.Email));
@@ -124,16 +112,10 @@ namespace Bs.Calendar.Mvc.Services
                 SendMsgToUser(userToEdit);
             }
 
-            userToEdit.FirstName = userModel.FirstName;
-            userToEdit.LastName = userModel.LastName;
-            userToEdit.Email = userModel.Email;
-            userToEdit.Role = userModel.Role;
-            userToEdit.Live = deleted ? LiveStatuses.Deleted : userToEdit.Live;
-            userToEdit.BirthDate = userModel.BirthDate;
+            _contactService.UpdateContacts(userModel.Contacts);
 
-            var contacts = _contactService.UpdateContacts(userModel.Contacts);
-            userToEdit.Contacts.Clear();
-            userToEdit.Contacts = contacts;
+            userToEdit = userModel.Map();
+            userToEdit.Live = deleted ? LiveStatuses.Deleted : userToEdit.Live;
 
             _unit.User.Save(userToEdit);
         }
@@ -141,130 +123,44 @@ namespace Bs.Calendar.Mvc.Services
         private static void SendMsgToUser(User user)
         {
             var sender = Ioc.Resolve<EmailSender>();
-            var body = string.Format("Hi, {0}!\nYour account's status is {1} and {2} now.",
-                user.FullName,
-                user.Live == LiveStatuses.Active ? "active" : "deleted",
-                user.ApproveState == ApproveStates.Approved ? "approved" : "not approved");
+            var body = string.Format("Hi, {0}!\nYour account's status is {1} and {2} now.", user.FullName, user.Live.GetDescription(), user.ApproveState.GetDescription());
 
             sender.Send("Status has been changed", body, user.Email);
+        }
+
+        public UsersVm RetrieveList(UserFilterVm filterVm)
+        {
+            return new UsersVm(_unit.User.Load(filterVm.Map()), filterVm);
         }
 
         public UsersVm RetreiveList(PagingVm pagingVm)
         {
             var users = _unit.User.Load();
 
-            users = searchByStr(users, pagingVm.SearchStr);
-            users = searchByRoleAndState(users, pagingVm.RolesFilter, pagingVm.LiveStatusFilter, pagingVm.ApproveStateFilter,
-                                         pagingVm.ShowUnknownRole, pagingVm.ShowUnknownLiveStatus, pagingVm.ShowUnknownApproveState);
+            //users = searchByStr(users, pagingVm.SearchStr);
+            //users = searchByRoleAndState(users, pagingVm.RolesFilter, pagingVm.LiveStatusFilter, pagingVm.ApproveStateFilter,
+            //                             pagingVm.ShowUnknownRole, pagingVm.ShowUnknownLiveStatus, pagingVm.ShowUnknownApproveState);
 
-            users = sortByStr(users, pagingVm.SortByStr);
+            //users = sortByStr(users, pagingVm.SortByStr);
 
-            pagingVm = updatePagingVm(pagingVm, users);
+            int pageSize = Config.Instance.PageSize;
+            pagingVm = updatePagingVm(pagingVm, users, pageSize);
 
             return new UsersVm
             {
-                Users = users.Skip((pagingVm.Page - 1) * PageSize).Take(PageSize).ToList(),
+                Users = users.Skip((pagingVm.Page - 1) * pageSize).Take(pageSize).ToList(),
                 PagingVm = pagingVm
             };
         }
 
-        private PagingVm updatePagingVm(PagingVm pagingVm, IQueryable<User> users)
+        private PagingVm updatePagingVm(PagingVm pagingVm, IQueryable<User> users, int pageSize)
         {
             var newPagingVm = new PagingVm(pagingVm);
 
-            newPagingVm.TotalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            newPagingVm.TotalPages = PageCounter.GetTotalPages(users.Count(), pageSize);
             newPagingVm.Page = PageCounter.GetRangedPage(pagingVm.Page, newPagingVm.TotalPages);
 
             return newPagingVm;
-        }
-
-        private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
-        {
-            users = users.OrderByIf(string.IsNullOrEmpty(sortByStr),
-                        user => user.Id);
-
-            users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("Name"),
-                        team => team.FullName);
-            users = users.OrderByDescIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("NameDesc"),
-                        team => team.FullName);
-
-            users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("E-mail"),
-                        team => team.Email);
-            users = users.OrderByDescIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("E-mailDesc"),
-                        team => team.FullName);
-
-            return users;
-        }
-
-        private IQueryable<User> searchByStr(IQueryable<User> users, string searchStr)
-        {
-            if (string.IsNullOrEmpty(searchStr))
-                return users;
-
-            //Delete extra whitespaces
-            searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ").ToLower();
-
-            var filteredUsers = users.WhereIf(searchStr.Length > 0,
-                                    user => user.Email.ToLower().Contains(searchStr));
-
-            filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
-
-            filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
-
-            return filteredUsers.Distinct();
-        }
-
-        private IQueryable<User> searchByName(IQueryable<User> users, string searchStr)
-        {
-            var filteredUsers = Enumerable.Empty<User>().AsQueryable();
-            var splitedStr = searchStr.Split();
-
-            for (int i = 0; i < splitedStr.Rank && i < 2; i++)
-            {
-                var str = splitedStr[i];
-                filteredUsers = filteredUsers.Concat(users.Where(user => user.FullName.ToLower().Contains(str)));
-            }
-
-            return filteredUsers;
-        }
-
-        private IQueryable<User> SearchByRole(IQueryable<User> users, string searchStr)
-        {
-            var filteredUsers = Enumerable.Empty<User>().AsQueryable();
-            var searchRoleName = Enum.GetNames(typeof(Roles)).FirstOrDefault(role => role.ToLower().Contains(searchStr));
-
-            if (searchRoleName == null)
-            {
-                return filteredUsers;
-            }
-
-            var searchRole = (Roles)Enum.Parse(typeof (Roles), searchRoleName);
-            
-            filteredUsers = filteredUsers.Concat(users.Where(user => user.Role == searchRole));
-            return filteredUsers;
-        }
-
-        private IQueryable<User> searchByRoleAndState(
-            IQueryable<User> users, Roles showRoles = (Roles)~0,
-            LiveStatuses showStatus = (LiveStatuses)~0, ApproveStates showApproveState = (ApproveStates)~0,
-            bool selectUnknownRole = false, bool selectUnknownStatus = false, bool selectUnknownState = false)
-        {
-            //Select users with unknown parameters only if corresponding flags are set to true (even if filter value is stated apparently)
-
-            return users
-                .Where(user => (selectUnknownRole ? (showRoles & user.Role) == user.Role : (showRoles & user.Role) != 0) &&
-                               (selectUnknownStatus ? (showStatus & user.Live) == user.Live : (showStatus & user.Live) != 0) &&
-                               (selectUnknownState ? (showApproveState & user.ApproveState) == user.ApproveState : (showApproveState & user.ApproveState) != 0));
-        }
-
-        private int getTotalPages(int count, int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)count / pageSize);
-        }
-
-        private int getRangedPage(int page, int totalPages)
-        {
-            return page <= 1 ? 1 : page > totalPages ? totalPages : page;
         }
 
         public void RecoverUser(string email)

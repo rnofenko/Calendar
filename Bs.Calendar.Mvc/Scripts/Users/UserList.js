@@ -33,7 +33,7 @@ function ViewModel() {
     self.headerClick = function(data, event) {
         self.showArrow('#' + event.currentTarget.id);
 
-        self.model.SortByStr(event.currentTarget.innerText.concat(self.arrowUp ? "" : "Desc"));
+        self.model.SortByStr(event.currentTarget.innerText.concat(self.arrowUp ? "" : " DESC"));
         self.updateList(self.model);
     };
 

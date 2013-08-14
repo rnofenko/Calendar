@@ -1,6 +1,7 @@
 ﻿@using System.Text
 
 @using Bs.Calendar.Models
+@using Bs.Calendar.Rules
 @model Bs.Calendar.Mvc.ViewModels.UsersVm
 
 <input id="listPage" hidden="true" value="@Model.PagingVm.Page">
@@ -11,8 +12,8 @@
 {
     bool notApproved = user.ApproveState == ApproveStates.NotApproved;
 
-    var labelText = new StringBuilder(user.Live.ToString());
-    labelText.AppendFormat(", {0}", notApproved ? "not approved" : "approved");
+    var labelText = new StringBuilder(user.Live.GetDescription());
+    labelText.AppendFormat(", {0}", user.ApproveState.GetDescription().ToLower());
     
     string notApprovedStyle = notApproved ? "background-color: Yellow" : null;
     
