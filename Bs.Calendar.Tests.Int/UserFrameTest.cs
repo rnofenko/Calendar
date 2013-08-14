@@ -10,6 +10,7 @@ using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Core;
+using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Tests.Unit.FakeObjects;
 using Moq;
 using NUnit.Framework;

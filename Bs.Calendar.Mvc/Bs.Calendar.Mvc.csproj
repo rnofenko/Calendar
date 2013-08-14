@@ -271,9 +271,10 @@
     <Compile Include="ViewModels\RoomsVm.cs" />
     <Compile Include="ViewModels\TeamEditVm.cs" />
     <Compile Include="ViewModels\TeamUserVm.cs" />
-    <Compile Include="ViewModels\UsersVm.cs" />
+    <Compile Include="ViewModels\Users\UserFilterVm.cs" />
+    <Compile Include="ViewModels\Users\UsersVm.cs" />
     <Compile Include="Services\UserService.cs" />
-    <Compile Include="ViewModels\UserEditVm.cs" />
+    <Compile Include="ViewModels\Users\UserEditVm.cs" />
     <Compile Include="Services\TeamService.cs" />
     <Compile Include="ViewModels\TeamsVm.cs" />
   </ItemGroup>

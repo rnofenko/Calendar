@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Controllers
@@ -17,7 +18,7 @@ namespace Bs.Calendar.Mvc.Controllers
             _service = service;
         }
 
-        private ActionResult PassUserIntoTheView(string view, int id)
+        private ActionResult passUserIntoTheView(string view, int id)
         {
             var user = _service.GetUser(id);
             return user != null ? (ActionResult)View(view, new UserEditVm(user)) : HttpNotFound();
@@ -25,7 +26,8 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            var filter = new UserFilterVm();
+            return View(filter);
         }
 
         public ActionResult Create()
@@ -33,8 +35,7 @@ namespace Bs.Calendar.Mvc.Controllers
             return View("Edit", new UserEditVm());
         }
 
-        [HttpPost,
-        ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Create(UserEditVm model)
         {
             ModelState.Remove("userId");
@@ -72,11 +73,10 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Edit(int id)
         {
-            return PassUserIntoTheView("Edit", id);
+            return passUserIntoTheView("Edit", id);
         }
 
-        [HttpPost,
-        ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditVm model, bool deleted)
         {
            try
@@ -93,11 +93,10 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Delete(int id)
         {
-            return PassUserIntoTheView("Delete", id);
+            return passUserIntoTheView("Delete", id);
         }
 
-        [HttpPost,
-        ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Delete(UserEditVm model)
         {
             _service.UpdateUserState(model.UserId, model.ApproveState, LiveStatuses.Deleted);
@@ -115,7 +114,8 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpGet]
         [OutputCache(NoStore = true, Duration = 0)]
-        public ActionResult GetContactType(string contact) {
+        public ActionResult GetContactType(string contact)
+        {
             return Json(ContactTypeParser.GetContactType(contact), JsonRequestBehavior.AllowGet);
         }
     }
