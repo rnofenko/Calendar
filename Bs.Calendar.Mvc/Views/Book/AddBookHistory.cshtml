@@ -16,7 +16,12 @@
             <td>
                 <input type="date" data-bind="value: $root.returnDate" name="ReturnDate" style="background-color: greenyellow">
             </td>
-            <td></td>
+            <td>
+                <select data-bind="options: $root.orderDirections" name="OrderDirection"></select>
+            </td>
         </tr>
     </tbody>
 </table>
+<div class="medium info btn icon-left icon-book three columns pull_right" id="SaveHistoryButton">
+    <input type="submit" value="Save" />
+</div>

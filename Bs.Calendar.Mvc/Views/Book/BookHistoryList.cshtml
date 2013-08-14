@@ -16,7 +16,9 @@
             <td>
                 <input type="date" data-bind="value: returnDate, attr: { name: $root.indexedName($index(), 'ReturnDate') }" style="background-color: greenyellow">
             </td>
-            <td></td>
+            <td>
+                <a data-bind="text: orderDirection"/>
+            </td>
         </tr>
     </tbody>
 </table>

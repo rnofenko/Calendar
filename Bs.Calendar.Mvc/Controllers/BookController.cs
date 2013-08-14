@@ -80,7 +80,7 @@ namespace Bs.Calendar.Mvc.Controllers
             {
                 _service.Save(book);
                 _service.AddRecord(book);
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
             }
 
             return View("Edit", _bookHistoryService.GetBookHistories(book.BookId));

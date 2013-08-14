@@ -88,8 +88,8 @@ namespace Bs.Calendar.Mvc.Services
                 BookId = bookHistoryModel.BookId,
                 TakeDate = bookHistoryModel.TakeDate,
                 ReturnDate = bookHistoryModel.ReturnDate,
-                UserId = bookHistoryModel.UserId
-                //OrderDirection = 
+                UserId = bookHistoryModel.UserId,
+                OrderDirection = bookHistoryModel.OrderDirection
             });            
         }
 

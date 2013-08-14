@@ -13,7 +13,7 @@ namespace Bs.Calendar.Mvc.ViewModels
         public List<BookHistory> BookHistoryList { get; set; }
 
         public int UserId { get; set; }
-        public string UserFullName { get; set; }
+        //public string UserFullName { get; set; }
 
         public DateTime TakeDate { get; set; }
         public DateTime ReturnDate { get; set; }

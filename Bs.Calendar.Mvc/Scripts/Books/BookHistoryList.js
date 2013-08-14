@@ -2,23 +2,26 @@
 {
     var _self = this;
 
-    _self.userId = ko.observable(source.UserId);
+    _self.userId = source.UserId;
     _self.userFullName = ko.observable();
 
     ko.computed(function ()
     {
-        if (_self.userId() == 0)
-        {
-            $.getJSON("/Users/GetCurrentUserId", {}, _self.userId);
-        }
-        else
-        {
-            $.getJSON("/Users/GetUserFullName", { id: _self.userId }, _self.userFullName);
-        }
+        $.getJSON("/Users/GetUserFullName", { id: _self.userId }, _self.userFullName);       
     }, this);
 
     _self.takeDate = new Date(parseInt(source.TakeDate.substr(6))).toISOString().substr(0, 10);
     _self.returnDate = new Date(parseInt(source.ReturnDate.substr(6))).toISOString().substr(0, 10);
+
+    _self.orderDirection = source.OrderDirection;
+
+    ko.computed(function() {
+        if (_self.orderDirection == 1) {
+            _self.orderDirection = "Take";
+        } else if (_self.orderDirection == 2) {
+            _self.orderDirection = "Return";
+        }
+    }, this);
 }
 
 function People(id, name)
@@ -35,6 +38,7 @@ function BookHistoryVm(param)
     self.bookHistory = ko.observableArray();
 
     self.peoples = ko.observableArray();
+    self.orderDirections = ko.observableArray(['Take','Return']);
 
     ko.computed(function ()
     {
@@ -64,19 +68,10 @@ function BookHistoryVm(param)
 
     self.takeDate = ko.observable(new Date().toJSON());
     self.returnDate = ko.observable(new Date().toJSON());
-            
+
+
     self.addBookHistory = function (data)
     {
-        if (typeof data === "undefined" || data == self)
-        {
-            data =
-            {
-                UserId: 0,
-                TakeDate: (new Date()).toJSON(),
-                ReturnDate: (new Date()).toJSON()
-            };
-        }
-
         self.bookHistory.push(new BookHistory(data));
     };
 
