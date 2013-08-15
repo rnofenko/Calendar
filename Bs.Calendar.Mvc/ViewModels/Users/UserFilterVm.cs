@@ -7,30 +7,6 @@ namespace Bs.Calendar.Mvc.ViewModels.Users
 {
     public class UserFilterVm
     {
-        public UserFilterVm(string searchStr, string sortByStr, int totalPages, int page = 1,
-                            bool showDeleted = false, bool showAdmins = false, bool showNotApproved = true)
-        {
-            SearchString = searchStr;
-            SortByField = sortByStr;
-            Page = page;
-            TotalPages = totalPages;
-
-            Deleted = showDeleted;
-            OnlyAdmins = showAdmins;
-            NotApproved = showNotApproved;
-        }
-
-        public UserFilterVm(UserFilterVm pagingVm)
-            : this(
-                pagingVm.SearchString, pagingVm.SortByField, pagingVm.TotalPages, pagingVm.Page, pagingVm.Deleted,
-                pagingVm.OnlyAdmins, pagingVm.NotApproved)
-        {
-        }
-
-        public UserFilterVm()
-        {
-        }
-
         public string SearchString { get; set; }
 
         public string SortByField { get; set; }
