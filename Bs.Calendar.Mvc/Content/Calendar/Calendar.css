@@ -19,19 +19,18 @@
     border-left: 0;
 }
 
+.other-month div.bc-day-number {
+    color: gainsboro;
+}
 .bc-week td:first-child > div {
-    min-height: 108px;
+    min-height: 115px;
 }
 
 .bc-month-day > div:first-child{
     width: 100%;
-    padding: 0 5px;
+    padding: 0 2px;
     font-size: 14px ;
     font-weight: normal;
-}
-
-.bc-month-day.other-month > div:first-child{
-    color: gainsboro;
 }
 
 
@@ -41,4 +40,12 @@
 
 .bc-week img {
     vertical-align: text-top;
+}
+
+.bc-event {
+    background:darkseagreen;
+    border-radius: 2px;
+    overflow: hidden;
+    height: 100%;
+    margin-bottom: 1px;
 }
