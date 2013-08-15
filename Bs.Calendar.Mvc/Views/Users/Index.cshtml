@@ -1,8 +1,5 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.Users.UserFilterVm
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 @{
     ViewBag.Title = "Users";
 }
@@ -88,20 +85,9 @@
 @section Scripts {
     <script type="text/javascript">
         $(document).ready(function () {
-<<<<<<< Updated upstream
             window.UserFrame = new UserFrame();
             ko.applyBindings(window.UserFrame);
             window.UserFrame.filter.setFilter(@Html.Raw(Json.Encode(Model)));
-=======
-
-            var currentViewModel = '@Html.Raw(Json.Encode(Model))';
-
-            var model = new UserFrame();
-            
-            model.updateModal(currentViewModel);
-            ko.applyBindings(model);
-            model.updateList(currentViewModel);
->>>>>>> Stashed changes
         });
     </script>
 }

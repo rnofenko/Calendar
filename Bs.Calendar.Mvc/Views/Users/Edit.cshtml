@@ -1,8 +1,11 @@
 ﻿@using Bs.Calendar.Models
+@using Roles = Bs.Calendar.Models.Roles
 @model Bs.Calendar.Mvc.ViewModels.Users.UserEditVm
 @{
     var btnName = "Create";
-    var userRoles = (from object role in Enum.GetValues(typeof(Bs.Calendar.Models.Roles)) select role.ToString()).ToList();
+    var userRoles = Enum.GetValues(typeof(Roles))
+                        .Cast<Roles>()
+                        .Where(role => role < Roles.All);
     var userId = 0;
     var isDeleted = false;
 

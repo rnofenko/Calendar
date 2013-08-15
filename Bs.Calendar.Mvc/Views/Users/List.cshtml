@@ -1,18 +1,13 @@
 ﻿@using Bs.Calendar.Models
 @model Bs.Calendar.Mvc.ViewModels.Users.UsersVm
 
-<<<<<<< Updated upstream
 <input id="listPage" hidden="true" value="@Model.Filter.Page">
 <input id="listTotalPages" hidden="true" value="@Model.Filter.TotalPages">
-=======
-@using Bs.Calendar.Models
-@model Bs.Calendar.Mvc.ViewModels.Users.UsersVm
->>>>>>> Stashed changes
 
 @foreach (var user in Model.Users)
 {
     var labelText = "";
-    if(user.Live==LiveStatuses.Deleted)
+    if(user.Live == LiveStatuses.Deleted)
     {
         labelText = "Deleted";
     }
