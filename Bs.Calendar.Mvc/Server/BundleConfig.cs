@@ -27,6 +27,7 @@ namespace Bs.Calendar.Mvc.Server
             scripts.Include("~/Scripts/Users/user.js");
             scripts.Include("~/Scripts/Teams/TeamEdit.js");
             scripts.Include("~/Scripts/Users/UserList.js");
+            scripts.Include("~/Scripts/Users/UserFrameFilter.js");
             scripts.Include("~/Scripts/Layout/list-view.js");
             BundleTable.Bundles.Add(scripts);
 

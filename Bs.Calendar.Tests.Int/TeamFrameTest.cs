@@ -41,31 +41,31 @@ namespace Bs.Calendar.Tests.Int
             _unit.Team.Delete(team2);
         }
 
-        [Test]
-        public void Can_Provide_All_Teams() 
-        {
-            //act
-            var teamView = _teamController.List(new PagingVm()) as PartialViewResult;
-            var teams = teamView.Model as TeamsVm;
+        //[Test]
+        //public void Can_Provide_All_Teams() 
+        //{
+        //    //act
+        //    var teamView = _teamController.List(new PagingVm()) as PartialViewResult;
+        //    var teams = teamView.Model as TeamsVm;
 
-            //assert
-            teams.Teams.Count().Should().BeGreaterOrEqualTo(2);
-        }
+        //    //assert
+        //    teams.Teams.Count().Should().BeGreaterOrEqualTo(2);
+        //}
 
-        [Test]
-        public void Can_Search_Team() 
-        {
-            //arrange
-            var pagingVm = new PagingVm();
-            pagingVm.SearchStr = ".NET";
+        //[Test]
+        //public void Can_Search_Team() 
+        //{
+        //    //arrange
+        //    var pagingVm = new PagingVm();
+        //    pagingVm.SearchStr = ".NET";
 
-            //act
-            var teamsView = _teamController.List(pagingVm) as PartialViewResult;
-            var teams = teamsView.Model as TeamsVm;
-            var team = teams.Teams.First();
+        //    //act
+        //    var teamsView = _teamController.List(pagingVm) as PartialViewResult;
+        //    var teams = teamsView.Model as TeamsVm;
+        //    var team = teams.Teams.First();
 
-            //assert
-            team.Name.ShouldBeEquivalentTo(pagingVm.SearchStr);
-        }
+        //    //assert
+        //    team.Name.ShouldBeEquivalentTo(pagingVm.SearchStr);
+        //}
     }
 }

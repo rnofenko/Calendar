@@ -26,7 +26,12 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Index()
         {
-            var filter = new UserFilterVm();
+            var filter = new UserFilterVm
+                {
+                    NotApproved = true,
+                    OnlyAdmins = false,
+                    Deleted = false
+                };
             return View(filter);
         }
 
@@ -104,11 +109,9 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
-        public ActionResult List(PagingVm pagingVm)
+        public ActionResult List(UserFilterVm filter)
         {
-            var usersVm = _service.RetreiveList(pagingVm);
-            Session["pagingVm"] = usersVm.PagingVm;
-
+            var usersVm = _service.RetreiveList(filter);
             return PartialView(usersVm);
         }
 

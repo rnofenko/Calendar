@@ -1,20 +1,22 @@
-﻿@using System.Text
-
-@using Bs.Calendar.Models
+﻿@using Bs.Calendar.Models
 @model Bs.Calendar.Mvc.ViewModels.Users.UsersVm
 
-<input id="listPage" hidden="true" value="@Model.PagingVm.Page">
-<input id="listTotalPages" hidden="true" value="@Model.PagingVm.TotalPages">
-<input id="listSearchStr" hidden="true" value="@Model.PagingVm.SearchStr">
-<input id="listSortByStr" hidden="true" value="@Model.PagingVm.SortByStr">
+<input id="listPage" hidden="true" value="@Model.Filter.Page">
+<input id="listTotalPages" hidden="true" value="@Model.Filter.TotalPages">
+
 @foreach (var user in Model.Users)
 {
-    bool notApproved = user.ApproveState == ApproveStates.NotApproved;
+    var labelText = "";
+    if(user.Live==LiveStatuses.Deleted)
+    {
+        labelText = "Deleted";
+    }
+    else if (user.ApproveState == ApproveStates.NotApproved)
+    {
+        labelText = "Not approved";
+    }
 
-    var labelText = new StringBuilder(user.Live.ToString());
-    labelText.AppendFormat(", {0}", notApproved ? "not approved" : "approved");
-    
-    string notApprovedStyle = notApproved ? "background-color: Yellow" : null;
+    var notApprovedStyle = user.ApproveState==ApproveStates.NotApproved ? "background-color: Yellow" : null;
     
     <tr ondblclick="RowDblClick('@Url.Action("Edit", "Users", new { id = user.Id })')" style="@notApprovedStyle">
         <td>

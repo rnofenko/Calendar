@@ -1,5 +1,5 @@
 ﻿@using Bs.Calendar.Models
-@model Bs.Calendar.Mvc.ViewModels.UserEditVm
+@model Bs.Calendar.Mvc.ViewModels.Users.UserEditVm
 @{
     var btnName = "Create";
     var userRoles = (from object role in Enum.GetValues(typeof(Bs.Calendar.Models.Roles)) select role.ToString()).ToList();

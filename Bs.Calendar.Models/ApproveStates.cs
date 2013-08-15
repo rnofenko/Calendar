@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bs.Calendar.Models
 {
@@ -10,6 +6,7 @@ namespace Bs.Calendar.Models
     public enum ApproveStates
     {
         NotApproved = 1,
-        Approved = 2
+        Approved = 2,
+        All = NotApproved | Approved
     }
 }

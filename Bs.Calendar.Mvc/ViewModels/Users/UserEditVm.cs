@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Bs.Calendar.Models;
 
-namespace Bs.Calendar.Mvc.ViewModels
+namespace Bs.Calendar.Mvc.ViewModels.Users
 {
     public class UserEditVm
     {

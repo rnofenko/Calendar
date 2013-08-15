@@ -35,5 +35,7 @@ namespace Bs.Calendar.Mvc.Services
                 return _teamHeaderPattern;
             }
         }
+
+        public int PageSize { get { return 7; } }
     }
 }
