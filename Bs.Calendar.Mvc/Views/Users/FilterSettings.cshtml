@@ -13,6 +13,7 @@
                     <legend><h3>@ViewBag.SearchWindowTitle</h3></legend>
                     <ul>
                         <li class="field">
+<<<<<<< Updated upstream
                             <label class="checkbox" id="FilterOnlyAdmins">
                                 <span></span> Only Administrators
                             </label>
@@ -22,6 +23,20 @@
                             </label>
                             
                             <label class="checkbox" id="FilterDeleted">
+=======
+                            <label class="checkbox" id="adminsPrompt">
+                                <input type="checkbox">
+                                <span></span> Admins
+                            </label>
+
+                            <label class="checkbox" id="notApprovedPrompt">
+                                <input type="checkbox">
+                                <span></span> Not approved
+                            </label>
+                            
+                            <label class="checkbox" id="deletedPrompt">
+                                <input type="checkbox">
+>>>>>>> Stashed changes
                                 <span></span> Deleted
                             </label>
                         </li>
@@ -34,8 +49,14 @@
             </p>
             
             <p class="btn default medium">
+<<<<<<< Updated upstream
                 <a href="#" data-bind="click: filter.closeWindow" gumby-trigger="|#filter_settings">Cancel</a>
             </p>            
+=======
+                <a href="#" data-bind="click: resetFlags" gumby-trigger="|#filter_settings">Cancel</a>
+            </p>
+            
+>>>>>>> Stashed changes
         </div>
     </div>
 </div>

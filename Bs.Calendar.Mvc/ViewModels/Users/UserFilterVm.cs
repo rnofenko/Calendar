@@ -8,7 +8,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Users
     public class UserFilterVm
     {
         public UserFilterVm(string searchStr, string sortByStr, int totalPages, int page = 1,
-            bool showDeleted = false, bool showAdmins = false, bool showNotApproved = true)
+                            bool showDeleted = false, bool showAdmins = false, bool showNotApproved = true)
         {
             SearchString = searchStr;
             SortByField = sortByStr;
@@ -21,7 +21,9 @@ namespace Bs.Calendar.Mvc.ViewModels.Users
         }
 
         public UserFilterVm(UserFilterVm pagingVm)
-            : this(pagingVm.SearchString, pagingVm.SortByField, pagingVm.TotalPages, pagingVm.Page, pagingVm.Deleted, pagingVm.OnlyAdmins, pagingVm.NotApproved)
+            : this(
+                pagingVm.SearchString, pagingVm.SortByField, pagingVm.TotalPages, pagingVm.Page, pagingVm.Deleted,
+                pagingVm.OnlyAdmins, pagingVm.NotApproved)
         {
         }
 
@@ -50,13 +52,13 @@ namespace Bs.Calendar.Mvc.ViewModels.Users
                     SortByField = SortByField.IsEmpty() ? "Id" : SortByField
                 };
 
-            if(SearchString.IsNotEmpty())
+            if (SearchString.IsNotEmpty())
             {
                 SearchString = Regex.Replace(SearchString.Trim(), @"\s+", " ").ToLower();
                 filter.Email = SearchString;
 
                 var splitedString = SearchString.Split();
-                if (splitedString.Length>0)
+                if (splitedString.Length > 0)
                 {
                     filter.Name = splitedString[0];
                 }

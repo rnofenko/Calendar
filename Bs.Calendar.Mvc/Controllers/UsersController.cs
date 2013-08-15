@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
-using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Rules;
 
