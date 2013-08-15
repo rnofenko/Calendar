@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bs.Calendar.Models
 {
@@ -10,6 +6,7 @@ namespace Bs.Calendar.Models
     public enum LiveStatuses
     {
         Deleted = 1,
-        Active = 2
+        Active = 2,
+        All = Deleted | Active
     }
 }

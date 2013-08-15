@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Web.Security;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
-using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Rules.Emails;
-using Roles = Bs.Calendar.Models.Roles;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -161,122 +156,23 @@ namespace Bs.Calendar.Mvc.Services
             sender.Send("Status has been changed", body, user.Email);
         }
 
-        public UsersVm RetreiveList(PagingVm pagingVm)
+        public UsersVm RetreiveList(UserFilterVm filterVm)
         {
-            var users = _unit.User.Load();
-
-            users = searchByStr(users, pagingVm.SearchStr);
-            users = searchByRoleAndState(users, pagingVm.RolesFilter, pagingVm.LiveStatusFilter, pagingVm.ApproveStateFilter,
-                                         pagingVm.ShowUnknownRole, pagingVm.ShowUnknownLiveStatus, pagingVm.ShowUnknownApproveState);
-
-            users = sortByStr(users, pagingVm.SortByStr);
-
-            pagingVm = updatePagingVm(pagingVm, users);
+            var filter = filterVm.Map();
+            var users = _unit.User.Load(filter);
+            updatePagingData(filterVm, users);
 
             return new UsersVm
             {
-                Users = users.Skip((pagingVm.Page - 1) * PageSize).Take(PageSize).ToList(),
-                PagingVm = pagingVm
+                Users = users,
+                Filter = filterVm
             };
         }
 
-        private PagingVm updatePagingVm(PagingVm pagingVm, IQueryable<User> users)
+        private void updatePagingData(UserFilterVm filter, IQueryable<User> users)
         {
-            var newPagingVm = new PagingVm(pagingVm);
-
-            newPagingVm.TotalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
-            newPagingVm.Page = PageCounter.GetRangedPage(pagingVm.Page, newPagingVm.TotalPages);
-
-            return newPagingVm;
-        }
-
-        private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
-        {
-            users = users.OrderByIf(string.IsNullOrEmpty(sortByStr),
-                        user => user.Id);
-
-            users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("Name"),
-                        team => team.FullName);
-            users = users.OrderByDescIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("NameDesc"),
-                        team => team.FullName);
-
-            users = users.OrderByIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("E-mail"),
-                        team => team.Email);
-            users = users.OrderByDescIf(!string.IsNullOrEmpty(sortByStr) && sortByStr.Equals("E-mailDesc"),
-                        team => team.FullName);
-
-            return users;
-        }
-
-        private IQueryable<User> searchByStr(IQueryable<User> users, string searchStr)
-        {
-            if (string.IsNullOrEmpty(searchStr))
-                return users;
-
-            //Delete extra whitespaces
-            searchStr = Regex.Replace(searchStr.Trim(), @"\s+", " ").ToLower();
-
-            var filteredUsers = users.WhereIf(searchStr.Length > 0,
-                                    user => user.Email.ToLower().Contains(searchStr));
-
-            filteredUsers = filteredUsers.Concat(searchByName(users, searchStr));
-
-            filteredUsers = filteredUsers.Concat(SearchByRole(users, searchStr));
-
-            return filteredUsers.Distinct();
-        }
-
-        private IQueryable<User> searchByName(IQueryable<User> users, string searchStr)
-        {
-            var filteredUsers = Enumerable.Empty<User>().AsQueryable();
-            var splitedStr = searchStr.Split();
-
-            for (int i = 0; i < splitedStr.Rank && i < 2; i++)
-            {
-                var str = splitedStr[i];
-                filteredUsers = filteredUsers.Concat(users.Where(user => user.FullName.ToLower().Contains(str)));
-            }
-
-            return filteredUsers;
-        }
-
-        private IQueryable<User> SearchByRole(IQueryable<User> users, string searchStr)
-        {
-            var filteredUsers = Enumerable.Empty<User>().AsQueryable();
-            var searchRoleName = Enum.GetNames(typeof(Roles)).FirstOrDefault(role => role.ToLower().Contains(searchStr));
-
-            if (searchRoleName == null)
-            {
-                return filteredUsers;
-            }
-
-            var searchRole = (Roles)Enum.Parse(typeof (Roles), searchRoleName);
-            
-            filteredUsers = filteredUsers.Concat(users.Where(user => user.Role == searchRole));
-            return filteredUsers;
-        }
-
-        private IQueryable<User> searchByRoleAndState(
-            IQueryable<User> users, Roles showRoles = (Roles)~0,
-            LiveStatuses showStatus = (LiveStatuses)~0, ApproveStates showApproveState = (ApproveStates)~0,
-            bool selectUnknownRole = false, bool selectUnknownStatus = false, bool selectUnknownState = false)
-        {
-            //Select users with unknown parameters only if corresponding flags are set to true (even if filter value is stated apparently)
-
-            return users
-                .Where(user => (selectUnknownRole ? (showRoles & user.Role) == user.Role : (showRoles & user.Role) != 0) &&
-                               (selectUnknownStatus ? (showStatus & user.Live) == user.Live : (showStatus & user.Live) != 0) &&
-                               (selectUnknownState ? (showApproveState & user.ApproveState) == user.ApproveState : (showApproveState & user.ApproveState) != 0));
-        }
-
-        private int getTotalPages(int count, int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)count / pageSize);
-        }
-
-        private int getRangedPage(int page, int totalPages)
-        {
-            return page <= 1 ? 1 : page > totalPages ? totalPages : page;
+            filter.TotalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            filter.Page = PageCounter.GetRangedPage(filter.Page, filter.TotalPages);
         }
 
         public void RecoverUser(string email)

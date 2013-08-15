@@ -83,9 +83,10 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
-        public ActionResult List(PagingVm pagingVm) 
+        public ActionResult List()
         {
-            return PartialView(_service.RetreiveList(pagingVm));
+            return View();
+            //return PartialView(_service.RetreiveList(null));
         }
 
         [HttpGet]

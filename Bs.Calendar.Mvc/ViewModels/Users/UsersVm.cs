@@ -7,6 +7,6 @@ namespace Bs.Calendar.Mvc.ViewModels.Users
     {
         public IEnumerable<User> Users { get; set; }
 
-        public PagingVm PagingVm { get; set; }
+        public UserFilterVm Filter { get; set; }
     }
 }

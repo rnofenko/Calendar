@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Web.Helpers;
 using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
@@ -56,7 +54,12 @@ namespace Bs.Calendar.Mvc.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
-            var filter = new UserFilterVm();
+            var filter = new UserFilterVm
+                {
+                    NotApproved = true,
+                    OnlyAdmins = false,
+                    Deleted = false
+                };
             return View(filter);
         }
 
@@ -146,11 +149,9 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public ActionResult List(PagingVm pagingVm)
+        public ActionResult List(UserFilterVm filter)
         {
-            var usersVm = _service.RetreiveList(pagingVm);
-            Session["pagingVm"] = usersVm.PagingVm;
-
+            var usersVm = _service.RetreiveList(filter);
             return PartialView(usersVm);
         }
 

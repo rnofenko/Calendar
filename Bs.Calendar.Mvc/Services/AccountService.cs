@@ -7,6 +7,7 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
 using System.Web.Security;
+using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Core;
 using Bs.Calendar.Rules.Emails;
