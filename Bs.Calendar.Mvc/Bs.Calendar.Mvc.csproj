@@ -204,6 +204,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Calendar\Calendar.css" />
     <Content Include="Content\gumby\gumby.css" />
     <Content Include="Content\Rooms\ColorPicker.css" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -214,6 +215,7 @@
     <Content Include="Content\Layout\list-view.css" />
     <Content Include="Content\Teams\TeamEdit.css" />
     <Content Include="Content\Users\RoleStateFilterWindow.css" />
+    <Content Include="Images\birthday_icon.png" />
     <Content Include="Images\binaryLogo.png" />
     <Content Include="Scripts\Books\BooksVm.js" />
     <Content Include="Scripts\Gumby\gumby.init.js" />
@@ -237,6 +239,7 @@
     <Content Include="Scripts\Knockout\knockout.mapping-latest.js" />
     <Content Include="Scripts\Layout\list-view.js" />
     <Content Include="Scripts\modernizr-2.6.2.min.js" />
+    <Content Include="Scripts\Moment\moment.min.js" />
     <Content Include="Scripts\Rooms\ColorPicker.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
     <Compile Include="Controllers\TeamController.cs" />
@@ -262,6 +265,7 @@
     <Compile Include="Services\MvcConfig.cs" />
     <Compile Include="Services\ValidateAjaxAttribute.cs" />
     <Compile Include="ViewModels\BookEditVm.cs" />
+    <Compile Include="ViewModels\EventVm.cs" />
     <Compile Include="ViewModels\GenericPagingVm.cs" />
     <Compile Include="ViewModels\PagingVm.cs" />
     <Compile Include="Services\RoomService.cs" />

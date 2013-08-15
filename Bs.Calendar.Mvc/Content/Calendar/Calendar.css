@@ -1,0 +1,44 @@
+﻿.bc-header th {
+    width: 14.2857%;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-width: 0 0 0 1px;
+}
+
+.bc-header th:first-child {
+    border-left: 0;
+}
+
+.bc-week td {
+    border: 1px solid #ddd;
+    border-width: 1px 0 0 1px;
+    padding: 0;
+}
+
+.bc-week td:first-child {
+    border-left: 0;
+}
+
+.bc-week td:first-child > div {
+    min-height: 108px;
+}
+
+.bc-month-day > div:first-child{
+    width: 100%;
+    padding: 0 5px;
+    font-size: 14px ;
+    font-weight: normal;
+}
+
+.bc-month-day.other-month > div:first-child{
+    color: gainsboro;
+}
+
+
+.bc-month-day.current-day {
+    background:#fcf8e3;
+}
+
+.bc-week img {
+    vertical-align: text-top;
+}

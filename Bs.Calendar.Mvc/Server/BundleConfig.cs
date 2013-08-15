@@ -17,6 +17,9 @@ namespace Bs.Calendar.Mvc.Server
             bundles.Add(new ScriptBundle("~/bundles/Gumby").Include(
                 "~/Scripts/Gumby/gumby.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/Moment").Include(
+                "~/Scripts/Moment/moment.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/Knockout").Include(
                 "~/Scripts/Knockout/knockout-2.3.0.js",
                 "~/Scripts/Knockout/knockout.mapping-latest.js"));
@@ -28,6 +31,7 @@ namespace Bs.Calendar.Mvc.Server
             scripts.Include("~/Scripts/Teams/TeamEdit.js");
             scripts.Include("~/Scripts/Users/UserList.js");
             scripts.Include("~/Scripts/Layout/list-view.js");
+            scripts.Include("~/Scripts/Home/calendar.js");
             BundleTable.Bundles.Add(scripts);
 
             var css = new Bundle("~/Content/css", new CssMinify());

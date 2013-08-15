@@ -1,14 +1,24 @@
 ﻿<div class="row">
+    <div class="two columns pull_left">
+        <div class="six columns default btn pretty" data-bind="click: prevMonth"><</div>
+        <div class="six columns default btn pretty" data-bind="click: nextMonth">></div>
+    </div>
+    <div class="one columns default btn pretty" data-bind="click: today">Today</div>
+    <div class="three columns text-center pull_right"><h4 data-bind="text: title"></h4></div>
+</div>
+
+<div class="row">
     <table class = "twelve columns rounded">
-        <thead>
-        	<th></th>
-        	<th>Sun</th>
-        	<th>Mon</th>
-        	<th>Tue</th>
-        	<th>Wed</th>
-        	<th>Thu</th>
-        	<th>Fri</th>
-        	<th>Sat</th>
+        <thead class="bc-header">
+            <tr>
+                <th>Sun</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+            </tr>
         </thead>
         <tbody id="calendar_body" data-bind="template: {name : 'week-template', foreach:weeks}">
         </tbody>
@@ -16,17 +26,23 @@
 </div>
 
 <script type="text/html" id="week-template">
-    <tr data-bind="template: { name: 'day-template', foreach: days }">
+    <tr data-bind="template: { name: 'day-template', foreach: days }" class="bc-week">
     </tr>
 </script>
 
 <script type="text/html" id="day-template">
-    <td>
-    	<span data-bind="text:day_title"></span>
-    	<div data-bind="template: { name: 'event-template', foreach: events }">
+    <td data-bind="attr: { class: defineClass() }">
+        <div>
+            <div data-bind="text: day"></div>
+            <div data-bind="template: { name: 'event-template', foreach: events }"></div>
+        </div>
     </td>
 </script>
 
 <script type="text/html" id="event-template">
-    <div data-bind="html: event_content" class="danger alert"></div>
+    <div class="warning alert">
+        <img src="../../Images/birthday_icon.png" width="19"/>
+        <span data-bind="text: eventContent"></span> 
+    </div>
 </script>
+
