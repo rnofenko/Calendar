@@ -1,5 +1,6 @@
 ﻿<table>
     <thead>
+        <th>BookId</th>
         <th>User</th>
         <th>Take date</th>
         <th>Return date</th>
@@ -8,20 +9,23 @@
     <tbody>
         <tr>
             <td>
-                <select data-bind="options: $root.peoples, optionsValue: 'peopleId', optionsText: 'peopleName'" name="UserId"></select>
+                <a data-bind="text: bookId"/>
             </td>
             <td>
-                <input type="date" data-bind="value: $root.takeDate" name="TakeDate" style="background-color: yellow">
+                <select data-bind="options: $root.peoples, optionsValue: 'peopleId', value: $root.userId, optionsText: 'peopleName'"></select>
             </td>
             <td>
-                <input type="date" data-bind="value: $root.returnDate" name="ReturnDate" style="background-color: greenyellow">
+                <input type="date" data-bind="value: $root.takeDate" style="background-color: yellow"/>
             </td>
             <td>
-                <select data-bind="options: $root.orderDirections" name="OrderDirection"></select>
+                <input type="date" data-bind="value: $root.returnDate" style="background-color: greenyellow"/>
+            </td>
+            <td>
+                <select data-bind="options: $root.orderDirections, value: $root.orderDirection"></select>
             </td>
         </tr>
     </tbody>
 </table>
 <div class="medium info btn icon-left icon-book three columns pull_right" id="SaveHistoryButton">
-    <input type="submit" value="Save" />
+    <input type="button" data-bind="click: save" value="Save" />
 </div>

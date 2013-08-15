@@ -25,6 +25,7 @@
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(book => book.BookId)
+        
         <div class="centered seven columns danger alert">
             @Html.ValidationSummary()
         </div>

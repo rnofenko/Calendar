@@ -101,6 +101,11 @@ namespace Bs.Calendar.Mvc.Controllers
             return View("Edit", _bookHistoryService.GetBookHistories(book.BookId));
         }
 
+        public ActionResult Save(BookHistoryVm history)
+        {
+            return View("Index");
+        }
+
         public ActionResult Delete(int id)
         {
             try
