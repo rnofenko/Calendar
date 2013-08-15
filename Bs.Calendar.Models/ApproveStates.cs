@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace Bs.Calendar.Models
 {
     [Flags]
     public enum ApproveStates
     {
+        [Description("not approved")]
         NotApproved = 1,
-        Approved = 2
+        [Description("approve")]
+        Approved = 2,
+        All = NotApproved | Approved
     }
 }

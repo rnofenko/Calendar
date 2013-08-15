@@ -1,53 +1,41 @@
 ﻿@{
     ViewBag.SearchWindowTitle = "Filter settings";
-
-    ViewBag.Prompts = new[]
-    {
-        new{ id = "adminsPrompt", name = "Admins" },
-        new{ id = "notApprovedPrompt", name = "Not approved"},
-        new{ id = "deletedPrompt", name = "Deleted" }
-    };
 }
 
-<!-- modal window with searching settings -->
 <div class="modal" id="filter_settings">
     <div class="content">
-        <a class="close switch" data-bind="click: resetFlags" gumby-trigger="|#filter_settings">
+        <a class="close switch" gumby-trigger="|#filter_settings">
             <i class="icon-cancel"></i>
         </a>
         <div class="row">
-            
-            <!-- Input form -->
-               
             <form>
                 <fieldset>
                     <legend><h3>@ViewBag.SearchWindowTitle</h3></legend>
                     <ul>
                         <li class="field">
-                        @foreach(var prompt in ViewBag.Prompts)
-                        {
-                            <label class="checkbox" id="@prompt.id">
-                                <input type="checkbox">
-                                <span></span> @prompt.name
+                            <label class="checkbox" id="FilterOnlyAdmins">
+                                <span></span> Only Administrators
                             </label>
-                        }
+
+                            <label class="checkbox" id="FilterNotApproved">
+                                <span></span> Not approved
+                            </label>
+                            
+                            <label class="checkbox" id="FilterDeleted">
+                                <span></span> Deleted
+                            </label>
                         </li>
                     </ul>
                 </fieldset>
             </form>
             
             <p class="btn secondary medium">
-                <a href="#" data-bind="click: exitAccept" gumby-trigger="|#filter_settings">Accept</a>
+                <a href="#" data-bind="click: filter.acceptFilter" gumby-trigger="|#filter_settings">Accept</a>
             </p>
             
             <p class="btn default medium">
-                <a href="#" data-bind="click: resetFlags" gumby-trigger="|#filter_settings">Cancel</a>
-            </p>
-
-            <!---->
-            
+                <a href="#" data-bind="click: filter.closeWindow" gumby-trigger="|#filter_settings">Cancel</a>
+            </p>            
         </div>
-
     </div>
 </div>
-<!---->

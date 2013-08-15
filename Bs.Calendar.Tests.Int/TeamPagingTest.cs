@@ -43,28 +43,28 @@ namespace Bs.Calendar.Tests.Int
             _unit.Team.Delete(team2);
         }
 
-        [Test]
-        public void Can_Paginate_Teams() {
-            //act
-            var teamsView = _teamController.List(new PagingVm { Page = 2 }) as PartialViewResult;
-            var teams = teamsView.Model as TeamsVm;
+        //[Test]
+        //public void Can_Paginate_Teams() {
+        //    //act
+        //    var teamsView = _teamController.List(new PagingVm { Page = 2 }) as PartialViewResult;
+        //    var teams = teamsView.Model as TeamsVm;
 
-            //assert
-            teams.Teams.Count().ShouldBeEquivalentTo(_pageSize);
-        }
+        //    //assert
+        //    teams.Teams.Count().ShouldBeEquivalentTo(_pageSize);
+        //}
 
-        [Test]
-        public void Can_Sort_Teams() {
-            //arrange
-            var team = _unit.Team.Load().OrderBy(n => n.Name).First();
+        //[Test]
+        //public void Can_Sort_Teams() {
+        //    //arrange
+        //    var team = _unit.Team.Load().OrderBy(n => n.Name).First();
 
-            //act
-            var teamsView = _teamController.List(new PagingVm { Page = 1, SortByStr = "Name" }) as PartialViewResult;
-            var teams = teamsView.Model as TeamsVm;
+        //    //act
+        //    var teamsView = _teamController.List(new PagingVm { Page = 1, SortByStr = "Name" }) as PartialViewResult;
+        //    var teams = teamsView.Model as TeamsVm;
 
-            //assert
-            teams.Teams.Count().ShouldBeEquivalentTo(_pageSize);
-            teams.Teams.First().ShouldBeEquivalentTo(team);
-        }
+        //    //assert
+        //    teams.Teams.Count().ShouldBeEquivalentTo(_pageSize);
+        //    teams.Teams.First().ShouldBeEquivalentTo(team);
+        //}
     }
 }

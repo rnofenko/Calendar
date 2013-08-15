@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
@@ -93,24 +94,24 @@ namespace Bs.Calendar.Mvc.Services
             }
         }
 
-        public TeamsVm RetreiveList(PagingVm pagingVm)
-        {
-            var teams = _unit.Team.Load();
+        //public TeamsVm RetreiveList(PagingVm pagingVm)
+        //{
+        //    var teams = _unit.Team.Load();
 
-            teams = teams.WhereIf(!string.IsNullOrEmpty(pagingVm.SearchStr), 
-                        team => team.Name.ToLower().Contains(pagingVm.SearchStr.ToLower()));
+        //    teams = teams.WhereIf(!string.IsNullOrEmpty(pagingVm.SearchStr), 
+        //                team => team.Name.ToLower().Contains(pagingVm.SearchStr.ToLower()));
 
-            teams = sortByStr(teams, pagingVm.SortByStr);
+        //    teams = sortByStr(teams, pagingVm.SortByStr);
 
-            var totalPages = PageCounter.GetTotalPages(teams.Count(), PageSize);
-            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
+        //    var totalPages = PageCounter.GetTotalPages(teams.Count(), PageSize);
+        //    var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
 
-            return new TeamsVm 
-            {
-                Teams = teams.Skip((currentPage - 1) * PageSize).Take(PageSize).ToList(),
-                PagingVm = new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage)
-            };
-        }
+        //    return new TeamsVm 
+        //    {
+        //        Teams = teams.Skip((currentPage - 1) * PageSize).Take(PageSize).ToList(),
+        //        PagingVm = new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage)
+        //    };
+        //}
 
         private IQueryable<Team> sortByStr(IQueryable<Team> teams, string sortByStr) 
         {    

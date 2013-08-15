@@ -1,8 +1,7 @@
-﻿@using Bs.Calendar.Mvc.ViewModels
+﻿@model Bs.Calendar.Mvc.ViewModels.Users.UserFilterVm
 
 @{
     ViewBag.Title = "Users";
-    var pagingVm = @Session["pagingVm"] ?? new PagingVm();
 }
 
 <div class="row">
@@ -15,16 +14,18 @@
 
 <div class="row">
     <div class="one columns">
-        <button class="medium primary btn"><a href="/Users/Create">Create</a></button>
+        <button class="medium primary btn">
+            <a href="@Url.Action("Create")">Create</a>
+        </button>
     </div>
     <div class="pull_right field four columns">
         <div class="row">
             <div class="field nine columns">
-                <input class="search input" type="text" name="searchStr" placeholder="Find user" data-bind="value: model.SearchStr, event: { change: changeHandler }">
+                <input class="search input" type="text" placeholder="Input name of email" data-bind="value: filter.SearchString, event: { change: changeHandler }">
             </div>
             <div class="field three columns">
                 <div class="btn default medium" title="Filter settings">
-                    <a href="#"  data-bind="click: resetFlags" gumby-trigger="#filter_settings">
+                    <a href="#" data-bind="click: filter.showFilterWindow" gumby-trigger="#filter_settings">
                         <i class="icon-menu"></i>
                     </a>
                 </div>
@@ -32,10 +33,10 @@
         </div>
         <div class="row">
             <div data-bind="attr: { class: 
-                model.ShowAdmins() || model.ShowNotApproved() || model.ShowDeleted()
+                filter.OnlyAdmins() || filter.NotApproved() || filter.Deleted()
                 ? 'success label twelve columns'
                 : 'info label twelve columns' }">
-                <div class="label" data-bind="text: chekedFlagsToString"></div>
+                <div class="label" data-bind="text: filter.displayFilter"></div>
             </div>
         </div>
     </div>
@@ -46,26 +47,25 @@
         <thead>
             <tr>
                 <th></th>                
-                <th><div id="th-name" data-bind="click: headerClick">Name</div></th>
-                <th><div id="th-email" data-bind="click: headerClick">E-mail</div></th>
+                <th><div data-field="FullName" id="th-name" data-bind="click: headerClick">Name</div></th>
+                <th><div data-field="Email" id="th-email" data-bind="click: headerClick">E-mail</div></th>
                 <th>Action</th>
             </tr>
         </thead>
     
         <tbody id="list-body">
-            @*@Html.Action("List", @Session["pagingVm"] ?? new PagingVm())*@
         </tbody>
     </table>
 </div>
 
-<div class="row" data-bind="visible : model.TotalPages() > 0">
+<div class="row" data-bind="visible: TotalPages() > 0">
     <div class="two columns">
         <div class="field">
-            <input class="text input" type="text" name="PagingVm.Page" data-bind="value: model.Page, event: { change: changeHandler }">
+            <input class="text input" type="text" name="PagingVm.Page" data-bind="value: filter.Page, event: { change: changeHandler }">
         </div>
     </div>
             
-    <div class="two columns default alert" data-bind="text : 'of ' + model.TotalPages()">
+    <div class="two columns default alert" data-bind="text: 'of ' + TotalPages()">
        
     </div>
 
@@ -85,14 +85,9 @@
 @section Scripts {
     <script type="text/javascript">
         $(document).ready(function () {
-
-            currentViewModel = @Html.Raw(Json.Encode(@pagingVm));
-
-            var model = new ViewModel();
-            
-            model.updateModal(currentViewModel);
-            ko.applyBindings(model);
-            model.updateList(currentViewModel);
+            window.UserFrame = new UserFrame();
+            ko.applyBindings(window.UserFrame);
+            window.UserFrame.filter.setFilter(@Html.Raw(Json.Encode(Model)));
         });
     </script>
 }

@@ -16,5 +16,10 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
             entity.FullName = string.Format("{0} {1}", entity.FirstName, entity.LastName);
             base.Save(entity);
         }
+
+        public IQueryable<User> Load(UserFilter filter)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

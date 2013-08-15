@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Web.Helpers;
 using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
-using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Controllers
@@ -46,7 +44,7 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        private ActionResult PassUserIntoTheView(string view, int id)
+        private ActionResult passUserIntoTheView(string view, int id)
         {
             var user = _service.GetUser(id);
             return user != null ? (ActionResult)View(view, new UserEditVm(user)) : HttpNotFound();
@@ -55,7 +53,13 @@ namespace Bs.Calendar.Mvc.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
-            return View();
+            var filter = new UserFilterVm
+                {
+                    NotApproved = true,
+                    OnlyAdmins = false,
+                    Deleted = false
+                };
+            return View(filter);
         }
 
         [Authorize(Roles = "Admin")]
@@ -107,7 +111,7 @@ namespace Bs.Calendar.Mvc.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Edit(int id)
         {
-            return PassUserIntoTheView("Edit", id);
+            return passUserIntoTheView("Edit", id);
         }
 
         [HttpPost,
@@ -130,7 +134,7 @@ namespace Bs.Calendar.Mvc.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
-            return PassUserIntoTheView("Delete", id);
+            return passUserIntoTheView("Delete", id);
         }
 
         [HttpPost,
@@ -144,11 +148,9 @@ namespace Bs.Calendar.Mvc.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public ActionResult List(PagingVm pagingVm)
+        public ActionResult List(UserFilterVm filter)
         {
-            var usersVm = _service.RetreiveList(pagingVm);
-            Session["pagingVm"] = usersVm.PagingVm;
-
+            var usersVm = _service.RetreiveList(filter);
             return PartialView(usersVm);
         }
 

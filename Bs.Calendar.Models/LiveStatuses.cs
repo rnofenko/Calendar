@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace Bs.Calendar.Models
 {
     [Flags]
     public enum LiveStatuses
     {
+        [Description("deleted")]
         Deleted = 1,
-        Active = 2
+        [Description("active")]
+        Active = 2,
+        All = Deleted | Active
     }
 }

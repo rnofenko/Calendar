@@ -9,6 +9,7 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Controllers;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Tests.Int.TestHelpers;
 using Moq;
 using System.Web;
@@ -56,86 +57,86 @@ namespace Bs.Calendar.Tests.Int
             _usersController.ControllerContext = mock.Object;
         }
 
-        [Test]
-        public void Estimate_Paging_Time()
-        {
-            //arrange
+        //[Test]
+        //public void Estimate_Paging_Time()
+        //{
+        //    //arrange
 
-            var testedPagingModes = new PagingVm[]
-                                         {
-                                             new PagingVm(true, true, true, true, true, true) { Page = 100 },
-                                             new PagingVm(true, true, true, true, true, true) { Page = 1000 },
-                                             new PagingVm(true, true, true, true, true, true) { Page = 100000 }
-                                         };
+        //    var testedPagingModes = new UserFilterVm[]
+        //                                 {
+        //                                     new UserFilterVm(true, true, true, true, true, true) { Page = 100 },
+        //                                     new UserFilterVm(true, true, true, true, true, true) { Page = 1000 },
+        //                                     new UserFilterVm(true, true, true, true, true, true) { Page = 100000 }
+        //                                 };
 
-            var results = new double[testedPagingModes.Length];
+        //    var results = new double[testedPagingModes.Length];
 
-            var stopWatch = new Stopwatch();
+        //    var stopWatch = new Stopwatch();
 
-            //act
+        //    //act
 
-            //warm database up
+        //    //warm database up
 
-            _usersController.List(new PagingVm(true, true, true, true, true, true) { Page = 1000 });
+        //    _usersController.List(new UserFilterVm(true, true, true, true, true, true) { Page = 1000 });
 
-            for (int i = 0; i < testedPagingModes.Length; ++i)
-            {
-                stopWatch.Start();
-                stopWatch.Stop();
+        //    for (int i = 0; i < testedPagingModes.Length; ++i)
+        //    {
+        //        stopWatch.Start();
+        //        stopWatch.Stop();
 
-                _usersController.List(testedPagingModes[i]);
+        //        _usersController.List(testedPagingModes[i]);
 
-                results[i] = stopWatch.Elapsed.TotalMilliseconds;
-                stopWatch.Reset();
-            }
+        //        results[i] = stopWatch.Elapsed.TotalMilliseconds;
+        //        stopWatch.Reset();
+        //    }
 
-            //assert
+        //    //assert
 
-            for (int i = 0; i < results.Length; ++i)
-            {
-                Debug.WriteLine("Going to page {0} took {1} ms in time", testedPagingModes[i].Page, results[i]);
-            }
-        }
+        //    for (int i = 0; i < results.Length; ++i)
+        //    {
+        //        Debug.WriteLine("Going to page {0} took {1} ms in time", testedPagingModes[i].Page, results[i]);
+        //    }
+        //}
 
-        [Test]
-        public void Estimate_Sorting_And_Paging_Time()
-        {
-            //arrange
+        //[Test]
+        //public void Estimate_Sorting_And_Paging_Time()
+        //{
+        //    //arrange
 
-            var testedPagingModes = new PagingVm[]
-                                         {
-                                             new PagingVm(true, true, true, true, true, true) { SortByStr = "Name", Page = 100 },
-                                             new PagingVm(true, true, true, true, true, true) { SortByStr = "Name", Page = 1000 },
-                                             new PagingVm(true, true, true, true, true, true) { SortByStr = "Name", Page = 100000 }
-                                         };
+        //    var testedPagingModes = new UserFilterVm[]
+        //                                 {
+        //                                     new UserFilterVm(true, true, true, true, true, true) { SortByStr = "Name", Page = 100 },
+        //                                     new UserFilterVm(true, true, true, true, true, true) { SortByStr = "Name", Page = 1000 },
+        //                                     new UserFilterVm(true, true, true, true, true, true) { SortByStr = "Name", Page = 100000 }
+        //                                 };
 
-            var results = new double[testedPagingModes.Length];
+        //    var results = new double[testedPagingModes.Length];
 
-            var stopWatch = new Stopwatch();
+        //    var stopWatch = new Stopwatch();
 
-            //act
+        //    //act
 
-            //warm database up
-            _usersController.List(new PagingVm(true, true, true, true, true, true) { SortByStr = "Name", Page = 1000 });
+        //    //warm database up
+        //    _usersController.List(new UserFilterVm(true, true, true, true, true, true) { SortByStr = "Name", Page = 1000 });
 
-            for (int i = 0; i < testedPagingModes.Length; ++i)
-            {
-                stopWatch.Start();
-                stopWatch.Stop();
+        //    for (int i = 0; i < testedPagingModes.Length; ++i)
+        //    {
+        //        stopWatch.Start();
+        //        stopWatch.Stop();
 
-                _usersController.List(testedPagingModes[i]);
+        //        _usersController.List(testedPagingModes[i]);
 
-                results[i] = stopWatch.Elapsed.TotalMilliseconds;
-                stopWatch.Reset();
-            }
+        //        results[i] = stopWatch.Elapsed.TotalMilliseconds;
+        //        stopWatch.Reset();
+        //    }
 
-            //assert
+        //    //assert
 
-            for (int i = 0; i < results.Length; ++i)
-            {
-                Debug.WriteLine("Going to sorted page {0} took {1} ms in time", testedPagingModes[i].Page, results[i]);
-            }
-        }
+        //    for (int i = 0; i < results.Length; ++i)
+        //    {
+        //        Debug.WriteLine("Going to sorted page {0} took {1} ms in time", testedPagingModes[i].Page, results[i]);
+        //    }
+        //}
     }
 }
 

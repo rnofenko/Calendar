@@ -206,6 +206,7 @@
   <ItemGroup>
     <Content Include="Content\Calendar\Calendar.css" />
     <Content Include="Content\gumby\gumby.css" />
+    <Content Include="Content\Layout\fonts.css" />
     <Content Include="Content\Rooms\ColorPicker.css" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BookController.cs" />
@@ -234,8 +235,6 @@
     <Content Include="Scripts\Gumby\ui\gumby.toggleswitch.js" />
     <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
     <Content Include="Scripts\Home\calendar.js" />
-    <Content Include="Scripts\jquery.signalR-1.0.0.js" />
-    <Content Include="Scripts\jquery.signalR-1.0.0.min.js" />
     <Content Include="Scripts\Knockout\knockout-2.3.0.js" />
     <Content Include="Scripts\Knockout\knockout.mapping-latest.js" />
     <Content Include="Scripts\Layout\list-view.js" />
@@ -270,7 +269,6 @@
     <Compile Include="ViewModels\EventVm.cs" />
     <Compile Include="ViewModels\GenericPagingVm.cs" />
     <Compile Include="ViewModels\BookHistoryVm.cs" />
-    <Compile Include="ViewModels\PagingVm.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\AccountVm.cs" />
     <Compile Include="ViewModels\RegisterVm.cs" />
@@ -278,9 +276,10 @@
     <Compile Include="ViewModels\RoomsVm.cs" />
     <Compile Include="ViewModels\TeamEditVm.cs" />
     <Compile Include="ViewModels\TeamUserVm.cs" />
-    <Compile Include="ViewModels\UsersVm.cs" />
+    <Compile Include="ViewModels\Users\UserFilterVm.cs" />
+    <Compile Include="ViewModels\Users\UsersVm.cs" />
     <Compile Include="Services\UserService.cs" />
-    <Compile Include="ViewModels\UserEditVm.cs" />
+    <Compile Include="ViewModels\Users\UserEditVm.cs" />
     <Compile Include="Services\TeamService.cs" />
     <Compile Include="ViewModels\TeamsVm.cs" />
   </ItemGroup>
@@ -290,6 +289,10 @@
     <Content Include="Content\fonts\icons\entypo.eot" />
     <Content Include="Content\fonts\icons\entypo.ttf" />
     <Content Include="Content\fonts\icons\entypo.woff" />
+    <Content Include="Content\fonts\open_sans\Open Sans Bold.woff" />
+    <Content Include="Content\fonts\open_sans\Open Sans Light.woff" />
+    <Content Include="Content\fonts\open_sans\Open Sans Semibold.woff" />
+    <Content Include="Content\fonts\open_sans\Open Sans.woff" />
     <None Include="Scripts\jquery-2.0.2.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.2.js" />
     <Content Include="Scripts\jquery-2.0.2.min.js" />
@@ -307,6 +310,7 @@
     <Content Include="Scripts\Teams\TeamEdit.js" />
     <Content Include="Scripts\Shared\moment.js" />
     <Content Include="Scripts\Users\UserContacts.js" />
+    <Content Include="Scripts\Users\UserFrameFilter.js" />
     <Content Include="Scripts\Users\UserList.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
