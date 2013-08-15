@@ -1,27 +1,17 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.TeamEditVm
 @{ 
-    var btnName = Model == null ? "Create" : "Update";
-    var teamId = 0;
-
-    if (Model != null && Model.TeamId != 0) {
-        teamId = Model.TeamId;
-        ViewBag.Title = "Edit Team";
-        ViewBag.Team = "Current Team";
-    } else {
-        ViewBag.Title = "Create Team";
-        ViewBag.Team = "New Team";
-    }
+    var btnName = Model.TeamId == 0 ? "Create" : "Update";
+    ViewBag.Title = Model.TeamId != 0 ? "Edit Team" : "Create Team";
 }
 
 <div class="row">
-    <div class="centered seven columns default alert">
-        <h4 class="centered four columns">@ViewBag.Title</h4>
+    <div class="centered seven columns default alert text-center">
+        <h4>@ViewBag.Title</h4>
     </div>
 </div>
 
 <div class="row">
-    @using (Html.BeginForm())
-    {
+    <form data-bind="submit : onSubmit">
         @Html.AntiForgeryToken()
         @Html.HiddenFor(team => team.TeamId)
         <div class="centered seven columns">
@@ -29,47 +19,52 @@
         </div>
 
         <div class="row">
-            <fieldset class="centered seven columns">
-                <legend>
-                    <h4>@ViewBag.Team</h4>
-                </legend>
-                              
-                <ul>
-                    <li class="field">
-                        @Html.LabelFor(team => team.Name, new {@class = "inline"})
-                        @Html.TextBoxFor(team => team.Name, new {@class = "wide text input"})
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(team => team.Description, new {@class = "inline"})
-                        @Html.TextAreaFor(team => team.Description, new {@class = "textarea input", @rows = 3})
-                    </li>
-                </ul>
-
-                <div class="medium secondary btn three columns">
-                    <input type="submit" value=@btnName />
-                </div>
-
-                <div class="medium default btn push_one three columns">
-                    @Html.ActionLink("Back", "Index")
-                </div>
+            <div class="prepend field four columns">
+                @Html.LabelFor(team => team.Name, new {@class = "adjoined"})
+                @Html.TextBoxFor(team => team.Name, new {@class = "xwide text input", data_bind = "value : teamModel.Name"})
+            </div>
             
-                @if (teamId != 0)
-                {
-                    <div class="medium info btn three columns push_one">
-                        @Html.ActionLink("Delete", "Delete", new {id =  teamId})
-                    </div>
-                }  
-            </fieldset>
+            <div class="medium metro rounded btn warning  two columns icon-right icon-user-add pull_right" data-bind="click : clickAllUsers, visible : showTeamUsers()"><a href="#">Add Users</a></div>
+            <div class="medium metro rounded btn default two columns pull_right" data-bind="click : clickTeamUsers, visible : !showTeamUsers()"><a href="#">Team Users</a></div>
         </div>
-    }
+        
+        
+        <div class="row" data-bind="visible : showTeamUsers()">
+            <ul class="four_up tiles" data-bind="foreach : teamModel.Users">
+                <li data-bind="click: function () { UserClick('/Users/Edit', UserId())}">
+                    <span data-bind="text : Name"></span> 
+                    <i class="icon-cancel-squared pull_right" data-bind="click : $root.removeUser"></i>
+                </li>
+            </ul>
+        </div>
+
+        <div class="row" data-bind="visible: !showTeamUsers()">
+            @Html.Partial("ColumnUserList")
+        </div>
+        
+        <br/>
+        <div class="row">
+            <div class="medium info btn two columns push_one pull_right" data-bind="visible : teamModel.TeamId() != 0">
+                @Html.ActionLink("Delete", "Delete", new {id = Model.TeamId})
+            </div>
+
+            <div class="medium default btn two two push_one columns pull_right">
+                @Html.ActionLink("Back", "Index")
+            </div>
+            
+            <div class="medium secondary btn two columns pull_right">
+                <input type="submit" value=@btnName />
+            </div>
+        </div>
+        
+    </form>
 </div>
 
 @section Scripts {
-    <script src="/Scripts/jquery-2.0.2.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-}
-@section styles {
-    <link href="@Url.Content("~/Content/Layout/edit-form.css")" rel="stylesheet"/>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var model = new TeamUsersVm(@Html.RawJson(@Model));
+            ko.applyBindings(model);
+        });
+    </script>
 }

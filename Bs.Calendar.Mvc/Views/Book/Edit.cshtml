@@ -25,7 +25,7 @@
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(book => book.BookId)
-        <div class="centered seven columns">
+        <div class="centered seven columns danger alert">
             @Html.ValidationSummary()
         </div>
 
@@ -85,6 +85,9 @@
 {
     @section scripts
     {
+        <script src="/Scripts/jquery-2.0.2.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
         <script src="../../Scripts/Books/BookHistoryList.js"></script>
         <script src="../../Scripts/Shared/moment.js"></script>
         <script type="text/javascript">
@@ -92,7 +95,7 @@
             {
                 var model = new BookHistoryVm(@Html.RawJson(@Model.BookHistoryList));
                 ko.applyBindings(model);
-            }); 
+            });
         </script>
     }
 }

@@ -21,7 +21,14 @@ namespace Bs.Calendar.Mvc.Services
             PageSize = 7;
         }
 
-        public Team GetTeam(int teamId) {
+        public IEnumerable<TeamUserVm> GetAllUsers(int teamId)
+        {
+            var users = _unit.User.Load(u => u.Teams.All(t => t.Id != teamId)).ToList();
+            return users.Select(u => new TeamUserVm(u)).ToList();
+        }
+
+        public Team GetTeam(int teamId) 
+        {
             var team = _unit.Team.Get(teamId);
             return team;
         }
@@ -31,18 +38,11 @@ namespace Bs.Calendar.Mvc.Services
             return _unit.Team.Load().ToList();
         }
 
-        public void SaveTeam(TeamEditVm teamModel) 
+        public void CreateTeam(TeamEditVm teamModel) 
         {
-            if (_unit.Team.Get(t => t.Name.Equals(teamModel.Name, StringComparison.OrdinalIgnoreCase)) != null) 
-            {
-                throw new WarningException(string.Format("Team with name {0} already exists", teamModel.Name));
-            }
+            validateTeam(teamModel);
 
-            _unit.Team.Save(new Team
-            {
-                Name = teamModel.Name,
-                Description = teamModel.Description
-            });
+            saveTeam(teamModel);
         }
 
         public void DeleteTeam(int id) 
@@ -53,18 +53,44 @@ namespace Bs.Calendar.Mvc.Services
         public void EditTeam(TeamEditVm teamModel) 
         {
             var teamToEdit = GetTeam(teamModel.TeamId);
+
+            validateTeam(teamModel, teamToEdit);
+
+            saveTeam(teamModel, teamToEdit);
+        }
+
+        private void saveTeam(TeamEditVm teamVm, Team editedTeam = null)
+        {
+            var team = editedTeam ?? new Team();
+            team.Name = teamVm.Name;
+            team.Description = teamVm.Description;
+
+            addUsersToTeam(team, teamVm.Users);
+            _unit.Team.Save(team);
+        }
+
+        private void addUsersToTeam(Team team, IEnumerable<TeamUserVm> users)
+        {
+            if (team.Users != null) team.Users.Clear();
+            if (users == null) return;
+
+            var userIds = users.Select(u => u.UserId);
+            team.Users = _unit.User.Load(u => userIds.Contains(u.Id)).ToList();
+        }
+
+        private void validateTeam(TeamEditVm teamVm, Team editedTeam = null)
+        {
             var comparisonType = StringComparison.OrdinalIgnoreCase;
 
-            if (!teamToEdit.Name.Equals(teamModel.Name, comparisonType) &&
-                _unit.Team.Get(t => t.Name.Equals(teamModel.Name, comparisonType)) != null) 
+            if (editedTeam != null && editedTeam.Name.Equals(teamVm.Name, comparisonType))
             {
-                throw new WarningException(string.Format("Team with name {0} already exists", teamModel.Name));
+                return;
             }
 
-            teamToEdit.Name = teamModel.Name;
-            teamToEdit.Description = teamModel.Description;
-
-            _unit.Team.Save(teamToEdit);
+            if (_unit.Team.Get(t => t.Name.Equals(teamVm.Name, comparisonType)) != null)
+            {
+                throw new WarningException(string.Format("Team with name {0} already exists", teamVm.Name));
+            }
         }
 
         public TeamsVm RetreiveList(PagingVm pagingVm)

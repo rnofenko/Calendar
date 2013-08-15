@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Bs.Calendar.Core;
-using System.Web.Mvc;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Controllers;
@@ -32,7 +31,7 @@ namespace Bs.Calendar.Tests.Unit
             };
 
             _teamService = Ioc.Resolve<TeamService>();
-            _teamService.SaveTeam(new TeamEditVm(team));
+            _teamService.CreateTeam(new TeamEditVm(team));
             _teamController = new TeamController(_teamService);
         }
 
@@ -47,7 +46,7 @@ namespace Bs.Calendar.Tests.Unit
             };
 
             // act
-            _teamService.SaveTeam(new TeamEditVm(team));
+            _teamService.CreateTeam(new TeamEditVm(team));
             var count = _teamService.GetAllTeams().Count();
 
             // assert
@@ -73,7 +72,7 @@ namespace Bs.Calendar.Tests.Unit
         public void Should_Delete_Team() 
         {
             // arrange
-            _teamService.SaveTeam(new TeamEditVm { Name = "LOGO", Description = "LOGO" });
+            _teamService.CreateTeam(new TeamEditVm { Name = "LOGO", Description = "LOGO" });
             var teamToDelete = _teamService.GetAllTeams().First(team => team.Name.Equals("LOGO"));
 
             // act

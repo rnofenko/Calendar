@@ -28,27 +28,25 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Create() 
         {
-            return View("Edit", null);
+            return View("Edit", new TeamEditVm());
         }
 
-        [HttpPost,
-        ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAjax]
         public ActionResult Create(TeamEditVm model)
         {
-            ModelState.Remove("TeamId");
-            if (!ModelState.IsValid)
-                return View("Edit", model);
-
+            if (!ModelState.IsValid) return View("Edit", model);            
             try 
             {
-                _service.SaveTeam(model);
-                return RedirectToAction("Index");
+                _service.CreateTeam(model);
+                //return RedirectToAction("Index");
             } 
             catch (WarningException exception) 
             {
                 ModelState.AddModelError("", exception.Message);
-                return View("Edit", model);
+                //return View("Edit", model);
             }
+            return Json(new { redirectToUrl = Url.Action("Index") });
         }
 
         public ActionResult Edit(int id) 
@@ -57,22 +55,19 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAjax]
         public ActionResult Edit(TeamEditVm model) 
         {
-            ModelState.Remove("TeamId");
-            if (!ModelState.IsValid)
-                return View("Edit", model);
-
+            if (!ModelState.IsValid) return View(model);
             try
             {
                 _service.EditTeam(model);
-                return RedirectToAction("Index");
             } 
             catch (WarningException exception) 
             {
                 ModelState.AddModelError("", exception.Message);
-                return View(model);
             }
+            return Json(new { redirectToUrl = Url.Action("Index") });
         }
 
         public ActionResult Delete(int id)
@@ -91,6 +86,12 @@ namespace Bs.Calendar.Mvc.Controllers
         public ActionResult List(PagingVm pagingVm) 
         {
             return PartialView(_service.RetreiveList(pagingVm));
+        }
+
+        [HttpGet]
+        public JsonResult GetAllUsers(int teamId)
+        {
+            return Json(_service.GetAllUsers(teamId), JsonRequestBehavior.AllowGet);
         }
     }
 }

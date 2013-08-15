@@ -4,9 +4,10 @@
     self.Page = ko.observable();
     self.SortByStr = ko.observable();
     self.SearchStr = ko.observable();
-    
-    self.ExcludeAdmins = ko.observable();
-    self.ExcludeNotApproved = ko.observable();
+
+    self.ShowAdmins = ko.observable();
+    self.ShowNotApproved = ko.observable();
+    self.ShowDeleted = ko.observable();
 }
 
 function ViewModel() {
@@ -19,8 +20,9 @@ function ViewModel() {
         Page: ko.observable(),
         TotalPages: ko.observable(),
         
-        ExcludeAdmins: ko.observable(false),
-        ExcludeNotApproved: ko.observable(false)
+        ShowAdmins: ko.observable(false),
+        ShowNotApproved: ko.observable(false),
+        ShowDeleted: ko.observable(false)
     };
 
     self.arrowUp = false;
@@ -63,7 +65,8 @@ function ViewModel() {
         $(columnId).append($('<i/>', { "class": self.arrowUp ? "icon-up" : "icon-down" }));
     };
 
-    self.updateList = function(model) {
+    self.updateList = function (model) {
+
         $.get("Users/List", model, function(htmlData) {
             $(self.listBodyId).html(htmlData);
             self.model.Page($(htmlData).filter("#listPage").val());
@@ -81,51 +84,71 @@ function ViewModel() {
 
         /* Save new settings and update list of users */
 
-        var excludeAdmins = $("#ExcludeAdmins").hasClass("checked");
-        var excludeNotApproved = $("#ExcludeNotApproved").hasClass("checked");
+        var showAdmins = $("#adminsPrompt").hasClass("checked");
+        var showNotApproved = $("#notApprovedPrompt").hasClass("checked");
+        var showDeleted = $("#deletedPrompt").hasClass("checked");
         
-        if (excludeAdmins != self.model.ExcludeAdmins() ||
-            excludeNotApproved != self.model.ExcludeNotApproved()) {
+        if (showAdmins != self.model.ShowAdmins() ||
+            showNotApproved != self.model.ShowNotApproved() ||
+            showDeleted != self.model.ShowDeleted()) {
             
-            self.model.ExcludeAdmins(excludeAdmins);
-            self.model.ExcludeNotApproved(excludeNotApproved);
-            
+            self.model.ShowAdmins(showAdmins);
+            self.model.ShowNotApproved(showNotApproved);
+            self.model.ShowDeleted(showDeleted);
+            console.log(self.model);
             self.updateList(self.model);
         }
 
-        $("#filter_settings").removeClass("active");
+        self.resetFlags();
     };
 
-    self.exitCancel = function () {
+    self.resetFlags = function () {
 
         /* Revert checkboxes to the last state */
 
-        if ($("#ExcludeAdmins").hasClass("checked") != self.model.ExcludeAdmins())
-            $("#ExcludeAdmins").click();
+        if ($("#adminsPrompt").hasClass("checked") != self.model.ShowAdmins())
+            $("#adminsPrompt").click();
 
-        if ($("#ExcludeNotApproved").hasClass("checked") != self.model.ExcludeNotApproved())
-            $("#ExcludeNotApproved").click();
+        if ($("#notApprovedPrompt").hasClass("checked") != self.model.ShowNotApproved())
+            $("#notApprovedPrompt").click();
         
-        $("#filter_settings").removeClass("active");
+        if ($("#deletedPrompt").hasClass("checked") != self.model.ShowDeleted())
+            $("#deletedPrompt").click();
+
+        self.toggleModal();
+    };
+
+    self.toggleModal = function() {
+
+        $("#filter_settings").toggleClass("active");
     };
     
     self.chekedFlagsToString = ko.computed(function () {
-
-        var adminsFlag = self.model.ExcludeAdmins();
-        var notApprovedFlag = self.model.ExcludeNotApproved();
-
-        var noteMessage = "filter: ";
         
-        if (adminsFlag && notApprovedFlag)
-            noteMessage += "admins, inactive";
-        else if (adminsFlag)
-            noteMessage += "admins";
-        else if (notApprovedFlag)
-            noteMessage += "inactive";
-        else
-            noteMessage += "none";
+        var noteMessage = [];
 
-        return noteMessage;
+        if (self.model.ShowAdmins())
+            noteMessage.push("Only Admins");
+        if (self.model.ShowNotApproved())
+            noteMessage.push("Not approved");
+        if (self.model.ShowDeleted())
+            noteMessage.push("Deleted");
+        
+        if (noteMessage.length == 0)
+            noteMessage.push("Default");
+
+        return noteMessage.join(", ");
         
     }, self);
+
+    self.updateModal = function (model) {
+
+        console.log(self.model.ShowAdmins(), self.model.ShowNotApproved(), self.model.ShowDeleted());
+
+        self.model.ShowAdmins(model.ShowAdmins);
+        self.model.ShowNotApproved(model.ShowNotApproved);
+        self.model.ShowDeleted(model.ShowDeleted);
+
+        console.log(self.model.ShowAdmins(), self.model.ShowNotApproved(), self.model.ShowDeleted());
+    };
 }

@@ -1,4 +1,6 @@
-﻿using Bs.Calendar.Core;
+﻿using System;
+using System.Web.Security;
+using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;
@@ -7,36 +9,49 @@ using Bs.Calendar.Rules;
 using Bs.Calendar.Tests.Unit.FakeObjects;
 using FluentAssertions;
 using NUnit.Framework;
+using System.Linq;
+using Roles = Bs.Calendar.Models.Roles;
 
 namespace Bs.Calendar.Tests.Int
 {
     [TestFixture]
     class CalendarRoleProviderTest
     {
-        private CalendarRoleProvider _roleProvider;
+        private RoleProvider _roleProvider;
 
-        private RepoUnit _unit;
+        private RepoUnit _repoUnit;
 
         private User _user;
         private string _userPassword;
         private string _userSalt;
         private const int SALT_LENGTH = 128;
 
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            _repoUnit.User.Delete(_user);
+        }
+
         [TestFixtureSetUp]
         public void Setup()
         {
+            //Map interfaces for further modifications
+
             DiMvc.Register();
-            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
-            _unit = Ioc.Resolve<RepoUnit>();
+            
+            Ioc.RegisterType<IUserRepository, UserRepository>();
+            Ioc.RegisterType<ICryptoProvider, KeccakCryptoProvider>();
+            Ioc.RegisterType<ISaltProvider, RandomSaltProvider>();
+            Ioc.RegisterType<RoleProvider, CalendarRoleProvider>();
 
-            _roleProvider = new CalendarRoleProvider();
+            _roleProvider = Ioc.Resolve<RoleProvider>();
 
-            var cryptoProvider = new KeccakCryptoProvider();
-            var saltProvider = new RandomSaltProvider();
-            var salt = saltProvider.GetSalt(SALT_LENGTH);
+            var cryptoProvider = Ioc.Resolve<ICryptoProvider>();
+            var saltProvider = Ioc.Resolve<ISaltProvider>();
 
             _userPassword = "IrenAdler";
-            var keccak = cryptoProvider.GetHashWithSalt(_userPassword, salt);
+            _userSalt = saltProvider.GetSalt(SALT_LENGTH);
+            var keccak = cryptoProvider.GetHashWithSalt(_userPassword, _userSalt);
 
             _user = new User
             {
@@ -46,13 +61,16 @@ namespace Bs.Calendar.Tests.Int
                 PasswordHash = keccak,
                 Role = Roles.Simple
             };
-            _unit.User.Save(_user);                       
+
+            _repoUnit = Ioc.Resolve<RepoUnit>();
+            _repoUnit.User.Save(_user);
         }
 
         [Test]
-        public void ShouldReturnTrueIfUserInRole()
+        public void Should_return_true_When_user_has_specified_role()
         {
             // act & assert
+
             _roleProvider.IsUserInRole(_user.Email, _user.Role.ToString()).Should().BeTrue();
         }
 
@@ -60,30 +78,32 @@ namespace Bs.Calendar.Tests.Int
         public void ShouldReturnTrueIfUsersRoleExists()
         {
             // act & assert
+
             _roleProvider.RoleExists(_user.Role.ToString()).Should().BeTrue();
             _roleProvider.RoleExists("FakeRole").Should().BeFalse();
         }
 
-        [TestCase("Admin"),
-        TestCase("Simple"),
-        TestCase("None")]
-        public void ShouldReturnEmailsOfTheUsersWithGivenRole(string role)
+        [TestCase(Roles.Admin),
+        TestCase(Roles.Simple)]
+        public void Should_return_emails_of_users_associated_with_specified_role(Roles role)
         {
-            // arrange
-            var usersWithGivenRole = _unit.User.Get(u => u.Role.ToString() == role);
+            //arrange
+            
+            var usersWithGivenRole = _repoUnit.User.Get(u => u.Role == role);
+
             if (usersWithGivenRole == null)
             {
-                // act & assert
-                _roleProvider.GetUsersInRole(role).Should().BeNull();
+                //act & assert
+                _roleProvider.GetUsersInRole(role.ToString()).Should().BeNull();
             }
             else
             {
                 var usersEmails = new [] {usersWithGivenRole.Email};
 
-                // act
-                var usersEmailsRoleProvider = _roleProvider.GetUsersInRole(role);
+                //act
+                var usersEmailsRoleProvider = _roleProvider.GetUsersInRole(role.ToString());
 
-                // assert
+                //assert
                 usersEmailsRoleProvider.Should().BeEquivalentTo(usersEmails);
             }
         }

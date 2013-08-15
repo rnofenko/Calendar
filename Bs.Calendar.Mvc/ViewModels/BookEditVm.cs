@@ -15,12 +15,18 @@ namespace Bs.Calendar.Mvc.ViewModels
         public BookEditVm(Book book)
         {
             BookId = book.Id;
+            Code = book.Code;
             Title = book.Title;
             Author = book.Author;
         }
 
         [StringLength(BaseEntity.LENGTH_NAME),
-        Required(ErrorMessage = "The title of the book must be specified"),
+        Required(ErrorMessage = "Code should be specified"),
+        Display(Name = "Code")]
+        public string Code { get; set; }
+
+        [StringLength(BaseEntity.LENGTH_NAME),
+        Required(ErrorMessage = "Title should be specified"),
         Display(Name = "Title")]
         public string Title { get; set; }
 

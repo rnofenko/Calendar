@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +7,13 @@ using Bs.Calendar.Rules.Logs;
 
 namespace Bs.Calendar.Rules.Emails
 {
-    public class EmailSender
+    public interface IEmailSender
+    {
+        void Send(string subject, string body, string addresser);
+        void Send(string subject, string body, IEnumerable<string> addressers);
+    }
+
+    public class EmailSender : IEmailSender
     {
         private readonly IEmailProvider _provider;
 
@@ -22,26 +28,32 @@ namespace Bs.Calendar.Rules.Emails
             return regex.IsMatch(emailAddress);
         }
 
-        public void Send(string subject, string body, string addresser)
+        virtual public void Send(string subject, string body, string addresser)
         {
             Send(subject, body, new List<string> {addresser});
         }
 
-        public void Send(string subject, string body, IEnumerable<string> addressers)
+        virtual public void Send(string subject, string body, IEnumerable<string> addressers)
         {
             if (!Config.Instance.SendEmail)
             {
                 return;
             }
 
-            foreach (var addresser in addressers)
-            {
-                if (!IsValidEmailAddress(addresser))
-                {
-                    continue;
-                }
+            var list = addressers
+                .Where(IsValidEmailAddress)
+                .Select(x => new EmailData {Addresser = x, Body = body, Subject = subject})
+                .ToList();
 
-                sendAync(new EmailData { Addresser = addresser, Body = body, Subject = subject });
+            var thread = new Thread(sendInThread);
+            thread.Start(list);
+        }
+
+        private void sendInThread(object list)
+        {
+            foreach (var email in (List<EmailData>)list)
+            {
+                sendAync(email);
             }
         }
 

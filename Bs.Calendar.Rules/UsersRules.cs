@@ -16,7 +16,7 @@ namespace Bs.Calendar.Rules
         }
 
         public IEnumerable<User> LoadUsersByBirthday(DateTime from, DateTime into)
-        {            
+        {
             var fromNormalized = NormalizeDate(from);
             var intoNormalized = NormalizeDate(into);
 
@@ -26,7 +26,7 @@ namespace Bs.Calendar.Rules
                     _unit.User.Load(
                         u =>
                             u.BirthDate != null &&
-                            u.LiveState != LiveState.Deleted &&
+                            u.Live != LiveStatuses.Deleted &&
                             ((DateTime) u.BirthDate).Month*100 + ((DateTime) u.BirthDate).Day >= fromNormalized &&
                             ((DateTime) u.BirthDate).Month*100 + ((DateTime) u.BirthDate).Day <= intoNormalized);
                             //NormalizeDate((DateTime) u.BirthDate) >= fromNormalized &&
@@ -37,14 +37,14 @@ namespace Bs.Calendar.Rules
             {
                 var u1 = _unit.User.Load(u =>
                             u.BirthDate != null &&
-                            u.LiveState != LiveState.Deleted &&
-                            NormalizeDate((DateTime) u.BirthDate) >= fromNormalized &&
-                            NormalizeDate((DateTime) u.BirthDate) <= 1231);
+                            u.Live != LiveStatuses.Deleted &&
+                            ((DateTime)u.BirthDate).Month * 100 + ((DateTime)u.BirthDate).Day >= fromNormalized &&
+                            ((DateTime)u.BirthDate).Month * 100 + ((DateTime)u.BirthDate).Day <= 1231);
                 var u2 = _unit.User.Load(u =>
                             u.BirthDate != null &&
-                            u.LiveState != LiveState.Deleted &&
-                            NormalizeDate((DateTime) u.BirthDate) >= 101 &&
-                            NormalizeDate((DateTime) u.BirthDate) <= intoNormalized);
+                            u.Live != LiveStatuses.Deleted &&
+                            ((DateTime)u.BirthDate).Month * 100 + ((DateTime)u.BirthDate).Day >= 101 &&
+                            ((DateTime)u.BirthDate).Month * 100 + ((DateTime)u.BirthDate).Day <= intoNormalized);
                 return u1.Concat(u2);
             }
             return null;

@@ -1,0 +1,122 @@
+﻿@using Bs.Calendar.Models
+@model Bs.Calendar.Mvc.ViewModels.UserEditVm
+@{
+    var btnName = "Create";
+    var userRoles = (from object role in Enum.GetValues(typeof(Bs.Calendar.Models.Roles)) select role.ToString()).ToList();
+    var userId = 0;
+    var isDeleted = false;
+
+    if (Model != null && Model.UserId != 0)
+    {
+        btnName = "Update";
+        userId = Model.UserId;
+        ViewBag.Title = "Edit User";
+        ViewBag.User = Model.FirstName + " " + Model.LastName;
+        
+        isDeleted = Model.Live == LiveStatuses.Deleted;
+    }
+    else
+    {
+        ViewBag.Title = "Create User";
+        ViewBag.User = "New User";
+    }
+}
+
+<div class="row">
+    <div class="centered seven columns default alert text-center">
+        <h4>@ViewBag.Title</h4>
+    </div>
+</div>
+
+<div class="row">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(user => user.UserId)
+
+        <div class="centered seven columns danger alert">
+            @Html.ValidationSummary()
+        </div>
+
+        <div class="row">
+            <fieldset class="centered seven columns">
+                <legend>
+                    <h4>@ViewBag.User</h4>
+                </legend>
+
+                <ul>
+                    <li class="field">
+                        @Html.LabelFor(user => user.FirstName, new { @class = "inline three columns" })
+                        @Html.TextBoxFor(user => user.FirstName, new { @class = "wide text input" })
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(user => user.LastName, new { @class = "inline three columns" })
+                        @Html.TextBoxFor(user => user.LastName, new { @class = "wide text input" })
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(user => user.Email, new { @class = "inline three columns" })
+                        @Html.TextBoxFor(user => user.Email, new { @class = "wide text input" })
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(user => user.BirthDate, new { @class = "inline three columns" })
+                        @Html.CustomDateEditor(user => user.BirthDate)
+                    </li>
+
+                    <li class="field">
+                        @Html.LabelFor(user => user.Role, new { @class = "inline three columns" })
+                        <div class="picker">
+                            @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
+                        </div>
+                    </li>
+                    @if (userId != 0)
+                    {                        
+                        <li>
+                            <label class="inline  three columns">Deleted</label>
+                            @Html.CheckBox("deleted", isDeleted)
+                        </li>
+                    }
+                </ul>
+            </fieldset>
+        </div>
+        
+        @Html.Partial("UserContacts")
+<<<<<<< HEAD
+        
+=======
+
+>>>>>>> 5055b71515adc8475e15df2f97506e7b4911a457
+        <div class="row">
+            <div class="centered seven columns">
+                <div class="medium secondary btn three columns">
+                    <input type="submit" value="@btnName"/>
+                </div>
+
+                <div class="medium default btn push_one three columns">
+                    @Html.ActionLink("Back", "Index")
+                </div>
+                
+                @if (Model.ApproveState == ApproveStates.NotApproved)
+                {
+                    <div class="medium warning btn push_one three columns">
+                        @Html.ActionLink("Approve", "ApproveUser", Model)
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    <script src="../../Scripts/Users/UserContacts.js"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function() {
+            ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts)));
+        });
+    </script>
+}

@@ -1,36 +1,26 @@
-﻿using System;
-using Bs.Calendar.DataAccess;
-using Bs.Calendar.DataAccess.Bases;
+﻿using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
-using Bs.Calendar.Mvc.Server;
-using NUnit.Framework;
 
 namespace Bs.Calendar.Tests.Int.TestHelpers
 {
     public class ClientGenerator
     {
-        [Test]
-        public void GenerateClients()
+        public void GenerateClients(RepoUnit repoUnit, int count = 1000)
         {
-            DiMvc.Register();
-
-            const int COUNT = 100;
-            
-            using (var unit = new RepoUnit())
+            for (var i = 1; i < count; i++)
             {
-                for (var i = 1; i < COUNT; i++)
-                {
-                    var user = new User
-                        {
-                            Email = "test" + i + "@gmail.com",
-                            FirstName = "Test" + i,
-                            LastName = "Test",
-                            Role = Roles.Simple,
-                            LiveState = LiveState.Active
-                        };
+                var user = new User
+                               {
+                                   Email = string.Format("test{0}@gmail.com", i),
+                                   FirstName = "Test" + i,
+                                   LastName = "Test",
 
-                    unit.User.Save(user);
-                }
+                                   Role = Roles.Simple,
+                                   Live = LiveStatuses.Active,
+                                   ApproveState = ApproveStates.Approved
+                               };
+
+                repoUnit.User.Save(user);
             }
         }
     }

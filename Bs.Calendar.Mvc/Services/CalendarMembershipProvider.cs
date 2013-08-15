@@ -62,9 +62,12 @@ namespace Bs.Calendar.Mvc.Services
                 PasswordHash = _crypto.GetHashWithSalt(password, salt),
                 PasswordSalt = salt,
                 Role = Roles.Simple,
-                LiveState = LiveState.NotApproved,
-                BirthDate = null
-            };           
+                BirthDate = null,
+
+                ApproveState = ApproveStates.NotApproved,
+                Live = LiveStatuses.Active
+            };
+
             using (var unit = new RepoUnit())
             {
                 unit.User.Save(user);
@@ -125,6 +128,7 @@ namespace Bs.Calendar.Mvc.Services
             }
 
             if (user == null) return null;
+
             var memUser = new MembershipUser("CalendarMembershipProvider",
                 user.FullName,
                 user.Id, user.Email,
@@ -137,6 +141,7 @@ namespace Bs.Calendar.Mvc.Services
                 DateTime.MinValue,
                 DateTime.Now,
                 DateTime.Now);
+
             return memUser;
         }
 

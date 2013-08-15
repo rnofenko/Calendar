@@ -6,8 +6,8 @@
 }
 
 <div class="row">
-    <div class="centered seven columns default alert">
-        <h4 class="centered two columns">@ViewBag.Title</h4>
+    <div class="centered seven columns default alert text-center">
+        <h4>@ViewBag.Title</h4>
     </div>
 </div>
 
@@ -24,7 +24,7 @@
             </div>
             <div class="field three columns">
                 <div class="btn default medium" title="Filter settings">
-                    <a href="#" class="switch active" gumby-trigger="#filter_settings">
+                    <a href="#"  data-bind="click: resetFlags" gumby-trigger="#filter_settings">
                         <i class="icon-menu"></i>
                     </a>
                 </div>
@@ -32,9 +32,9 @@
         </div>
         <div class="row">
             <div data-bind="attr: { class: 
-                model.ExcludeAdmins() || model.ExcludeNotApproved()
+                model.ShowAdmins() || model.ShowNotApproved() || model.ShowDeleted()
                 ? 'success label twelve columns'
-                : 'info label twelve columns' }" class="info label twelve columns">
+                : 'info label twelve columns' }">
                 <div class="label" data-bind="text: chekedFlagsToString"></div>
             </div>
         </div>
@@ -83,14 +83,16 @@
 }
 
 @section Scripts {
-    <script src="../../Scripts/Users/UserList.js"></script>
-    <script src="../../Scripts/Layout/list-view.js"></script>
-
     <script type="text/javascript">
-        $(document).ready(function () {        
+        $(document).ready(function () {
+
+            currentViewModel = @Html.Raw(Json.Encode(@pagingVm));
+
             var model = new ViewModel();
+            
+            model.updateModal(currentViewModel);
             ko.applyBindings(model);
-            model.updateList(@Html.Raw(Json.Encode(@pagingVm)));
+            model.updateList(currentViewModel);
         });
     </script>
 }

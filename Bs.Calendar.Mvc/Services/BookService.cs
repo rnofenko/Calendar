@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
@@ -22,12 +23,12 @@ namespace Bs.Calendar.Mvc.Services
             return book;
         }
 
-        public List<Book> Load(string orderby, string searchStr)
+        public IEnumerable<Book> Load(string orderby, string searchStr)
         {
             IEnumerable<Book> books = _repoUnit.Book.Load();
             books = _search(books, searchStr);
             books = _orderBy(books, orderby);
-            return books.ToList();
+            return books;
         }
 
         private static IEnumerable<Book> _orderBy(IEnumerable<Book> books, string @orderby)
@@ -42,6 +43,10 @@ namespace Bs.Calendar.Mvc.Services
                     orderby = orderby.Substring(1);
                 }
             }
+            if (orderby == "code")
+            {
+                return asc ? books.OrderBy(book => book.Code) : books.OrderByDescending(book => book.Code);
+            }
             if (orderby == "title")
             {
                 return asc ? books.OrderBy(book => book.Title) : books.OrderByDescending(book => book.Title);
@@ -50,10 +55,6 @@ namespace Bs.Calendar.Mvc.Services
             {
                 return asc ? books.OrderBy(book => book.Author) : books.OrderByDescending(book => book.Author);
             }
-            //            if (orderby == "code")
-            //            {
-            //                return asc ? books.OrderBy(book => book.Code) : books.OrderByDescending(book => book.Code);
-            //            }
             return asc ? books.OrderBy(book => book.Id) : books.OrderByDescending(book => book.Id);
         }
 
@@ -64,17 +65,31 @@ namespace Bs.Calendar.Mvc.Services
                 return books;
             }
             return books.Where(book =>
-                               book.Author.ToLower().Contains(searchStr) || book.Title.ToLower().Contains(searchStr));
+                               book.Code.ToLower().Contains(searchStr)
+                               || book.Author.ToLower().Contains(searchStr)
+                               || book.Title.ToLower().Contains(searchStr));
         }
 
 
-        public bool IsValid(BookEditVm book)
-        {
-            bool result = true;
-            result = result && (book.Title != string.Empty);
-            result = result && (book.Author != string.Empty);
-            return result;
-        }
+        //public void Validate(BookEditVm book)
+        //{
+        //    if (string.IsNullOrEmpty(book.Code))
+        //    {
+        //        throw new WarningException(string.Format("Code should be specified"));
+        //    }
+        //    if (string.IsNullOrEmpty(book.Title))
+        //    {
+        //        throw new WarningException(string.Format("Title should be specified"));
+        //    }
+        //    if (string.IsNullOrEmpty(book.Author))
+        //    {
+        //        throw new WarningException(string.Format("Author should be specified"));
+        //    }
+        //    if (_repoUnit.Book.Load(b => b.Code == book.Code && b.Id != book.BookId).Any())
+        //    {
+        //        throw new WarningException(string.Format("Code should be unique"));
+        //    }
+        //}
 
         public void Delete(int id)
         {
@@ -95,12 +110,11 @@ namespace Bs.Calendar.Mvc.Services
 
         public void Save(BookHistoryVm model)
         {
-            var book = Get(model.BookId) ?? new Book
-            {
-                Title = model.BookTitle,
-                Author = model.BookAuthor
-            };
-
+            //Validate(model);
+            var book = Get(model.BookId) ?? new Book();
+            book.Code = model.BookCode;
+            book.Title = model.BookTitle;
+            book.Author = model.BookAuthor;
             _repoUnit.Book.Save(book);
         }
     }

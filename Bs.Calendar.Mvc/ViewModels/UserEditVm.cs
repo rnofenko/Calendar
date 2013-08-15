@@ -7,7 +7,8 @@ namespace Bs.Calendar.Mvc.ViewModels
 {
     public class UserEditVm
     {
-        public UserEditVm(int userId,string firstName,string lastName, string email, Roles role, DateTime? bday, LiveState liveState)
+        public UserEditVm(int userId, string firstName, string lastName, string email, Roles role, DateTime? bday,
+                          LiveStatuses liveStatus = LiveStatuses.Active, ApproveStates approveState = ApproveStates.NotApproved)
         {
             UserId = userId;
             FirstName = firstName;
@@ -15,7 +16,9 @@ namespace Bs.Calendar.Mvc.ViewModels
             Email = email;
             Role = role;
             BirthDate = bday;
-            LiveState = liveState;
+
+            Live = liveStatus;
+            ApproveState = approveState;
         }
 
         public UserEditVm(User user)
@@ -26,8 +29,10 @@ namespace Bs.Calendar.Mvc.ViewModels
             Email = user.Email;
             Role = user.Role;
             BirthDate = user.BirthDate;
-            LiveState = user.LiveState;
             Contacts = new List<Contact>(user.Contacts);
+
+            Live = user.Live;
+            ApproveState = user.ApproveState;
         }
         
         public UserEditVm()
@@ -62,8 +67,9 @@ namespace Bs.Calendar.Mvc.ViewModels
 
         public Roles Role { get; set; }
 
-        public LiveState LiveState { get; set; }
+        public List<Contact> Contacts { get; set; }
 
-        public List<Contact> Contacts { get; set; } 
+        public LiveStatuses Live {get; set; }
+        public ApproveStates ApproveState { get; set; }
     }
 }

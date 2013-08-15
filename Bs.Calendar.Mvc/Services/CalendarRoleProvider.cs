@@ -11,7 +11,9 @@ namespace Bs.Calendar.Mvc.Services
         {
             using (var unit = new RepoUnit())
             {
-                return unit.User.Get(u => u.Email == email && u.Role.ToString() == roleName) != null;
+                var user = unit.User.Get(u => u.Email == email);
+
+                return user != null && user.Role.ToString().Equals(roleName);
             }
         }
 
@@ -35,8 +37,10 @@ namespace Bs.Calendar.Mvc.Services
 
         public override bool RoleExists(string roleName)
         {
-            return (Enum.GetValues(typeof(Models.Roles))
-                           .Cast<object>().Count(role => roleName == role.ToString())) != 0;
+            //Can't use Enum.TryParse(), because it allows specifying enum member by value
+
+            return Enum.GetNames(typeof (Models.Roles))
+                       .FirstOrDefault(role => role == roleName) != null;
         }
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
@@ -51,9 +55,20 @@ namespace Bs.Calendar.Mvc.Services
 
         public override string[] GetUsersInRole(string roleName)
         {
+            bool roleFound = RoleExists(roleName);
+
+            if (!roleFound)
+            {
+                throw new NotImplementedException();
+            }
+
+            Models.Roles searchedRole;
+            Enum.TryParse(roleName, out searchedRole);
+
             using (var unit = new RepoUnit())
             {
-                var usersInRole = unit.User.Get(u => u.Role.ToString() == roleName);
+                var usersInRole = unit.User.Get(u => u.Role == searchedRole);
+
                 if (usersInRole == null) return null;
                 var usersInRoleEmails = usersInRole.Email;
                 return new[] {usersInRoleEmails};

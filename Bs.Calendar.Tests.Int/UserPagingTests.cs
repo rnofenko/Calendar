@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Bs.Calendar.Core;
@@ -16,26 +17,32 @@ using NUnit.Framework;
 namespace Bs.Calendar.Tests.Int
 {
     [TestFixture]
-    class PagingAndSortingTests
+    class UserPagingTest
     {
-        private RepoUnit _unit;
+        private RepoUnit _repoUnit;
         private UsersController _usersController;
         private int _pageSize;
+
+        private List<User> _users;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
+            _users = new List<User>()
+                         {
+                             new User { Email = "aaa@bbb.com", FullName = "aaa ddd", FirstName = "aaa", LastName = "ddd"},
+                             new User { Email = "ccc@ddd.com", FullName = "aaa bbb", FirstName = "aaa", LastName = "bbb"}
+                         };
+
             var mock = new Mock<ControllerContext>();
             mock.Setup(p => p.HttpContext.Session).Returns(new Mock<HttpSessionStateBase>().Object);
 
             DiMvc.Register();
-            Ioc.RegisterType<IUserRepository, UserRepository>();
 
-            _unit = new RepoUnit();
-            _unit.User.Save(new User { Email = "aaa@bbb.com", FullName = "aaa ddd", FirstName = "aaa", LastName = "ddd", LiveState = LiveState.Active});
-            _unit.User.Save(new User { Email = "ccc@ddd.com", FullName = "aaa bbb", FirstName = "aaa", LastName = "bbb", LiveState = LiveState.Active });
+            _repoUnit = new RepoUnit();
+            _users.ForEach(user => _repoUnit.User.Save(user));
 
-            var userService = new UserService(_unit, null);
+            var userService = new UserService(_repoUnit, null);
             userService.PageSize = _pageSize = 1;
 
             _usersController = new UsersController(userService);
@@ -45,19 +52,14 @@ namespace Bs.Calendar.Tests.Int
         [TestFixtureTearDown]
         public void TearDown()
         {
-            var user1 = _unit.User.Get(user => user.Email.Equals(
-                "aaa@bbb.com", StringComparison.InvariantCulture));
-            var user2 = _unit.User.Get(user => user.Email.Equals(
-                "ccc@ddd.com", StringComparison.InvariantCulture));
-            _unit.User.Delete(user1);
-            _unit.User.Delete(user2);
+            _users.ForEach(user => _repoUnit.User.Delete(user));
         }
 
         [Test]
         public void Can_Paginate_Users()
         {
             //act
-            var usersView = _usersController.List(new PagingVm {Page = 2}) as PartialViewResult;
+            var usersView = _usersController.List(new PagingVm(false, false, false, true, true, true) {Page = _users.Count}) as PartialViewResult;
             var users = usersView.Model as UsersVm;
 
             //assert
@@ -68,13 +70,20 @@ namespace Bs.Calendar.Tests.Int
         public void Can_Sort_Users() 
         {
             //arrange
-            var user = _unit.User.Load().OrderBy(n => n.FirstName).ThenBy(n => n.LastName).First();
+
+            var user = _repoUnit.User.Load().ToList()
+                                            .Where(record => _users.Contains(record))
+                                            .OrderBy(n => n.FirstName)
+                                            .ThenBy(n => n.LastName)
+                                            .First();
 
             //act
-            var usersView = _usersController.List(new PagingVm { Page = 1, SortByStr = "Name"}) as PartialViewResult;
+
+            var usersView = _usersController.List(new PagingVm(false, false, false, true, true, true) { Page = 1, SortByStr = "Name"}) as PartialViewResult;
             var users = usersView.Model as UsersVm;
 
             //assert
+
             users.Users.Count().ShouldBeEquivalentTo(_pageSize);
             users.Users.First().Email.ShouldBeEquivalentTo(user.Email);
         }

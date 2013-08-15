@@ -19,6 +19,7 @@ namespace Bs.Calendar.Mvc.ViewModels
         public DateTime ReturnDate { get; set; }
 
         public int BookId { get; set; }
+        public string BookCode { get; set; }
 
         [StringLength(BaseEntity.LENGTH_NAME),
         Required(ErrorMessage = "The title of the book must be specified"),

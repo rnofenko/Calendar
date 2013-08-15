@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Bs.Calendar.Core;
@@ -18,153 +19,151 @@ namespace Bs.Calendar.Tests.Int
     [TestFixture]
     class UsersControllerTest
     {
-        private RepoUnit _unit;
-        private User _user;
+        private RepoUnit _repoUnit;
         private UserService _userService;
+        
+        private int _lastDbRecordId;
+
+        [TearDown]
+        public void TearDown()
+        {
+            _repoUnit.User.Load(user => user.Id > _lastDbRecordId).ToList().ForEach(deletedUser => _repoUnit.User.Delete(deletedUser));
+        }
 
         [TestFixtureSetUp]
         public void Setup()
         {
-            _user = new User
-                {
-                    FirstName = "Winston",
-                    LastName = "Smith",
-                    Email = "bigbrother1984@gmail.com",
-                    Role = Roles.Simple,
-                    LiveState = LiveState.Active
-                };
             DiMvc.Register();
-            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
-            _unit = Ioc.Resolve<RepoUnit>();
-            _userService = new UserService(_unit, null);
-            _userService.SaveUser(new UserEditVm(_user));
-            _user = _unit.User.Get(u => u.Email == _user.Email);
-        }        
 
-        [Test]
-        public void CanNotAddNewUserWithExistingInTheDbEmail()
-        {
-            // arrange
-            var userToAdd = new User
-                {
-                    FirstName = "Emmanuel",
-                    LastName = "Goldstein",
-                    Email = "bigbrother1984@gmail.com",
-                    Role = Roles.Simple,
-                    LiveState = LiveState.Active
-                };
+            Ioc.RegisterType<IUserRepository, UserRepository>();
 
-            // act
-            Action action = () => _userService.SaveUser(new UserEditVm(userToAdd));
+            _repoUnit = Ioc.Resolve<RepoUnit>();
 
-            // assert
-            action.ShouldThrow<WarningException>().WithMessage(string.Format("User with email {0} already exists", userToAdd.Email));
+            _userService = new UserService(_repoUnit, Ioc.Resolve<ContactService>());
+
+            //Save last record id for post test database cleaning
+
+            var lastRecord = _repoUnit.User.Load().ToList().LastOrDefault();
+            _lastDbRecordId = lastRecord == null ? 0 : lastRecord.Id;
         }
 
         [Test]
-        public void CanNotAddNewUserWithExistingInTheDbEmailEvenIfUserWithThisEmaisIsDeleted()
+        public void Should_throw_WarningException_When_add_user_with_existing_email()
         {
             // arrange
-            _user.LiveState = LiveState.Deleted;
-            _userService.UpdateUserState(_user.Id, LiveState.Deleted);
+
+            string email = "bigbrother1984@gmail.com";
+
+            _repoUnit.User.Save(new User
+            {
+                Email = email,
+                Live = LiveStatuses.Active,
+                ApproveState = ApproveStates.Approved
+            });
 
             var userToAdd = new User
             {
-                FirstName = "Julia",
-                LastName = "Htims",
-                Email = "bigbrother1984@gmail.com",
-                Role = Roles.Simple,
-                LiveState = LiveState.Active
+                Email = email,
+                Contacts = new Collection<Contact>()
             };
 
             // act
+
             Action action = () => _userService.SaveUser(new UserEditVm(userToAdd));
 
             // assert
-            action.ShouldThrow<WarningException>().WithMessage(string.Format("User with email {0} already exists", userToAdd.Email));
+
+            action.ShouldThrow<WarningException>().WithMessage(string.Format("User with email {0} already exists", email));
         }
 
         [Test]
-        public void ShouldAddNewUserToTheDb()
+        public void Should_throw_WarningException_When_add_user_with_email_provided_by_already_deleted_user()
         {
             // arrange
-            var quantaty = _userService.GetAllUsers().Count();
+
+            string email = "bigbrother1984@gmail.com";
+
+            _repoUnit.User.Save(new User
+                                    {
+                                        Email = email,
+                                        Live = LiveStatuses.Deleted
+                                    });
+
+            var userToAdd = new User
+            {
+                Email = email,
+                Contacts = new Collection<Contact>()
+            };
+
+            // act
+
+            Action action = () => _userService.SaveUser(new UserEditVm(userToAdd));
+
+            // assert
+            
+            action.ShouldThrow<WarningException>().WithMessage(string.Format("User with email {0} already exists", email));
+        }
+
+        [Test]
+        public void Should_add_new_user_to_database()
+        {
+            // arrange
+
+            string email = "bigbrother1984@gmail.com";
+
             var user = new User
                 {
-                    FirstName = "George",
-                    LastName = "Orwell",
-                    Email = "orwell.george@gmail.com",
-                    Role = Roles.Simple,
-                    BirthDate = null,
-                    LiveState = LiveState.Active
+                    Email = email,
+                    Contacts = new Collection<Contact>()
                 };
 
             // act
+
             _userService.SaveUser(new UserEditVm(user));
 
             // assert
-            _userService.GetAllUsers().Count().Should().Be(quantaty + 1);
+
+            _repoUnit.User.Load().ToList().Last().Email.ShouldBeEquivalentTo(email);
         }
 
         [Test]
-        public void ShouldModifyUserInfoAndSaveToTheDb()
+        public void Should_modify_user_details_When_pass_existing_user_to_the_edit_view()
         {
             // arrange
-            var user = _userService.GetAllUsers().Last();
-            user.FirstName = "Big";
-            user.LastName = "Brother";
-            user.Email = "iamwatchingyou@gmail.com";
-            user.Role = Roles.Simple;
+
+            var modifiedUser = new User { Email = "bigbrother1984@gmail.com", Contacts = new Collection<Contact>() };
+            _repoUnit.User.Save(modifiedUser);
+
+            modifiedUser.Id = _repoUnit.User.Get(user => user.Email == modifiedUser.Email).Id;
+            modifiedUser.Email = "elderbrother1884@gmail.com";
 
             // act
-            new UsersController(_userService).Edit(new UserEditVm(user), false);
+
+            new UsersController(_userService).Edit(new UserEditVm(modifiedUser), false);
 
             // assert
-            var savedUser = _unit.User.Get(u =>
-                (
-                    u.FirstName == user.FirstName &&
-                    u.LastName == user.LastName &&
-                    u.Email == user.Email &&
-                    u.Role == user.Role
-                ));
-            savedUser.Id.Should().Be(user.Id);
+
+            _repoUnit.User.Get(modifiedUser.Id).Email.ShouldBeEquivalentTo(modifiedUser.Email);
         }
 
         [Test]
-        public void ShouldDeleteUserFromTheDb()
+        public void Should_delete_user_from_database_When_specified_user_with_existing_email()
         {
             // arrange
-            var userToDeleteVm = new UserEditVm
-            {
-                FirstName = " OBrien",
-                LastName = "Agent",
-                Email = "obrien@gmail.com",
-                Role = Roles.Simple,
-                LiveState = LiveState.Active
-            };
-            _userService.SaveUser(userToDeleteVm);
 
-            var userToDelete = _unit.User.Get(u => u.Email == userToDeleteVm.Email);
+            string email = "bigbrother1984@gmail.com";
+
+            var deletedUser = new User { Email = email, Contacts = new Collection<Contact>() };
+
+            _repoUnit.User.Save(deletedUser);
 
             // act
-            new UsersController(_userService).Delete(new UserEditVm(userToDelete));
+
+            new UsersController(_userService).Delete(new UserEditVm(deletedUser));
 
             // assert
-            _unit.User.Get(userToDelete.Id).LiveState.Should().Be(LiveState.Deleted);
-        }
 
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
-            var user1 = _unit.User.Get(user => user.Email == "bigbrother1984@gmail.com");
-            var user2 = _unit.User.Get(user => user.Email == "orwell.george@gmail.com");
-            var user3 = _unit.User.Get(user => user.Email == "iamwatchingyou@gmail.com");
-            var changedUsersList = new List<User> { user1, user2, user3 };
-
-            foreach (var user in changedUsersList.Where(user => user != null))
-            {
-                _unit.User.Delete(user);
-            }
+            _repoUnit.User.Get(user => user.Email == email).Live.Should().Be(LiveStatuses.Deleted);
         }
     }
 }

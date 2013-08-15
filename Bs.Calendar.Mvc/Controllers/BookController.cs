@@ -33,7 +33,22 @@ namespace Bs.Calendar.Mvc.Controllers
             var orderby = Request["orderby"];
             var searchStr = Request["search"];
             var books = _service.Load(orderby, searchStr);
-            return Json(books, JsonRequestBehavior.AllowGet);
+            var page = Request["page"];
+            var pageNumber = 0;
+            try
+            {
+                pageNumber = Convert.ToInt32(page);
+            }
+            catch
+            {
+                pageNumber = 0;
+            }
+            if (pageNumber < 1)
+            {
+                return Json(books, JsonRequestBehavior.AllowGet);
+            }
+            var pager = new GenericPagingVm<Book>(books, pageNumber);
+            return Json(pager, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Index()

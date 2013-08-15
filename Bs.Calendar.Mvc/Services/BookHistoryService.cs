@@ -24,7 +24,7 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException();
             }
-            var bookHistories = _unit.BookHistory.Load(h => h.BookId == bookId).OrderByDescending(h => h.TakeDate);
+            var bookHistories = _unit.BookHistory.Load(h => h.BookId == bookId).OrderByDescending(h => h.TakeDate).ThenByDescending(h => h.OrderDirection);
             foreach (var bookHistory in bookHistories)
             {
                 bookHistory.TakeDate = bookHistory.TakeDate.Date.AddDays(1);

@@ -66,17 +66,22 @@ namespace Bs.Calendar.Mvc.Services
                 LastName = userModel.LastName,
                 Email = userModel.Email,
                 Role = userModel.Role,
-                LiveState = userModel.LiveState,
                 BirthDate = userModel.BirthDate,
-                Contacts = contacts
+                Contacts = contacts,
+
+                Live = userModel.Live,
+                ApproveState = userModel.ApproveState
             };
             _unit.User.Save(user);
         }
 
-        public void UpdateUserState(int userModelId, LiveState liveState)
+        public void UpdateUserState(int userModelId, ApproveStates approveState = ApproveStates.NotApproved, LiveStatuses liveState = LiveStatuses.Active)
         {
             var user = _unit.User.Get(userModelId);
-            user.LiveState = liveState;
+            
+            user.Live = liveState;
+            user.ApproveState = approveState;
+
             _unit.User.Save(user);
         }
 
@@ -88,23 +93,29 @@ namespace Bs.Calendar.Mvc.Services
         public bool CreateUser(UserEditVm userEditVm)
         {
             var dbUser = _unit.User.Get(u => u.Email == userEditVm.Email);
+
             if (dbUser != null)
             {
                 userEditVm.FirstName = dbUser.FirstName;
                 userEditVm.LastName = dbUser.LastName;
                 userEditVm.Role = dbUser.Role;
 
-                if (dbUser.LiveState == LiveState.Deleted)
+                if (dbUser.Live == LiveStatuses.Deleted)
                 {
-                    userEditVm.LiveState = dbUser.LiveState;
+                    userEditVm.Live = dbUser.Live;
                 }
+
                 return false;
             }
-            userEditVm.LiveState = LiveState.NotApproved | LiveState.Active;
+
+            userEditVm.ApproveState = ApproveStates.NotApproved;
+            userEditVm.Live = LiveStatuses.Active;
+
             SaveUser(userEditVm);
             dbUser = _unit.User.Get(u => u.Email == userEditVm.Email);
             dbUser.PasswordHash = userEditVm.Email;
             _unit.User.Save(dbUser);
+
             return true;
         }
 
@@ -128,12 +139,12 @@ namespace Bs.Calendar.Mvc.Services
             userToEdit.LastName = userModel.LastName;
             userToEdit.Email = userModel.Email;
             userToEdit.Role = userModel.Role;
-            userToEdit.LiveState = deleted ? LiveState.Deleted : userToEdit.LiveState;
+            userToEdit.Live = deleted ? LiveStatuses.Deleted : userToEdit.Live;
             userToEdit.BirthDate = userModel.BirthDate;
 
             var contacts = _contactService.UpdateContacts(userModel.Contacts);
             userToEdit.Contacts.Clear();
-            userToEdit.Contacts = contacts; 
+            userToEdit.Contacts = contacts;
 
             _unit.User.Save(userToEdit);
         }
@@ -141,8 +152,11 @@ namespace Bs.Calendar.Mvc.Services
         private static void SendMsgToUser(User user)
         {
             var sender = Ioc.Resolve<EmailSender>();
-            var body = string.Format("Hi {0}!\nYour account's status is {1} now.",
-                user.FullName, user.LiveState);
+            var body = string.Format("Hi, {0}!\nYour account's status is {1} and {2} now.",
+                user.FullName,
+                user.Live == LiveStatuses.Active ? "active" : "deleted",
+                user.ApproveState == ApproveStates.Approved ? "approved" : "not approved");
+
             sender.Send("Status has been changed", body, user.Email);
         }
 
@@ -151,7 +165,9 @@ namespace Bs.Calendar.Mvc.Services
             var users = _unit.User.Load();
 
             users = searchByStr(users, pagingVm.SearchStr);
-            users = searchByRoleAndState(users, pagingVm.ExcludeAdmins, pagingVm.ExcludeNotApproved);
+            users = searchByRoleAndState(users, pagingVm.RolesFilter, pagingVm.LiveStatusFilter, pagingVm.ApproveStateFilter,
+                                         pagingVm.ShowUnknownRole, pagingVm.ShowUnknownLiveStatus, pagingVm.ShowUnknownApproveState);
+
             users = sortByStr(users, pagingVm.SortByStr);
 
             pagingVm = updatePagingVm(pagingVm, users);
@@ -165,10 +181,12 @@ namespace Bs.Calendar.Mvc.Services
 
         private PagingVm updatePagingVm(PagingVm pagingVm, IQueryable<User> users)
         {
-            var totalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
-            var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
+            var newPagingVm = new PagingVm(pagingVm);
 
-            return new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage);
+            newPagingVm.TotalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            newPagingVm.Page = PageCounter.GetRangedPage(pagingVm.Page, newPagingVm.TotalPages);
+
+            return newPagingVm;
         }
 
         private IQueryable<User> sortByStr(IQueryable<User> users, string sortByStr)
@@ -237,13 +255,17 @@ namespace Bs.Calendar.Mvc.Services
             return filteredUsers;
         }
 
-        private IQueryable<User> searchByRoleAndState(IQueryable<User> users, bool excludeAdmins = false, bool excludeNotApproved = false)
+        private IQueryable<User> searchByRoleAndState(
+            IQueryable<User> users, Roles showRoles = (Roles)~0,
+            LiveStatuses showStatus = (LiveStatuses)~0, ApproveStates showApproveState = (ApproveStates)~0,
+            bool selectUnknownRole = false, bool selectUnknownStatus = false, bool selectUnknownState = false)
         {
+            //Select users with unknown parameters only if corresponding flags are set to true (even if filter value is stated apparently)
+
             return users
-                .Where(user => 
-                user.LiveState != LiveState.Deleted &&
-                (!excludeAdmins || excludeAdmins && user.Role != Roles.Admin) &&
-                (!excludeNotApproved || excludeNotApproved && user.LiveState != LiveState.NotApproved));
+                .Where(user => (selectUnknownRole ? (showRoles & user.Role) == user.Role : (showRoles & user.Role) != 0) &&
+                               (selectUnknownStatus ? (showStatus & user.Live) == user.Live : (showStatus & user.Live) != 0) &&
+                               (selectUnknownState ? (showApproveState & user.ApproveState) == user.ApproveState : (showApproveState & user.ApproveState) != 0));
         }
 
         private int getTotalPages(int count, int pageSize)
@@ -259,7 +281,10 @@ namespace Bs.Calendar.Mvc.Services
         public void RecoverUser(string email)
         {
             var userToRecover = _unit.User.Get(u => u.Email == email);
-            userToRecover.LiveState = LiveState.NotApproved;
+
+            userToRecover.Live = LiveStatuses.Active;
+            userToRecover.ApproveState = ApproveStates.NotApproved;
+
             _unit.User.Save(userToRecover);
         }
 

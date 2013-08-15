@@ -1,5 +1,8 @@
-﻿namespace Bs.Calendar.Models
+﻿using System;
+
+namespace Bs.Calendar.Models
 {
+    [Flags]
     public enum Roles
     {
         Simple = 1,

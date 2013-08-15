@@ -18,15 +18,23 @@ namespace Bs.Calendar.Tests.Unit
         private UserService _userService;
         private List<User> _users;
 
-        [TestFixtureSetUp]
-        public void Setup() {
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            Ioc.RegisterInstance<RepoUnit>(new RepoUnit());
+        }
+
+        [SetUp]
+        public void Setup()
+        {
             _users = new List<User>
             {
-                new User {Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", LiveState = LiveState.Active},
-                new User {Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", LiveState = LiveState.Active},
-                new User {Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", LiveState = LiveState.Active},
-                new User {Email = "0000@gmail.com", FirstName = "Alex", LastName = "Sinov", LiveState = LiveState.Active}
+                new User {Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini"},
+                new User {Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi"},
+                new User {Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov"},
+                new User {Email = "0000@gmail.com", FirstName = "Alex", LastName = "Sinov"}
             };
+
             _users.ForEach(user => user.FullName = string.Format("{0} {1}", user.FirstName, user.LastName));
 
             var moq = new Mock<IUserRepository>();
@@ -41,31 +49,31 @@ namespace Bs.Calendar.Tests.Unit
         public void Can_Paginate_Users()
         {
             //arrange
+            
             _userService.PageSize = 2;
 
+            var expectedPage1Content = new User[] {_users[0], _users[1]};
+            var expectedPage2Content = new User[] {_users[2], _users[3]};
+
             //act
-            var usersPage1 = _userService.RetreiveList(new PagingVm {Page = 1}).Users;
-            var usersPage2 = _userService.RetreiveList(new PagingVm {Page = 2}).Users;
+
+            var usersPage1 = _userService.RetreiveList(new PagingVm(false, false, false, true, true, true) { Page = 1 }).Users;
+            var usersPage2 = _userService.RetreiveList(new PagingVm(false, false, false, true, true, true) { Page = 2 }).Users;
 
             //assert
-            usersPage1.Count().ShouldBeEquivalentTo(_userService.PageSize);
-            usersPage2.Count().ShouldBeEquivalentTo(_userService.PageSize);
 
-            usersPage1.First().ShouldBeEquivalentTo(_users[0]);
-            usersPage1.Last().ShouldBeEquivalentTo(_users[1]);
-
-            usersPage2.First().ShouldBeEquivalentTo(_users[2]);
-            usersPage2.Last().ShouldBeEquivalentTo(_users[3]);
+            usersPage1.ShouldAllBeEquivalentTo(expectedPage1Content);
+            usersPage2.ShouldAllBeEquivalentTo(expectedPage2Content);
         }
 
         [Test]
-        public void Can_Sort_Users() 
+        public void Can_Sort_Users()
         {
             //arrange
             _userService.PageSize = _users.Count;
 
             //act
-            var users = _userService.RetreiveList(new PagingVm {SortByStr = "Name", Page = 1}).Users;
+            var users = _userService.RetreiveList(new PagingVm(false, false, false, true, true, true) {SortByStr = "Name", Page = 1}).Users;
 
             //assert
             users.Count().ShouldBeEquivalentTo(_userService.PageSize);
@@ -80,8 +88,8 @@ namespace Bs.Calendar.Tests.Unit
             _userService.PageSize = 2;
 
             //act
-            var usersPage1 = _userService.RetreiveList(new PagingVm { SortByStr = "Name", Page = 1 }).Users;
-            var usersPage2 = _userService.RetreiveList(new PagingVm { SortByStr = "Name", Page = 2 }).Users;
+            var usersPage1 = _userService.RetreiveList(new PagingVm(false, false, false, true, true, true) { SortByStr = "Name", Page = 1 }).Users;
+            var usersPage2 = _userService.RetreiveList(new PagingVm(false, false, false, true, true, true) { SortByStr = "Name", Page = 2 }).Users;
 
             //assert
             usersPage1.First().ShouldBeEquivalentTo(_users[3]);
@@ -95,7 +103,7 @@ namespace Bs.Calendar.Tests.Unit
             _userService.PageSize = 2;
 
             //act
-            var usersPage2 = _userService.RetreiveList(new PagingVm
+            var usersPage2 = _userService.RetreiveList(new PagingVm(false, false, false, true, true, true)
             {
                 SearchStr = "Dima", SortByStr = "Name", Page = 2
             }).Users;

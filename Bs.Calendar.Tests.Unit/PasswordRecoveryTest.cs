@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Net.Mail;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Rules.Emails;
 using FluentAssertions;
-using Moq;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
@@ -15,6 +15,8 @@ using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Tests.Unit.FakeObjects;
 using NUnit.Framework;
 
+using Moq;
+
 namespace Bs.Calendar.Tests.Unit
 {
     [TestFixture]
@@ -22,22 +24,28 @@ namespace Bs.Calendar.Tests.Unit
     {
         private List<User> _users;
         private AccountService _accountService;
+        private RepoUnit _repoUnit;
 
-        [TestFixtureSetUp]
+        [SetUp]
         public void SetUp()
         {
             _users = new List<User>()
             {
-                new User {Id = 1, Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.Simple, LiveState = LiveState.Active},
-                new User {Id = 2, Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.Simple, LiveState = LiveState.Active},
-                new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.Simple, LiveState = LiveState.Active}
+                new User {Id = 1, Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.Simple, Live = LiveStatuses.Active},
+                new User {Id = 2, Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.Simple, Live = LiveStatuses.Active},
+                new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.Simple, Live = LiveStatuses.Active}
             };
 
             DiMvc.Register();
+
+            Ioc.RegisterType<IEmailProvider, StandardEmailProvider>();
             Ioc.RegisterType<IUserRepository, FakeUserRepository>();
 
-            var repoUnit = new RepoUnit();
-            _users.ForEach(u => repoUnit.User.Save(u));
+            _repoUnit = new RepoUnit();
+            _users.ForEach(u => _repoUnit.User.Save(u));
+
+            Ioc.RegisterInstance<RepoUnit>(_repoUnit);
+
             _accountService = Ioc.Resolve<AccountService>();
         }
 
@@ -71,22 +79,30 @@ namespace Bs.Calendar.Tests.Unit
         public void Can_Form_Recovery_Link_And_Send_Email()
         {
             //arrange
-            var mailMessage = new MailMessage();
-            var url = "localhost/";
-            var moq = new Mock<EmailSender>();
 
-            moq.Setup(e => e.Send("","",It.IsAny<string>()))
-               .Callback<MailMessage>(m => mailMessage = m);
+            MailMessage mailMessage = null;
+
+            var url = "localhost/";
+            var moq = new Mock<EmailSender>(Ioc.Resolve<IEmailProvider>());
+
+            moq.Setup(e => e.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Callback<string, string, string>((subject, body, to) =>
+                                                      {
+                                                          mailMessage = new MailMessage("binary.calendar@gmail.com", to, subject, body);
+                                                      });
+
             Ioc.RegisterInstance<EmailSender>(moq.Object);
 
             //act
+
             _accountService.PasswordRecovery(_users[0].Email, url);
             var expectedUrl = string.Format("{0}PasswordReset/{1}/{2}", url, _users[0].Id,_users[0].PasswordRecovery.PasswordHash);
 
             //assert
-            moq.Verify(e => e.Send("","",It.IsAny<string>()), Times.Once());
+
             mailMessage.Body.Should().Contain(expectedUrl);
             mailMessage.To.Contains(new MailAddress(_users[0].Email)).Should().BeTrue();
+            moq.Verify(e => e.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
         }
 
         [Test]
