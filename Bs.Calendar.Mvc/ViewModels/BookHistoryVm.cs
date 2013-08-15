@@ -19,6 +19,9 @@ namespace Bs.Calendar.Mvc.ViewModels
         public DateTime ReturnDate { get; set; }
 
         public int BookId { get; set; }
+
+        [Required(ErrorMessage = "The code of the book must be specified"),
+        Display(Name = "ISBN")]
         public string BookCode { get; set; }
 
         [StringLength(BaseEntity.LENGTH_NAME),
@@ -38,6 +41,7 @@ namespace Bs.Calendar.Mvc.ViewModels
             var repoUnit = Ioc.Resolve<RepoUnit>();
 
             BookId = book.Id;
+            BookCode = book.Code;
             BookTitle = book.Title;
             BookAuthor = book.Author;
 

@@ -94,8 +94,7 @@ namespace Bs.Calendar.Mvc.Controllers
             if (ModelState.IsValid)
             {
                 _service.Save(book);
-                _service.AddRecord(book);
-                //return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View("Edit", _bookHistoryService.GetBookHistories(book.BookId));
@@ -103,7 +102,8 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Save(BookHistoryVm history)
         {
-            return View("Index");
+            _service.AddRecord(history);
+            return Json(new { redirectToUrl = Url.Action("Edit") });
         }
 
         public ActionResult Delete(int id)

@@ -1,6 +1,6 @@
-﻿<table>
+﻿<input type="hidden" data-bind="value: bookId"/>
+<table>
     <thead>
-        <th>BookId</th>
         <th>User</th>
         <th>Take date</th>
         <th>Return date</th>
@@ -8,9 +8,6 @@
     </thead>
     <tbody>
         <tr>
-            <td>
-                <a data-bind="text: bookId"/>
-            </td>
             <td>
                 <select data-bind="options: $root.peoples, optionsValue: 'peopleId', value: $root.userId, optionsText: 'peopleName'"></select>
             </td>

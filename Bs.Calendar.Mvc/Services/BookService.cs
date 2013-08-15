@@ -70,26 +70,25 @@ namespace Bs.Calendar.Mvc.Services
                                || book.Title.ToLower().Contains(searchStr));
         }
 
-
-        //public void Validate(BookEditVm book)
-        //{
-        //    if (string.IsNullOrEmpty(book.Code))
-        //    {
-        //        throw new WarningException(string.Format("Code should be specified"));
-        //    }
-        //    if (string.IsNullOrEmpty(book.Title))
-        //    {
-        //        throw new WarningException(string.Format("Title should be specified"));
-        //    }
-        //    if (string.IsNullOrEmpty(book.Author))
-        //    {
-        //        throw new WarningException(string.Format("Author should be specified"));
-        //    }
-        //    if (_repoUnit.Book.Load(b => b.Code == book.Code && b.Id != book.BookId).Any())
-        //    {
-        //        throw new WarningException(string.Format("Code should be unique"));
-        //    }
-        //}
+        public void Validate(BookEditVm book)
+        {
+            if (string.IsNullOrEmpty(book.Code))
+            {
+                throw new WarningException(string.Format("Code should be specified"));
+            }
+            if (string.IsNullOrEmpty(book.Title))
+            {
+                throw new WarningException(string.Format("Title should be specified"));
+            }
+            if (string.IsNullOrEmpty(book.Author))
+            {
+                throw new WarningException(string.Format("Author should be specified"));
+            }
+            if (_repoUnit.Book.Load(b => b.Code == book.Code && b.Id != book.BookId).Any())
+            {
+                throw new WarningException(string.Format("Code should be unique"));
+            }
+        }
 
         public void Delete(int id)
         {
@@ -110,7 +109,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public void Save(BookHistoryVm model)
         {
-            //Validate(model);
+            Validate(new BookEditVm(model));
             var book = Get(model.BookId) ?? new Book();
             book.Code = model.BookCode;
             book.Title = model.BookTitle;

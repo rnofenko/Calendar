@@ -5,8 +5,6 @@
     _self.userId = source.UserId;
     _self.userFullName = ko.observable();
 
-    _self.bookId = ko.observable(source.BookId);
-
     ko.computed(function ()
     {
         $.getJSON("/Users/GetUserFullName", { id: _self.userId }, _self.userFullName);
@@ -40,7 +38,7 @@ function People(id, name)
 function BookHistoryVm(param)
 {
     var self = this;
-    
+
     self.bookHistory = ko.observableArray();
     self.peoples = ko.observableArray();
     self.orderDirections = ko.observableArray(['Take', 'Return']);
@@ -72,13 +70,19 @@ function BookHistoryVm(param)
     });
 
     self.takeDate = ko.observable(new Date().toJSON());
-    self.returnDate = ko.observable(new Date().toJSON());        
+    self.returnDate = ko.observable(new Date().toJSON());
     self.orderDirection = ko.observable();
-    self.userId = ko.observable();   
-    self.bookId = ko.observable();
+    self.userId = ko.observable();
+    self.bookId = 0;
+
+    ko.computed(function ()
+    {
+        var address = window.location.href;
+        self.bookId = address.substring(address.lastIndexOf("/") + 1, address.length);
+    }, this);
 
     self.save = function ()
-    {        
+    {
         $.ajax("/Book/Save",
             {
                 data: ko.toJSON(
@@ -91,12 +95,12 @@ function BookHistoryVm(param)
                     }),
                 type: "post",
                 contentType: "application/json",
-                success: function (result)
+                success: function (data)
                 {
-                    //alert(result);
+                    window.location.href = data.redirectToUrl + "/" + self.bookId;
                 }
             });
-    };    
+    };
 
     self.addBookHistory = function (data)
     {
@@ -107,9 +111,4 @@ function BookHistoryVm(param)
     {
         self.addBookHistory(value);
     });
-
-    //self.indexedName = function (index, parameter)
-    //{
-    //    return "BookHistoryList[" + index + "]." + parameter;
-    //};
 }
