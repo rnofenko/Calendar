@@ -5,8 +5,7 @@
     _self.userId = source.UserId;
     _self.userFullName = ko.observable();
 
-    ko.computed(function ()
-    {
+    ko.computed(function () {
         $.getJSON("/Users/GetUserFullName", { id: _self.userId }, _self.userFullName);       
     }, this);
 

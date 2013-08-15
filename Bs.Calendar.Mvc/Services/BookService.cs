@@ -93,14 +93,6 @@ namespace Bs.Calendar.Mvc.Services
             });            
         }
 
-        public void Save(BookEditVm bookHistoryModel)
-        {
-            var book = Get(bookHistoryModel.BookId) ?? new Book();
-            book.Title = bookHistoryModel.Title;            
-            book.Author = bookHistoryModel.Author;
-            _repoUnit.Book.Save(book);            
-        }
-
         public void Save(BookHistoryVm model)
         {
             var book = Get(model.BookId) ?? new Book

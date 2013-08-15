@@ -24,9 +24,12 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException();
             }
-            var membershipUserEmail = Membership.GetUser().Email;
-            var user = _unit.User.Get(u => u.Email == membershipUserEmail);
-            var bookHistories = _unit.BookHistory.Load(h => h.BookId == bookId);
+            var bookHistories = _unit.BookHistory.Load(h => h.BookId == bookId).OrderByDescending(h => h.TakeDate);
+            foreach (var bookHistory in bookHistories)
+            {
+                bookHistory.TakeDate = bookHistory.TakeDate.Date.AddDays(1);
+                bookHistory.ReturnDate = bookHistory.ReturnDate.Date.AddDays(1);
+            }
             var result = new BookHistoryVm(book) {BookHistoryList = new List<BookHistory>(bookHistories)};
             return result;
         }
