@@ -29,7 +29,7 @@ namespace Bs.Calendar.Tests.Int
             _unit.Team.Save(new Team { Name = "PHP", Description = "PHP" });
 
             var teamService = new TeamService(_unit);
-            teamService.PageSize = _pageSize = 1;
+            //teamService.PageSize = _pageSize = 1;
 
             _teamController = new TeamController(teamService);
         }

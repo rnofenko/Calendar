@@ -1,64 +1,16 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.TeamsVm
+﻿@model Bs.Calendar.Mvc.ViewModels.Teams.TeamsVm
 
-@{
-    var ajaxOptions = new AjaxOptions
-    {
-        UpdateTargetId = "team-table",
-        HttpMethod = "Get"
-    };
-}
-@if (!Model.Teams.Any())
+<input id="listPage" hidden="true" value="@Model.Filter.Page">
+<input id="listTotalPages" hidden="true" value="@Model.Filter.TotalPages">
+
+@foreach (var team in Model.Teams)
 {
-    <div class="danger alert centered four columns">Sorry, no team available!</div>
-}
-else
-{  
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var team in Model.Teams)
-            {
-                <tr ondblclick="RowDblClick('@Url.Action("Edit", "Team", new { id = team.Id })')">
-                    <td>@team.Name</td>      
-                    <td>           
-                        <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = team.Id})</div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <div class="row">
-        <div class="two columns">
-            @using (Ajax.BeginForm("List", "Team", ajaxOptions))
-            {
-                @Html.HiddenFor(team => team.PagingVm.SearchStr)
-                @Html.HiddenFor(team => team.PagingVm.SortByStr)
-                <div class="field">
-                    <input class="text input" type="text" name="PagingVm.Page" placeholder="@Model.PagingVm.Page">
-                </div>
-            }
-        </div>
-            
-        <div class="four columns">
-            <div class="default alert  eight columns">
-                <div>of @Model.PagingVm.TotalPages</div>
-            </div>
-        </div>
-
-        <div class="primary push_six label two columns">
-            @Html.AjaxPageLink(@Model.PagingVm, "Previous", @Model.PagingVm.Page - 1, ajaxOptions)
-        </div>
-
-        <div class="primary label two columns">
-            @Html.AjaxPageLink(@Model.PagingVm, "Next", @Model.PagingVm.Page + 1, ajaxOptions)
-        </div>
-    </div>
+    <tr ondblclick=" RowDblClick('@Url.Action("Edit", "Team", new {id = team.Id})') ">
+        <td>@team.Name</td>      
+        <td>           
+            <div class="medium default btn icon-right icon-pencil">@Html.ActionLink("Edit", "Edit", new {id = team.Id})</div>
+        </td>
+    </tr>
 }
 
 

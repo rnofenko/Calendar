@@ -1,12 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
 using Bs.Calendar.Models;
 using Bs.Calendar.Rules;
 
-namespace Bs.Calendar.Mvc.ViewModels
+namespace Bs.Calendar.Mvc.ViewModels.Teams
 {
     public class TeamEditVm
     {

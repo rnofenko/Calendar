@@ -1,6 +1,6 @@
-﻿using Bs.Calendar.Models;
+using Bs.Calendar.Models;
 
-namespace Bs.Calendar.Mvc.ViewModels
+namespace Bs.Calendar.Mvc.ViewModels.Teams
 {
     public class TeamUserVm
     {
