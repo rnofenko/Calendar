@@ -106,7 +106,8 @@ namespace Bs.Calendar.Mvc.Services
 
         private void updatePagingData(TeamFilterVm filter) 
         {
-            filter.TotalPages = PageCounter.GetTotalPages(_unit.Team.Load().Count(), Config.Instance.PageSize);
+            filter.TotalPages = PageCounter.GetTotalPages(_unit.Team.Load().WhereIf(filter.SearchString.IsNotEmpty(), x => x.Name.Contains(filter.SearchString)).Count(), 
+                Config.Instance.PageSize);
             filter.Page = PageCounter.GetRangedPage(filter.Page, filter.TotalPages);
         }
 
