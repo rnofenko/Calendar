@@ -33,14 +33,14 @@
 <script type="text/html" id="day-template">
     <td data-bind="attr: { class: defineClass() }">
         <div>
-            <div data-bind="text: day"></div>
-            <div data-bind="template: { name: 'event-template', foreach: events }"></div>
+            <div class="bc-day-number" data-bind="text: day"></div>
+            <div data-bind="template: { name: 'event-template', foreach: events }"></div
         </div>
     </td>
 </script>
 
 <script type="text/html" id="event-template">
-    <div class="warning alert">
+    <div class="bc-event">
         <img src="../../Images/birthday_icon.png" width="19"/>
         <span data-bind="text: eventContent"></span> 
     </div>
