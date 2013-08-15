@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Bs.Calendar.Core
 {
-    public static class QueryExtension
+    public static class QueryExtensions
     {
         public static IOrderedQueryable<TEntity> OrderByExpression<TEntity>(this IQueryable<TEntity> source, string sortExpression) where TEntity : class
         {
@@ -26,6 +27,31 @@ namespace Bs.Calendar.Core
                 }
             }
             return result;
+        }
+
+        public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource> source, bool condition, Func<TSource, bool> predicate)
+        {
+            if (condition)
+                return source.Where(predicate);
+            return source;
+        }
+
+        public static IQueryable<TSource> WhereIf<TSource>(this IQueryable<TSource> source, bool condition, Expression<Func<TSource, bool>> predicate) {
+            if (condition)
+                return source.Where(predicate);
+            return source;
+        }
+
+        public static IQueryable<TSource> OrderByIf<TSource, TKey>(this IQueryable<TSource> source, bool condition, Expression<Func<TSource, TKey>> predicate) {
+            if (condition)
+                return source.OrderBy(predicate);
+            return source;
+        }
+
+        public static IQueryable<TSource> OrderByDescIf<TSource, TKey>(this IQueryable<TSource> source, bool condition, Expression<Func<TSource, TKey>> predicate) {
+            if (condition)
+                return source.OrderByDescending(predicate);
+            return source;
         }
 
         private static IOrderedQueryable<TEntity> orderBy<TEntity>(this IQueryable<TEntity> source, string fieldName) where TEntity : class

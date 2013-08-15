@@ -75,6 +75,13 @@
     };
 
     self.getCurrentValues = function () {
-        return { OnlyAdmins: self.OnlyAdmins(), NotApproved: self.NotApproved(), Deleted: self.Deleted(), SearchString: self.SearchString(), SortByField: self.SortByField(), Page: self.Page() };
+        return {
+            OnlyAdmins: self.OnlyAdmins(),
+            NotApproved: self.NotApproved(),
+            Deleted: self.Deleted(),
+            SearchString: self.SearchString(),
+            SortByField: self.SortByField(),
+            Page: self.Page()
+        };
     };
 }

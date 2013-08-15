@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ioc.cs" />
-    <Compile Include="QueryExtension.cs" />
+    <Compile Include="QueryExtensions.cs" />
     <Compile Include="StringExtension.cs" />
   </ItemGroup>
   <ItemGroup>
