@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
@@ -40,8 +41,10 @@ namespace Bs.Calendar.Tests.Int
         [TestFixtureTearDown]
         public void TearDown()
         {
-            var bookToDelete = _unit.Book.Get(book => book.Code == "0-9745140-2-0");
-            _unit.Book.Delete(bookToDelete);
+            var firstBookToDelete = _unit.Book.Get(book => book.Code == "0-9745140-2-0");
+            var secondBookToDelete = _unit.Book.Get(book => book.Code == "5-8046-0051-6");
+            _unit.Book.Delete(firstBookToDelete);
+            _unit.Book.Delete(secondBookToDelete);
         }
 
         [Test]
