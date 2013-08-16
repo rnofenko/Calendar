@@ -6,6 +6,7 @@ using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 using System.Linq;
+using Bs.Calendar.Mvc.ViewModels.Teams;
 using Bs.Calendar.Tests.Unit.FakeObjects;
 using FluentAssertions;
 using NUnit.Framework;

@@ -27,8 +27,10 @@ namespace Bs.Calendar.Mvc.Server
             var scripts = new Bundle("~/Scripts/all", new JsMinify());
             scripts.Include("~/Scripts/Rooms/SetupEvents.js");
             scripts.Include("~/Scripts/Rooms/ColorPicker.js");
-            scripts.Include("~/Scripts/Users/user.js");
+            scripts.Include("~/Scripts/Teams/TeamFrameFilter.js");
             scripts.Include("~/Scripts/Teams/TeamEdit.js");
+            scripts.Include("~/Scripts/Teams/TeamList.js");
+            scripts.Include("~/Scripts/Users/user.js");
             scripts.Include("~/Scripts/Users/UserList.js");
             scripts.Include("~/Scripts/Users/UserFrameFilter.js");
             scripts.Include("~/Scripts/Layout/list-view.js");

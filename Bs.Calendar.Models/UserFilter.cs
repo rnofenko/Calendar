@@ -1,12 +1,10 @@
-﻿namespace Bs.Calendar.Models
+﻿using System.Collections.Generic;
+
+namespace Bs.Calendar.Models
 {
     public class UserFilter
     {
-        public string Email { get; set; }
-
-        public string Name { get; set; }
-
-        public string SecondName { get; set; }
+        public List<string> EmailOrFullName { get; set; }
 
         public int PageSize { get; set; }
 

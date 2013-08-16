@@ -55,6 +55,7 @@
     <Compile Include="Roles.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="Team.cs" />
+    <Compile Include="TeamFilter.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserFilter.cs" />
   </ItemGroup>

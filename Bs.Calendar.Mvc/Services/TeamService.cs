@@ -4,9 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
-using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
-using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Mvc.ViewModels.Teams;
 using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Services
@@ -14,12 +13,10 @@ namespace Bs.Calendar.Mvc.Services
     public class TeamService
     {
         private readonly RepoUnit _unit;
-        public int PageSize { get; set; }
 
         public TeamService(RepoUnit repoUnit)
         {
             _unit = repoUnit;
-            PageSize = 7;
         }
 
         public IEnumerable<TeamUserVm> GetAllUsers(int teamId)
@@ -94,27 +91,28 @@ namespace Bs.Calendar.Mvc.Services
             }
         }
 
-        //public TeamsVm RetreiveList(PagingVm pagingVm)
-        //{
-        //    var teams = _unit.Team.Load();
+        public TeamsVm RetreiveList(TeamFilterVm filterVm) 
+        {
+            updatePagingData(filterVm);
+            var filter = filterVm.Map();
+            var teams = _unit.Team.Load(filter);
 
-        //    teams = teams.WhereIf(!string.IsNullOrEmpty(pagingVm.SearchStr), 
-        //                team => team.Name.ToLower().Contains(pagingVm.SearchStr.ToLower()));
+            return new TeamsVm 
+            {
+                Teams = teams,
+                Filter = filterVm
+            };
+        }
 
-        //    teams = sortByStr(teams, pagingVm.SortByStr);
-
-        //    var totalPages = PageCounter.GetTotalPages(teams.Count(), PageSize);
-        //    var currentPage = PageCounter.GetRangedPage(pagingVm.Page, totalPages);
-
-        //    return new TeamsVm 
-        //    {
-        //        Teams = teams.Skip((currentPage - 1) * PageSize).Take(PageSize).ToList(),
-        //        PagingVm = new PagingVm(pagingVm.SearchStr, pagingVm.SortByStr, totalPages, currentPage)
-        //    };
-        //}
+        private void updatePagingData(TeamFilterVm filter) 
+        {
+            filter.TotalPages = PageCounter.GetTotalPages(_unit.Team.Load().WhereIf(filter.SearchString.IsNotEmpty(), x => x.Name.Contains(filter.SearchString)).Count(), 
+                Config.Instance.PageSize);
+            filter.Page = PageCounter.GetRangedPage(filter.Page, filter.TotalPages);
+        }
 
         private IQueryable<Team> sortByStr(IQueryable<Team> teams, string sortByStr) 
-        {    
+        {
             teams = teams.OrderByIf(!string.IsNullOrEmpty(sortByStr),
                         team => team.Name);
 
