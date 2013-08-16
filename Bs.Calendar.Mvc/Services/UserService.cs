@@ -16,11 +16,9 @@ namespace Bs.Calendar.Mvc.Services
         private readonly RepoUnit _unit;
         private readonly ContactService _contactService;
         private const int SALT_LENGTH = 128;
-        public int PageSize { get; set; }
 
         public UserService(RepoUnit unit, ContactService contactService)
         {
-            PageSize = 7;
             _contactService = contactService;
             _unit = unit;
         }
@@ -150,8 +148,8 @@ namespace Bs.Calendar.Mvc.Services
             var sender = Ioc.Resolve<EmailSender>();
             var body = string.Format("Hi, {0}!\nYour account's status is {1} and {2} now.",
                 user.FullName,
-                user.Live == LiveStatuses.Active ? "active" : "deleted",
-                user.ApproveState == ApproveStates.Approved ? "approved" : "not approved");
+                user.Live.GetDescription(),
+                user.ApproveState.GetDescription());
 
             sender.Send("Status has been changed", body, user.Email);
         }
@@ -171,7 +169,9 @@ namespace Bs.Calendar.Mvc.Services
 
         private void updatePagingData(UserFilterVm filter, IQueryable<User> users)
         {
-            filter.TotalPages = PageCounter.GetTotalPages(users.Count(), PageSize);
+            var pageSize = Config.Instance.PageSize;
+
+            filter.TotalPages = PageCounter.GetTotalPages(users.Count(), pageSize);
             filter.Page = PageCounter.GetRangedPage(filter.Page, filter.TotalPages);
         }
 

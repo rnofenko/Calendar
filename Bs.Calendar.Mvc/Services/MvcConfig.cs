@@ -8,6 +8,7 @@ namespace Bs.Calendar.Mvc.Services
     {
         private bool? _sendEmail;
         private string _teamHeaderPattern;
+        private int? _pageSize;
 
         public bool SendEmail
         {
@@ -36,6 +37,10 @@ namespace Bs.Calendar.Mvc.Services
             }
         }
 
-        public int PageSize { get { return 7; } }
+        public int PageSize
+        {
+            get { return _pageSize ?? 7; }
+            set { _pageSize = value; }
+        }
     }
 }

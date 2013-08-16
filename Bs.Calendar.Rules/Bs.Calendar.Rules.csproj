@@ -53,7 +53,6 @@
     <Compile Include="Emails\EmailSender.cs" />
     <Compile Include="Emails\IEmailProvider.cs" />
     <Compile Include="Emails\StandardEmailProvider.cs" />
-    <Compile Include="EnumExtensions.cs" />
     <Compile Include="IConfig.cs" />
     <Compile Include="ICryptoProvider.cs" />
     <Compile Include="ISaltProvider.cs" />

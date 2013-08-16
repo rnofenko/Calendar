@@ -1,4 +1,6 @@
-﻿namespace Bs.Calendar.Models
+﻿using System.Collections.Generic;
+
+namespace Bs.Calendar.Models
 {
     public class UserFilter
     {
@@ -19,5 +21,7 @@
         public ApproveStates ApproveStates { get; set; }
 
         public LiveStatuses LiveStatuses { get; set; }
+
+        public List<string> EmailOrFullName { get; set; }
     }
 }

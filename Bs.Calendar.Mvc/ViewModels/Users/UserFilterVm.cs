@@ -1,11 +1,12 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 using Bs.Calendar.Models;
 using Bs.Calendar.Core;
 using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.ViewModels.Users
 {
-    public class UserFilterVm
+public class UserFilterVm
     {
         public string SearchString { get; set; }
 
@@ -31,17 +32,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Users
             if (SearchString.IsNotEmpty())
             {
                 SearchString = Regex.Replace(SearchString.Trim(), @"\s+", " ").ToLower();
-                filter.Email = SearchString;
-
-                var splitedString = SearchString.Split();
-                if (splitedString.Length > 0)
-                {
-                    filter.Name = splitedString[0];
-                }
-                if (splitedString.Length > 1)
-                {
-                    filter.SecondName = splitedString[1];
-                }
+                filter.EmailOrFullName = SearchString.Split().ToList();
             }
 
             filter.Roles = OnlyAdmins ? Roles.Admin : Roles.All;
