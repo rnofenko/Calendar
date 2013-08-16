@@ -62,6 +62,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BookControllerTest.cs" />
+    <Compile Include="BookHistoryTest.cs" />
     <Compile Include="CalendarMembershipProviderTest.cs" />
     <Compile Include="CalendarRoleProviderTest.cs" />
     <Compile Include="TeamControllerTest.cs" />

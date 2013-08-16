@@ -274,14 +274,15 @@
     <Compile Include="ViewModels\RegisterVm.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />
-    <Compile Include="ViewModels\TeamEditVm.cs" />
-    <Compile Include="ViewModels\TeamUserVm.cs" />
+    <Compile Include="ViewModels\Teams\TeamEditVm.cs" />
+    <Compile Include="ViewModels\Teams\TeamFilterVm.cs" />
+    <Compile Include="ViewModels\Teams\TeamsVm.cs" />
+    <Compile Include="ViewModels\Teams\TeamUserVm.cs" />
     <Compile Include="ViewModels\Users\UserFilterVm.cs" />
     <Compile Include="ViewModels\Users\UsersVm.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="ViewModels\Users\UserEditVm.cs" />
     <Compile Include="Services\TeamService.cs" />
-    <Compile Include="ViewModels\TeamsVm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
@@ -309,6 +310,8 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Teams\TeamEdit.js" />
     <Content Include="Scripts\Shared\moment.js" />
+    <Content Include="Scripts\Teams\TeamFrameFilter.js" />
+    <Content Include="Scripts\Teams\TeamList.js" />
     <Content Include="Scripts\Users\UserContacts.js" />
     <Content Include="Scripts\Users\UserFrameFilter.js" />
     <Content Include="Scripts\Users\UserList.js" />

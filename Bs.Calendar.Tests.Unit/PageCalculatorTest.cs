@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bs.Calendar.Mvc.Server;
-using Bs.Calendar.Mvc.Services;
-using Bs.Calendar.Rules;
+﻿using Bs.Calendar.Rules;
 using FluentAssertions;
 using NUnit.Framework;
-using Bs.Calendar.Core;
 
 namespace Bs.Calendar.Tests.Unit
 {
-
     [TestFixture]
     class PageCalculatorTest
     {

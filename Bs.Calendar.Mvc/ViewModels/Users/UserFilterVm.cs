@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Bs.Calendar.Models;
 using Bs.Calendar.Core;
 using Bs.Calendar.Rules;
+using System.Linq;
 
 namespace Bs.Calendar.Mvc.ViewModels.Users
 {

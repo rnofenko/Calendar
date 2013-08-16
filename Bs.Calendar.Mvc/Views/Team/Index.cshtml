@@ -1,10 +1,5 @@
 ﻿@{
     ViewBag.Title = "Teams";
-
-    var ajaxOptions = new AjaxOptions {
-        UpdateTargetId = "team-table",
-        HttpMethod = "Get"
-    };
 }
 
 <div class="row">
@@ -14,31 +9,54 @@
 </div>
     
 <div class="row">
-    <div class="sixteen colgrid">
-        <div class="row">
-            <div class="one columns">
-                <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
-            </div>
+    <div class="one columns">
+        <button class="medium primary btn">@Html.ActionLink("Create", "Create")</button>
+    </div>
         
-            @using (Ajax.BeginForm("List", "Team", ajaxOptions))
-            {
-                <div class="field push_eleven four columns">
-                    <input class="search input" type="text" name="searchStr" placeholder="Find team"/>
-                </div>
-            }
-        </div>
-
-        <div class="row">
-            <div id="team-table">
-                @Html.Action("List", "Team")
-            </div>
-        </div>
+    <div class="field three columns pull_right">
+        <input class="search input" type="text" name="searchStr" placeholder="Team name" data-bind="value: filter.SearchString, event: { change: changeHandler }"/>
     </div>
 </div>
-@section Scripts {
-    <script src="../../Scripts/Layout/list-view.js"></script>
-}
 
-@section styles {
-    <link href="@Url.Content("~/Content/Layout/list-view.css")" rel="stylesheet"/>
+
+<div class="row">
+    <table>
+        <thead>
+            <tr>
+                <th><div data-field="Name" id="th-name" data-bind="click: headerClick">Name</div></th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="list-body"></tbody>
+    </table>
+</div>
+
+
+<div class="row" data-bind="visible: TotalPages() > 0">
+    <div class="two columns">
+        <div class="field">
+            <input class="text input" type="text" data-bind="value: filter.Page, event: { change: changeHandler }">
+        </div>
+    </div>
+            
+    <div class="two columns default alert" data-bind="text: 'of ' + TotalPages()"></div>
+
+    <div class="primary label push_four two columns">
+        <a href="~" data-bind="click: previousPage">Previous</a>
+    </div>
+
+    <div class="primary label two columns">
+        <a href="~" data-bind="click: nextPage">Next</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.TeamListVm = new TeamListVm();
+            ko.applyBindings(window.TeamListVm);
+            window.TeamListVm.updateList();
+        });
+    </script>
 }

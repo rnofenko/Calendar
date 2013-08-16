@@ -20,6 +20,14 @@ namespace Bs.Calendar.Mvc.ViewModels
             Author = book.Author;
         }
 
+        public BookEditVm(BookHistoryVm model)
+        {
+            BookId = model.BookId;
+            Code = model.BookCode;            
+            Author = model.BookAuthor;
+            Title = model.BookTitle;            
+        }
+
         [StringLength(BaseEntity.LENGTH_NAME),
         Required(ErrorMessage = "Code should be specified"),
         Display(Name = "Code")]
