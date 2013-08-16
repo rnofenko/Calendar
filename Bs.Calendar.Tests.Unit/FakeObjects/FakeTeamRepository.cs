@@ -10,5 +10,9 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
 {
     class FakeTeamRepository : FakeBaseRepository<Team>, ITeamRepository
     {
+        public IQueryable<Team> Load(TeamFilter filter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

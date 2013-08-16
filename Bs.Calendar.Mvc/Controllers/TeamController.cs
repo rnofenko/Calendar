@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Web.Mvc;
 using Bs.Calendar.Mvc.Services;
-using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Mvc.ViewModels.Teams;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -83,10 +83,9 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
-        public ActionResult List()
+        public ActionResult List(TeamFilterVm filter)
         {
-            return View();
-            //return PartialView(_service.RetreiveList(null));
+            return PartialView(_service.RetreiveList(filter));
         }
 
         [HttpGet]
