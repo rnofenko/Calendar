@@ -15,6 +15,8 @@ namespace Bs.Calendar.Core
 
         public static T Resolve<T>()
         {
+            //Construct new instance of type
+
             return (T)Resolve(typeof(T));
         }
 
@@ -38,9 +40,11 @@ namespace Bs.Calendar.Core
             _container.RegisterInstance(type, instance);
         }
 
-        public static void Teardown(object instance)
+        public static void BuildUp<TInjected>(object instance)
         {
-            _container.Teardown(instance);
+            //Inject existing object
+
+            _container.BuildUp(typeof (TInjected), instance);
         }
     }
 }

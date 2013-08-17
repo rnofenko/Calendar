@@ -17,7 +17,5 @@ namespace Bs.Calendar.Models
         public ApproveStates ApproveStates { get; set; }
 
         public LiveStatuses LiveStatuses { get; set; }
-
-        public List<string> EmailOrFullName { get; set; }
     }
 }

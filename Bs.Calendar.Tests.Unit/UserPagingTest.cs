@@ -10,6 +10,8 @@ using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Tests.Unit.FakeObjects;
+using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.Utility;
 using Moq;
 using NUnit.Framework;
 using FluentAssertions;
@@ -19,33 +21,25 @@ namespace Bs.Calendar.Tests.Unit
     [TestFixture]
     class UserPagingTest
     {
+        private IUserRepository _repository;
         private UserService _userService;
-        private List<User> _users;
-
         private FakeConfig _config;
 
-        [TestFixtureTearDown]
-        public void TeardownFixture()
-        {
-            Ioc.RegisterInstance<IUserRepository>(Ioc.Resolve<IUserRepository>());
-        }
+        private List<User> _users;
 
         [TestFixtureSetUp]
-        public void SetupFixture()
+        public void SetUpFixture()
         {
             DiMvc.Register();
 
             Ioc.RegisterType<IConfig, FakeConfig>();
             Ioc.RegisterType<IUserRepository, FakeUserRepository>();
 
-            _config = new FakeConfig();
-            Ioc.RegisterInstance<IConfig>(_config);
-
-            _userService = Ioc.Resolve<UserService>();
+            _config = Config.Instance as FakeConfig;
 
             //Create and populate repository instance
-            var repoUnit = Ioc.Resolve<IUserRepository>();
-            Ioc.RegisterInstance<IUserRepository>(repoUnit);
+            Ioc.RegisterInstance<IUserRepository>(new FakeUserRepository());
+            _repository = Ioc.Resolve<IUserRepository>();
 
             _users = new List<User>
             {
@@ -55,7 +49,9 @@ namespace Bs.Calendar.Tests.Unit
                 new User {Email = "acbd@gmail.com", FirstName = "Alex", LastName = "Sinov", Role = Roles.Simple, ApproveState = ApproveStates.Approved, Live = LiveStatuses.Active}
             };
 
-            _users.ForEach(repoUnit.Save);
+            _users.ForEach(_repository.Save);
+
+            _userService = Ioc.Resolve<UserService>();
         }
 
         [Test]

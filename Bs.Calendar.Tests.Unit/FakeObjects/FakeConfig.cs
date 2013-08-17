@@ -10,17 +10,12 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
     class FakeConfig : IConfig
     {
         private int? _pageSize;
+        private bool? _sendMail;
 
         public bool SendEmail
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { return _sendMail ?? false; }
+            set { _sendMail = value; }
         }
 
         public string TeamHeaderPattern

@@ -39,6 +39,23 @@ namespace Bs.Calendar.Mvc.ViewModels.Users
         {
         }
 
+        public User Map()
+        {
+            return new User
+            {
+                Id = UserId,
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
+                BirthDate = BirthDate,
+                Contacts = Contacts,
+
+                Role = Role,
+                Live = Live,
+                ApproveState = ApproveState,
+            };
+        }
+
         public int UserId { get; set; }
 
         [StringLength(50),

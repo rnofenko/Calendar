@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Bs.Calendar.Core;
@@ -8,6 +9,7 @@ using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Mvc.ViewModels.Users;
+using Bs.Calendar.Rules;
 using Bs.Calendar.Tests.Unit.FakeObjects;
 using Moq;
 using NUnit.Framework;
@@ -15,197 +17,162 @@ using FluentAssertions;
 
 namespace Bs.Calendar.Tests.Unit
 {
-    [TestFixture] 
+    [TestFixture]
     class UserFilterTest
     {
         private UserService _userService;
+        private FakeConfig _config;
+
         private List<User> _users;
-        private RepoUnit _repoUnit;
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
-            Ioc.RegisterInstance<RepoUnit>(new RepoUnit());
-        }
-
         private List<User> _usersForStringSearchAndFiltering = new List<User>
             {
-                new User {Email = "12345@gmail.com", FullName = "Saveli Bondini", FirstName = "Saveli", LastName = "Bondini"},
-                new User {Email = "5678@gmail.com", FullName = "Dima Rossi", FirstName = "Dima", LastName = "Rossi"},
-                new User {Email = "9999@gmail.com", FullName = "Dima Prohorov", FirstName = "Dima", LastName = "Prohorov"}
+                new User {Email = "12345@gmail.com", FullName = "Saveli Bondini", FirstName = "Saveli", LastName = "Bondini", Role = Roles.Simple, ApproveState = ApproveStates.Approved, Live = LiveStatuses.Active},
+                new User {Email = "5678@gmail.com", FullName = "Dima Rossi", FirstName = "Dima", LastName = "Rossi", Role = Roles.Simple, ApproveState = ApproveStates.Approved, Live = LiveStatuses.Active},
+                new User {Email = "9999@gmail.com", FullName = "Dima Prohorov", FirstName = "Dima", LastName = "Prohorov", Role = Roles.Simple, ApproveState = ApproveStates.Approved, Live = LiveStatuses.Active}
             };
 
-        private const int ACTIVE_APPROVED_ADMIN = 0;
-        private const int ACTIVE_APPROVED_SIMPLE = 1;
-        private const int ACTIVE_NOTAPPROVED_ADMIN = 2;
-        private const int ACTIVE_NOTAPPROVED_SIMPLE = 3;
-        private const int DELETED_APPROVED_ADMIN = 4;
-        private const int DELETED_APPROVED_SIMPLE = 5;
-        private const int DELETED_NOTAPPROVED_ADMIN = 6;
-        private const int DELETED_NOTAPPROVED_SIMPLE = 7;
-
-        private List<User> _usersForRoleAndStateFilteringTest = new List<User>
+        private Dictionary<string, User> _usersForRoleAndStateFilteringTest = new Dictionary<string, User>
             {
-                new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Admin },
-                new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Simple },
-                new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved, Role = Roles.Admin },
-                new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved, Role = Roles.Simple },
-                new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.Approved, Role = Roles.Admin },
-                new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.Approved, Role = Roles.Simple },
-                new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.NotApproved, Role = Roles.Admin },
-                new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.NotApproved, Role = Roles.Simple }
+                { "ACTIVE_APPROVED_ADMIN", new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Admin }},
+                { "ACTIVE_APPROVED_SIMPLE", new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.Approved, Role = Roles.Simple }},
+                { "ACTIVE_NOTAPPROVED_ADMIN", new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved, Role = Roles.Admin }},
+                { "ACTIVE_NOTAPPROVED_SIMPLE", new User{ Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved, Role = Roles.Simple }},
+                { "DELETED_APPROVED_ADMIN", new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.Approved, Role = Roles.Admin }},
+                { "DELETED_APPROVED_SIMPLE", new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.Approved, Role = Roles.Simple }},
+                { "DELETED_NOTAPPROVED_ADMIN", new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.NotApproved, Role = Roles.Admin }},
+                { "DELETED_NOTAPPROVED_SIMPLE", new User{ Live = LiveStatuses.Deleted, ApproveState = ApproveStates.NotApproved, Role = Roles.Simple }}
             };
 
-        private void Setup(List<User> users)
+        [TestFixtureSetUp]
+        public void SetupFixture()
         {
-            _users = users.ToList(); //Create list copy for test independency
-
             DiMvc.Register();
+
             Ioc.RegisterType<IUserRepository, FakeUserRepository>();
+            Ioc.RegisterType<IConfig, FakeConfig>();
 
-            _repoUnit = new RepoUnit();
-            _users.ForEach(user => _repoUnit.User.Save(user));
+            _config = Config.Instance as FakeConfig;
 
-            Ioc.RegisterInstance<RepoUnit>(_repoUnit);
+            var repoUnit = new FakeUserRepository();
+            Ioc.RegisterInstance<IUserRepository>(repoUnit);
+
             _userService = Ioc.Resolve<UserService>();
         }
 
-        //[Test]
-        //public void Should_Return_One_User_When_Filter_Has_Email()
-        //{
-        //    //arrange
-        //    Setup(_usersForStringSearchAndFiltering);
+        public void Setup(List<User> users)
+        {
+            _users = users;
 
-        //    var testEmail = _users[0].Email;
-        //    var pagingVm = new UserFilterVm(true, true, true, true, true, true) { SearchString = testEmail };
+            var repoUnit = Ioc.Resolve <IUserRepository>();
 
-        //    //act
-        //    var users = _userService.RetreiveList(pagingVm).Users;
+            repoUnit.Dispose();
+            _users.ForEach(repoUnit.Save);
 
-        //    //assert
-        //    users.Count().ShouldBeEquivalentTo(1);
-        //    users.First().Email.ShouldBeEquivalentTo(testEmail);
-        //}
+            _config.PageSize = _users.Count;
+        }
 
+        public void Setup<TSource>(Dictionary<TSource, User> users)
+        {
+            Setup(users.Values.ToList());
+        }
 
-        //[Test]
-        //public void Should_Return_User_When_Filter_By_Name()
-        //{
-        //    //arrange
-        //    Setup(_usersForStringSearchAndFiltering);
-
-        //    var testUser = _users[0];
-        //    var pagingVm = new UserFilterVm(true, true, true, true, true, true) { SearchString = testUser.FirstName };
-
-        //    //act
-        //    var users = _userService.RetreiveList(pagingVm).Users;
-
-        //    //assert
-        //    users.Count().ShouldBeEquivalentTo(1);
-        //    users.First().Email.ShouldBeEquivalentTo(testUser.Email);
-        //    users.First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
-        //}
-
-        //[Test]
-        //public void Should_return_all_users_with_full_name_containing_specified_name_When_search_by_name() 
-        //{
-        //    //arrange
-        //    Setup(_usersForStringSearchAndFiltering);
-
-        //    var testUser = _users[1];
-        //    var pagingVm = new UserFilterVm(true, true, true, true, true, true) { SearchString = testUser.FirstName };
-
-        //    //act
-            
-        //    var users = _userService.RetreiveList(pagingVm).Users;
-
-        //    //assert
-            
-        //    users.Count().ShouldBeEquivalentTo(2);
-
-        //    users.First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
-        //    users.Skip(1).First().FirstName.ShouldBeEquivalentTo(testUser.FirstName);
-        //}
-
-
-        [Test]
-        public void Should_Return_No_User_When_Filter_By_Nonexistent_Email() 
+        [Test,
+        TestCase("12345@gmail.com"),
+        TestCase("5678@gmail.com"),
+        TestCase("9999@gmail.com")]
+        public void Should_return_one_user_When_filter_contains_exiting_email_string(string email)
         {
             //arrange
             Setup(_usersForStringSearchAndFiltering);
 
-            var pagingVm = new UserFilterVm { SearchString = "00000@gmail.com" };
-
             //act
-            var users = _userService.RetreiveList(pagingVm).Users;
+            var users = _userService.RetreiveList(new UserFilterVm { SearchString = email }).Users;
 
             //assert
-            users.Count().ShouldBeEquivalentTo(0);
+            users.Should().ContainSingle(user => user.Email == email);
         }
 
-
-        [Test]
-        public void Should_Return_No_User_When_Filter_By_Nonexistent_Name() 
+        [Test,
+        TestCase("Ro"),
+        TestCase("Dima"),
+        TestCase("Dima Prohorov")]
+        public void Should_return_users_having_specified_name_contained_in_full_name_not_contained_in_their_email_strings(string nameOrSurname)
         {
             //arrange
             Setup(_usersForStringSearchAndFiltering);
 
-            var pagingVm = new UserFilterVm { SearchString = "Alex" };
-
             //act
-            var users = _userService.RetreiveList(pagingVm).Users;
+            var users = _userService.RetreiveList(new UserFilterVm { SearchString = nameOrSurname }).Users;
 
             //assert
-            users.Count().ShouldBeEquivalentTo(0);
+            users.Should().OnlyContain(user => user.FullName.Contains(nameOrSurname, StringComparison.OrdinalIgnoreCase));
         }
 
+        [Test,
+        TestCase("AbsentName"),
+        TestCase("absent@absent.com")]
+        public void Should_not_return_users_When_search_string_does_not_contained_both_in_email_and_full_name(string searchString)
+        {
+            //arrange
+            Setup(_usersForStringSearchAndFiltering);
 
-        //[Test]
-        //public void Should_Return_All_Users_When_Filter_By_Empty_String()
-        //{
-        //    //arrange
-        //    Setup(_usersForStringSearchAndFiltering);
+            //act
+            var users = _userService.RetreiveList(new UserFilterVm { SearchString = searchString }).Users;
 
-        //    var pagingVm = new UserFilterVm(true, true, true, true, true, true) { SearchString = string.Empty };
+            //assert
+            users.Should().BeEmpty();
+        }
 
-        //    //act
-        //    var users = _userService.RetreiveList(pagingVm).Users;
+        [Test,
+        TestCase(null),
+        TestCase(""),
+        TestCase(" "),
+        TestCase("       ")]
+        public void Should_return_all_users_When_filter_by_empty_string(string searchString)
+        {
+            //arrange
+            Setup(_usersForStringSearchAndFiltering);
 
-        //    //assert
-        //    users.Count().ShouldBeEquivalentTo(_users.Count);
-        //}
+            //act
+            var users = _userService.RetreiveList(new UserFilterVm { SearchString = searchString }).Users;
 
-        //[Test,
-        //TestCase(true, true, true, new[]
-        //                               {
-        //                                   ACTIVE_APPROVED_ADMIN, ACTIVE_APPROVED_SIMPLE,
-        //                                   ACTIVE_NOTAPPROVED_ADMIN, ACTIVE_NOTAPPROVED_SIMPLE,
-        //                                   DELETED_APPROVED_ADMIN, DELETED_APPROVED_SIMPLE,
-        //                                   DELETED_NOTAPPROVED_ADMIN, DELETED_NOTAPPROVED_SIMPLE
-        //                               }),
-        //TestCase(false, true, true, new[] { ACTIVE_APPROVED_ADMIN, ACTIVE_APPROVED_SIMPLE, ACTIVE_NOTAPPROVED_ADMIN, ACTIVE_NOTAPPROVED_SIMPLE }),
-        //TestCase(true, true, false, new[] { ACTIVE_APPROVED_SIMPLE, ACTIVE_NOTAPPROVED_SIMPLE, DELETED_APPROVED_SIMPLE, DELETED_NOTAPPROVED_SIMPLE }),
-        //TestCase(false, true, false, new[] { ACTIVE_APPROVED_SIMPLE, ACTIVE_NOTAPPROVED_SIMPLE }),
-        //TestCase(true, false, true, new[] { ACTIVE_APPROVED_ADMIN, ACTIVE_APPROVED_SIMPLE, DELETED_APPROVED_ADMIN, DELETED_APPROVED_SIMPLE }),
-        //TestCase(false, false, true, new[] { ACTIVE_APPROVED_ADMIN, ACTIVE_APPROVED_SIMPLE }),
-        //TestCase(true, false, false, new[] { ACTIVE_APPROVED_SIMPLE, DELETED_APPROVED_SIMPLE }),
-        //TestCase(false, false, false, new[] { ACTIVE_APPROVED_SIMPLE })
-        //]
-        //public void Should_return_records_corresponding_to_selected_role_and_state_filters(bool showDeleted, bool showNotApproved, bool showAdmins, int[] expected)
-        //{
-        //    //arrange
-        //    Setup(_usersForRoleAndStateFilteringTest);
+            //assert
+            users.ShouldAllBeEquivalentTo(_users);
+        }
 
-        //    var pagingVm = new UserFilterVm(showDeleted, showAdmins, showNotApproved) { SearchString = string.Empty };
-        //    _userService.PageSize = _users.Count(); //Don't take paging filter in count
+        [Test,
+        TestCase(true, true, true, new[] { "ACTIVE_APPROVED_ADMIN", "ACTIVE_NOTAPPROVED_ADMIN", "DELETED_APPROVED_ADMIN", "DELETED_NOTAPPROVED_ADMIN" }),
+        TestCase(false, true, true, new[] { "ACTIVE_APPROVED_ADMIN", "ACTIVE_NOTAPPROVED_ADMIN" }),
+        TestCase(true, true, false, new[]
+        {
+            "ACTIVE_APPROVED_ADMIN", "ACTIVE_APPROVED_SIMPLE",
+            "ACTIVE_NOTAPPROVED_ADMIN", "ACTIVE_NOTAPPROVED_SIMPLE",
+            "DELETED_APPROVED_ADMIN", "DELETED_APPROVED_SIMPLE",
+            "DELETED_NOTAPPROVED_ADMIN", "DELETED_NOTAPPROVED_SIMPLE"
+        }),
+        TestCase(false, true, false, new[] { "ACTIVE_APPROVED_ADMIN", "ACTIVE_APPROVED_SIMPLE", "ACTIVE_NOTAPPROVED_ADMIN", "ACTIVE_NOTAPPROVED_SIMPLE" }),
+        TestCase(true, false, true, new[] { "ACTIVE_APPROVED_ADMIN", "DELETED_APPROVED_ADMIN" }),
+        TestCase(false, false, true, new[] { "ACTIVE_APPROVED_ADMIN" }),
+        TestCase(true, false, false, new[] { "ACTIVE_APPROVED_ADMIN", "ACTIVE_APPROVED_SIMPLE", "DELETED_APPROVED_ADMIN", "DELETED_APPROVED_SIMPLE" }),
+        TestCase(false, false, false, new[] { "ACTIVE_APPROVED_ADMIN", "ACTIVE_APPROVED_SIMPLE" })]
+        public void Should_return_records_corresponding_to_selected_role_and_state_filters(bool showDeleted, bool showNotApproved, bool onlyAdmins, string[] expected)
+        {
+            //arrange
+            Setup(_usersForRoleAndStateFilteringTest);
 
-        //    var expectedResult = _users.Where((user, index) => expected.Contains(index)); //Select correct records in the right order
+            //var expectedResult = _users.Where((user, index) => expected.Contains(index)); //Select correct records in the right order
+            var expectedResult = expected.Select(key => _usersForRoleAndStateFilteringTest[key]);
 
-        //    //act
-        //    var listPage = _userService.RetreiveList(pagingVm).Users;
+            //act
+            var listPage = _userService.RetreiveList(new UserFilterVm
+                                                         {
+                                                             Deleted = showDeleted,
+                                                             OnlyAdmins = onlyAdmins,
+                                                             NotApproved = showNotApproved
+                                                         }).Users;
 
-        //    //assert
-        //    listPage.ShouldAllBeEquivalentTo(expectedResult);
-        //}
+            //assert
+            listPage.ShouldAllBeEquivalentTo(expectedResult);
+        }
     }
 }

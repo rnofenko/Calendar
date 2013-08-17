@@ -14,6 +14,7 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
 
         public void Dispose()
         {
+            _entities.Clear();
         }
 
         public virtual IQueryable<T> Load()

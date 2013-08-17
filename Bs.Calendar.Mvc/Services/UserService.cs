@@ -52,20 +52,9 @@ namespace Bs.Calendar.Mvc.Services
                 throw new WarningException(string.Format("User with email {0} already exists", userModel.Email));
             }
 
-            var contacts = _contactService.UpdateContacts(userModel.Contacts);
+            var user = userModel.Map();
+            user.Contacts = _contactService.UpdateContacts(userModel.Contacts);
 
-            var user = new User
-            {
-                FirstName = userModel.FirstName,
-                LastName = userModel.LastName,
-                Email = userModel.Email,
-                Role = userModel.Role,
-                BirthDate = userModel.BirthDate,
-                Contacts = contacts,
-
-                Live = userModel.Live,
-                ApproveState = userModel.ApproveState
-            };
             _unit.User.Save(user);
         }
 
