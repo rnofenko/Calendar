@@ -2,9 +2,9 @@
     cursor: pointer;
 }
 
-.team-header, .team-column {
+.team-body {
     border: 1px solid #d8d8d8;
-    border-top: 0;
+    border-radius: 4px 4px 0 0;
 }
 
 .team-header > div, .team-column > div {
@@ -20,8 +20,7 @@
 }
 
 .team-header {
-    border: 1px solid #d8d8d8;
-    border-radius: 4px 4px 0 0;
+    border-bottom: 1px solid #d8d8d8;
     padding: 3px 0 3px 0;
 }
 

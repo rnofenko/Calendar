@@ -7,7 +7,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Teams
         public TeamUserVm(User user) 
         {
             UserId = user.Id;
-            Name = string.Format("{0} {1}.", user.LastName, user.FirstName[0]);
+            FullName = string.Format("{0} {1}", user.LastName, user.FirstName);
         }
 
         public TeamUserVm() 
@@ -15,6 +15,6 @@ namespace Bs.Calendar.Mvc.ViewModels.Teams
         }
 
         public int UserId { get; set; }
-        public string Name { get; set; }
+        public string FullName { get; set; }
     }
 }

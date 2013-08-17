@@ -21,7 +21,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public IEnumerable<TeamUserVm> GetAllUsers(int teamId)
         {
-            var users = _unit.User.Load(u => u.Teams.All(t => t.Id != teamId)).ToList();
+            var users = _unit.User.Load(u => u.Teams.All(t => t.Id != teamId) && u.Live == LiveStatuses.Active).ToList();
             return users.Select(u => new TeamUserVm(u)).ToList();
         }
 
@@ -62,6 +62,7 @@ namespace Bs.Calendar.Mvc.Services
             var team = editedTeam ?? new Team();
             team.Name = teamVm.Name;
             team.Description = teamVm.Description;
+            team.Live = teamVm.IsDeleted ? LiveStatuses.Deleted : LiveStatuses.Active;
 
             addUsersToTeam(team, teamVm.Users);
             _unit.Team.Save(team);
@@ -104,10 +105,12 @@ namespace Bs.Calendar.Mvc.Services
             };
         }
 
-        private void updatePagingData(TeamFilterVm filter) 
+        private void updatePagingData(TeamFilterVm filter)
         {
-            filter.TotalPages = PageCounter.GetTotalPages(_unit.Team.Load().WhereIf(filter.SearchString.IsNotEmpty(), x => x.Name.Contains(filter.SearchString)).Count(), 
-                Config.Instance.PageSize);
+            var teams = _unit.Team.Load()
+                             .WhereIf(filter.SearchString.IsNotEmpty(), x => x.Name.Contains(filter.SearchString))
+                             .Where(x => x.Live == LiveStatuses.Active);
+            filter.TotalPages = PageCounter.GetTotalPages(teams.Count(), Config.Instance.PageSize);
             filter.Page = PageCounter.GetRangedPage(filter.Page, filter.TotalPages);
         }
 

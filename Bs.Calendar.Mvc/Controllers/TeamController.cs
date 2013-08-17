@@ -39,12 +39,10 @@ namespace Bs.Calendar.Mvc.Controllers
             try 
             {
                 _service.CreateTeam(model);
-                //return RedirectToAction("Index");
             } 
             catch (WarningException exception) 
             {
                 ModelState.AddModelError("", exception.Message);
-                //return View("Edit", model);
             }
             return Json(new { redirectToUrl = Url.Action("Index") });
         }

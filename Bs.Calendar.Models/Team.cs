@@ -11,6 +11,8 @@ namespace Bs.Calendar.Models
 
         [StringLength(LENGTH_NAME)]
         public string Description { get; set; }
+        
+        public LiveStatuses Live { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
     }

@@ -10,6 +10,7 @@ namespace Bs.Calendar.DataAccess
         public IQueryable<Team> Load(TeamFilter filter)
         {
             var query = Load()
+                .Where(x => x.Live == LiveStatuses.Active)
                 .WhereIf(filter.Name.IsNotEmpty(), x => x.Name.Contains(filter.Name));
             
             query = query

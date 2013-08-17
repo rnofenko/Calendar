@@ -20,7 +20,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Teams
             var filter = new TeamFilter() 
             {
                 PageSize = Config.Instance.PageSize,
-                Page = Page < 1 ? 1 : Page > TotalPages ? TotalPages : Page,
+                Page = Page,
                 SortByField = SortByField.IsEmpty() ? "Id" : SortByField, 
             };
 
