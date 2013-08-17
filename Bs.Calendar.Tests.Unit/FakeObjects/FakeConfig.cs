@@ -11,6 +11,7 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
     {
         private int? _pageSize;
         private bool? _sendMail;
+        private string _teamHeaderPattern;
 
         public bool SendEmail
         {
@@ -20,7 +21,8 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
 
         public string TeamHeaderPattern
         {
-            get { throw new NotImplementedException(); }
+            get { return _teamHeaderPattern ?? "ABC,DEF,GHIJ,KLMN,OPQR,STUV,WXYZ"; }
+            set { _teamHeaderPattern = value; }
         }
 
         public int PageSize

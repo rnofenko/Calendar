@@ -17,13 +17,15 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
 
         public IQueryable<User> Load(UserFilter filter)
         {
+            var stringComparisonOption = StringComparison.OrdinalIgnoreCase;
+
             var query = Load();
             
             if (filter.EmailOrFullName != null)
             {
                 foreach (var name in filter.EmailOrFullName)
                 {
-                    query = query.Where(x => x.Email.Contains(name, StringComparison.OrdinalIgnoreCase) || x.FullName.Contains(name, StringComparison.OrdinalIgnoreCase));
+                    query = query.Where(x => x.Email.Contains(name, stringComparisonOption) || x.FullName.Contains(name, stringComparisonOption));
                 }
             }
 

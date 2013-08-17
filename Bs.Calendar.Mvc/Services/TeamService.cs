@@ -93,9 +93,9 @@ namespace Bs.Calendar.Mvc.Services
 
         public TeamsVm RetreiveList(TeamFilterVm filterVm) 
         {
-            updatePagingData(filterVm);
             var filter = filterVm.Map();
             var teams = _unit.Team.Load(filter);
+            updatePagingData(filterVm, teams);
 
             return new TeamsVm 
             {
@@ -104,10 +104,11 @@ namespace Bs.Calendar.Mvc.Services
             };
         }
 
-        private void updatePagingData(TeamFilterVm filter) 
+        private void updatePagingData(TeamFilterVm filter, IQueryable<Team> teams)
         {
-            filter.TotalPages = PageCounter.GetTotalPages(_unit.Team.Load().WhereIf(filter.SearchString.IsNotEmpty(), x => x.Name.Contains(filter.SearchString)).Count(), 
-                Config.Instance.PageSize);
+            var pageSize = Config.Instance.PageSize;
+
+            filter.TotalPages = PageCounter.GetTotalPages(teams.Count(), pageSize);
             filter.Page = PageCounter.GetRangedPage(filter.Page, filter.TotalPages);
         }
 

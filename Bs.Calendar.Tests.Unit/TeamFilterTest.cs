@@ -9,6 +9,8 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Mvc.ViewModels.Teams;
+using Bs.Calendar.Rules;
 using Bs.Calendar.Tests.Unit.FakeObjects;
 using FluentAssertions;
 using Moq;
@@ -26,6 +28,15 @@ namespace Bs.Calendar.Tests.Unit
         [TestFixtureSetUp]
         public void Setup()
         {
+            DiMvc.Register();
+
+            Ioc.RegisterType<IConfig, FakeConfig>();
+            Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
+            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
+
+            _repoUnit = new RepoUnit();
+            Ioc.RegisterInstance<RepoUnit>(_repoUnit);
+
             _teams = new List<Team>
             {
                 new Team {Name = ".NET", Description = ".NET team"},
@@ -33,73 +44,72 @@ namespace Bs.Calendar.Tests.Unit
                 new Team {Name = ".C++", Description = ".C++ team"}
             };
 
-            DiMvc.Register();
-            Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
+            _teams.ForEach(_repoUnit.Team.Save);
 
-            _repoUnit = new RepoUnit();
-            _teams.ForEach(team => _repoUnit.Team.Save(team));
-
-            Ioc.RegisterInstance<RepoUnit>(_repoUnit);
-            _teamService = Ioc.Resolve<TeamService>();
+            _teamService = new TeamService(_repoUnit);
+            Ioc.RegisterInstance<TeamService>(_teamService);
         }
 
 
-        //[Test]
-        //public void Should_Return_Team_When_Filter_By_Name() 
-        //{
-        //    //arrange
-        //    var pagingVm = new PagingVm { SearchStr = _teams[0].Name };
+        [Test]
+        public void Should_return_team_When_filter_by_name_of_existing_team()
+        {
+            //arrange
+            var testedTeam = _teams[0];
+            var filterVm = new TeamFilterVm { SearchString = testedTeam.Name };
 
-        //    //act
-        //    var teams = _teamService.RetreiveList(pagingVm).Teams;
+            var expectedList = new[] { testedTeam };
+            
+            //act
+            var teams = _teamService.RetreiveList(filterVm).Teams;
 
-        //    //assert
-        //    teams.Count().ShouldBeEquivalentTo(1);
-        //    teams.First().Name.ShouldBeEquivalentTo(pagingVm.SearchStr);
-        //}
+            //assert
+            teams.ShouldAllBeEquivalentTo(expectedList);
+        }
 
-        //[Test]
-        //public void Should_Return_Many_Teams_When_Filter_By_Similar_Name() 
-        //{
-        //    //arrange
-        //    var pagingVm = new PagingVm { SearchStr = "." };
+        [Test,
+        TestCase(".")]
+        public void Should_return_many_teams_When_filter_by_nonempty_similar_name(string name)
+        {
+            //arrange
+            var filterVm = new TeamFilterVm { SearchString = name };
 
-        //    //act
-        //    var teams = _teamService.RetreiveList(pagingVm).Teams;
+            //act
+            var teams = _teamService.RetreiveList(filterVm).Teams;
 
-        //    //assert
-        //    teams.Count().ShouldBeEquivalentTo(_teams.Count);
-        //}
+            //assert
+            teams.ShouldAllBeEquivalentTo(_teams);
+        }
 
+        [Test,
+        TestCase("ThisTeamDoesn'tExists")]
+        public void Should_return_no_team_When_filter_by_nonexistent_not_empty_name(string searchString)
+        {
+            //arrange
+            var filterVm = new TeamFilterVm { SearchString = searchString };
 
-        //[Test]
-        //public void Should_Return_No_Team_When_Filter_By_Nonexistent_Name() 
-        //{
-        //    //arrange
-        //    var pagingVm = new PagingVm { SearchStr = "PROLOG" };
+            //act
+            var teams = _teamService.RetreiveList(filterVm).Teams;
 
-        //    //act
-        //    var teams = _teamService.RetreiveList(pagingVm).Teams;
+            //assert
+            teams.Should().BeEmpty();
+        }
 
-        //    //assert
-        //    teams.Count().ShouldBeEquivalentTo(0);
-        //}
+        [Test,
+        TestCase(null),
+        TestCase(""),
+        TestCase(" "),
+        TestCase("   ")]
+        public void Should_Return_All_Teams_When_Filter_By_Empty_String(string searchString)
+        {
+            //arrange
+            var filterVm = new TeamFilterVm { SearchString = searchString };
 
+            //act
+            var teams = _teamService.RetreiveList(filterVm).Teams;
 
-        //[Test]
-        //public void Should_Return_All_Teams_When_Filter_By_Empty_String() 
-        //{
-        //    //arrange
-
-        //    var pagingVm = new PagingVm { SearchStr = string.Empty };
-
-        //    //act
-
-        //    var teams = _teamService.RetreiveList(pagingVm).Teams;
-
-        //    //assert
-
-        //    teams.ShouldAllBeEquivalentTo(_teams);
-        //}
+            //assert
+            teams.ShouldAllBeEquivalentTo(_teams);
+        }
     }
 }

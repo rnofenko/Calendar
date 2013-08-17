@@ -9,7 +9,8 @@ namespace Bs.Calendar.Rules
             return (int)Math.Ceiling((decimal)count / pageSize);
         }
 
-        public static int GetRangedPage(int page, int totalPages) {
+        public static int GetRangedPage(int page, int totalPages)
+        {
             return page <= 1 ? 1 : page > totalPages ? totalPages : page;
         }
     }
