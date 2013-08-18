@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+using Bs.Calendar.Models;
+using Bs.Calendar.Models.Bases;
+
+namespace Bs.Calendar.Mvc.ViewModels.Home
+{
+    public class PersonalEventVm
+    {
+        public PersonalEventVm(CalendarEvent calendarEvent)
+        {
+            
+        }
+
+        public int EventId { get; set; }
+
+        [Required(ErrorMessage = "Title is required!"),
+        StringLength(BaseEntity.LENGTH_NAME),
+        Display(Name = "Title")]
+        public string Title { get; set; }
+
+        [Required(ErrorMessage = "Description is required!"),
+        Display(Name = "Description")]
+        public string Text { get; set; }
+
+        [Required(ErrorMessage = "From Date is required!"),
+        Display(Name = "Date"),
+        DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime FromDate { get; set; }
+
+        [Required(ErrorMessage = "Date is required!"),
+        Display(Name = "Date"),
+        DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime ToDate { get; set; }
+
+        [Display(Name = "Don't consider time")]
+        public bool IsAllDay { get; set; }
+    }
+}

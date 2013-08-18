@@ -1,4 +1,5 @@
 ﻿using Bs.Calendar.Models.Bases;
+using Bs.Calendar.Models.Bases;
 
 namespace Bs.Calendar.Models
 {

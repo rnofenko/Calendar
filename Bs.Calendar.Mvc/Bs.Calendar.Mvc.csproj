@@ -206,6 +206,8 @@
   <ItemGroup>
     <Content Include="Content\Calendar\Calendar.css" />
     <Content Include="Content\gumby\gumby.css" />
+    <Content Include="Content\jquery.timepicker\lib\base.css" />
+    <Content Include="Content\jquery.timepicker\jquery.timepicker.css" />
     <Content Include="Content\Layout\fonts.css" />
     <Content Include="Content\Rooms\ColorPicker.css" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -235,6 +237,9 @@
     <Content Include="Scripts\Gumby\ui\gumby.toggleswitch.js" />
     <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
     <Content Include="Scripts\Home\calendar.js" />
+    <Content Include="Scripts\jquery.timepicker\lib\base.js" />
+    <Content Include="Scripts\jquery.timepicker\lib\datepair.js" />
+    <Content Include="Scripts\jquery.timepicker\jquery.timepicker.min.js" />
     <Content Include="Scripts\Knockout\knockout-2.3.0.js" />
     <Content Include="Scripts\Knockout\knockout.mapping-latest.js" />
     <Content Include="Scripts\Layout\list-view.js" />
@@ -271,6 +276,7 @@
     <Compile Include="ViewModels\BookHistoryVm.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\AccountVm.cs" />
+    <Compile Include="ViewModels\Home\PersonalEventVm.cs" />
     <Compile Include="ViewModels\RegisterVm.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />
@@ -373,6 +379,7 @@
     <Content Include="Views\Shared\ColumnUserList.cshtml" />
     <Content Include="Views\Book\BookHistory.cshtml" />
     <Content Include="Views\Book\Details.cshtml" />
+    <Content Include="Views\Home\EditPersonalEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

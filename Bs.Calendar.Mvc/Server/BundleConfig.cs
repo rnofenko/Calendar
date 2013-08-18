@@ -13,7 +13,10 @@ namespace Bs.Calendar.Mvc.Server
                 "~/Scripts/jquery.validate.min.js",
                 "~/Scripts/jquery.validate.unobtrusive.min.js",
                 "~/Scripts/jquery.unobtrusive-ajax.min.js"));
-            
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery.timepicker").Include(
+                "~/Scripts/jquery.timepicker/jquery.timepicker.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/Gumby").Include(
                 "~/Scripts/Gumby/gumby.min.js"));
 
@@ -38,11 +41,13 @@ namespace Bs.Calendar.Mvc.Server
             BundleTable.Bundles.Add(scripts);
 
             var css = new Bundle("~/Content/css", new CssMinify());
+            css.Include("~/Content/");
             css.Include("~/Content/gumby/gumby.css");
             css.Include("~/Content/Rooms/ColorPicker.css");
             css.Include("~/Content/Users/RoleStateFilterWindow.css");
             css.Include("~/Content/Layout/layout.css");
             css.Include("~/Content/Teams/TeamEdit.css");
+            css.Include("~/Content/jquery.timepicker/jquery.timepicker.css");
             BundleTable.Bundles.Add(css);
         }
     }
