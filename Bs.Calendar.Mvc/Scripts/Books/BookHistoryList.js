@@ -61,7 +61,6 @@ function BookHistoryVm(param)
     self.show = function ()
     {
         self.showAdd(true);
-        self.showList(false);
     };
     $("#SaveHistoryButton").on("click", function ()
     {

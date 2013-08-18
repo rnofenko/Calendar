@@ -35,7 +35,7 @@
                 <legend>
                     <h4>@bookTitle</h4>
                 </legend>
-                
+
                 <div class="field">
                     @Html.LabelFor(model => model.BookCode, new { @class = "inline three columns" })
                     @Html.TextBoxFor(model => model.BookCode, new { @class = "wide text input" })
@@ -74,13 +74,7 @@
                         data-bind="click: show">
                         <a href="#">Add</a>
                     </div>
-
-                    <div data-bind="visible: showAdd">
-                        @Html.Partial("AddBookHistory")
-                    </div>
-                    <div data-bind="visible: showList">
-                        @Html.Partial("BookHistoryList")
-                    </div>
+                    @Html.Partial("BookHistory")
                 </div>
             }
         </div>
