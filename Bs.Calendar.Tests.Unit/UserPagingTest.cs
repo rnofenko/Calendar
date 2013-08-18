@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
@@ -21,7 +22,7 @@ namespace Bs.Calendar.Tests.Unit
     [TestFixture]
     class UserPagingTest
     {
-        private IUserRepository _repository;
+        private RepoUnit _repository;
         private UserService _userService;
         private FakeConfig _config;
 
@@ -30,16 +31,13 @@ namespace Bs.Calendar.Tests.Unit
         [TestFixtureSetUp]
         public void SetUpFixture()
         {
-            DiMvc.Register();
-
-            Ioc.RegisterType<IConfig, FakeConfig>();
-            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
+            FakeDi.Register();
 
             _config = Config.Instance as FakeConfig;
 
             //Create and populate repository instance
-            Ioc.RegisterInstance<IUserRepository>(new FakeUserRepository());
-            _repository = Ioc.Resolve<IUserRepository>();
+            _repository = new RepoUnit();
+            Ioc.RegisterInstance<RepoUnit>(_repository);
 
             _users = new List<User>
             {
@@ -49,9 +47,10 @@ namespace Bs.Calendar.Tests.Unit
                 new User {Email = "acbd@gmail.com", FirstName = "Alex", LastName = "Sinov", Role = Roles.Simple, ApproveState = ApproveStates.Approved, Live = LiveStatuses.Active}
             };
 
-            _users.ForEach(_repository.Save);
+            _users.ForEach(_repository.User.Save);
 
-            _userService = Ioc.Resolve<UserService>();
+            _userService = new UserService(_repository, Ioc.Resolve<ContactService>());
+            Ioc.RegisterInstance<UserService>(_userService);
         }
 
         [Test]

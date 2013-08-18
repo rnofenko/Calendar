@@ -25,14 +25,12 @@ namespace Bs.Calendar.Tests.Unit
         private IUserRepository _repository;
 
         private List<User> _users;
+        private FakeConfig _config;
 
         [TestFixtureSetUp]
         public void SetUpFixture()
         {
-            DiMvc.Register();
-
-            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
-            Ioc.RegisterType<IConfig, FakeConfig>();
+            FakeDi.Register();
 
             _repository = new FakeUserRepository();
             Ioc.RegisterInstance<IUserRepository>(_repository);
@@ -59,6 +57,9 @@ namespace Bs.Calendar.Tests.Unit
             _repository.Dispose();
 
             _users.ForEach(_repository.Save);
+
+            _config = Config.Instance as FakeConfig;
+            _config.PageSize = _users.Count;
         }
 
         [Test]
@@ -121,11 +122,11 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         [Test]
-        public void Can_Create_Users()
+        public void Should_create_user()
         {
-
             //arrange
             var testUserVm = new UserEditVm { Email = "0000@gmail.com" };
+            _config.PageSize = _users.Count + 1;
 
             //act
             _userController.Create(testUserVm);

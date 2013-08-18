@@ -29,22 +29,19 @@ namespace Bs.Calendar.Tests.Unit
         [SetUp]
         public void SetUp()
         {
+            FakeDi.Register();
+
             _users = new List<User>()
             {
-                new User {Id = 1, Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.Simple, Live = LiveStatuses.Active},
-                new User {Id = 2, Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.Simple, Live = LiveStatuses.Active},
-                new User {Id = 3, Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.Simple, Live = LiveStatuses.Active}
+                new User { Email = "12345@gmail.com", FirstName = "Saveli", LastName = "Bondini", Role = Roles.Simple, Live = LiveStatuses.Active },
+                new User { Email = "5678@gmail.com", FirstName = "Dima", LastName = "Rossi", Role = Roles.Simple, Live = LiveStatuses.Active },
+                new User { Email = "9999@gmail.com", FirstName = "Dima", LastName = "Prohorov", Role = Roles.Simple, Live = LiveStatuses.Active }
             };
 
-            DiMvc.Register();
-
-            Ioc.RegisterType<IEmailProvider, StandardEmailProvider>();
-            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
-
             _repoUnit = new RepoUnit();
-            _users.ForEach(u => _repoUnit.User.Save(u));
-
             Ioc.RegisterInstance<RepoUnit>(_repoUnit);
+
+            _users.ForEach(_repoUnit.User.Save);
 
             _accountService = Ioc.Resolve<AccountService>();
         }

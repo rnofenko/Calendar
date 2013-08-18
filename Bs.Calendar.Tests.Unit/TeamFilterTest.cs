@@ -25,14 +25,12 @@ namespace Bs.Calendar.Tests.Unit
         private List<Team> _teams;
         private RepoUnit _repoUnit;
 
+        private FakeConfig _config;
+
         [TestFixtureSetUp]
         public void Setup()
         {
-            DiMvc.Register();
-
-            Ioc.RegisterType<IConfig, FakeConfig>();
-            Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
-            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
+            FakeDi.Register();
 
             _repoUnit = new RepoUnit();
             Ioc.RegisterInstance<RepoUnit>(_repoUnit);
@@ -45,6 +43,9 @@ namespace Bs.Calendar.Tests.Unit
             };
 
             _teams.ForEach(_repoUnit.Team.Save);
+
+            _config = Config.Instance as FakeConfig;
+            _config.PageSize = _teams.Count;
 
             _teamService = new TeamService(_repoUnit);
             Ioc.RegisterInstance<TeamService>(_teamService);

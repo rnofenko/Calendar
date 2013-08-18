@@ -9,6 +9,8 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Mvc.ViewModels.Teams;
+using Bs.Calendar.Rules;
 using Bs.Calendar.Tests.Unit.FakeObjects;
 using FluentAssertions;
 using Moq;
@@ -23,9 +25,15 @@ namespace Bs.Calendar.Tests.Unit
         private List<Team> _teams;
         private RepoUnit _repoUnit;
 
+        private FakeConfig _config;
+
         [TestFixtureSetUp]
         public void Setup()
         {
+            FakeDi.Register();
+
+            _config = Config.Instance as FakeConfig;
+
             _teams = new List<Team>
             {
                 new Team {Name = ".NET", Description = ".NET team"},
@@ -34,84 +42,92 @@ namespace Bs.Calendar.Tests.Unit
                 new Team {Name = ".D", Description = ".D team"}
             };
 
-            DiMvc.Register();
-            Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
-
             _repoUnit = new RepoUnit();
-            _teams.ForEach(team => _repoUnit.Team.Save(team));
+            _teams.ForEach(_repoUnit.Team.Save);
 
-            Ioc.RegisterInstance<RepoUnit>(_repoUnit);
-            _teamService = Ioc.Resolve<TeamService>();
+            _teamService = new TeamService(_repoUnit);
+            Ioc.RegisterInstance<TeamService>(_teamService);
         }
 
-        //[Test]
-        //public void Can_Paginate_Teams()
-        //{
-        //    //arrange
+        [Test]
+        public void Can_Paginate_Teams()
+        {
+            //arrange
+            _config.PageSize = 2;
 
-        //    _teamService.PageSize = 2;
+            var expectedPage1Content = new[] {_teams[0], _teams[1]};
+            var expectedPage2Content = new[] {_teams[2], _teams[3]};
 
-        //    //act
+            //act
+            var teamPage1 = _teamService.RetreiveList(new TeamFilterVm { Page = 1 }).Teams;
+            var teamPage2 = _teamService.RetreiveList(new TeamFilterVm { Page = 2 }).Teams;
 
-        //    var teamPage1 = _teamService.RetreiveList(new PagingVm { Page = 1 }).Teams;
-        //    var teamPage2 = _teamService.RetreiveList(new PagingVm { Page = 2 }).Teams;
+            //assert
+            teamPage1.ShouldAllBeEquivalentTo(expectedPage1Content);
+            teamPage2.ShouldAllBeEquivalentTo(expectedPage2Content);
+        }
 
-        //    //assert
+        [Test,
+        TestCase("Name", new[] { ".C++", ".D", ".NET", ".PHP" }),
+        TestCase("Name desc", new[] { ".PHP", ".NET", ".D", ".C++" })]
+        public void Should_sort_teams_by_name_field(string sortByField, string[] expectedNames)
+        {
+            //arrange
+            _config.PageSize = _teams.Count;
 
-        //    teamPage1.Count().ShouldBeEquivalentTo(_teamService.PageSize);
-        //    teamPage2.Count().ShouldBeEquivalentTo(_teamService.PageSize);
+            //act
+            var teams = _teamService.RetreiveList(new TeamFilterVm { SortByField = sortByField }).Teams;
 
-        //    teamPage1.First().ShouldBeEquivalentTo(_teams[0]);
-        //    teamPage1.Last().ShouldBeEquivalentTo(_teams[1]);
+            //assert
+            teams.Select(team => team.Name).ShouldAllBeEquivalentTo(expectedNames);
+        }
 
-        //    teamPage2.First().ShouldBeEquivalentTo(_teams[2]);
-        //    teamPage2.Last().ShouldBeEquivalentTo(_teams[3]);
-        //}
+        [Test,
+        TestCase("Name", new[] { ".C++", ".D" }, new[] { ".NET", ".PHP" }),
+        TestCase("Name desc", new[] { ".PHP", ".NET" }, new[] { ".D", ".C++" })]
+        public void Can_Sort_Teams_On_Multiple_Pages(string sortByField, string[] page1ExpectedNames, string[] page2ExpectedNames)
+        {
+            //arrange
+            _config.PageSize = 2;
 
-        //[Test]
-        //public void Can_Sort_Teams()
-        //{
-        //    //arrange
-        //    _teamService.PageSize = _teams.Count;
+            //act
+            var teamPage1 = _teamService.RetreiveList(new TeamFilterVm { SortByField = sortByField, Page = 1 }).Teams;
+            var teamPage2 = _teamService.RetreiveList(new TeamFilterVm { SortByField = sortByField, Page = 2 }).Teams;
 
-        //    //act
-        //    var teams = _teamService.RetreiveList(new PagingVm { SortByStr = "Name", Page = 1 }).Teams;
+            //assert
+            teamPage1.Select(team => team.Name).ShouldAllBeEquivalentTo(page1ExpectedNames);
+            teamPage2.Select(team => team.Name).ShouldAllBeEquivalentTo(page2ExpectedNames);
+        }
 
-        //    //assert
-        //    teams.Count().ShouldBeEquivalentTo(_teamService.PageSize);
-        //    teams.First().ShouldBeEquivalentTo(_teams[2]);
-        //    teams.Last().ShouldBeEquivalentTo(_teams[1]);
-        //}
+        [Test,
+        TestCase(".NET", "Name", 2, 1, new[] { ".NET" }),
+        TestCase(".NET", "Name", 2, 2, new string[] {}),
+        TestCase(".NET", "Name desc", 2, 1, new[] { ".NET" }),
+        TestCase(".NET", "Name desc", 2, 2, new string[] { }),
+        TestCase(".", "Name", 1, 1, new[] { ".C++" }),
+        TestCase(".", "Name", 2, 1, new[] { ".C++", ".D" }),
+        TestCase(".", "Name", 3, 1, new[] { ".C++", ".D", ".NET" }),
+        TestCase(".", "Name", 4, 1, new[] { ".C++", ".D", ".NET", ".PHP" }),
+        TestCase(".", "Name", 1, 2, new[] { ".D" }),
+        TestCase(".", "Name", 2, 2, new[] { ".NET", ".PHP" }),
+        TestCase(".", "Name", 3, 2, new[] { ".PHP" }),
+        TestCase(".", "Name", 4, 2, new string[] {})]
+        public void Can_Paginate_Sort_And_Search_Teams(string searchString, string sortByField, int pageSize, int lookupPage, string[] expectedNames)
+        {
+            //arrange
+            _config.PageSize = pageSize;
+            var filterVm = new TeamFilterVm
+                               {
+                                   SearchString = searchString,
+                                   SortByField = sortByField,
+                                   Page = lookupPage
+                               };
 
-        //[Test]
-        //public void Can_Sort_Teams_On_Multiple_Pages() {
-        //    //arrange
-        //    _teamService.PageSize = 2;
+            //act
+            var teams = _teamService.RetreiveList(filterVm).Teams;
 
-        //    //act
-        //    var teamPage1 = _teamService.RetreiveList(new PagingVm { SortByStr = "Name", Page = 1 }).Teams;
-        //    var teamPage2 = _teamService.RetreiveList(new PagingVm { SortByStr = "Name", Page = 2 }).Teams;
-
-        //    //assert
-        //    teamPage1.First().ShouldBeEquivalentTo(_teams[2]);
-        //    teamPage2.Last().ShouldBeEquivalentTo(_teams[1]);
-        //}
-
-        //[Test]
-        //public void Can_Paginate_Sort_And_Search_Teams() {
-        //    //arrange
-        //    _teamService.PageSize = 2;
-
-        //    //act
-        //    var usersPage2 = _teamService.RetreiveList(new PagingVm {
-        //        SearchStr = ".NET",
-        //        SortByStr = "Name",
-        //        Page = 2
-        //    }).Teams;
-
-        //    //assert
-        //    usersPage2.Count().ShouldBeEquivalentTo(1);
-        //    usersPage2.First().Name.ShouldBeEquivalentTo(".NET");
-        //}
+            //assert
+            teams.Select(team => team.Name).ShouldAllBeEquivalentTo(expectedNames);
+        }
     }
 }

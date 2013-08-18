@@ -6,7 +6,7 @@ namespace Bs.Calendar.Core
 {
     public class Ioc
     {
-        private static readonly IUnityContainer _container = new UnityContainer();
+        private static IUnityContainer _container = new UnityContainer();
 
         public static object Resolve(Type type)
         {
@@ -40,11 +40,9 @@ namespace Bs.Calendar.Core
             _container.RegisterInstance(type, instance);
         }
 
-        public static void BuildUp<TInjected>(object instance)
+        public static void Reset()
         {
-            //Inject existing object
-
-            _container.BuildUp(typeof (TInjected), instance);
+            _container = new UnityContainer();
         }
     }
 }

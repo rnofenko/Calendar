@@ -4,6 +4,7 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
 using Bs.Calendar.Core;
+using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Tests.Unit.FakeObjects
 {

@@ -46,27 +46,24 @@ namespace Bs.Calendar.Tests.Unit
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            DiMvc.Register();
-
-            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
-            Ioc.RegisterType<IConfig, FakeConfig>();
+            FakeDi.Register();
 
             _config = Config.Instance as FakeConfig;
 
-            var repoUnit = new FakeUserRepository();
-            Ioc.RegisterInstance<IUserRepository>(repoUnit);
+            var repoUnit = new RepoUnit();
+            Ioc.RegisterInstance<RepoUnit>(repoUnit);
 
-            _userService = Ioc.Resolve<UserService>();
+            _userService = new UserService(repoUnit, Ioc.Resolve<ContactService>());
+            Ioc.RegisterInstance<UserService>(_userService);
         }
 
         public void Setup(List<User> users)
         {
             _users = users;
 
-            var repoUnit = Ioc.Resolve <IUserRepository>();
-
-            repoUnit.Dispose();
-            _users.ForEach(repoUnit.Save);
+            var repoUnit = Ioc.Resolve <RepoUnit>();
+            repoUnit.User.Dispose();
+            _users.ForEach(repoUnit.User.Save);
 
             _config.PageSize = _users.Count;
         }
@@ -160,7 +157,6 @@ namespace Bs.Calendar.Tests.Unit
             //arrange
             Setup(_usersForRoleAndStateFilteringTest);
 
-            //var expectedResult = _users.Where((user, index) => expected.Contains(index)); //Select correct records in the right order
             var expectedResult = expected.Select(key => _usersForRoleAndStateFilteringTest[key]);
 
             //act

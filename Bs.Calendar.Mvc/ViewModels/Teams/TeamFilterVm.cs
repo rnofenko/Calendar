@@ -15,12 +15,12 @@ namespace Bs.Calendar.Mvc.ViewModels.Teams
 
         public int TotalPages { get; set; }
 
-        public TeamFilter Map() 
+        public TeamFilter Map()
         {
             var filter = new TeamFilter
             {
                 PageSize = Config.Instance.PageSize,
-                Page = Page < 1 ? 1 : Page > TotalPages ? TotalPages : Page,
+                Page = Page <= 1 ? 1 : Page,// > TotalPages ? TotalPages : Page,
                 SortByField = SortByField.IsEmpty() ? "Id" : SortByField
             };
 
