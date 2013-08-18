@@ -31,6 +31,8 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
             Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
             Ioc.RegisterType<IBookRepository, BookRepository>();
             Ioc.RegisterType<IBookHistoryRepository, BookHistoryRepository>();
+            Ioc.RegisterType<IPersonalEventRepository, PersonalEventRepository>();
+            Ioc.RegisterType<ITeamEventRepository, TeamEventRepository>();
         }
 
         private static void registerCryptography()

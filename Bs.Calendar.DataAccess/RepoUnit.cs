@@ -7,12 +7,15 @@ namespace Bs.Calendar.DataAccess
     public class RepoUnit : IDisposable
     {
         private CalendarContext _context;
+
         private IUserRepository _user;
         private IRoomRepository _room;
         private ITeamRepository _team;
         private IBookRepository _book;
         private IBookHistoryRepository _bookHistory;
-
+        private IPersonalEventRepository _personalEvent;
+        private ITeamEventRepository _teamEvent;
+        
         public IUserRepository User
         {
             get { return _user ?? (_user = getRepository<IUserRepository>()); }
@@ -36,8 +39,18 @@ namespace Bs.Calendar.DataAccess
         public IBookHistoryRepository BookHistory
         {
             get { return _bookHistory ?? (_bookHistory = getRepository<IBookHistoryRepository>()); }
-        }    
-		
+        }
+
+        public IPersonalEventRepository PersonalEvent
+        {
+            get { return _personalEvent ?? (_personalEvent = getRepository<IPersonalEventRepository>()); }
+        }
+
+        public ITeamEventRepository TeamEvent
+        {
+            get { return _teamEvent ?? (_teamEvent = getRepository<ITeamEventRepository>()); }
+        }
+
         private CalendarContext getContext()
 		{
             return _context ?? (_context = new CalendarContext());

@@ -48,7 +48,6 @@
     <Compile Include="Contact.cs" />
     <Compile Include="ContactType.cs" />
     <Compile Include="Book.cs" />
-    <Compile Include="EventStatus.cs" />
     <Compile Include="PersonalEventLink.cs" />
     <Compile Include="EventType.cs" />
     <Compile Include="LiveStatuses.cs" />
