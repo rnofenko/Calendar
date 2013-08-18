@@ -13,8 +13,8 @@ namespace Bs.Calendar.DataAccess
             var stringComparisonOption = StringComparison.OrdinalIgnoreCase;
 
             var query = Load()
+                .Where(x => x.Live == LiveStatuses.Active)
                 .WhereIf(filter.Name.IsNotEmpty(), x => x.Name.Contains(filter.Name, stringComparisonOption));
-
             query = query
                 .OrderByExpression(filter.SortByField)
                 .Skip((filter.Page - 1) * filter.PageSize)

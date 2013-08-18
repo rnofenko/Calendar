@@ -31,10 +31,10 @@
 </script>
 
 <script type="text/html" id="day-template">
-    <td data-bind="attr: { class: defineClass() }">
+    <td data-bind="attr: { class: $root.defineClass(date) }">
         <div>
             <div class="bc-day-number" data-bind="text: day"></div>
-            <div data-bind="template: { name: 'event-template', foreach: events }"></div
+            <div data-bind="template: { name: 'event-template', foreach: events }"></div>
         </div>
     </td>
 </script>

@@ -11,9 +11,8 @@
 </div>
 
 <div class="row">
-    <form data-bind="submit : onSubmit">
+    <form id="team-edit-form" data-bind="submit : onSubmit">
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(team => team.TeamId)
         <div class="centered seven columns">
             @Html.ValidationSummary()
         </div>
@@ -29,24 +28,25 @@
         </div>
         
         
-        <div class="row" data-bind="visible : showTeamUsers()">
+        <div class="row">
             <ul class="four_up tiles" data-bind="foreach : teamModel.Users">
                 <li data-bind="click: function () { UserClick('/Users/Edit', UserId())}">
-                    <span data-bind="text : Name"></span> 
+                    <span data-bind="text : FullName"></span> 
                     <i class="icon-cancel-squared pull_right" data-bind="click : $root.removeUser"></i>
                 </li>
             </ul>
         </div>
 
-        <div class="row" data-bind="visible: !showTeamUsers()">
+        <div class="row team-body invisible-onstart" data-bind="visible: !showTeamUsers() && nonTeamUsersCount() > 0">
             @Html.Partial("ColumnUserList")
+        </div>
+        <div class="warning alert text-center invisible-onstart" data-bind="visible : !showTeamUsers() && nonTeamUsersCount() == 0">
+            Sorry, no more users to add.
         </div>
         
         <br/>
         <div class="row">
-            <div class="medium info btn two columns push_one pull_right" data-bind="visible : teamModel.TeamId() != 0">
-                @Html.ActionLink("Delete", "Delete", new {id = Model.TeamId})
-            </div>
+            <div class="medium info btn two columns push_one pull_right" data-bind="visible : teamModel.TeamId() != 0, click: onDelete"><a href="#">Delete</a></div>
 
             <div class="medium default btn two two push_one columns pull_right">
                 @Html.ActionLink("Back", "Index")
@@ -62,9 +62,10 @@
 
 @section Scripts {
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             var model = new TeamUsersVm(@Html.RawJson(@Model));
             ko.applyBindings(model);
+            $(".invisible-onstart").removeClass("invisible-onstart");
         });
     </script>
 }

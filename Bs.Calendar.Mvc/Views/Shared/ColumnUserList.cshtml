@@ -1,5 +1,4 @@
 ﻿
-
 <div class="row team-header" data-bind="foreach: userColumns">
     <div data-bind="text: title"></div>
 </div>
@@ -10,7 +9,7 @@
         
 <script type="text/html" id="team-template">
     <div class="row">
-        <span data-bind="text : Name"></span>
+        <span data-bind="text : $root.shortName(FullName)"></span>
         <i data-bind="click : function() { $root.addUser($parent, $data)}" class="icon-plus-circled pull_right"></i>
     </div>
 </script>

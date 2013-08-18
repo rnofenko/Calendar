@@ -15,3 +15,7 @@
 .page-buffer {
     height: 60px;
 }
+
+.invisible-onstart {
+    display: none;
+}

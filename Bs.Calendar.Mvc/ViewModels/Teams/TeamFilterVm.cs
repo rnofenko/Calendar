@@ -15,17 +15,16 @@ namespace Bs.Calendar.Mvc.ViewModels.Teams
 
         public int TotalPages { get; set; }
 
-        public TeamFilter Map()
+        public TeamFilter Map() 
         {
-            var filter = new TeamFilter
+            var filter = new TeamFilter() 
             {
                 PageSize = Config.Instance.PageSize,
-                Page = Page <= 1 ? 1 : Page,// > TotalPages ? TotalPages : Page,
-                SortByField = SortByField.IsEmpty() ? "Id" : SortByField
+                Page = Page,
+                SortByField = SortByField.IsEmpty() ? "Id" : SortByField, 
             };
 
-            if (SearchString.IsNotEmpty())
-            {
+            if (SearchString.IsNotEmpty()) {
                 SearchString = Regex.Replace(SearchString.Trim(), @"\s+", " ").ToLower();
                 filter.Name = SearchString;
             }

@@ -35,5 +35,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Teams
         public List<TeamUserVm> Users { get; set; } 
 
         public string HeaderPattern { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

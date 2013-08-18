@@ -46,6 +46,11 @@ namespace Bs.Calendar.Mvc.Services
 
         public List<EventVm> GetEvents(DateTime from, DateTime to)
         {
+            return getBirthdayEvents(from, to);
+        }
+
+        private List<EventVm> getBirthdayEvents(DateTime from, DateTime to)
+        {
             var users = _rules.LoadUsersByBirthday(from, to);
             return users.Select(u => new EventVm { Date = u.BirthDate.Value, Text = u.LastName }).ToList();
         }
