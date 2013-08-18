@@ -23,11 +23,11 @@ namespace Bs.Calendar.Tests.Unit
         [SetUp]
         public void SetUp()
         {
-            DiMvc.Register();
-            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
+            FakeDi.Register();
 
             _repoUnit = new RepoUnit();
             _rules = new UsersRules(_repoUnit);
+
             _generator = new SequentialGenerator<DateTime> { Direction = GeneratorDirection.Ascending };
         }
 

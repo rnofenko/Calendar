@@ -28,7 +28,7 @@ namespace Bs.Calendar.DataAccess
                 }
             }
 
-            query
+            query = query
                 .WhereIf(filter.Roles > 0 && filter.Roles < Roles.All, x => (x.Role & filter.Roles) > 0)
                 .WhereIf(filter.LiveStatuses > 0 && filter.LiveStatuses < LiveStatuses.All,
                          x => (x.Live & filter.LiveStatuses) > 0)

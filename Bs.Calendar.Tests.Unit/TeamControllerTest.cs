@@ -30,11 +30,7 @@ namespace Bs.Calendar.Tests.Unit
         [TestFixtureSetUp]
         public void SetUpFixture()
         {
-            DiMvc.Register();
-
-            Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
-            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
-            Ioc.RegisterType<IConfig, FakeConfig>();
+            FakeDi.Register();
 
             var team = new Team
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Rules.Emails;

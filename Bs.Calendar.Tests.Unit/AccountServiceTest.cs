@@ -23,31 +23,24 @@ namespace Bs.Calendar.Tests.Unit
         private AccountService _accountService;
         private RepoUnit _repoUnit;
 
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
-            Ioc.RegisterInstance<RepoUnit>(new RepoUnit());
-        }
-
         [SetUp]
         public void SetUp()
         {
+            FakeDi.Register();
+
             var users = new List<User>
             {
                 new User { Email = "12345@gmail.com", FullName = "Saveli Bondini", FirstName = "Saveli", 
                     LastName = "Bondini", BirthDate = DateTime.Now, Role = Roles.Simple, Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved, Contacts = new List<Contact>()},
                     
                 new User { Email = "00000@gmail.com", FullName = "Oleg Shepelev", FirstName = "Oleg", 
-                    LastName = "Shepelev", BirthDate = DateTime.Now, Role = Roles.Simple, Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved, Contacts = new List<Contact>()},
+                    LastName = "Shepelev", BirthDate = DateTime.Now, Role = Roles.Simple, Live = LiveStatuses.Active, ApproveState = ApproveStates.NotApproved, Contacts = new List<Contact>()}
             };
-
-            DiMvc.Register();
-            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
 
             _repoUnit = new RepoUnit();
             Ioc.RegisterInstance<RepoUnit>(_repoUnit);
 
-            users.ForEach(user => _repoUnit.User.Save(user));
+            users.ForEach(_repoUnit.User.Save);
 
             _accountService = Ioc.Resolve<AccountService>();
         }

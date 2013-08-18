@@ -35,7 +35,6 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
 
         private static void registerCryptography()
         {
-            Ioc.RegisterType<ICryptoProvider, KeccakCryptoProvider>();
             Ioc.RegisterType<ICryptoProvider, SimpleCryptoProvider>();
             Ioc.RegisterType<ISaltProvider, RandomSaltProvider>();
         }

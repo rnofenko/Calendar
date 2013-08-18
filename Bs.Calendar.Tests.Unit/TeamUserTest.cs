@@ -22,10 +22,7 @@ namespace Bs.Calendar.Tests.Unit
         [SetUp]
         public void SetUp()
         {
-            DiMvc.Register();
-
-            Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
-            Ioc.RegisterType<IUserRepository, FakeUserRepository>();
+            FakeDi.Register();
 
             _unit = new RepoUnit();
             Ioc.RegisterInstance<RepoUnit>(_unit);

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
+using Bs.Calendar.Tests.Unit.FakeObjects;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -20,6 +22,8 @@ namespace Bs.Calendar.Tests.Unit
         [TestFixtureSetUp]
         public void Setup()
         {
+            FakeDi.Register();
+
             _rooms = new List<Room>
             {
                 new Room {Name = "First room", Color = 1, NumberOfPlaces = 78},
@@ -30,9 +34,8 @@ namespace Bs.Calendar.Tests.Unit
             var mockRepository = new Mock<IRoomRepository>();
             mockRepository.Setup(m => m.Load()).Returns(_rooms.AsQueryable());
 
-            DiMvc.Register();
-            Core.Ioc.RegisterInstance<IRoomRepository>(mockRepository.Object);
-            _roomService = Core.Ioc.Resolve<RoomService>();
+            Ioc.RegisterInstance<IRoomRepository>(mockRepository.Object);
+            _roomService = Ioc.Resolve<RoomService>();
         }
 
         
@@ -46,7 +49,7 @@ namespace Bs.Calendar.Tests.Unit
         public void Find_Should_Return_Correct_Elements_Count_Test(string searchStr, int resultCount)
         {
             var rooms = _roomService.Find(searchStr).Rooms.ToList();
-            rooms.Count.Should().Be(resultCount);
+            rooms.Should().HaveCount(resultCount);
         }
 
         [Test]
@@ -56,7 +59,7 @@ namespace Bs.Calendar.Tests.Unit
         public void Find_Should_Return_Correct_Room(string searchStr, string roomName)
         {
             var rooms = _roomService.Find(searchStr).Rooms.ToList();
-            rooms.Count.Should().Be(1);
+            rooms.Should().HaveCount(1);
             rooms[0].Name.Should().Be(roomName);
         }
     }
