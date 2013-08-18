@@ -21,7 +21,7 @@ namespace Bs.Calendar.Mvc.ViewModels
         public int BookId { get; set; }
 
         [Required(ErrorMessage = "The code of the book must be specified"),
-        Display(Name = "ISBN")]
+        Display(Name = "Code")]
         public string BookCode { get; set; }
 
         [StringLength(BaseEntity.LENGTH_NAME),
