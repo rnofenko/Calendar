@@ -44,7 +44,7 @@ namespace Bs.Calendar.Tests.Int
             _users.ForEach(user => _repoUnit.User.Save(user));
 
             var userService = new UserService(_repoUnit, null);
-            userService.PageSize = _pageSize = 1;
+            //userService.PageSize = _pageSize = 1;
 
             _usersController = new UsersController(userService);
             _usersController.ControllerContext = mock.Object;
