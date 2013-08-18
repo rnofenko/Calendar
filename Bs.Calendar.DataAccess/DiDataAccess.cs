@@ -11,6 +11,8 @@ namespace Bs.Calendar.DataAccess
             Ioc.RegisterType<ITeamRepository, TeamRepository>();
             Ioc.RegisterType<IBookRepository, BookRepository>();
             Ioc.RegisterType<IBookHistoryRepository, BookHistoryRepository>();
+            Ioc.RegisterType<IPersonalEventRepository, PersonalEventRepository>();
+            Ioc.RegisterType<ITeamEventRepository, TeamEventRepository>();
         }
     }
 }

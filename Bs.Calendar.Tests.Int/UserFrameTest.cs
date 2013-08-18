@@ -51,7 +51,7 @@ namespace Bs.Calendar.Tests.Int
 
             var service = new UserService(_repoUnit, null)
                               {
-                                  PageSize = lastRecord.Count() + _users.Count //Prevent paging
+                                  //PageSize = lastRecord.Count() + _users.Count //Prevent paging
                               };
 
             _usersController = new UsersController(service);

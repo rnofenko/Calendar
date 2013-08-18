@@ -1,8 +1,9 @@
 ﻿using System;
+using Bs.Calendar.Models.Bases;
 
 namespace Bs.Calendar.Models
 {
-    public class CalendarEvent
+    public class CalendarEvent : BaseEntity 
     {
         public string Title { get; set; }
         public string Text { get; set; }

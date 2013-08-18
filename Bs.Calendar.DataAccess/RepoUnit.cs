@@ -12,10 +12,22 @@ namespace Bs.Calendar.DataAccess
         private ITeamRepository _team;
         private IBookRepository _book;
         private IBookHistoryRepository _bookHistory;
+        private IPersonalEventRepository _personalEvent;
+        private ITeamEventRepository _teamEvent;
 
         public IUserRepository User
         {
             get { return _user ?? (_user = getRepository<IUserRepository>()); }
+        }
+
+        public IPersonalEventRepository PersonalEvent
+        {
+            get { return _personalEvent ?? (_personalEvent = getRepository<IPersonalEventRepository>()); }
+        }
+
+        public ITeamEventRepository TeamEvent
+        {
+            get { return _teamEvent ?? (_teamEvent = getRepository<ITeamEventRepository>()); }
         }
 
         public IRoomRepository Room
