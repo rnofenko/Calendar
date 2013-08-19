@@ -2,7 +2,9 @@
 
     width: 25%;
     padding: 10px;
+}
 
-    min-height: 52%;
-    max-height: 53%;
+#filter_settings {
+
+    height: 680px;
 }

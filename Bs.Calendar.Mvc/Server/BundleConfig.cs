@@ -37,7 +37,8 @@ namespace Bs.Calendar.Mvc.Server
             scripts.Include("~/Scripts/Users/UserList.js");
             scripts.Include("~/Scripts/Users/UserFrameFilter.js");
             scripts.Include("~/Scripts/Layout/list-view.js");
-            scripts.Include("~/Scripts/Home/calendar.js");
+            scripts.Include("~/Scripts/Home/Calendar.js");
+            scripts.Include("~/Scripts/Home/MeetingEvent.js");
             BundleTable.Bundles.Add(scripts);
 
             var css = new Bundle("~/Content/css", new CssMinify());

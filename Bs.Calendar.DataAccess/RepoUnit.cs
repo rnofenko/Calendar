@@ -41,16 +41,6 @@ namespace Bs.Calendar.DataAccess
             get { return _bookHistory ?? (_bookHistory = getRepository<IBookHistoryRepository>()); }
         }
 
-        public IPersonalEventRepository PersonalEvent
-        {
-            get { return _personalEvent ?? (_personalEvent = getRepository<IPersonalEventRepository>()); }
-        }
-
-        public ITeamEventRepository TeamEvent
-        {
-            get { return _teamEvent ?? (_teamEvent = getRepository<ITeamEventRepository>()); }
-        }
-
         private CalendarContext getContext()
 		{
             return _context ?? (_context = new CalendarContext());

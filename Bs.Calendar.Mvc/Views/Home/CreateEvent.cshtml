@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Create Event";
+}
+
+<div class="row">
+    <div class="centered seven columns default alert text-center">
+        <h4>@ViewBag.Title</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="twelve columns">
+        <section class="pill tabs">
+            <ul class="tab-nav">
+                <li><a href="#">Meeting Event</a></li>
+                <li><a href="#">Personal Event</a></li>
+                <li><a href="#">Company Event</a></li>
+            </ul>
+            
+            <div class="tab-content" id="meeting-event">
+                @Html.Partial("MeetingEvent")
+            </div>
+            <div class="tab-content">
+                Comming Soon....
+            </div>
+            <div class="tab-content">
+                Comming Soon Too...
+            </div>
+        </section>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            ko.applyBindings(new MeetingEventVm(), document.getElementById("meeting-event"));
+        });
+    </script>
+}
+

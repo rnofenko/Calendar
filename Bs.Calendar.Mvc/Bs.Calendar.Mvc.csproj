@@ -236,11 +236,12 @@
     <Content Include="Scripts\Gumby\ui\gumby.tabs.js" />
     <Content Include="Scripts\Gumby\ui\gumby.toggleswitch.js" />
     <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
-    <Content Include="Scripts\Home\calendar.js" />
     <Content Include="Scripts\Home\EditPersonalEvent.js" />
     <Content Include="Scripts\jquery.timepicker\lib\base.js" />
     <Content Include="Scripts\jquery.timepicker\lib\datepair.js" />
     <Content Include="Scripts\jquery.timepicker\jquery.timepicker.min.js" />
+    <Content Include="Scripts\Home\Calendar.js" />
+    <Content Include="Scripts\Home\MeetingEvent.js" />
     <Content Include="Scripts\Knockout\knockout-2.3.0.js" />
     <Content Include="Scripts\Knockout\knockout.mapping-latest.js" />
     <Content Include="Scripts\Layout\list-view.js" />
@@ -378,10 +379,12 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
     <Content Include="Views\Shared\ColumnUserList.cshtml" />
-    <Content Include="Views\Book\BookHistoryList.cshtml" />
+    <Content Include="Views\Book\BookHistory.cshtml" />
     <Content Include="Views\Book\Details.cshtml" />
-    <Content Include="Views\Book\AddBookHistory.cshtml" />
     <Content Include="Views\Home\EditPersonalEvent.cshtml" />
+    <Content Include="Views\Book\AddBookHistory.cshtml" />
+    <Content Include="Views\Home\CreateEvent.cshtml" />
+    <Content Include="Views\Home\MeetingEvent.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -206,6 +206,9 @@
   <ItemGroup>
     <Content Include="Content\Calendar\Calendar.css" />
     <Content Include="Content\gumby\gumby.css" />
+    <Content Include="Content\jquery.timepicker\lib\base.css" />
+    <Content Include="Content\jquery.timepicker\jquery.timepicker.css" />
+    <Content Include="Content\Layout\fonts.css" />
     <Content Include="Content\Rooms\ColorPicker.css" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BookController.cs" />
@@ -234,8 +237,9 @@
     <Content Include="Scripts\Gumby\ui\gumby.toggleswitch.js" />
     <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
     <Content Include="Scripts\Home\calendar.js" />
-    <Content Include="Scripts\jquery.signalR-1.0.0.js" />
-    <Content Include="Scripts\jquery.signalR-1.0.0.min.js" />
+    <Content Include="Scripts\jquery.timepicker\lib\base.js" />
+    <Content Include="Scripts\jquery.timepicker\lib\datepair.js" />
+    <Content Include="Scripts\jquery.timepicker\jquery.timepicker.min.js" />
     <Content Include="Scripts\Knockout\knockout-2.3.0.js" />
     <Content Include="Scripts\Knockout\knockout.mapping-latest.js" />
     <Content Include="Scripts\Layout\list-view.js" />
@@ -267,25 +271,24 @@
     <Compile Include="Services\MvcConfig.cs" />
     <Compile Include="Services\ValidateAjaxAttribute.cs" />
     <Compile Include="ViewModels\BookEditVm.cs" />
-<<<<<<< HEAD
-    <Compile Include="ViewModels\BookHistoryVm.cs" />
-=======
     <Compile Include="ViewModels\EventVm.cs" />
     <Compile Include="ViewModels\GenericPagingVm.cs" />
->>>>>>> 5055b71515adc8475e15df2f97506e7b4911a457
-    <Compile Include="ViewModels\PagingVm.cs" />
+    <Compile Include="ViewModels\BookHistoryVm.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\AccountVm.cs" />
+    <Compile Include="ViewModels\Home\PersonalEventVm.cs" />
     <Compile Include="ViewModels\RegisterVm.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />
-    <Compile Include="ViewModels\TeamEditVm.cs" />
-    <Compile Include="ViewModels\TeamUserVm.cs" />
-    <Compile Include="ViewModels\UsersVm.cs" />
+    <Compile Include="ViewModels\Teams\TeamEditVm.cs" />
+    <Compile Include="ViewModels\Teams\TeamFilterVm.cs" />
+    <Compile Include="ViewModels\Teams\TeamsVm.cs" />
+    <Compile Include="ViewModels\Teams\TeamUserVm.cs" />
+    <Compile Include="ViewModels\Users\UserFilterVm.cs" />
+    <Compile Include="ViewModels\Users\UsersVm.cs" />
     <Compile Include="Services\UserService.cs" />
-    <Compile Include="ViewModels\UserEditVm.cs" />
+    <Compile Include="ViewModels\Users\UserEditVm.cs" />
     <Compile Include="Services\TeamService.cs" />
-    <Compile Include="ViewModels\TeamsVm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
@@ -293,6 +296,10 @@
     <Content Include="Content\fonts\icons\entypo.eot" />
     <Content Include="Content\fonts\icons\entypo.ttf" />
     <Content Include="Content\fonts\icons\entypo.woff" />
+    <Content Include="Content\fonts\open_sans\Open Sans Bold.woff" />
+    <Content Include="Content\fonts\open_sans\Open Sans Light.woff" />
+    <Content Include="Content\fonts\open_sans\Open Sans Semibold.woff" />
+    <Content Include="Content\fonts\open_sans\Open Sans.woff" />
     <None Include="Scripts\jquery-2.0.2.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.2.js" />
     <Content Include="Scripts\jquery-2.0.2.min.js" />
@@ -307,12 +314,12 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-<<<<<<< HEAD
-    <Content Include="Scripts\Shared\moment.js" />
-=======
     <Content Include="Scripts\Teams\TeamEdit.js" />
->>>>>>> 5055b71515adc8475e15df2f97506e7b4911a457
+    <Content Include="Scripts\Shared\moment.js" />
+    <Content Include="Scripts\Teams\TeamFrameFilter.js" />
+    <Content Include="Scripts\Teams\TeamList.js" />
     <Content Include="Scripts\Users\UserContacts.js" />
+    <Content Include="Scripts\Users\UserFrameFilter.js" />
     <Content Include="Scripts\Users\UserList.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -347,7 +354,6 @@
     <Content Include="Views\Room\List.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
-    <Content Include="Views\Users\Delete.cshtml" />
     <Content Include="Views\Users\List.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
@@ -369,14 +375,15 @@
     <Content Include="Views\Book\EditorTemplates\BookEditVm.cshtml" />
     <Content Include="Views\Users\FilterSettings.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
-<<<<<<< HEAD
-    <Content Include="Views\Book\BookHistoryList.cshtml" />
-    <Content Include="Views\Book\Details.cshtml" />
-    <Content Include="Views\Book\AddBookHistory.cshtml" />
-=======
     <Content Include="Views\Home\Calendar.cshtml" />
     <Content Include="Views\Shared\ColumnUserList.cshtml" />
->>>>>>> 5055b71515adc8475e15df2f97506e7b4911a457
+    <Content Include="Views\Book\BookHistory.cshtml" />
+    <Content Include="Views\Book\Details.cshtml" />
+<<<<<<< HEAD
+=======
+    <Content Include="Views\Book\AddBookHistory.cshtml" />
+    <Content Include="Views\Home\EditPersonalEvent.cshtml" />
+>>>>>>> 8849eb43237c63bef6e8d588f16ed24c6c3e2479
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
