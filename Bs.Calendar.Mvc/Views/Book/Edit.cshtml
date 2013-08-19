@@ -97,7 +97,7 @@
         <script type="text/javascript">
             $(document).ready(function ()
             {
-                var model = new BookHistoryVm(@Html.RawJson(@Model.BookHistoryList));
+                var model = new BookHistoryList(@Html.RawJson(@Model.BookHistoryList));
                 ko.applyBindings(model);
             });
         </script>
