@@ -3,8 +3,6 @@
     var _self = this;
 
     _self.userId = source.UserId;    
-    //_self.userFullName = $.getJSON("/Users/GetUserFullName", { id: _self.userId }, function (data) { return data; });
-
     _self.userFullName = ko.observable();
     ko.computed(function ()
     {

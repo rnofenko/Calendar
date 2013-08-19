@@ -9,16 +9,16 @@
     <tbody data-bind="visible: $root.showAdd">
         <tr>
             <td>
-                <select data-bind="options: $root.peoples, optionsValue: 'peopleId', value: $root.userId, optionsText: 'peopleName'"></select>
+                <select data-bind="options: peoples, optionsValue: 'peopleId', value: userId, optionsText: 'peopleName'"></select>
             </td>
             <td>
-                <input type="date" data-bind="value: $root.takeDate"/>
+                <input type="date" data-bind="value: takeDate"/>
             </td>
             <td>
-                <input type="date" data-bind="value: $root.returnDate"/>
+                <input type="date" data-bind="value: returnDate"/>
             </td>
             <td>
-                <select data-bind="options: $root.orderDirections, value: $root.orderDirection"></select>
+                <select data-bind="options: orderDirections, value: orderDirection"></select>
             </td>
         </tr>
     </tbody>
