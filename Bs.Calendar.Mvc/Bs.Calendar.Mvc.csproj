@@ -237,6 +237,7 @@
     <Content Include="Scripts\Gumby\ui\gumby.toggleswitch.js" />
     <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
     <Content Include="Scripts\Home\calendar.js" />
+    <Content Include="Scripts\Home\EditPersonalEvent.js" />
     <Content Include="Scripts\jquery.timepicker\lib\base.js" />
     <Content Include="Scripts\jquery.timepicker\lib\datepair.js" />
     <Content Include="Scripts\jquery.timepicker\jquery.timepicker.min.js" />
@@ -381,6 +382,7 @@
     <Content Include="Views\Book\Details.cshtml" />
     <Content Include="Views\Book\AddBookHistory.cshtml" />
     <Content Include="Views\Home\EditPersonalEvent.cshtml" />
+    <Content Include="Views\Home\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

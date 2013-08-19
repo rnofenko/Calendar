@@ -1,56 +1,62 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.Home.PersonalEventVm
 
 @{
-    //ViewBag.Title = Model
+    var DoesEventExists = Model.EventId == 0;
+    
+    var legendFieldName = DoesEventExists ? "New personal event" : Model.Title;
+    var submitButtonName = DoesEventExists ? "Create" : "Update";
+    ViewBag.Title = string.Format("{0} personal event", submitButtonName);
 }
 
 <div class="row">
-    <form id="team-edit-form" data-bind="submit : onSubmit">
+    <div class="centered seven columns default alert text-center">
+        <h4>@ViewBag.Title</h4>
+    </div>
+</div>
+
+<div class="row">
+    <form data-bind="submit : onSubmit">
         @Html.AntiForgeryToken()
         <div class="centered seven columns">
             @Html.ValidationSummary()
         </div>
-
+        
         <div class="row">
-            <div class="prepend field four columns">
-                @Html.LabelFor(team => team.Name, new { @class = "adjoined" })
-                @Html.TextBoxFor(team => team.Name, new {@class = "xwide text input", data_bind = "value : teamModel.Name"})
-            </div>
+            <fieldset class="centered seven columns">
+                <legend>
+                    <h4>@legendFieldName</h4>
+                </legend>
+                
+                
+<!-- Bottom control buttons -->
+                <div class="medium secondary btn three columns">
+                    <input type="submit" value="@submitButtonName"/>
+                </div>
+
+                <div class="medium default btn push_one three columns">
+                    @Html.ActionLink("Back", "Index")
+                </div>
             
-            <div class="medium metro rounded btn warning  two columns icon-right icon-user-add pull_right" data-bind="click : clickAllUsers, visible : showTeamUsers()"><a href="#">Add Users</a></div>
-            <div class="medium metro rounded btn default two columns pull_right" data-bind="click : clickTeamUsers, visible : !showTeamUsers()"><a href="#">Team Users</a></div>
-        </div>
-        
-        
-        <div class="row">
-            <ul class="four_up tiles" data-bind="foreach : teamModel.Users">
-                <li data-bind="click: function () { UserClick('/Users/Edit', UserId())}">
-                    <span data-bind="text : FullName"></span> 
-                    <i class="icon-cancel-squared pull_right" data-bind="click : $root.removeUser"></i>
-                </li>
-            </ul>
+                @if (DoesEventExists)
+                {
+                    <div class="medium info btn three columns push_one">
+                        @*@Html.ActionLink("Delete", "Delete", new {id})*@
+                    </div>
+                }
+<!---->
+            </fieldset>
         </div>
 
-        <div class="row team-body invisible-onstart" data-bind="visible: !showTeamUsers() && nonTeamUsersCount() > 0">
-            @Html.Partial("ColumnUserList")
-        </div>
-        <div class="warning alert text-center invisible-onstart" data-bind="visible : !showTeamUsers() && nonTeamUsersCount() == 0">
-            Sorry, no more users to add.
-        </div>
-        
-        <br/>
-        <div class="row">
-            <div class="medium info btn two columns push_one pull_right" data-bind="visible : teamModel.TeamId() != 0, click: onDelete"><a href="#">Delete</a></div>
-
-            <div class="medium default btn two two push_one columns pull_right">
-                @Html.ActionLink("Back", "Index")
-            </div>
-            
-            <div class="medium secondary btn two columns pull_right">
-                <input type="submit" value=@btnName />
-            </div>
-        </div>
-        
     </form>
 </div>
 
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var viewModel = new PersonalEventVm(@Html.RawJson(Model));
+            
+        });
+
+    </script>
+}

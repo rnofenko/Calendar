@@ -10,9 +10,36 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
 {
     public class PersonalEventVm
     {
-        public PersonalEventVm(CalendarEvent calendarEvent)
+        public PersonalEventVm()
         {
             
+        }
+
+        public PersonalEventVm(CalendarEvent calendarEvent)
+        {
+            EventId = calendarEvent.Id;
+
+            Title = calendarEvent.Title;
+            Text = calendarEvent.Text;
+            
+            DateStart = calendarEvent.DateStart;
+            DateEnd = calendarEvent.DateEnd;
+            IsAllDay = calendarEvent.IsAllDay;
+        }
+
+        public CalendarEvent Map(PersonalEventVm personalEvent)
+        {
+            return new CalendarEvent
+                {
+                    Id = EventId,
+                    Title = Title,
+                    Text = Text,
+                    DateStart = DateStart,
+                    DateEnd = DateEnd,
+                    IsAllDay = IsAllDay,
+                    EventType = EventType.Personal,
+                    Room = null
+                };
         }
 
         public int EventId { get; set; }
@@ -29,12 +56,12 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
         [Required(ErrorMessage = "From Date is required!"),
         Display(Name = "Date"),
         DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime FromDate { get; set; }
+        public DateTime DateStart { get; set; }
 
         [Required(ErrorMessage = "Date is required!"),
         Display(Name = "Date"),
         DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime ToDate { get; set; }
+        public DateTime DateEnd { get; set; }
 
         [Display(Name = "Don't consider time")]
         public bool IsAllDay { get; set; }

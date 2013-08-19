@@ -35,7 +35,6 @@ namespace Bs.Calendar.Mvc.Services
                 };
                 unit.User.Save(defaultUser);
             }
-
         }
 
         public IEnumerable<User> LoadUsers()

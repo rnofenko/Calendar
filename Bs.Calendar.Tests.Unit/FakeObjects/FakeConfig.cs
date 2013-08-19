@@ -7,7 +7,7 @@ using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Tests.Unit.FakeObjects
 {
-    class FakeConfig : IConfig
+    public class FakeConfig : IConfig
     {
         private int? _pageSize;
         private bool? _sendMail;

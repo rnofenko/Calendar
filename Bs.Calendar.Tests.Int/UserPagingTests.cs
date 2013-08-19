@@ -11,9 +11,12 @@ using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 using Bs.Calendar.Mvc.ViewModels.Users;
+using Bs.Calendar.Rules;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+
+using Bs.Calendar.Tests.Unit.FakeObjects;
 
 namespace Bs.Calendar.Tests.Int
 {
@@ -22,71 +25,66 @@ namespace Bs.Calendar.Tests.Int
     {
         private RepoUnit _repoUnit;
         private UsersController _usersController;
-        private int _pageSize;
+        private FakeConfig _config;
 
         private List<User> _users;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
+            DiMvc.Register();
+            Ioc.RegisterType<IConfig, FakeConfig>();
+
+            _config = Ioc.Resolve<IConfig>() as FakeConfig;
+
             _users = new List<User>()
                          {
                              new User { Email = "aaa@bbb.com", FullName = "aaa ddd", FirstName = "aaa", LastName = "ddd"},
                              new User { Email = "ccc@ddd.com", FullName = "aaa bbb", FirstName = "aaa", LastName = "bbb"}
                          };
 
+            _repoUnit = new RepoUnit();
+            _users.ForEach(_repoUnit.User.Save);
+
+            var userService = new UserService(_repoUnit, null);
+            Ioc.RegisterInstance<UserService>(userService);                    
+
             var mock = new Mock<ControllerContext>();
             mock.Setup(p => p.HttpContext.Session).Returns(new Mock<HttpSessionStateBase>().Object);
 
-            DiMvc.Register();
+            _usersController = new UsersController(userService) { ControllerContext = mock.Object };
 
-            _repoUnit = new RepoUnit();
-            _users.ForEach(user => _repoUnit.User.Save(user));
-
-            var userService = new UserService(_repoUnit, null);
-            //userService.PageSize = _pageSize = 1;
-
-            _usersController = new UsersController(userService);
-            _usersController.ControllerContext = mock.Object;
+            _config.PageSize = 1;
         }
 
         [TestFixtureTearDown]
         public void TearDown()
         {
-            _users.ForEach(user => _repoUnit.User.Delete(user));
+            _users.ForEach(_repoUnit.User.Delete);
         }
 
         //[Test]
         //public void Can_Paginate_Users()
         //{
         //    //act
-        //    var usersView = _usersController.List(new PagingVm(false, false, false, true, true, true) {Page = _users.Count}) as PartialViewResult;
+        //    var usersView = _usersController.List(new UserFilterVm()) as PartialViewResult;
         //    var users = usersView.Model as UsersVm;
 
         //    //assert
-        //    users.Users.Count().ShouldBeEquivalentTo(_pageSize);
+        //    users.Users.Count().ShouldBeEquivalentTo(_config.PageSize);
         //}
 
-        //[Test]
-        //public void Can_Sort_Users() 
+        //[Test,
+        //TestCase("FullName", new[] { "aaa bbb", "aaa ddd" }),
+        //TestCase("FullName desc", new[] { "aaa ddd", "aaa bbb" })]
+        //public void Should_sort_users_by_name(string sortByField, string[] expectedUsers)
         //{
-        //    //arrange
-
-        //    var user = _repoUnit.User.Load().ToList()
-        //                                    .Where(record => _users.Contains(record))
-        //                                    .OrderBy(n => n.FirstName)
-        //                                    .ThenBy(n => n.LastName)
-        //                                    .First();
-
         //    //act
-
-        //    var usersView = _usersController.List(new PagingVm(false, false, false, true, true, true) { Page = 1, SortByStr = "Name"}) as PartialViewResult;
+        //    var usersView = _usersController.List(new UserFilterVm { SortByField = sortByField }) as PartialViewResult;
         //    var users = usersView.Model as UsersVm;
 
         //    //assert
-
-        //    users.Users.Count().ShouldBeEquivalentTo(_pageSize);
-        //    users.Users.First().Email.ShouldBeEquivalentTo(user.Email);
+        //    users.Users.Select(u => u.FullName).ShouldAllBeEquivalentTo(expectedUsers);
         //}
     }
 }
