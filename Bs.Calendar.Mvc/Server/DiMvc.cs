@@ -16,7 +16,7 @@ namespace Bs.Calendar.Mvc.Server
             Ioc.RegisterType<IConfig, MvcConfig>();
             Ioc.RegisterType<IControllerFactory, UnityControllerFactory>();
 
-            Ioc.RegisterType<ICryptoProvider, KeccakCryptoProvider>();
+            Ioc.RegisterType<ICryptoProvider, SimpleCryptoProvider>();
             Ioc.RegisterType<ISaltProvider, RandomSaltProvider>();
             
             Ioc.RegisterType<IEmailProvider, StandardEmailProvider>();
