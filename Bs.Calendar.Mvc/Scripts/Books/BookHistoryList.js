@@ -17,7 +17,7 @@
     _self.orderDirection = source.OrderDirection == 1 ? "Take" : "Return";
 }
 
-function People(id, name)
+function User(id, name)
 {
     var self = this;
 
@@ -40,7 +40,7 @@ function BookHistoryList(param)
             {
                 $.each(data, function (index, item)
                 {
-                    self.peoples.push(new People(index, item));
+                    self.peoples.push(new User(index, item));
                 });
             });
     }, this);
