@@ -2,29 +2,7 @@
     cursor: pointer;
 }
 
-.team-body {
-    border: 1px solid #d8d8d8;
-    border-radius: 4px 4px 0 0;
-}
-
-.team-header > div, .team-column > div {
-    text-align: center;
-    width: 14.28571%;
-    min-height: 1px;
-    float: left;
-}
-
-.team-column .row {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-.team-header {
-    border-bottom: 1px solid #d8d8d8;
-    padding: 3px 0 3px 0;
-}
-
-ul.tiles.four_up > li {
+.team-edit.tiles > li {
     margin-bottom: 15px;
     background: #f2f2f2;
     height: 38px;
@@ -34,6 +12,6 @@ ul.tiles.four_up > li {
     line-height: 38px;
 }
 
-ul.tiles.four_up > li:hover {
+.team-edit.tiles > li:hover {
     background: #f9f9f9;
 }

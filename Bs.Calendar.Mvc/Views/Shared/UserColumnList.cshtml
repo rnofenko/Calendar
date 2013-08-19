@@ -1,0 +1,20 @@
+﻿<div class="row column-list-body invisible-onstart" data-bind="visible: userColumnVm.showColumnUserList() && userColumnVm.columnUsersCount() > 0">
+    <div class="row column-header" data-bind="foreach: userColumnVm.userColumns">
+        <div data-bind="text: title"></div>
+    </div>
+        
+    <div class="row user-column" data-bind="foreach: userColumnVm.userColumns">
+        <div data-bind="template: { name: 'team-template', foreach: allUsers }"></div>
+    </div>
+</div>
+
+<div class="warning alert text-center invisible-onstart" data-bind="visible: userColumnVm.showColumnUserList() && userColumnVm.columnUsersCount() == 0">
+    Sorry, no more users to add.
+</div>        
+
+<script type="text/html" id="team-template">
+    <div class="row">
+        <span data-bind="text : $parent.shortName(FullName)"></span>
+        <i data-bind="click: function () { $root.userColumnVm.removeUser($parent, $data) }" class="icon-plus-circled pull_right"></i>
+    </div>
+</script>

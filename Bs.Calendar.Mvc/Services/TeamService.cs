@@ -6,6 +6,7 @@ using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels.Teams;
+using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Services
@@ -19,10 +20,10 @@ namespace Bs.Calendar.Mvc.Services
             _unit = repoUnit;
         }
 
-        public IEnumerable<TeamUserVm> GetAllUsers(int teamId)
+        public IEnumerable<UserVm> GetAllUsers(int teamId)
         {
             var users = _unit.User.Load(u => u.Teams.All(t => t.Id != teamId) && u.Live == LiveStatuses.Active).ToList();
-            return users.Select(u => new TeamUserVm(u)).ToList();
+            return users.Select(u => new UserVm(u)).ToList();
         }
 
         public Team GetTeam(int teamId) 
@@ -68,7 +69,7 @@ namespace Bs.Calendar.Mvc.Services
             _unit.Team.Save(team);
         }
 
-        private void addUsersToTeam(Team team, IEnumerable<TeamUserVm> users)
+        private void addUsersToTeam(Team team, IEnumerable<UserVm> users)
         {
             if (team.Users != null) team.Users.Clear();
             if (users == null) return;

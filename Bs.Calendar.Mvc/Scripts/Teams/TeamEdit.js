@@ -1,10 +1,4 @@
-﻿function ColumnModel(title) {
-    var self = this;
-    self.title = ko.observable(title);
-    self.allUsers = ko.observableArray();
-}
-
-function TeamModel() {
+﻿function TeamModel() {
     var self = this;
     self.TeamId = 0;
     self.Name = ko.observable();
@@ -15,49 +9,16 @@ function TeamModel() {
 function TeamUsersVm(editModel) {
     var self = this;
 
-    self.nonTeamUsersCount = ko.observable(0);
-    self.showTeamUsers = ko.observable(true);
-    self.isOtherUsersAdded = false;
-    self.userColumns = ko.observableArray();
-    self.titles = editModel.HeaderPattern.split(',');
-
     self.teamModel = ko.mapping.fromJS(editModel, TeamModel);
     if (self.teamModel.Users() == null) self.teamModel.Users = ko.observableArray();
 
-    $.each(self.titles, function (key, title) {
-        self.userColumns.push(new ColumnModel(title));
-    });
-
-    self.addUser = function (columnModel, user) {
-        columnModel.allUsers.remove(user);
-        self.teamModel.Users.push(user);
-        self.nonTeamUsersCount(self.nonTeamUsersCount() - 1);
-    };
-
-    self.removeUser = function (user) {
-        self.teamModel.Users.remove(user);
-        self.pushToColumns([user]);
-        self.nonTeamUsersCount(self.nonTeamUsersCount() + 1);
-    };
-    
-    self.getColumnsUsers = function (users, column) {
-        return $.grep(users, function (element) {
-            return new RegExp('^[' + column + ']', 'i').test(ko.unwrap(element.FullName));
-        });
-    };
-
-    self.pushToColumns = function(users) {
-        $.each(self.titles, function (key, title) {
-            $.each(self.getColumnsUsers(users, title), function (index, value) {
-                self.userColumns()[key].allUsers.push(value);
-            });
-        });
-    };
+    self.userColumnVm = new UserColumnVm(self.teamModel.Users);
+    self.isOtherUsersAdded = false;
 
     self.getOtherUsers = function () {
         $.getJSON("/Team/GetAllUsers", { teamId: self.teamModel.TeamId }, function (users) {
-            self.pushToColumns(users);
-            self.nonTeamUsersCount(self.nonTeamUsersCount() + users.length);
+            self.userColumnVm.pushToColumns(users);
+            self.userColumnVm.columnUsersCount(self.userColumnVm.columnUsersCount() + users.length);
         });
     };
 
@@ -66,16 +27,10 @@ function TeamUsersVm(editModel) {
             self.isOtherUsersAdded = true;
             self.getOtherUsers();
         }
-        self.showTeamUsers(false);
+        self.userColumnVm.showColumnUserList(true);
     };
     self.clickTeamUsers = function () {
-        self.showTeamUsers(true);
-    };
-
-    self.shortName = function(fullName) {
-        var strings = ko.unwrap(fullName).split(" ");
-        if (strings.length == 1) return strings[0];
-        return strings[0] + ' ' + strings[1].charAt(0) + '.';
+        self.userColumnVm.showColumnUserList(false);
     };
 
     self.actionUrl = function() {

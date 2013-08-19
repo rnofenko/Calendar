@@ -216,6 +216,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Content\Layout\layout.css" />
     <Content Include="Content\Layout\list-view.css" />
+    <Content Include="Content\Shared\UserColumnList.css" />
     <Content Include="Content\Teams\TeamEdit.css" />
     <Content Include="Content\Users\RoleStateFilterWindow.css" />
     <Content Include="Images\birthday_icon.png" />
@@ -284,7 +285,8 @@
     <Compile Include="ViewModels\Teams\TeamEditVm.cs" />
     <Compile Include="ViewModels\Teams\TeamFilterVm.cs" />
     <Compile Include="ViewModels\Teams\TeamsVm.cs" />
-    <Compile Include="ViewModels\Teams\TeamUserVm.cs" />
+    <Compile Include="ViewModels\Teams\TeamVm.cs" />
+    <Compile Include="ViewModels\Users\UserVm.cs" />
     <Compile Include="ViewModels\Users\UserFilterVm.cs" />
     <Compile Include="ViewModels\Users\UsersVm.cs" />
     <Compile Include="Services\UserService.cs" />
@@ -315,6 +317,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Shared\UserColumnList.js" />
     <Content Include="Scripts\Teams\TeamEdit.js" />
     <Content Include="Scripts\Shared\moment.js" />
     <Content Include="Scripts\Teams\TeamFrameFilter.js" />
@@ -377,7 +380,7 @@
     <Content Include="Views\Users\FilterSettings.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
-    <Content Include="Views\Shared\ColumnUserList.cshtml" />
+    <Content Include="Views\Shared\UserColumnList.cshtml" />
     <Content Include="Views\Book\BookHistory.cshtml" />
     <Content Include="Views\Book\Details.cshtml" />
     <Content Include="Views\Home\EditPersonalEvent.cshtml" />

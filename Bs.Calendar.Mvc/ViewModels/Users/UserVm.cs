@@ -1,16 +1,16 @@
 using Bs.Calendar.Models;
 
-namespace Bs.Calendar.Mvc.ViewModels.Teams
+namespace Bs.Calendar.Mvc.ViewModels.Users
 {
-    public class TeamUserVm
+    public class UserVm
     {
-        public TeamUserVm(User user) 
+        public UserVm(User user) 
         {
             UserId = user.Id;
             FullName = string.Format("{0} {1}", user.LastName, user.FirstName);
         }
 
-        public TeamUserVm() 
+        public UserVm() 
         {
         }
 

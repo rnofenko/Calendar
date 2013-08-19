@@ -23,26 +23,21 @@
                 @Html.TextBoxFor(team => team.Name, new {@class = "xwide text input", data_bind = "value : teamModel.Name"})
             </div>
             
-            <div class="medium metro rounded btn warning  two columns icon-right icon-user-add pull_right" data-bind="click : clickAllUsers, visible : showTeamUsers()"><a href="#">Add Users</a></div>
-            <div class="medium metro rounded btn default two columns pull_right" data-bind="click : clickTeamUsers, visible : !showTeamUsers()"><a href="#">Team Users</a></div>
+            <div class="medium metro rounded btn warning  two columns icon-right icon-user-add pull_right" data-bind="click: clickAllUsers, visible: !userColumnVm.showColumnUserList()"><a href="#">Add Users</a></div>
+            <div class="medium metro rounded btn default two columns pull_right" data-bind="click: clickTeamUsers, visible: userColumnVm.showColumnUserList()"><a href="#">Team Users</a></div>
         </div>
         
         
         <div class="row">
-            <ul class="four_up tiles" data-bind="foreach : teamModel.Users">
+            <ul class="four_up tiles team-edit" data-bind="foreach : teamModel.Users">
                 <li data-bind="click: function () { UserClick('/Users/Edit', UserId())}">
                     <span data-bind="text : FullName"></span> 
-                    <i class="icon-cancel-squared pull_right" data-bind="click : $root.removeUser"></i>
+                    <i class="icon-cancel-squared pull_right" data-bind="click: $root.userColumnVm.addUser"></i>
                 </li>
             </ul>
         </div>
 
-        <div class="row team-body invisible-onstart" data-bind="visible: !showTeamUsers() && nonTeamUsersCount() > 0">
-            @Html.Partial("ColumnUserList")
-        </div>
-        <div class="warning alert text-center invisible-onstart" data-bind="visible : !showTeamUsers() && nonTeamUsersCount() == 0">
-            Sorry, no more users to add.
-        </div>
+        @Html.Partial("UserColumnList")
         
         <br/>
         <div class="row">

@@ -161,5 +161,11 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             return Json(ContactTypeParser.GetContactType(contact), JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public JsonResult GetHeaderPattern()
+        {
+            return Json(Config.Instance.TeamHeaderPattern, JsonRequestBehavior.AllowGet);
+        }
     }
 }

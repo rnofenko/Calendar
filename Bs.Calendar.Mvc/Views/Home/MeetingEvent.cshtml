@@ -6,9 +6,14 @@
                 <label for="title">Title</label>
                 <input class="narrow text input" id="title" type="text" placeholder="Event Title">
             </li> 
-             <li class="field">
-                <label for="time">Time</label>
-                <input class="narrow text input" id="time" type="text" placeholder="Event Time">
+            <li class="field">
+                <label>Time</label>
+                <input class="xnarrow text input" id="time" type="text" placeholder="Start Date">
+                <input class="xnarrow text input" type="text" placeholder="Start Time">
+                <span>to</span>
+                <input class="xnarrow text input" type="text" placeholder="End Time">
+                <input class="xnarrow text input" type="text" placeholder="End Date">
+                <span></span>
             </li> 
             <li class="field">
                 <label for="event-text">Text</label>
@@ -21,17 +26,52 @@
                     </select>
                 </div>
             </li>
+
             <li class="field">
                 <fieldset>
                     <legend>Teams</legend>
-						
+                    <ul class="four_up tiles" data-bind="foreach : eventVm.teamList">
+                        <li>
+                            <span data-bind="text: Name"></span>
+                            <i class="icon-cancel-squared pull_right" data-bind="click: $root.removeTeam"></i>
+                        </li>
+                    </ul>
+                    <div class="medium info btn pull_right" data-bind="click: clickTeamList"><a href="#">Team List</a></div>
+                    <ul data-bind="foreach : teamList" class="four_up tiles">
+                        <li>
+                            <span data-bind="text : Name"></span>
+                            <i class="icon-plus-circled pull_right" data-bind="click: $root.addTeam"></i>
+                        </li>
+                    </ul>
                 </fieldset>
             </li>
+
             <li class="field">
                 <fieldset>
                     <legend>Users</legend>
+                    <ul class="four_up tiles" data-bind="foreach: eventVm.userList">
+                        <li>
+                            <span data-bind="text: Name"></span>
+                            <i class="icon-cancel-squared pull_right" data-bind="click: $root.removeUser"></i>
+                        </li>
+                    </ul>
+                    <div class="medium info btn pull_right" data-bind="click: showUserList"><a href="#">User List</a></div>
                 </fieldset>
             </li>
         </ul>
+    </div>
+    
+    <div class="row">
+        @Html.Partial("UserColumnList")
+    </div>
+    <br/>
+    <div class="row">
+        <div class="medium default btn two two push_one columns pull_right">
+            <a href="#">Back</a>
+        </div>
+              
+        <div class="medium secondary btn two columns pull_right">
+            <input type="submit" value="Create">
+        </div>
     </div>
 </form>

@@ -29,5 +29,17 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             return Json(_service.GetEvents(from, to), JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public JsonResult GetTeams()
+        {
+            return Json(_service.GetTeams(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetAllUsers()
+        {
+            return Json(_service.GetAllUsers(), JsonRequestBehavior.AllowGet);
+        }
     }
 }
