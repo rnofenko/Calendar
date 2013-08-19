@@ -67,7 +67,8 @@ namespace Bs.Calendar.Mvc.Services
             return books.Where(book =>
                                book.Code.ToLower().Contains(searchStr)
                                || book.Author.ToLower().Contains(searchStr)
-                               || book.Title.ToLower().Contains(searchStr));
+                               || book.Title.ToLower().Contains(searchStr)
+                               || book.Description.ToLower().Contains(searchStr));
         }
 
         public void Validate(BookEditVm book)
@@ -114,6 +115,7 @@ namespace Bs.Calendar.Mvc.Services
             book.Code = model.BookCode;
             book.Title = model.BookTitle;
             book.Author = model.BookAuthor;
+            book.Description = model.BookDescription;
             _repoUnit.Book.Save(book);
         }
     }

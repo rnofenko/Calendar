@@ -12,5 +12,7 @@ namespace Bs.Calendar.Models
 
         [StringLength(LENGTH_NAME)]
         public string Author { get; set; }
+
+        public string Description { get; set; }
     }
 }
