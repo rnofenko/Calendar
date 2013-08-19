@@ -12,10 +12,10 @@
                 <select data-bind="options: $root.peoples, optionsValue: 'peopleId', value: $root.userId, optionsText: 'peopleName'"></select>
             </td>
             <td>
-                <input type="date" data-bind="value: $root.takeDate" style="background-color: yellow" />
+                <input type="date" data-bind="value: $root.takeDate"/>
             </td>
             <td>
-                <input type="date" data-bind="value: $root.returnDate" style="background-color: greenyellow" />
+                <input type="date" data-bind="value: $root.returnDate"/>
             </td>
             <td>
                 <select data-bind="options: $root.orderDirections, value: $root.orderDirection"></select>
@@ -25,16 +25,16 @@
     <tbody data-bind="foreach: bookHistory">
         <tr>
             <td>
-                <a data-bind="text: userFullName"></a>
+                <p data-bind="text: userFullName"/>
             </td>
             <td>
-                <input type="date" data-bind="value: takeDate" style="background-color: yellow">
+                <input type="date" data-bind="value: takeDate">
             </td>
             <td>
-                <input type="date" data-bind="value: returnDate" style="background-color: greenyellow">
+                <input type="date" data-bind="value: returnDate">
             </td>
             <td>
-                <a data-bind="text: orderDirection" />
+                <p data-bind="text: orderDirection" />
             </td>
         </tr>
     </tbody>

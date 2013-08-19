@@ -13,12 +13,14 @@ namespace Bs.Calendar.Mvc.ViewModels
         public List<BookHistory> BookHistoryList { get; set; }
 
         public int UserId { get; set; }
-        //public string UserFullName { get; set; }
 
         public DateTime TakeDate { get; set; }
         public DateTime ReturnDate { get; set; }
 
         public int BookId { get; set; }
+
+        [Display(Name = "Description")]
+        public string BookDescription { get; set; }
 
         [Required(ErrorMessage = "The code of the book must be specified"),
         Display(Name = "Code")]
@@ -44,6 +46,7 @@ namespace Bs.Calendar.Mvc.ViewModels
             BookCode = book.Code;
             BookTitle = book.Title;
             BookAuthor = book.Author;
+            BookDescription = book.Description;
 
             BookHistoryList = new List<BookHistory>();
             var bookHistories = repoUnit.BookHistory.Load(h => h.BookId == book.Id);

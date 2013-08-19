@@ -49,6 +49,10 @@
                     @Html.LabelFor(model => model.BookAuthor, new { @class = "inline three columns" })
                     @Html.TextBoxFor(model => model.BookAuthor, new { @class = "wide text input" })
                 </div>
+                <div class="field">
+                    @Html.LabelFor(model => model.BookDescription, new { @class = "inline three columns" })
+                    @Html.TextAreaFor(model => model.BookDescription, new { @class = "wide input textarea"})
+                </div>
 
                 <div class="medium secondary btn three columns">
                     <input type="submit" value="@btnName"/>
@@ -93,7 +97,7 @@
         <script type="text/javascript">
             $(document).ready(function ()
             {
-                var model = new BookHistoryVm(@Html.RawJson(@Model.BookHistoryList));
+                var model = new BookHistoryList(@Html.RawJson(@Model.BookHistoryList));
                 ko.applyBindings(model);
             });
         </script>
