@@ -19,6 +19,11 @@ namespace Bs.Calendar.Mvc.Controllers
             return View(users);
         }
 
+        public ActionResult CreateEvent()
+        {
+            return View();
+        }
+
         [HttpGet]
         public JsonResult GetEvents(DateTime from, DateTime to)
         {
