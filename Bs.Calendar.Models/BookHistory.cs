@@ -7,8 +7,7 @@ namespace Bs.Calendar.Models
     {
         public int BookId { get; set; }
         public int UserId { get; set; }
-        public DateTime TakeDate { get; set; }
-        public DateTime ReturnDate { get; set; }
-        public DirectionEnums OrderDirection { get; set; }
+        public DateTime OrderDate { get; set; }
+        public DirectionEnums Action { get; set; }
     }
 }

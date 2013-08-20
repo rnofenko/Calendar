@@ -101,10 +101,9 @@ namespace Bs.Calendar.Mvc.Services
             _repoUnit.BookHistory.Save(new BookHistory
             {
                 BookId = bookHistoryModel.BookId,
-                TakeDate = bookHistoryModel.TakeDate,
-                ReturnDate = bookHistoryModel.ReturnDate,
+                OrderDate = bookHistoryModel.OrderDate,
                 UserId = bookHistoryModel.UserId,
-                OrderDirection = bookHistoryModel.OrderDirection
+                Action = bookHistoryModel.Action
             });            
         }
 

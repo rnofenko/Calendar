@@ -2,9 +2,8 @@
 <table data-bind="visible: ($root.bookHistory().length > 0 || $root.showAdd) ">
     <thead>
         <th>User</th>
-        <th>Take date</th>
-        <th>Return date</th>
-        <th>Order</th>
+        <th>Order Date</th>
+        <th>Action</th>
     </thead>
     <tbody data-bind="visible: $root.showAdd">
         <tr>
@@ -12,13 +11,10 @@
                 <select data-bind="options: peoples, optionsValue: 'peopleId', value: userId, optionsText: 'peopleName'"></select>
             </td>
             <td>
-                <input type="date" data-bind="value: takeDate"/>
+                <input type="date" data-bind="value: orderDate"/>
             </td>
             <td>
-                <input type="date" data-bind="value: returnDate"/>
-            </td>
-            <td>
-                <select data-bind="options: orderDirections, value: orderDirection"></select>
+                <p data-bind="text: action"></p>
             </td>
         </tr>
     </tbody>
@@ -28,13 +24,10 @@
                 <p data-bind="text: userFullName"/>
             </td>
             <td>
-                <input type="date" data-bind="value: takeDate">
+                <input type="date" data-bind="value: orderDate"/>
             </td>
             <td>
-                <input type="date" data-bind="value: returnDate">
-            </td>
-            <td>
-                <p data-bind="text: orderDirection" />
+                <p data-bind="text: action" />
             </td>
         </tr>
     </tbody>

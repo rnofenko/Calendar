@@ -13,11 +13,9 @@ namespace Bs.Calendar.Mvc.ViewModels
         public List<BookHistory> BookHistoryList { get; set; }
 
         public int UserId { get; set; }
-
-        public DateTime TakeDate { get; set; }
-        public DateTime ReturnDate { get; set; }
-
-        public int BookId { get; set; }
+        public int BookId { get; set; }        
+        public DateTime OrderDate { get; set; }
+        public DirectionEnums Action { get; set; }
 
         [Display(Name = "Description")]
         public string BookDescription { get; set; }
@@ -35,8 +33,6 @@ namespace Bs.Calendar.Mvc.ViewModels
         Required(ErrorMessage = "Author should be specified"),
         StringLength(BaseEntity.LENGTH_NAME)]
         public string BookAuthor { get; set; }
-
-        public DirectionEnums OrderDirection { get; set; }
 
         public BookHistoryVm(Book book)
         {

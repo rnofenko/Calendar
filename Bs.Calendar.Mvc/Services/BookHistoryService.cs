@@ -23,11 +23,10 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException();
             }
-            var bookHistories = _unit.BookHistory.Load(h => h.BookId == bookId).OrderByDescending(h => h.TakeDate).ThenByDescending(h => h.OrderDirection);
+            var bookHistories = _unit.BookHistory.Load(h => h.BookId == bookId).OrderByDescending(h => h.OrderDate).ThenByDescending(h => h.Action);
             foreach (var bookHistory in bookHistories)
             {
-                bookHistory.TakeDate = bookHistory.TakeDate.Date.AddDays(1);
-                bookHistory.ReturnDate = bookHistory.ReturnDate.Date.AddDays(1);
+                bookHistory.OrderDate = bookHistory.OrderDate.Date.AddDays(1);
             }
             var result = new BookHistoryVm(book) {BookHistoryList = new List<BookHistory>(bookHistories)};
             return result;

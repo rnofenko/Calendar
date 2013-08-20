@@ -4,15 +4,14 @@
 
     _self.userId = source.UserId;    
     _self.userFullName = ko.observable();
+
     ko.computed(function ()
     {
         $.getJSON("/Users/GetUserFullName", { id: _self.userId }, _self.userFullName);
     }, this);
 
-    _self.takeDate = new Date(parseInt(source.TakeDate.substr(6))).toISOString().substr(0, 10);
-    _self.returnDate = new Date(parseInt(source.ReturnDate.substr(6))).toISOString().substr(0, 10);
-
-    _self.orderDirection = source.OrderDirection == 1 ? "Take" : "Return";
+    _self.orderDate = new Date(parseInt(source.OrderDate.substr(6))).toISOString().substr(0, 10);
+    _self.action = source.Action == 1 ? "Take" : "Return";
 }
 
 function User(id, name)
@@ -29,7 +28,6 @@ function BookHistoryList(param)
 
     self.bookHistory = ko.observableArray();
     self.peoples = ko.observableArray();
-    self.orderDirections = ko.observableArray(['Take', 'Return']);
 
     ko.computed(function ()
     {
@@ -45,20 +43,21 @@ function BookHistoryList(param)
 
     self.showAdd = ko.observable(false);
     self.showList = ko.observable(true);
+    self.action = ko.observable();
 
     self.show = function ()
     {
+        self.action(self.bookHistory().length % 2 == 0 ? "Take" : "Return");
         self.showAdd(true);
     };
+    
     $("#SaveHistoryButton").on("click", function ()
     {
         self.showAdd(false);
         self.showList(true);
     });
 
-    self.takeDate = ko.observable(new Date().toJSON());
-    self.returnDate = ko.observable(new Date().toJSON());
-    self.orderDirection = ko.observable();
+    self.orderDate = ko.observable(new Date().toJSON());
     self.userId = ko.observable();    
     self.bookId = window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length);
 
@@ -68,9 +67,8 @@ function BookHistoryList(param)
             {
                 data: ko.toJSON(
                     {
-                        TakeDate: self.takeDate,
-                        ReturnDate: self.returnDate,
-                        OrderDirection: self.orderDirection,
+                        OrderDate: self.orderDate,
+                        Action: self.action,
                         UserId: self.userId,
                         BookId: self.bookId
                     }),
