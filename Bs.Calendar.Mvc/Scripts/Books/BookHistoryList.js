@@ -1,4 +1,4 @@
-﻿function BookHistory(source)
+﻿function BookHistoryItem(source)
 {
     var _self = this;
 
@@ -85,7 +85,7 @@ function BookHistoryList(param)
 
     self.addBookHistory = function (data)
     {
-        self.bookHistory.push(new BookHistory(data));
+        self.bookHistory.push(new BookHistoryItem(data));
     };
 
     $.each(param, function (key, value)
