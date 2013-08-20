@@ -10,7 +10,7 @@
         $.getJSON("/Users/GetUserFullName", { id: _self.userId }, _self.userFullName);
     }, this);
 
-    _self.orderDate = new Date(parseInt(source.OrderDate.substr(6))).toISOString().substr(0, 10);
+    _self.orderDate = moment(source.OrderDate).format("Do MMMM, YYYY");
     _self.action = source.Action == 1 ? "Take" : "Return";
 }
 
