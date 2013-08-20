@@ -13,6 +13,7 @@
     float: left;
     cursor: pointer;
     margin-left: 17px;
+    vertical-align: text-bottom;
 }
 
 .roomColorSelected

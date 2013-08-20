@@ -206,6 +206,7 @@
   <ItemGroup>
     <Content Include="Content\Calendar\Calendar.css" />
     <Content Include="Content\gumby\gumby.css" />
+    <Content Include="Content\Home\CalendarEvent.css" />
     <Content Include="Content\jquery.timepicker\lib\base.css" />
     <Content Include="Content\jquery.timepicker\jquery.timepicker.css" />
     <Content Include="Content\Layout\fonts.css" />
@@ -216,6 +217,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Content\Layout\layout.css" />
     <Content Include="Content\Layout\list-view.css" />
+    <Content Include="Content\Shared\SimpleTeamList.css" />
     <Content Include="Content\Shared\UserColumnList.css" />
     <Content Include="Content\Teams\TeamEdit.css" />
     <Content Include="Content\Users\RoleStateFilterWindow.css" />
@@ -278,6 +280,7 @@
     <Compile Include="ViewModels\BookHistoryVm.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\AccountVm.cs" />
+    <Compile Include="ViewModels\Home\CalendarEventVm.cs" />
     <Compile Include="ViewModels\Home\PersonalEventVm.cs" />
     <Compile Include="ViewModels\RegisterVm.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
@@ -317,6 +320,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Shared\SimpleTeamList.js" />
     <Content Include="Scripts\Shared\UserColumnList.js" />
     <Content Include="Scripts\Teams\TeamEdit.js" />
     <Content Include="Scripts\Shared\moment.js" />
@@ -387,6 +391,7 @@
     <Content Include="Views\Book\AddBookHistory.cshtml" />
     <Content Include="Views\Home\CreateEvent.cshtml" />
     <Content Include="Views\Home\MeetingEvent.cshtml" />
+    <Content Include="Views\Shared\SimpleTeamList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

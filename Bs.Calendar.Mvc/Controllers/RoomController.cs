@@ -85,5 +85,11 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             return View("Edit", null);
         }
+
+        [HttpGet]
+        public JsonResult GetAllRooms()
+        {
+            return Json(_service.GetAllRooms(), JsonRequestBehavior.AllowGet);
+        }
     }
 }

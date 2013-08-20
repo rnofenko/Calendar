@@ -17,22 +17,17 @@ function UserColumnVm(usersArray) {
     self.removedUsers = usersArray;
     self.showColumnUserList = ko.observable(false);
     self.columnUsersCount = ko.observable(0);
-
-    self.getTitles = function () {
-        jQuery.ajaxSetup({ async: false });
-        var str = "";
+    self.titles = [];
+    
+    self.setTitles = function () {
         $.getJSON("/Users/GetHeaderPattern", null, function(data) {
-            str = data;
+            self.titles = data.split(',');
+            $.each(self.titles, function (key, title) {
+                self.userColumns.push(new ColumnModel(title));
+            });
         });
-        jQuery.ajaxSetup({ async: true });
-        return str.split(',');
     };
-
-    self.titles = self.getTitles();
-
-    $.each(self.titles, function (key, title) {
-        self.userColumns.push(new ColumnModel(title));
-    });
+    self.setTitles();
 
     self.getColumnsUsers = function (users, column) {
         return $.grep(users, function (element) {

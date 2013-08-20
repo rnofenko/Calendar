@@ -10,7 +10,6 @@ namespace Bs.Calendar.Models
 
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
-        public bool IsAllDay { get; set; }
 
         public Room Room { get; set; }
         public EventType EventType { get; set; }
