@@ -65,8 +65,20 @@
         }, self),
         timeChanged: function (context, event) {
             var fromTime = moment($(event.target).val(), formatSettings.time),
-                toTime = moment(self.toDateTime().format(formatSettings.time), formatSettings.time),
                 currentFromTime = self.fromDateTime();
+
+            //Check specified time format
+
+            if (!moment.isMoment(fromTime) ||
+                !fromTime.isValid() ||
+                event.type === "timeFormatError") {
+                self.toDateTime(currentFromTime);
+                return;
+            }
+
+            //Update current "to" time and "from" time if needed
+
+            var toTime = moment(self.toDateTime().format(formatSettings.time), formatSettings.time);
 
             setTime(currentFromTime, fromTime);
             self.fromDateTime(currentFromTime);
@@ -84,15 +96,27 @@
         timeChanged: function (context, event) {
             //Todo: This bidlocodishe is because of time formats difference in case of using timepicker and moment.js
             var toTime = moment($(event.target).val(), formatSettings.time), //moment($(event.target).timepicker("getTime")).year(0).month(0).date(1),
-                fromTime = moment(self.fromDateTime().format(formatSettings.time), formatSettings.time), //self.fromDateTime();
                 currentToTime = self.toDateTime();
 
-                setTime(currentToTime, toTime);
+            //Check specified time format
+
+            if (!moment.isMoment(toTime) ||
+                !toTime.isValid() ||
+                event.type === "timeFormatError") {
                 self.toDateTime(currentToTime);
-            
-                if (toTime < fromTime) {
-                    self.fromDateTime(currentToTime);
-                }
+                return;
+            }
+
+            //Update current "to" time and "from" time if needed
+
+            var fromTime = moment(self.fromDateTime().format(formatSettings.time), formatSettings.time); //self.fromDateTime();
+
+            setTime(currentToTime, toTime);
+            self.toDateTime(currentToTime);
+
+            if (toTime < fromTime) {
+                self.fromDateTime(currentToTime);
+            }
         }
     };
 };

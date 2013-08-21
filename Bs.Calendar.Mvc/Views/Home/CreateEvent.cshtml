@@ -30,12 +30,11 @@
         $(document).ready(function () {
             //Setup and apply timepicker plugin
             var timePickerConfig = {
-                forceRoundTime: true,
                 timeFormat: "g:i a",
                 step: 30
             };
             
-            $('.timeInput').keydown(false).timepicker(timePickerConfig);
+            $('.timeInput').timepicker(timePickerConfig);
             
             //Setup knockout
             ko.applyBindings(new MeetingEventVm(), document.getElementById("meeting-event"));

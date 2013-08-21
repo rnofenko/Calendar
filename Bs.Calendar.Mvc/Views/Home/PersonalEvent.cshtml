@@ -20,8 +20,8 @@
                     </div>
                     <div class="four columns">
                         <div class="prepend append double field">
-                            <input id="fromTime" class="narrow text input timeInput" type="text" placeholder="from" data-bind="disable: isAllDay(), value: fromInput.value, event: { changeTime: fromInput.timeChanged }" />
-                            <input id="toTime" class="narrow text input timeInput" type="text" placeholder="to" data-bind="disable: isAllDay(), value: toInput.value, event: { changeTime: toInput.timeChanged }" />
+                            <input id="fromTime" class="narrow text input timeInput" type="text" placeholder="from" data-bind="disable: isAllDay(), value: fromInput.value, event: { change: fromInput.timeChanged, timeFormatError: fromInput.timeChanged, changeTime: fromInput.timeChanged }" />
+                            <input id="toTime" class="narrow text input timeInput" type="text" placeholder="to" data-bind="disable: isAllDay(), value: toInput.value, event: { change: toInput.timeChanged, timeFormatError: toInput.timeChanged, changeTime: toInput.timeChanged }" />
                         </div>
                     </div>
                     <div class="four columns">

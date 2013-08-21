@@ -10,7 +10,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
 {
     public class CalendarEventVm
     {
-        public CalendarEvent Map(CalendarEventVm calendarEvent)
+        public CalendarEvent Map()
         {
             return new CalendarEvent
             {
