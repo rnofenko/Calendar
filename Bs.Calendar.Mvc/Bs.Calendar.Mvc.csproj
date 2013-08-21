@@ -244,7 +244,7 @@
     <Content Include="Scripts\jquery.timepicker\lib\datepair.js" />
     <Content Include="Scripts\jquery.timepicker\jquery.timepicker.min.js" />
     <Content Include="Scripts\Home\Calendar.js" />
-    <Content Include="Scripts\Home\MeetingEvent.js" />
+    <Content Include="Scripts\Home\CalendarEvent.js" />
     <Content Include="Scripts\Knockout\knockout-2.3.0.js" />
     <Content Include="Scripts\Knockout\knockout.mapping-latest.js" />
     <Content Include="Scripts\Layout\list-view.js" />
