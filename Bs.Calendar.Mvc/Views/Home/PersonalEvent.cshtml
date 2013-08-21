@@ -1,0 +1,42 @@
+﻿@model Bs.Calendar.Mvc.ViewModels.Home.PersonalEventVm
+
+<form>
+    <div class="row">
+        <ul>
+            <div class="row">
+                <div class="four columns">
+                    <li class="field">
+                        <label for="title">Title</label>
+                        <input class="text input" id="title" type="text" placeholder="Event Title">
+                    </li>
+                </div>
+            </div>
+            <li class="field">
+                <!-- Time range control -->
+                <label>Time range</label>
+                <div class="row">
+                    <div class="four columns">
+                        <div class="field">
+                            <input id="date" class="text input date" type="date" data-bind="event: { input: dateInput.dateChanged }, attr: { value: dateInput.value(), min: dateInput.min }" />
+                        </div>
+                    </div>
+                    <div class="four columns">
+                        <div class="prepend append double field">
+                            <input id="fromTime" class="narrow text input timeInput" type="text" placeholder="from" data-bind="disable: isAllDay(), value: fromInput.value, event: { changeTime: fromInput.timeChanged }" />
+                            <input id="toTime" class="narrow text input timeInput" type="text" placeholder="to" data-bind="disable: isAllDay(), value: toInput.value, event: { changeTime: toInput.timeChanged }" />
+                        </div>
+                    </div>
+                    <div class="four columns">
+                        <label class="checkbox" data-bind="event: {'gumby.onChange': function(){isAllDay(!isAllDay())}}">
+                            <span></span> All day
+                        </label>
+                    </div>
+                </div>
+            </li>
+            <li class="field">
+                <label for="event-text">Text</label>
+                <textarea class="input textarea" id="event-text" placeholder="Event Text" rows="2"></textarea>
+            </li>
+        </ul>
+    </div>
+</form>

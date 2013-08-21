@@ -12,7 +12,8 @@ namespace Bs.Calendar.Mvc.Server
                 "~/Scripts/modernizr-2.6.2.min.js",
                 "~/Scripts/jquery.validate.min.js",
                 "~/Scripts/jquery.validate.unobtrusive.min.js",
-                "~/Scripts/jquery.unobtrusive-ajax.min.js"));
+                "~/Scripts/jquery.unobtrusive-ajax.min.js",
+                "~/Scripts/jquery.datetimeentry.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery.timepicker").Include(
                 "~/Scripts/jquery.timepicker/jquery.timepicker.min.js"));
@@ -38,6 +39,7 @@ namespace Bs.Calendar.Mvc.Server
             scripts.Include("~/Scripts/Users/UserFrameFilter.js");
             scripts.Include("~/Scripts/Layout/list-view.js");
             scripts.Include("~/Scripts/Home/Calendar.js");
+            scripts.Include("~/Scripts/Home/PersonalEvent.js");
             scripts.Include("~/Scripts/Home/MeetingEvent.js");
             BundleTable.Bundles.Add(scripts);
 
@@ -49,6 +51,7 @@ namespace Bs.Calendar.Mvc.Server
             css.Include("~/Content/Layout/layout.css");
             css.Include("~/Content/Teams/TeamEdit.css");
             css.Include("~/Content/jquery.timepicker/jquery.timepicker.css");
+            css.Include("~/Content/Home/CreateEvent.css");
             BundleTable.Bundles.Add(css);
         }
     }

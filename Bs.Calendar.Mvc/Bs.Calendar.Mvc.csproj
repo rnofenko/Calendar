@@ -206,6 +206,7 @@
   <ItemGroup>
     <Content Include="Content\Calendar\Calendar.css" />
     <Content Include="Content\gumby\gumby.css" />
+    <Content Include="Content\Home\CreateEvent.css" />
     <Content Include="Content\jquery.timepicker\lib\base.css" />
     <Content Include="Content\jquery.timepicker\jquery.timepicker.css" />
     <Content Include="Content\Layout\fonts.css" />
@@ -236,7 +237,8 @@
     <Content Include="Scripts\Gumby\ui\gumby.tabs.js" />
     <Content Include="Scripts\Gumby\ui\gumby.toggleswitch.js" />
     <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
-    <Content Include="Scripts\Home\EditPersonalEvent.js" />
+    <Content Include="Scripts\Home\PersonalEvent.js" />
+    <Content Include="Scripts\jquery.datetimeentry.min.js" />
     <Content Include="Scripts\jquery.timepicker\lib\base.js" />
     <Content Include="Scripts\jquery.timepicker\lib\datepair.js" />
     <Content Include="Scripts\jquery.timepicker\jquery.timepicker.min.js" />
@@ -381,11 +383,12 @@
     <Content Include="Views\Shared\ColumnUserList.cshtml" />
     <Content Include="Views\Book\BookHistory.cshtml" />
     <Content Include="Views\Book\Details.cshtml" />
-    <Content Include="Views\Home\EditPersonalEvent.cshtml" />
+    <Content Include="Views\Home\PersonalEvent.cshtml" />
     <Content Include="Views\Book\AddBookHistory.cshtml" />
     <Content Include="Views\Home\CreateEvent.cshtml" />
     <Content Include="Views\Home\MeetingEvent.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
+    <Content Include="Views\Home\DateTimeRangePicker.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
