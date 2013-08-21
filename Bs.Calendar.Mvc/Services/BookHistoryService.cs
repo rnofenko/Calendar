@@ -18,21 +18,35 @@ namespace Bs.Calendar.Mvc.Services
 
         public BookHistoryVm GetBookHistories(int bookId)
         {
-            var book = _unit.Book.Get(bookId);
+            var book = _unit.Book.Get(bookId);            
             if (book.Id == 0)
             {
                 throw new WarningException();
+            }            
+            var bookHistories = _unit.BookHistory.Load(h => h.BookId == bookId).OrderByDescending(h => h.OrderDate).ThenByDescending(h => h.Action);//.ToList();
+            var result = new BookHistoryVm(book)
+            {
+                BookHistoryList = new List<BookHistoryItemVm>()
+            };
+            foreach (var bookHistory in bookHistories)
+            {
+                result.BookHistoryList.Add(new BookHistoryItemVm(bookHistory));
             }
-            var bookHistories = _unit.BookHistory.Load(h => h.BookId == bookId).OrderByDescending(h => h.OrderDate).ThenByDescending(h => h.Action);
-            var result = new BookHistoryVm(book) {BookHistoryList = new List<BookHistory>(bookHistories)};
             return result;
         }
 
-        public void AddRecord(BookHistoryVm bookHistoryVm)
+        public void AddRecord(List<BookHistoryItemVm> bookHistoryItemsList)
         {
-            var bookHistoryItem = bookHistoryVm.BookHistoryList.LastOrDefault();
-            bookHistoryItem.BookId = bookHistoryVm.BookId;
-            _unit.BookHistory.Save(bookHistoryItem);
+            foreach (var bookHistoryItem in bookHistoryItemsList)
+            {
+                _unit.BookHistory.Save(new BookHistory
+                {
+                    BookId = bookHistoryItem.BookId,
+                    UserId = bookHistoryItem.UserId,
+                    OrderDate = bookHistoryItem.OrderDate,
+                    Action = bookHistoryItem.Action
+                });
+            }
         }
     }
 }

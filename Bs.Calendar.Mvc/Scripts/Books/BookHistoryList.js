@@ -1,17 +1,9 @@
 ﻿function BookHistory(source)
 {
     var _self = this;
-
-    _self.userId = source.UserId;
-    _self.userFullName = ko.observable();
-
-    ko.computed(function ()
-    {
-        if (_self.userId != 0) {
-            $.getJSON("/Users/GetUserFullName", { id: _self.userId }, _self.userFullName);
-        }
-    }, this);
-
+    _self.userId = source.UserId;    
+    _self.userFullName = ko.observable(source.FullName);
+    
     _self.orderDate = moment(source.OrderDate).format("Do MMMM, YYYY");
 
     _self.actionId = source.Action;
@@ -69,6 +61,7 @@ function BookHistoryList(param)
             data =
             {
                 UserId: 0,
+                userFullName: "",
                 OrderDate: ko.observable(new Date().toJSON()),
                 Action: (self.bookHistory().length + self.newBookHistory().length) % 2 + 1
             };

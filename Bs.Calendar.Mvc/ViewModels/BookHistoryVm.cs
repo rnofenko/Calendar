@@ -9,7 +9,7 @@ namespace Bs.Calendar.Mvc.ViewModels
 {
     public class BookHistoryVm
     {
-        public List<BookHistory> BookHistoryList { get; set; }
+        public List<BookHistoryItemVm> BookHistoryList { get; set; }
         public int BookId { get; set; }        
 
         [Display(Name = "Description")]
@@ -39,11 +39,11 @@ namespace Bs.Calendar.Mvc.ViewModels
             BookAuthor = book.Author;
             BookDescription = book.Description;
 
-            BookHistoryList = new List<BookHistory>();
+            BookHistoryList = new List<BookHistoryItemVm>();
             var bookHistories = repoUnit.BookHistory.Load(h => h.BookId == book.Id);
             foreach (var bookHistory in bookHistories)
             {
-                BookHistoryList.Add(bookHistory);
+                BookHistoryList.Add(new BookHistoryItemVm(bookHistory));
             }
         }
 

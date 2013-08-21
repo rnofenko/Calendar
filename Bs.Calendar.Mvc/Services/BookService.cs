@@ -11,10 +11,12 @@ namespace Bs.Calendar.Mvc.Services
     public class BookService
     {
         private readonly RepoUnit _repoUnit;
+        private readonly BookHistoryService _service;
 
-        public BookService(RepoUnit repository)
+        public BookService(RepoUnit repository, BookHistoryService service)
         {
             _repoUnit = repository;
+            _service = service;
         }
 
         public Book Get(int id)
@@ -106,23 +108,9 @@ namespace Bs.Calendar.Mvc.Services
             book.Description = model.BookDescription;
             if (model.BookHistoryList != null)
             {
-                AddRecord(model.BookHistoryList);
+                _service.AddRecord(model.BookHistoryList);
             }
             _repoUnit.Book.Save(book);
-        }
-
-        public void AddRecord(List<BookHistory> bookHistoryList)
-        {
-            foreach (var bookHistory in bookHistoryList)
-            {
-                _repoUnit.BookHistory.Save(new BookHistory
-                {
-                    BookId = bookHistory.BookId,
-                    UserId = bookHistory.UserId,                    
-                    OrderDate = bookHistory.OrderDate,
-                    Action = bookHistory.Action
-                });
-            }
-        }
+        }        
     }
 }
