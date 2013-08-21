@@ -1,10 +1,10 @@
-﻿function PersonalEventVm(formId) {
+﻿function PersonalEventVm() {
     var self = this;
 
     var dateTimeControl = {
-        fromTime: $("#" + formId + " #fromTime"),
-        toTime: $("#" + formId + " #toTime"),
-        date: $("#" + formId + " #date")
+        fromTime: $("#fromTime"),
+        toTime: $("#toTime"),
+        date: $("#date")
     }; //Setup time range control html elements
 
     var formatSettings = { date: "YYYY-MM-DD", time: "hh:mm a" };

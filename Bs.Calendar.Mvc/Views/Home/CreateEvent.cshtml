@@ -17,33 +17,42 @@
         </div>
 
         <div class="row">
+            <div class="nine columns">
             <div class="six columns field">
                 @Html.LabelFor(eventModel => eventModel.Title)
                 @Html.TextBoxFor(eventModel => eventModel.Title, new { @class = "text input nine columns", data_bind = "value : eventModel.Title", placeholder = "Event Title" })
             </div>
             
-            <div class="five columns pull_right invisible-onstart" data-bind="visible: eventModel.EventType() != 1">
-                <label>Event Place</label>
-                <div class="picker six columns">
-                    <select data-bind="options: roomOptions.roomList, optionsText: roomOptions.optionText, value: eventModel.Room, optionsCaption: 'Choose Room...'"></select>
+                <div class="four columns pull_right invisible-onstart" data-bind="visible: eventModel.EventType() != 1">
+                    <label>Event Place</label>
+                    <div class="picker nine columns">
+                        <select data-bind="options: roomOptions.roomList, optionsText: roomOptions.optionText, value: eventModel.Room, optionsCaption: 'Choose Room...'"></select>
+                    </div>
+                    <div data-bind="attr: { class: roomOptions.roomOptionColor }" class="one columns"></div>
                 </div>
-                <div data-bind="attr: { class: roomOptions.roomOptionColor }"></div>
-            </div>
+                </div>
         </div>
         
         <div class="row">
-            <div class="six columns field">
+            <div class="eight columns field">
                 <label>Time Period</label>
-                <input class="narrow text input" id="time" type="text" placeholder="Start Date">
-                <input class="narrow text input" type="text" placeholder="Start Time">
-                <span>to</span>
-                <input class="narrow text input" type="text" placeholder="End Time">
-                <span></span>
+                <input id="date" class="text input date four columns" type="date" data-bind="event: { input: dateTime.dateInput.dateChanged }, attr: { value: dateTime.dateInput.value(), min: dateTime.dateInput.min }" />
+                <div class="four columns">
+                    <div class="prepend append double field">
+                        <input id="fromTime" class="text input timeInput" type="text" placeholder="Start Time" data-bind="disable: dateTime.isAllDay(), value: dateTime.fromInput.value, event: { changeTime: dateTime.fromInput.timeChanged }" />
+                        <input id="toTime" class="text input timeInput" type="text" placeholder="End Time" data-bind="disable: dateTime.isAllDay(), value: dateTime.toInput.value, event: { changeTime: dateTime.toInput.timeChanged }" />
+                    </div>
+                </div>
+                <div class="push_one three columns">
+                        <label class="checkbox" data-bind="event: { 'gumby.onChange': function () { dateTime.isAllDay(!dateTime.isAllDay()) } }">
+                            <span></span> All day
+                        </label>
+                    </div>
             </div>
         </div>
     
         <div class="row">
-            <div class="six columns field">
+            <div class="nine columns field">
                 @Html.LabelFor(eventModel => eventModel.Text)
                 @Html.TextAreaFor(eventModel => eventModel.Text, 2, 1, new { @class = "input textarea", data_bind = "value: eventModel.Text", placeholder = "Event Text"})
             </div>
@@ -100,22 +109,10 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
-            //Setup and apply timepicker plugin
-            var timePickerConfig = {
-                forceRoundTime: true,
-                timeFormat: "g:i a",
-                step: 30
-            };
-            
+            var timePickerConfig = { timeFormat: "g:i a", step: 30 };
             $('.timeInput').keydown(false).timepicker(timePickerConfig);
             
-            //Setup knockout
-            ko.applyBindings(new MeetingEventVm(), document.getElementById("meeting-event"));
-            ko.applyBindings(new PersonalEventVm("personal-event"), document.getElementById("personal-event"));
-
-
             window.calendarEventVm = new CalendarEventVm(@Html.RawJson(@Model));
-
             ko.applyBindings(calendarEventVm.subscribers.userColumnVm, document.getElementById("user-column-list"));
             ko.applyBindings(calendarEventVm.subscribers.simpleTeamListVm, document.getElementById("simple-team-list"));
             ko.applyBindings(calendarEventVm, document.getElementById("calendar-event"));

@@ -22,6 +22,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
                 EventType = EventType,
                 Room = Room
             };
+        }
 
         public CalendarEventVm()
         {
@@ -41,6 +42,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
 
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
+        public bool IsAllDay { get; set; }
 
         public Room Room { get; set; }
         public EventType EventType { get; set; }
