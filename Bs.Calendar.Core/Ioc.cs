@@ -15,14 +15,17 @@ namespace Bs.Calendar.Core
 
         public static T Resolve<T>()
         {
-            //Construct new instance of type
-
             return (T)Resolve(typeof(T));
         }
 
         public static IEnumerable<object> ResolveAll(Type type)
         {
             return _container.ResolveAll(type);
+        }
+
+        public static IEnumerable<T> ResolveAll<T>()
+        {
+            return _container.ResolveAll<T>();
         }
 
         public static void RegisterType<TInterface, TClass>()

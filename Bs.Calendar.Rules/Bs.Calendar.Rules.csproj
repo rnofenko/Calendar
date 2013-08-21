@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Backgrounds\BackgroundManager.cs" />
+    <Compile Include="Backgrounds\IBackgroundProcess.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ContactTypeParser.cs" />
     <Compile Include="Emails\EmailData.cs" />

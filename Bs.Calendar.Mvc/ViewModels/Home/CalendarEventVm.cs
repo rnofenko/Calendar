@@ -24,6 +24,11 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
             };
         }
 
+        public CalendarEventVm()
+        {
+            EventType = EventType.Personal;
+        }
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Title is required!"),
@@ -31,12 +36,13 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
         Display(Name = "Title")]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "Description is required!"),
-        Display(Name = "Description")]
+        [Required(ErrorMessage = "Event Text is required!"),
+        Display(Name = "Text")]
         public string Text { get; set; }
 
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
+        public bool IsAllDay { get; set; }
 
         public Room Room { get; set; }
         public EventType EventType { get; set; }

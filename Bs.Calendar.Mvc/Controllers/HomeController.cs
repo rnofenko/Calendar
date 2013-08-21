@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels.Home;
+using Bs.Calendar.Mvc.ViewModels.Users;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -23,7 +25,7 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpGet]
         public ActionResult CreateEvent()
         {
-            return View();
+            return View(new CalendarEventVm());
         }
 
         [HttpPost]

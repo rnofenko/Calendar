@@ -1,4 +1,6 @@
-﻿namespace Bs.Calendar.Rules
+﻿using System;
+
+namespace Bs.Calendar.Rules
 {
     public interface IConfig
     {
@@ -7,5 +9,7 @@
         string TeamHeaderPattern { get; }
 
         int PageSize { get; }
+
+        DateTime Now { get; }
     }
 }

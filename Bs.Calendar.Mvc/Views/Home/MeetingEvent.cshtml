@@ -1,61 +1,64 @@
-﻿
-<form>
-    <div class="row">
-        <div class="six columns field">
-            <label for="title">Title</label>
-            <input data-bind="value : eventVm.Title" class="text input nine columns" id="title" type="text" placeholder="Event Title">
-        </div>
-        
-        <div class="six columns field">
-            <label>Time Period</label>
-            <input class="narrow text input" id="time" type="text" placeholder="Start Date">
-            <input class="narrow text input" type="text" placeholder="Start Time">
-            <span>to</span>
-            <input class="narrow text input" type="text" placeholder="End Time">
-            <span></span>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class=" six columns field">
-            <label for="event-text">Text</label>
-            <textarea data-bind="text : eventVm.Text" class="input textarea nine columns" id="event-text" placeholder="Event Text" rows="2"></textarea>
-        </div>
-        <div class="six columns">
-            <label>Event Place</label>
-            <div class="picker seven columns">
-                <select data-bind="options: roomList, optionsText: roomOptionText, value: eventVm.Room, optionsCaption: 'Choose Room...'"></select>
-            </div>
-            <div data-bind="attr: { class: roomOptionColor }"></div>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="nine columns">
-            <div class="medium default btn metro rounded icon-right icon-user-add three columns" data-bind="click: showUserList"><a href="#">Add Users</a></div>
-            <div class="medium warning btn metro rounded icon-right icon-users three columns calendar-addteam-btn" data-bind="click: showTeamList"><a href="#">AddTeams</a></div>
-        </div>
-    </div>
-    <br/>
+﻿@model Bs.Calendar.Mvc.ViewModels.Home.CalendarEventVm
 
-    <div class="row">
-        <ul class="four_up tiles calendar-event-user" data-bind="foreach: eventVm.Users">
-            <li>
-                <span data-bind="text: FullName"></span>
-                <i class="icon-cancel-squared pull_right" data-bind="click: $root.userColumnVm.addUser"></i>
-            </li>
-        </ul>
-    </div>
+<form onsubmit="window.calendarEventVm.onSubmit()">
+    <div class="row" id="test-tmp">
+        <div class="row">
+            <div class="six columns field">
+                <label for="title">Title</label>
+                <input data-bind="value : eventModel.Title" class="text input nine columns" id="title" type="text" placeholder="Event Title">
+            </div>
+        
+            <div class="six columns field">
+                <label>Time Period</label>
+                <input class="narrow text input" id="time" type="text" placeholder="Start Date">
+                <input class="narrow text input" type="text" placeholder="Start Time">
+                <span>to</span>
+                <input class="narrow text input" type="text" placeholder="End Time">
+                <span></span>
+            </div>
+        </div>
     
-    <div class="row">
-        <ul class="four_up tiles calendar-event-team" data-bind="foreach: eventVm.Teams">
-            <li>
-                <span data-bind="text: Name"></span>
-                <i class="icon-cancel-squared pull_right" data-bind="click: $root.simpleTeamListVm.addTeam"></i>
-            </li>
-        </ul>
-    </div>
+        <div class="row">
+            <div class=" six columns field">
+                <label for="event-text">Text</label>
+                <textarea data-bind="text : eventModel.Text" class="input textarea nine columns" id="event-text" placeholder="Event Text" rows="2"></textarea>
+            </div>
+            <div class="six columns">
+                <label>Event Place</label>
+                <div class="picker seven columns">
+                    <select data-bind="options: roomOptions.roomList, optionsText: roomOptions.optionText, value: eventModel.Room, optionsCaption: 'Choose Room...'"></select>
+                </div>
+                <div data-bind="attr: { class: roomOptions.roomOptionColor }"></div>
+            </div>
+        </div>
     
+        <div class="row">
+            <div class="nine columns">
+                <div class="medium default btn metro rounded icon-right icon-user-add three columns" data-bind="click: subscribers.showUserList"><a href="#">Add Users</a></div>
+                <div class="medium warning btn metro rounded icon-right icon-users three columns calendar-addteam-btn" data-bind="click: subscribers.showTeamList"><a href="#">AddTeams</a></div>
+            </div>
+        </div>
+        <br/>
+
+        <div class="row">
+            <ul class="four_up tiles calendar-event-user" data-bind="foreach: eventModel.Users">
+                <li>
+                    <span data-bind="text: FullName"></span>
+                    <i class="icon-cancel-squared pull_right" data-bind="click: $root.subscribers.removeUser"></i>
+                </li>
+            </ul>
+        </div>
+    
+        <div class="row">
+            <ul class="four_up tiles calendar-event-team" data-bind="foreach: eventModel.Teams">
+                <li>
+                    <span data-bind="text: Name"></span>
+                    <i class="icon-cancel-squared pull_right" data-bind="click: $root.subscribers.removeTeam"></i>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     @Html.Partial("UserColumnList")
     
     @Html.Partial("SimpleTeamList")

@@ -186,6 +186,9 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0.3\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
     <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.2.0.20710.0\lib\net40\WebMatrix.Data.dll</HintPath>
@@ -206,8 +209,6 @@
   <ItemGroup>
     <Content Include="Content\Calendar\Calendar.css" />
     <Content Include="Content\gumby\gumby.css" />
-    <Content Include="Content\Home\CreateEvent.css" />
-    <Content Include="Content\Home\CalendarEvent.css" />
     <Content Include="Content\jquery.timepicker\lib\base.css" />
     <Content Include="Content\jquery.timepicker\jquery.timepicker.css" />
     <Content Include="Content\Layout\fonts.css" />
@@ -218,7 +219,6 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Content\Layout\layout.css" />
     <Content Include="Content\Layout\list-view.css" />
-    <Content Include="Content\Shared\SimpleTeamList.css" />
     <Content Include="Content\Shared\UserColumnList.css" />
     <Content Include="Content\Teams\TeamEdit.css" />
     <Content Include="Content\Users\RoleStateFilterWindow.css" />
@@ -240,13 +240,11 @@
     <Content Include="Scripts\Gumby\ui\gumby.tabs.js" />
     <Content Include="Scripts\Gumby\ui\gumby.toggleswitch.js" />
     <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
-    <Content Include="Scripts\Home\PersonalEvent.js" />
-    <Content Include="Scripts\jquery.datetimeentry.min.js" />
     <Content Include="Scripts\jquery.timepicker\lib\base.js" />
     <Content Include="Scripts\jquery.timepicker\lib\datepair.js" />
     <Content Include="Scripts\jquery.timepicker\jquery.timepicker.min.js" />
     <Content Include="Scripts\Home\Calendar.js" />
-    <Content Include="Scripts\Home\MeetingEvent.js" />
+    <Content Include="Scripts\Home\CalendarEvent.js" />
     <Content Include="Scripts\Knockout\knockout-2.3.0.js" />
     <Content Include="Scripts\Knockout\knockout.mapping-latest.js" />
     <Content Include="Scripts\Layout\list-view.js" />
@@ -255,6 +253,7 @@
     <Content Include="Scripts\Rooms\ColorPicker.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
     <Compile Include="Controllers\TeamController.cs" />
+    <Compile Include="Server\BackgroundTimer.cs" />
     <Compile Include="Server\BundleConfig.cs" />
     <Compile Include="Server\DiMvc.cs" />
     <Compile Include="Server\FilterConfig.cs" />
@@ -322,7 +321,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\Shared\SimpleTeamList.js" />
     <Content Include="Scripts\Shared\UserColumnList.js" />
     <Content Include="Scripts\Teams\TeamEdit.js" />
     <Content Include="Scripts\Shared\moment.js" />
@@ -389,11 +387,10 @@
     <Content Include="Views\Shared\UserColumnList.cshtml" />
     <Content Include="Views\Book\BookHistory.cshtml" />
     <Content Include="Views\Book\Details.cshtml" />
-    <Content Include="Views\Home\PersonalEvent.cshtml" />
+    <Content Include="Views\Home\EditPersonalEvent.cshtml" />
     <Content Include="Views\Book\AddBookHistory.cshtml" />
     <Content Include="Views\Home\CreateEvent.cshtml" />
     <Content Include="Views\Home\MeetingEvent.cshtml" />
-    <Content Include="Views\Shared\SimpleTeamList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

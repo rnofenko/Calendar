@@ -42,7 +42,7 @@ namespace Bs.Calendar.Mvc.Server
             scripts.Include("~/Scripts/Home/PersonalEvent.js");
             scripts.Include("~/Scripts/Shared/UserColumnList.js");
             scripts.Include("~/Scripts/Shared/SimpleTeamList.js");
-            scripts.Include("~/Scripts/Home/MeetingEvent.js");
+            scripts.Include("~/Scripts/Home/CalendarEvent.js");
             BundleTable.Bundles.Add(scripts);
 
             var css = new Bundle("~/Content/css", new CssMinify());

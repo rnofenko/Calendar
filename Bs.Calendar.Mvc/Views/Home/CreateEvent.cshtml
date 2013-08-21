@@ -1,45 +1,123 @@
-﻿@{
+﻿@model Bs.Calendar.Mvc.ViewModels.Home.CalendarEventVm
+@{
     ViewBag.Title = "Create Event";
 }
 
-<div class="row">
-    <div class="twelve columns">
-        <section class="pill tabs">
-            <ul class="tab-nav">
-                <li><a href="#">Meeting Event</a></li>
-                <li><a href="#">Personal Event</a></li>
-                <li><a href="#">Company Event</a></li>
-            </ul>
+<form>
+    <div class="row" id="calendar-event">
+        <div class="row">
+            <div class="medium info btn four columns event-btn1"><a href="#">Personal Event</a></div>
+            <div class="medium default btn four columns event-btn3"><a href="#">Company Event</a></div>
+            <div class="medium default btn four columns event-btn2"><a href="#">Meeting Event</a></div>
+        </div>
+        <br/>
+        
+        <div class="centered five columns text-center">
+            @Html.ValidationSummary("", new {@class = "warning alert", data_bind = "visible : isError()"})
+        </div>
+
+        <div class="row">
+            <div class="nine columns">
+            <div class="six columns field">
+                @Html.LabelFor(eventModel => eventModel.Title)
+                @Html.TextBoxFor(eventModel => eventModel.Title, new { @class = "text input nine columns", data_bind = "value : eventModel.Title", placeholder = "Event Title" })
+            </div>
             
-            <div class="tab-content" id="meeting-event">
-                @Html.Partial("MeetingEvent")
+                <div class="four columns pull_right invisible-onstart" data-bind="visible: eventModel.EventType() != 1">
+                    <label>Event Place</label>
+                    <div class="picker nine columns">
+                        <select data-bind="options: roomOptions.roomList, optionsText: roomOptions.optionText, value: eventModel.Room, optionsCaption: 'Choose Room...'"></select>
+                    </div>
+                    <div data-bind="attr: { class: roomOptions.roomOptionColor }" class="one columns"></div>
+                </div>
+                </div>
+        </div>
+        
+        <div class="row">
+            <div class="eight columns field">
+                <label>Time Period</label>
+                <input id="date" class="text input date four columns" type="date" data-bind="event: { input: dateTime.dateInput.dateChanged }, attr: { value: dateTime.dateInput.value(), min: dateTime.dateInput.min }" />
+                <div class="four columns">
+                    <div class="prepend append double field">
+                        <input id="fromTime" class="text input timeInput" type="text" placeholder="Start Time" data-bind="disable: dateTime.isAllDay(), value: dateTime.fromInput.value, event: { changeTime: dateTime.fromInput.timeChanged }" />
+                        <input id="toTime" class="text input timeInput" type="text" placeholder="End Time" data-bind="disable: dateTime.isAllDay(), value: dateTime.toInput.value, event: { changeTime: dateTime.toInput.timeChanged }" />
+                    </div>
+                </div>
+                <div class="push_one three columns">
+                        <label class="checkbox" data-bind="event: { 'gumby.onChange': function () { dateTime.isAllDay(!dateTime.isAllDay()) } }">
+                            <span></span> All day
+                        </label>
+                    </div>
             </div>
-            <div class="tab-content" id="personal-event">
-                @Html.Partial("PersonalEvent")
+        </div>
+    
+        <div class="row">
+            <div class="nine columns field">
+                @Html.LabelFor(eventModel => eventModel.Text)
+                @Html.TextAreaFor(eventModel => eventModel.Text, 2, 1, new { @class = "input textarea", data_bind = "value: eventModel.Text", placeholder = "Event Text"})
             </div>
-            <div class="tab-content">
-                Comming Soon Too...
+            
+        </div>
+       
+    
+        <div class="row invisible-onstart" data-bind="visible: eventModel.EventType() == 2">
+            <div class="row" >
+                <div class="nine columns">
+                    <div class="medium default btn metro rounded icon-right icon-user-add three columns" data-bind="click: subscribers.showUserList"><a href="#">Add Users</a></div>
+                    <div class="medium warning btn metro rounded icon-right icon-users three columns calendar-addteam-btn" data-bind="click: subscribers.showTeamList"><a href="#">Add Teams</a></div>
+                </div>
             </div>
-        </section>
+            <br/>
+
+            <div class="row">
+                <ul class="four_up tiles calendar-event-user" data-bind="foreach: eventModel.Users">
+                    <li>
+                        <span data-bind="text: FullName"></span>
+                        <i class="icon-cancel-squared pull_right" data-bind="click: $root.subscribers.removeUser"></i>
+                    </li>
+                </ul>
+            </div>
+    
+            <div class="row">
+                <ul class="four_up tiles calendar-event-team" data-bind="foreach: eventModel.Teams">
+                    <li>
+                        <span data-bind="text: Name"></span>
+                        <i class="icon-cancel-squared pull_right" data-bind="click: $root.subscribers.removeTeam"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-</div>
+    
+    @Html.Partial("UserColumnList")
+    
+    @Html.Partial("SimpleTeamList")
+        
+    <br/>
+    <div class="row">
+        <div class=" push_three medium secondary btn two columns">
+            <input type="submit" value="Create">
+        </div>
+        
+        <div class="medium default btn push_one two columns">
+            <a href="#">Back</a>
+        </div>
+    </div>
+</form>
 
 @section scripts
 {
     <script type="text/javascript">
         $(document).ready(function () {
-            //Setup and apply timepicker plugin
-            var timePickerConfig = {
-                timeFormat: "g:i a",
-                step: 30
-            };
+            var timePickerConfig = { timeFormat: "g:i a", step: 30 };
+            $('.timeInput').keydown(false).timepicker(timePickerConfig);
             
-            $('.timeInput').timepicker(timePickerConfig);
+            window.calendarEventVm = new CalendarEventVm(@Html.RawJson(@Model));
+            ko.applyBindings(calendarEventVm.subscribers.userColumnVm, document.getElementById("user-column-list"));
+            ko.applyBindings(calendarEventVm.subscribers.simpleTeamListVm, document.getElementById("simple-team-list"));
+            ko.applyBindings(calendarEventVm, document.getElementById("calendar-event"));
             
-            //Setup knockout
-            ko.applyBindings(new MeetingEventVm(), document.getElementById("meeting-event"));
-            ko.applyBindings(new PersonalEventVm("personal-event"), document.getElementById("personal-event"));
-
+            $("[class*=event-btn]").click(function () { calendarEventVm.setEventType(this); });
             $(".invisible-onstart").removeClass("invisible-onstart");
         });
     </script>
