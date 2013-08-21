@@ -8,7 +8,7 @@
     }; //Setup time range control html elements
 
     var formatSettings = { date: "YYYY-MM-DD", time: "hh:mm a" };
-    var defaultTimeDifference = { minutes: dateTimeControl.fromTime.timepicker('option', 'step') };
+    var dateDefaults = { initialValue: moment().startOf('day'), initialDifference: { minutes: dateTimeControl.fromTime.timepicker('option', 'step') } };
 
     var setTime = function (updateMoment, withMoment) {
 
@@ -25,10 +25,10 @@
             .date(withMoment.date());
     };
 
-    self.fromDateTime = ko.observable(moment().startOf('day'));
-    self.toDateTime = ko.observable(moment().startOf('day').add(defaultTimeDifference));
+    self.fromDateTime = ko.observable(dateDefaults.initialValue);
+    self.toDateTime = ko.observable(dateDefaults.initialValue.add(dateDefaults.initialDifference));
 
-    self.isAllDay = ko.observable(false);//jsonCalendarEventVm.IsAllDay);
+    self.isAllDay = ko.observable(false);
 
     self.dateInput = {
         value: ko.computed(function() {

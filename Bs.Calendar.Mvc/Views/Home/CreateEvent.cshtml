@@ -18,10 +18,10 @@
 
         <div class="row">
             <div class="nine columns">
-            <div class="six columns field">
-                @Html.LabelFor(eventModel => eventModel.Title)
-                @Html.TextBoxFor(eventModel => eventModel.Title, new { @class = "text input nine columns", data_bind = "value : eventModel.Title", placeholder = "Event Title" })
-            </div>
+                <div class="six columns field">
+                    @Html.LabelFor(eventModel => eventModel.Title)
+                    @Html.TextBoxFor(eventModel => eventModel.Title, new { @class = "text input nine columns", data_bind = "value : eventModel.Title", placeholder = "Event Title" })
+                </div>
             
                 <div class="four columns pull_right invisible-onstart" data-bind="visible: eventModel.EventType() != 1">
                     <label>Event Place</label>
@@ -30,7 +30,7 @@
                     </div>
                     <div data-bind="attr: { class: roomOptions.roomOptionColor }" class="one columns"></div>
                 </div>
-                </div>
+            </div>
         </div>
         
         <div class="row">
@@ -39,15 +39,15 @@
                 <input id="date" class="text input date four columns" type="date" data-bind="event: { input: dateTime.dateInput.dateChanged }, attr: { value: dateTime.dateInput.value(), min: dateTime.dateInput.min }" />
                 <div class="four columns">
                     <div class="prepend append double field">
-                        <input id="fromTime" class="text input timeInput" type="text" placeholder="Start Time" data-bind="disable: dateTime.isAllDay(), value: dateTime.fromInput.value, event: { changeTime: dateTime.fromInput.timeChanged }" />
-                        <input id="toTime" class="text input timeInput" type="text" placeholder="End Time" data-bind="disable: dateTime.isAllDay(), value: dateTime.toInput.value, event: { changeTime: dateTime.toInput.timeChanged }" />
+                        <input id="fromTime" class="text input timeInput" type="text" placeholder="from" data-bind="disable: dateTime.isAllDay(), value: dateTime.fromInput.value, event: { change: dateTime.fromInput.timeChanged, timeFormatError: dateTime.fromInput.timeChanged, changeTime: dateTime.fromInput.timeChanged }" />
+                        <input id="toTime" class="text input timeInput" type="text" placeholder="to" data-bind="disable: dateTime.isAllDay(), value: dateTime.toInput.value, event: { change: dateTime.toInput.timeChanged, timeFormatError: dateTime.toInput.timeChanged, changeTime: dateTime.toInput.timeChanged }" />
                     </div>
                 </div>
                 <div class="push_one three columns">
-                        <label class="checkbox" data-bind="event: { 'gumby.onChange': function () { dateTime.isAllDay(!dateTime.isAllDay()) } }">
-                            <span></span> All day
-                        </label>
-                    </div>
+                    <label class="checkbox" data-bind="event: { 'gumby.onChange': function () { dateTime.isAllDay(!dateTime.isAllDay()) } }">
+                        <span></span> All day
+                    </label>
+                </div>
             </div>
         </div>
     
@@ -110,7 +110,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var timePickerConfig = { timeFormat: "g:i a", step: 30 };
-            $('.timeInput').keydown(false).timepicker(timePickerConfig);
+            $('.timeInput').timepicker(timePickerConfig);
             
             window.calendarEventVm = new CalendarEventVm(@Html.RawJson(@Model));
             ko.applyBindings(calendarEventVm.subscribers.userColumnVm, document.getElementById("user-column-list"));

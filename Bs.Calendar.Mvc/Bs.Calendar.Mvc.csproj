@@ -209,6 +209,8 @@
   <ItemGroup>
     <Content Include="Content\Calendar\Calendar.css" />
     <Content Include="Content\gumby\gumby.css" />
+    <Content Include="Content\Home\CalendarEvent.css" />
+    <Content Include="Content\Home\CreateEvent.css" />
     <Content Include="Content\jquery.timepicker\lib\base.css" />
     <Content Include="Content\jquery.timepicker\jquery.timepicker.css" />
     <Content Include="Content\Layout\fonts.css" />
@@ -387,10 +389,11 @@
     <Content Include="Views\Shared\UserColumnList.cshtml" />
     <Content Include="Views\Book\BookHistory.cshtml" />
     <Content Include="Views\Book\Details.cshtml" />
-    <Content Include="Views\Home\EditPersonalEvent.cshtml" />
     <Content Include="Views\Book\AddBookHistory.cshtml" />
     <Content Include="Views\Home\CreateEvent.cshtml" />
     <Content Include="Views\Home\MeetingEvent.cshtml" />
+    <Content Include="Views\Shared\SimpleTeamList.cshtml" />
+    <Content Include="Views\Home\PersonalEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

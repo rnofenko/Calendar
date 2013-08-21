@@ -8,23 +8,22 @@
     self.Teams = ko.observableArray();
     self.Users = ko.observableArray();
     self.EventType = ko.observable();
-    
+
     self.DateStart = ko.observable();
     self.DateEnd = ko.observable();
     self.IsAllDay = ko.observable();
 }
 
-
 function EventRoomOptionHandler(selectedRoom) {
     var self = this;
-    
+
     self.roomList = ko.observableArray();
     self.selectedRoom = selectedRoom;
-    
+
     $.getJSON("/Room/GetAllRooms", null, function (rooms) {
         ko.mapping.fromJS(rooms, {}, self.roomList);
     });
-    
+
     self.optionText = function (room) {
         return $.validator.format("{0} [{1}]", room.Name(), room.NumberOfPlaces());
     };
@@ -37,13 +36,13 @@ function EventRoomOptionHandler(selectedRoom) {
 
 function EventSubscribersHandler(eventModel) {
     var self = this;
-    
+
     self.simpleTeamListVm = new SimpleTeamListVm(eventModel.Teams);
     self.userColumnVm = new UserColumnVm(eventModel.Users);
-    
+
     self.isUsersLoaded = false;
     self.isTeamsLoaded = false;
-    
+
     self.getAllTeams = function () {
         $.getJSON("/Home/GetTeams", null, function (teams) {
             ko.mapping.fromJS(teams, {}, self.simpleTeamListVm.teamList);
@@ -75,18 +74,18 @@ function EventSubscribersHandler(eventModel) {
         self.userColumnVm.showColumnUserList(!self.userColumnVm.showColumnUserList());
     };
 
-    self.removeUser = function(user) {
+    self.removeUser = function (user) {
         self.userColumnVm.addUser(user);
     };
 
-    self.removeTeam = function(team) {
+    self.removeTeam = function (team) {
         self.simpleTeamListVm.addTeam(team);
     };
 }
 
 function DateTimeHandler(eventModel) {
     var self = this;
-    
+
     var dateTimeControl = {
         fromTime: $("#fromTime"),
         toTime: $("#toTime"),
@@ -94,7 +93,7 @@ function DateTimeHandler(eventModel) {
     }; //Setup time range control html elements
 
     var formatSettings = { date: "YYYY-MM-DD", time: "hh:mm a" };
-    var defaultTimeDifference = { minutes: dateTimeControl.fromTime.timepicker('option', 'step') };
+    var dateDefaults = { initialValue: moment().startOf('day'), initialDifference: { minutes: dateTimeControl.fromTime.timepicker('option', 'step') } };
 
     var setTime = function (updateMoment, withMoment) {
 
@@ -111,8 +110,8 @@ function DateTimeHandler(eventModel) {
             .date(withMoment.date());
     };
 
-    self.fromDateTime = ko.observable(moment().startOf('day'));
-    self.toDateTime = ko.observable(moment().startOf('day').add(defaultTimeDifference));
+    self.fromDateTime = ko.observable(dateDefaults.initialValue);
+    self.toDateTime = ko.observable(dateDefaults.initialValue.clone().add(dateDefaults.initialDifference));
 
     self.isAllDay = eventModel.IsAllDay;
 
@@ -133,14 +132,14 @@ function DateTimeHandler(eventModel) {
                 currentDate = self.fromDateTime(),
                 minDate = moment(self.dateInput.min).startOf('day');
 
-            if (newDate > minDate) {
+            if (newDate < minDate) {
+                $(event.target).val(self.dateInput.value());
+            }
+            else {
                 setDate(currentDate, newDate);
 
                 self.fromDateTime(currentDate);
-                self.toDateTime(currentDate);
-            }
-            else {
-                $(event.target).val(self.dateInput.value());
+                self.toDateTime(currentDate.clone());
             }
         }
     };
@@ -151,14 +150,23 @@ function DateTimeHandler(eventModel) {
         }, self),
         timeChanged: function (context, event) {
             var fromTime = moment($(event.target).val(), formatSettings.time),
-                toTime = moment(self.toDateTime().format(formatSettings.time), formatSettings.time),
                 currentFromTime = self.fromDateTime();
+            
+            if (!moment.isMoment(fromTime) ||
+                !fromTime.isValid() ||
+                event.type === "timeFormatError") {
+                self.fromDateTime(currentFromTime);
+                return;
+            }
 
             setTime(currentFromTime, fromTime);
             self.fromDateTime(currentFromTime);
 
+            //Update "from" time and "to" time if needed
+            var toTime = moment(self.toDateTime().format(formatSettings.time), formatSettings.time);
+
             if (fromTime > toTime) {
-                self.toDateTime(currentFromTime);
+                self.toDateTime(currentFromTime.clone());
             }
         }
     };
@@ -168,25 +176,32 @@ function DateTimeHandler(eventModel) {
             return self.toDateTime().format(formatSettings.time);
         }, self),
         timeChanged: function (context, event) {
-            //Todo: This bidlocodishe is because of time formats difference in case of using timepicker and moment.js
-            var toTime = moment($(event.target).val(), formatSettings.time), //moment($(event.target).timepicker("getTime")).year(0).month(0).date(1),
-                fromTime = moment(self.fromDateTime().format(formatSettings.time), formatSettings.time), //self.fromDateTime();
+            var toTime = moment($(event.target).val(), formatSettings.time),
                 currentToTime = self.toDateTime();
+
+            if (!moment.isMoment(toTime) ||
+                !toTime.isValid() ||
+                event.type === "timeFormatError") {
+                self.toDateTime(currentToTime);
+                return;
+            }
+            
+            //Update "to" time and "from" time if needed
+            var fromTime = moment(self.fromDateTime().format(formatSettings.time), formatSettings.time);
 
             setTime(currentToTime, toTime);
             self.toDateTime(currentToTime);
 
             if (toTime < fromTime) {
-                self.fromDateTime(currentToTime);
+                self.fromDateTime(currentToTime.clone());
             }
         }
     };
 }
 
-
 function CalendarEventVm(eventModel) {
     var self = this;
-    
+
     self.eventModel = ko.mapping.fromJS(eventModel, {}, new CalendarEvent());
     if (self.eventModel.Users() == null) self.eventModel.Users([]);
     if (self.eventModel.Teams() == null) self.eventModel.Teams([]);
@@ -208,7 +223,7 @@ function CalendarEventVm(eventModel) {
     self.sendModel = function () {
         self.eventModel.DateStart(self.dateTime.fromDateTime().toJSON());
         self.eventModel.DateEnd(self.dateTime.toDateTime().toJSON());
-        
+
         $.ajax({
             url: self.eventModel.Id != 0 ? "/Home/Edit" : "/Home/CreateEvent",
             data: JSON.stringify(ko.toJS(self.eventModel)),
@@ -219,8 +234,8 @@ function CalendarEventVm(eventModel) {
             dataType: 'json'
         });
     };
-  
-    $("form:first").on("submit", function(e) {
+
+    $("form:first").on("submit", function (e) {
         e.preventDefault();
         if (!self.validateModel()) return;
         self.sendModel();
@@ -229,13 +244,13 @@ function CalendarEventVm(eventModel) {
     self.validateModel = function () {
         $("div[class*='validation-summary'] > ul").empty();
         self.isError(true);
-        
+
         if (!$("form:first").valid()) return false;
         if (self.eventModel.EventType() == 2 && self.eventModel.Users().length == 0 && self.eventModel.Teams().length == 0) {
             $("div[class*='validation-summary'] > ul").append("<li>At least one Team or User should be specified!</li>");
             return false;
         }
-        
+
         self.isError(false);
         return true;
     };

@@ -12,8 +12,7 @@ namespace Bs.Calendar.Mvc.Server
                 "~/Scripts/modernizr-2.6.2.min.js",
                 "~/Scripts/jquery.validate.min.js",
                 "~/Scripts/jquery.validate.unobtrusive.min.js",
-                "~/Scripts/jquery.unobtrusive-ajax.min.js",
-                "~/Scripts/jquery.datetimeentry.min.js"));
+                "~/Scripts/jquery.unobtrusive-ajax.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery.timepicker").Include(
                 "~/Scripts/jquery.timepicker/jquery.timepicker.min.js"));
@@ -29,6 +28,9 @@ namespace Bs.Calendar.Mvc.Server
                 "~/Scripts/Knockout/knockout.mapping-latest.js"));
                 
             var scripts = new Bundle("~/Scripts/all", new JsMinify());
+            scripts.Include("~/Scripts/Shared/UserColumnList.js");
+            scripts.Include("~/Scripts/Shared/SimpleTeamList.js");
+            scripts.Include("~/Scripts/Layout/list-view.js");
             scripts.Include("~/Scripts/Rooms/SetupEvents.js");
             scripts.Include("~/Scripts/Rooms/ColorPicker.js");
             scripts.Include("~/Scripts/Teams/TeamFrameFilter.js");
@@ -37,25 +39,21 @@ namespace Bs.Calendar.Mvc.Server
             scripts.Include("~/Scripts/Users/user.js");
             scripts.Include("~/Scripts/Users/UserList.js");
             scripts.Include("~/Scripts/Users/UserFrameFilter.js");
-            scripts.Include("~/Scripts/Layout/list-view.js");
             scripts.Include("~/Scripts/Home/Calendar.js");
-            scripts.Include("~/Scripts/Home/PersonalEvent.js");
-            scripts.Include("~/Scripts/Shared/UserColumnList.js");
-            scripts.Include("~/Scripts/Shared/SimpleTeamList.js");
             scripts.Include("~/Scripts/Home/CalendarEvent.js");
             BundleTable.Bundles.Add(scripts);
 
             var css = new Bundle("~/Content/css", new CssMinify());
             css.Include("~/Content/");
             css.Include("~/Content/gumby/gumby.css");
+            css.Include("~/Content/jquery.timepicker/jquery.timepicker.css");
+            css.Include("~/Content/Shared/UserColumnList.css");
+            css.Include("~/Content/Shared/SimpleTeamList.css");
             css.Include("~/Content/Rooms/ColorPicker.css");
             css.Include("~/Content/Users/RoleStateFilterWindow.css");
             css.Include("~/Content/Layout/layout.css");
             css.Include("~/Content/Teams/TeamEdit.css");
-            css.Include("~/Content/jquery.timepicker/jquery.timepicker.css");
             css.Include("~/Content/Home/CreateEvent.css");
-            css.Include("~/Content/Shared/UserColumnList.css");
-            css.Include("~/Content/Shared/SimpleTeamList.css");
             css.Include("~/Content/Home/CalendarEvent.css");
             BundleTable.Bundles.Add(css);
         }
