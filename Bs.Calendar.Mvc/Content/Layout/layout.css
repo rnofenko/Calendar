@@ -25,5 +25,10 @@ form label {
 }
 
 .page-title {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid;
+    margin-bottom: 30px;
+}
+
+.sub-title{
+/* not required yet */
 }
