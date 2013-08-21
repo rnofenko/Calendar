@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
@@ -11,11 +10,7 @@ namespace Bs.Calendar.Mvc.ViewModels
     public class BookHistoryVm
     {
         public List<BookHistory> BookHistoryList { get; set; }
-
-        public int UserId { get; set; }
         public int BookId { get; set; }        
-        public DateTime OrderDate { get; set; }
-        public DirectionEnums Action { get; set; }
 
         [Display(Name = "Description")]
         public string BookDescription { get; set; }

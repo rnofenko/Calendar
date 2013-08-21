@@ -100,12 +100,6 @@ namespace Bs.Calendar.Mvc.Controllers
             return View("Edit", _bookHistoryService.GetBookHistories(book.BookId));
         }
 
-        public ActionResult Save(BookHistoryVm history)
-        {
-            _service.AddRecord(history);
-            return Json(new { redirectToUrl = Url.Action("Edit") });
-        }
-
         public ActionResult Delete(int id)
         {
             try

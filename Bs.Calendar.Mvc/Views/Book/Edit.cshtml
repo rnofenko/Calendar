@@ -20,22 +20,20 @@
     </div>
 </div>
 
-<div class="row">
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(book => book.BookId)
-        
-        <div class="centered seven columns danger alert">
-            @Html.ValidationSummary()
-        </div>
+        @Html.HiddenFor(book => book.BookId)                
 
-        <div class="row">
-            <fieldset class="centered eight columns">
-                <legend>
-                    <h4>@bookTitle</h4>
-                </legend>
-
+        <div class="row">              
+            <div class="six columns">                  
+                <fieldset>
+                    <legend>
+                        <strong>@bookTitle</strong>
+                    </legend>
+                <div class="centered seven columns danger alert">
+                    @Html.ValidationSummary()
+                </div>
                 <div class="field">
                     @Html.LabelFor(model => model.BookCode, new { @class = "inline three columns" })
                     @Html.TextBoxFor(model => model.BookCode, new { @class = "wide text input" })
@@ -51,7 +49,7 @@
                 </div>
                 <div class="field">
                     @Html.LabelFor(model => model.BookDescription, new { @class = "inline three columns" })
-                    @Html.TextAreaFor(model => model.BookDescription, new { @class = "wide input textarea"})
+                    @Html.TextAreaFor(model => model.BookDescription, new { @class = "wide input textarea" })
                 </div>
 
                 <div class="medium secondary btn three columns">
@@ -68,22 +66,21 @@
                         @Html.ActionLink("Delete", "Delete", new { id })
                     </div>
                 }
-            </fieldset>
+                </fieldset>
+            </div>
             @if (id != 0)
             {
-                <div class="centered eight columns">
-
+                <div class="six columns">
                     <div class="medium info btn icon-left icon-book three columns pull_right"
                         id="AddButton"
                         data-bind="click: show">
                         <a href="#">Add</a>
-                    </div>
+                    </div>                
                     @Html.Partial("BookHistory")
                 </div>
-            }
+            }                 
         </div>
     }
-</div>
 
 @if (id != 0)
 {

@@ -1,20 +1,30 @@
-﻿<input type="hidden" data-bind="value: bookId" />
+﻿<div data-bind="visible: $root.bookHistory().length == 0" class="medium warning btn pull_right">
+    <strong> Book history is empty </strong>
+</div>
 <table data-bind="visible: ($root.bookHistory().length > 0 || $root.showAdd) ">
     <thead>
         <th>User</th>
         <th>Order Date</th>
         <th>Action</th>
+        <th></th>
     </thead>
-    <tbody data-bind="visible: $root.showAdd">
+    <tbody data-bind="foreach: newBookHistory">
         <tr>
             <td>
-                <select data-bind="options: peoples, optionsValue: 'peopleId', value: userId, optionsText: 'peopleName'"></select>
+                <select data-bind="options: $root.peoples, optionsValue: 'peopleId', optionsText: 'peopleName', attr: { name: $root.indexedName($index(), 'UserId') }"></select>
+                <input type="hidden" data-bind="value: $root.bookId, attr: { name: $root.indexedName($index(), 'BookId') }" />
             </td>
             <td>
-                <input type="date" data-bind="value: orderDate"/>
+                <input type="date" data-bind="value: orderDate, attr: { name: $root.indexedName($index(), 'OrderDate') }"/>
             </td>
             <td>
                 <p data-bind="text: action"></p>
+                <input type="hidden" data-bind="value: actionId, attr: { name: $root.indexedName($index(), 'Action') }" />           
+            </td>
+            <td>
+                <div data-bind="visible: $index() + 1 == $root.newBookHistory().length, click: $root.removeRecord" class="one columns" style="cursor: pointer">
+                    <i class="icon-cancel"></i>
+                </div>
             </td>
         </tr>
     </tbody>
@@ -29,9 +39,7 @@
             <td>
                 <p data-bind="text: action" />
             </td>
+            <td></td>
         </tr>
     </tbody>
 </table>
-<div data-bind="visible: $root.showAdd" class="medium info btn icon-left icon-book three columns pull_right" id="SaveHistoryButton">
-    <input type="button" data-bind="click: save" value="Save" />
-</div>

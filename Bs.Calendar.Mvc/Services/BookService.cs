@@ -96,17 +96,6 @@ namespace Bs.Calendar.Mvc.Services
             _repoUnit.Book.Delete(_repoUnit.Book.Get(id));
         }
 
-        public void AddRecord(BookHistoryVm bookHistoryModel)
-        {
-            _repoUnit.BookHistory.Save(new BookHistory
-            {
-                BookId = bookHistoryModel.BookId,
-                OrderDate = bookHistoryModel.OrderDate,
-                UserId = bookHistoryModel.UserId,
-                Action = bookHistoryModel.Action
-            });            
-        }
-
         public void Save(BookHistoryVm model)
         {
             Validate(new BookEditVm(model));
@@ -115,7 +104,25 @@ namespace Bs.Calendar.Mvc.Services
             book.Title = model.BookTitle;
             book.Author = model.BookAuthor;
             book.Description = model.BookDescription;
+            if (model.BookHistoryList != null)
+            {
+                AddRecord(model.BookHistoryList);
+            }
             _repoUnit.Book.Save(book);
+        }
+
+        public void AddRecord(List<BookHistory> bookHistoryList)
+        {
+            foreach (var bookHistory in bookHistoryList)
+            {
+                _repoUnit.BookHistory.Save(new BookHistory
+                {
+                    BookId = bookHistory.BookId,
+                    UserId = bookHistory.UserId,                    
+                    OrderDate = bookHistory.OrderDate,
+                    Action = bookHistory.Action
+                });
+            }
         }
     }
 }
