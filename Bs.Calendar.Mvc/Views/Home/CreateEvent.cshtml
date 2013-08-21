@@ -16,38 +16,33 @@
             @Html.ValidationSummary("", new {@class = "warning alert", data_bind = "visible : isError()"})
         </div>
 
-        <div class="row">
-            <div class="nine columns">
-                <div class="six columns field">
-                    @Html.LabelFor(eventModel => eventModel.Title)
-                    @Html.TextBoxFor(eventModel => eventModel.Title, new { @class = "text input nine columns", data_bind = "value : eventModel.Title", placeholder = "Event Title" })
+        <div class="row field">
+            <div class="four columns">
+                @Html.LabelFor(eventModel => eventModel.Title)
+                @Html.TextBoxFor(eventModel => eventModel.Title, new { @class = "text input columns", data_bind = "value : eventModel.Title", placeholder = "Event Title" })
+            </div>
+            <div class="four columns invisible-onstart" data-bind="visible: eventModel.EventType() != 1">
+                <label>Event Place</label>
+                <div class="picker nine columns">
+                    <select data-bind="options: roomOptions.roomList, optionsText: roomOptions.optionText, value: eventModel.Room, optionsCaption: 'Choose Room...'"></select>
                 </div>
-            
-                <div class="four columns pull_right invisible-onstart" data-bind="visible: eventModel.EventType() != 1">
-                    <label>Event Place</label>
-                    <div class="picker nine columns">
-                        <select data-bind="options: roomOptions.roomList, optionsText: roomOptions.optionText, value: eventModel.Room, optionsCaption: 'Choose Room...'"></select>
-                    </div>
-                    <div data-bind="attr: { class: roomOptions.roomOptionColor }" class="one columns"></div>
-                </div>
+                <div data-bind="attr: { class: roomOptions.roomOptionColor }" class="one columns"></div>
             </div>
         </div>
         
-        <div class="row">
-            <div class="eight columns field">
-                <label>Time Period</label>
-                <input id="date" class="text input date four columns" type="date" data-bind="event: { input: dateTime.dateInput.dateChanged }, attr: { value: dateTime.dateInput.value(), min: dateTime.dateInput.min }" />
-                <div class="four columns">
-                    <div class="prepend append double field">
-                        <input id="fromTime" class="text input timeInput" type="text" placeholder="from" data-bind="disable: dateTime.isAllDay(), value: dateTime.fromInput.value, event: { change: dateTime.fromInput.timeChanged, timeFormatError: dateTime.fromInput.timeChanged, changeTime: dateTime.fromInput.timeChanged }" />
-                        <input id="toTime" class="text input timeInput" type="text" placeholder="to" data-bind="disable: dateTime.isAllDay(), value: dateTime.toInput.value, event: { change: dateTime.toInput.timeChanged, timeFormatError: dateTime.toInput.timeChanged, changeTime: dateTime.toInput.timeChanged }" />
-                    </div>
+        <div class="row field">
+            <label>Time Period</label>
+            <input id="date" class="text input date four columns" type="date" data-bind="event: { input: dateTime.dateInput.dateChanged }, attr: { value: dateTime.dateInput.value(), min: dateTime.dateInput.min }" />
+            <div class="four columns">
+                <div class="prepend append double field">
+                    <input id="fromTime" class="text input timeInput" type="text" placeholder="from" data-bind="disable: dateTime.isAllDay(), value: dateTime.fromInput.value, event: { change: dateTime.fromInput.timeChanged, timeFormatError: dateTime.fromInput.timeChanged, changeTime: dateTime.fromInput.timeChanged }" />
+                    <input id="toTime" class="text input timeInput" type="text" placeholder="to" data-bind="disable: dateTime.isAllDay(), value: dateTime.toInput.value, event: { change: dateTime.toInput.timeChanged, timeFormatError: dateTime.toInput.timeChanged, changeTime: dateTime.toInput.timeChanged }" />
                 </div>
-                <div class="push_one three columns">
-                    <label class="checkbox" data-bind="event: { 'gumby.onChange': function () { dateTime.isAllDay(!dateTime.isAllDay()) } }">
-                        <span></span> All day
-                    </label>
-                </div>
+            </div>
+            <div class="three columns">
+                <label class="checkbox" data-bind="event: { 'gumby.onChange': function () { dateTime.isAllDay(!dateTime.isAllDay()) } }">
+                    <span></span> All day
+                </label>
             </div>
         </div>
     
