@@ -1,4 +1,4 @@
-﻿function PersonalEventVm(jsonCalendarEventVm, formId) {
+﻿function PersonalEventVm(formId) {
     var self = this;
 
     var dateTimeControl = {

@@ -28,7 +28,6 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
-
             //Setup and apply timepicker plugin
             var timePickerConfig = {
                 forceRoundTime: true,
@@ -40,7 +39,8 @@
             
             //Setup knockout
             ko.applyBindings(new MeetingEventVm(), document.getElementById("meeting-event"));
-            ko.applyBindings(new PersonalEventVm(null, "personal-event"), document.getElementById("personal-event"));
+            ko.applyBindings(new PersonalEventVm("personal-event"), document.getElementById("personal-event"));
+
             $(".invisible-onstart").removeClass("invisible-onstart");
         });
     </script>

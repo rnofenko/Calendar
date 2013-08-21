@@ -284,7 +284,6 @@
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\AccountVm.cs" />
     <Compile Include="ViewModels\Home\CalendarEventVm.cs" />
-    <Compile Include="ViewModels\Home\PersonalEventVm.cs" />
     <Compile Include="ViewModels\RegisterVm.cs" />
     <Compile Include="ViewModels\RoomEditVm.cs" />
     <Compile Include="ViewModels\RoomsVm.cs" />
@@ -394,8 +393,6 @@
     <Content Include="Views\Book\AddBookHistory.cshtml" />
     <Content Include="Views\Home\CreateEvent.cshtml" />
     <Content Include="Views\Home\MeetingEvent.cshtml" />
-    <Content Include="Views\Home\Edit.cshtml" />
-    <Content Include="Views\Home\DateTimeRangePicker.cshtml" />
     <Content Include="Views\Shared\SimpleTeamList.cshtml" />
   </ItemGroup>
   <ItemGroup>

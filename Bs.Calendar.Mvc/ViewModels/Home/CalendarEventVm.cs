@@ -10,6 +10,20 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
 {
     public class CalendarEventVm
     {
+        public CalendarEvent Map(CalendarEventVm calendarEvent)
+        {
+            return new CalendarEvent
+            {
+                Id = Id,
+                Title = Title,
+                Text = Text,
+                DateStart = DateStart,
+                DateEnd = DateEnd,
+                EventType = EventType,
+                Room = Room
+            };
+        }
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Title is required!"),
@@ -28,6 +42,6 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
         public EventType EventType { get; set; }
 
         public List<UserVm> Users { get; set; }
-        public List<TeamVm> Teams { get; set; } 
+        public List<TeamVm> Teams { get; set; }
     }
 }
