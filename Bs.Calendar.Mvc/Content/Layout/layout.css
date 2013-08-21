@@ -19,3 +19,11 @@
 .invisible-onstart {
     display: none;
 }
+
+form label {
+    cursor: default;
+}
+
+.page-title {
+    border-bottom: 1px solid #000;
+}

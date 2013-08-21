@@ -178,7 +178,7 @@ function DateTimeHandler(eventModel) {
         timeChanged: function (context, event) {
             var toTime = moment($(event.target).val(), formatSettings.time),
                 currentToTime = self.toDateTime();
-
+            
             if (!moment.isMoment(toTime) ||
                 !toTime.isValid() ||
                 event.type === "timeFormatError") {
