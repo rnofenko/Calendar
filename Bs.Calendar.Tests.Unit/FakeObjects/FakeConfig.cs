@@ -30,5 +30,7 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
             get { return _pageSize ?? 7; }
             set { _pageSize = value; }
         }
+
+        public DateTime Now { get { return DateTime.Now; } }
     }
 }

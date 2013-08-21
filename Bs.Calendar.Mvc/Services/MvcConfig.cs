@@ -42,5 +42,7 @@ namespace Bs.Calendar.Mvc.Services
             get { return _pageSize ?? 7; }
             set { _pageSize = value; }
         }
+
+        public DateTime Now { get { return DateTime.Now; } }
     }
 }

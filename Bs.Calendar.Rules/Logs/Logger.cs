@@ -1,4 +1,6 @@
-﻿namespace Bs.Calendar.Rules.Logs
+﻿using System;
+
+namespace Bs.Calendar.Rules.Logs
 {
     public class Logger
     {
@@ -12,6 +14,14 @@
             {
                 //совсем плохо.
             }
+        }
+
+        public static void Info(string message)
+        {
+        }
+
+        public static void Error(string message, Exception exception)
+        {
         }
     }
 }
