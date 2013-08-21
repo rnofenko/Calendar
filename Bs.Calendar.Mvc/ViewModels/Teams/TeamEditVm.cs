@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Bs.Calendar.Models;
+using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.ViewModels.Teams
@@ -13,13 +14,11 @@ namespace Bs.Calendar.Mvc.ViewModels.Teams
             TeamId = team.Id;
             Name = team.Name;
             Description = team.Description;
-            HeaderPattern = Config.Instance.TeamHeaderPattern;
-            Users = team.Users == null ? new List<TeamUserVm>() : team.Users.Select(u => new TeamUserVm(u)).ToList();
+            Users = team.Users == null ? new List<UserVm>() : team.Users.Select(u => new UserVm(u)).ToList();
         }
 
         public TeamEditVm()
         {
-            HeaderPattern = Config.Instance.TeamHeaderPattern;
         }
 
         public int TeamId { get; set; }
@@ -32,9 +31,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Teams
         [StringLength(50)]
         public string Description { get; set; }
 
-        public List<TeamUserVm> Users { get; set; } 
-
-        public string HeaderPattern { get; set; }
+        public List<UserVm> Users { get; set; } 
 
         public bool IsDeleted { get; set; }
     }

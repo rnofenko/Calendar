@@ -1,0 +1,12 @@
+﻿<div class="row team-simplelist-body invisible-onstart" data-bind="visible: simpleTeamListVm.showTeamList() && simpleTeamListVm.teamList().length > 0">
+        <ul data-bind="foreach: simpleTeamListVm.teamList" class="four_up tiles team-simplelist">
+            <li>
+                <span data-bind="text: Name"></span>
+                <i class="icon-plus-circled pull_right" data-bind="click: $root.simpleTeamListVm.removeTeam"></i>
+            </li>
+        </ul>
+    </div>
+
+<div class="warning alert text-center invisible-onstart" data-bind="visible: simpleTeamListVm.showTeamList() && simpleTeamListVm.teamList().length == 0">
+    Sorry, no teams to add.
+</div>        

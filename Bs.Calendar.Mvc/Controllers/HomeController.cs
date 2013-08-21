@@ -20,9 +20,16 @@ namespace Bs.Calendar.Mvc.Controllers
             return View(users);
         }
 
+        [HttpGet]
         public ActionResult CreateEvent()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult CreateEvent(CalendarEventVm calendarEvent)
+        {
+            return null;
         }
 
         [HttpGet]
@@ -31,10 +38,16 @@ namespace Bs.Calendar.Mvc.Controllers
             return Json(_service.GetEvents(from, to), JsonRequestBehavior.AllowGet);
         }
 
-        //TODO: Replace this thing with something appropriate
-        public ActionResult Edit()
+        [HttpGet]
+        public JsonResult GetTeams()
         {
-            return View("Edit");
+            return Json(_service.GetTeams(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetAllUsers()
+        {
+            return Json(_service.GetAllUsers(), JsonRequestBehavior.AllowGet);
         }
     }
 }

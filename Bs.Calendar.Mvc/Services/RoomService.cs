@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
@@ -62,6 +63,11 @@ namespace Bs.Calendar.Mvc.Services
             room.Color = roomModel.Color;
 
             _repoUnit.Room.Save(room);
+        }
+
+        public IEnumerable<Room> GetAllRooms()
+        {
+            return _repoUnit.Room.Load().ToList();
         }
     }
 }

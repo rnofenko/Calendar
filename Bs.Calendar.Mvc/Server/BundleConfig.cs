@@ -40,6 +40,8 @@ namespace Bs.Calendar.Mvc.Server
             scripts.Include("~/Scripts/Layout/list-view.js");
             scripts.Include("~/Scripts/Home/Calendar.js");
             scripts.Include("~/Scripts/Home/PersonalEvent.js");
+            scripts.Include("~/Scripts/Shared/UserColumnList.js");
+            scripts.Include("~/Scripts/Shared/SimpleTeamList.js");
             scripts.Include("~/Scripts/Home/MeetingEvent.js");
             BundleTable.Bundles.Add(scripts);
 
@@ -52,6 +54,9 @@ namespace Bs.Calendar.Mvc.Server
             css.Include("~/Content/Teams/TeamEdit.css");
             css.Include("~/Content/jquery.timepicker/jquery.timepicker.css");
             css.Include("~/Content/Home/CreateEvent.css");
+            css.Include("~/Content/Shared/UserColumnList.css");
+            css.Include("~/Content/Shared/SimpleTeamList.css");
+            css.Include("~/Content/Home/CalendarEvent.css");
             BundleTable.Bundles.Add(css);
         }
     }

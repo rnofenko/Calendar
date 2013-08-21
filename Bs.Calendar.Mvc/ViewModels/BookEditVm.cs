@@ -18,6 +18,7 @@ namespace Bs.Calendar.Mvc.ViewModels
             Code = book.Code;
             Title = book.Title;
             Author = book.Author;
+            Description = book.Description;
         }
 
         public BookEditVm(BookHistoryVm model)
@@ -25,7 +26,8 @@ namespace Bs.Calendar.Mvc.ViewModels
             BookId = model.BookId;
             Code = model.BookCode;            
             Author = model.BookAuthor;
-            Title = model.BookTitle;            
+            Title = model.BookTitle;
+            Description = model.BookDescription;
         }
 
         [StringLength(BaseEntity.LENGTH_NAME),
@@ -42,5 +44,8 @@ namespace Bs.Calendar.Mvc.ViewModels
         Required(ErrorMessage = "Author should be specified"),
         StringLength(BaseEntity.LENGTH_NAME)]
         public string Author { get; set; }
+
+        [Display(Name = "Description")]
+        public string Description { get; set; }
     }
 }

@@ -1,0 +1,22 @@
+﻿.calendar-event-user.tiles > li, .calendar-event-team.tiles > li {
+    margin-bottom: 15px;
+    background: #f2f2f2;
+    height: 38px;
+    cursor: default;
+    padding-left: 10px;
+    border: 1px solid #c9c9c9;
+    line-height: 38px;
+}
+
+.calendar-event-team.tiles > li {
+    background:beige;
+}
+
+.calendar-addteam-btn.btn {
+    background: beige;
+    border: 1px solid beige;
+}
+
+.calendar-addteam-btn.btn:hover {
+    background: white;
+}

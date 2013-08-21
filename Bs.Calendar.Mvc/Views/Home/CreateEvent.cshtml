@@ -3,12 +3,6 @@
 }
 
 <div class="row">
-    <div class="centered seven columns default alert text-center">
-        <h4>@ViewBag.Title</h4>
-    </div>
-</div>
-
-<div class="row">
     <div class="twelve columns">
         <section class="pill tabs">
             <ul class="tab-nav">
@@ -47,6 +41,7 @@
             //Setup knockout
             ko.applyBindings(new MeetingEventVm(), document.getElementById("meeting-event"));
             ko.applyBindings(new PersonalEventVm(null, "personal-event"), document.getElementById("personal-event"));
+            $(".invisible-onstart").removeClass("invisible-onstart");
         });
     </script>
 }

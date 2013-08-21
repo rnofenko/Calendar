@@ -7,6 +7,7 @@ using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 using System.Linq;
 using Bs.Calendar.Mvc.ViewModels.Teams;
+using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Tests.Unit.FakeObjects;
 using FluentAssertions;
 using NUnit.Framework;
@@ -37,7 +38,7 @@ namespace Bs.Calendar.Tests.Unit
             //arrange
             var user = new User {Live = LiveStatuses.Active, FirstName = "Alex", LastName = "Al", Id = 1};
             var team = new Team { Name = ".NET", Id = 1 };
-            var teamVm = new TeamEditVm(team) { Users = new List<TeamUserVm> { new TeamUserVm(user) } };
+            var teamVm = new TeamEditVm(team) { Users = new List<UserVm> { new UserVm(user) } };
 
             _unit.User.Save(user);
             _unit.Team.Save(team);         
@@ -59,7 +60,7 @@ namespace Bs.Calendar.Tests.Unit
                 new User {Live = LiveStatuses.Active, FirstName = "Alex", LastName = "Al", Id = 2}
             };
             var team = new Team {Name = ".NET", Id = 1};
-            var teamVm = new TeamEditVm(team) { Users = users.Select(u => new TeamUserVm(u)).ToList()};
+            var teamVm = new TeamEditVm(team) { Users = users.Select(u => new UserVm(u)).ToList()};
 
             users.ForEach(u => _unit.User.Save(u));
             _unit.Team.Save(team);
@@ -76,7 +77,7 @@ namespace Bs.Calendar.Tests.Unit
         {
             //arrange
             var user = new User { Live = LiveStatuses.Active, FirstName = "Alex", LastName = "Al", Id = 1 };
-            var teamVm = new TeamEditVm { Name = ".NET", Users = new List<TeamUserVm> { new TeamUserVm(user) } };
+            var teamVm = new TeamEditVm { Name = ".NET", Users = new List<UserVm> { new UserVm(user) } };
             _unit.User.Save(user);
 
             //act
@@ -95,7 +96,7 @@ namespace Bs.Calendar.Tests.Unit
                 new User {Live = LiveStatuses.Active, FirstName = "Alex", LastName = "Al", Id = 1},
                 new User {Live = LiveStatuses.Active, FirstName = "Alex", LastName = "Al", Id = 2}
             };
-            var teamVm = new TeamEditVm { Name = ".NET", Users = users.Select(u => new TeamUserVm(u)).ToList() };
+            var teamVm = new TeamEditVm { Name = ".NET", Users = users.Select(u => new UserVm(u)).ToList() };
             users.ForEach(u => _unit.User.Save(u));
 
             //act
@@ -144,7 +145,7 @@ namespace Bs.Calendar.Tests.Unit
                 new User {Live = LiveStatuses.Active, FirstName = "Alex", LastName = "Al", Id = 2}
             };
             var team = new Team {Name = ".NET", Id = 1, Users = users};
-            var teamVm = new TeamEditVm(team) { Users = new List<TeamUserVm> { new TeamUserVm(users[0]) } };
+            var teamVm = new TeamEditVm(team) { Users = new List<UserVm> { new UserVm(users[0]) } };
 
             users.ForEach(u => _unit.User.Save(u));
             _unit.Team.Save(team);
@@ -166,7 +167,7 @@ namespace Bs.Calendar.Tests.Unit
                 new User {Live = LiveStatuses.Active, FirstName = "Alex", LastName = "Al", Id = 2}
             };
             var team = new Team { Name = ".NET", Id = 1, Users = users };
-            var teamVm = new TeamEditVm(team) { Users = new List<TeamUserVm>()};
+            var teamVm = new TeamEditVm(team) { Users = new List<UserVm>()};
 
             users.ForEach(u => _unit.User.Save(u));
             _unit.Team.Save(team);

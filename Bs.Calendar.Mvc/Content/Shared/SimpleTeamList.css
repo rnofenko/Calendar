@@ -1,0 +1,13 @@
+﻿.team-simplelist-body {
+    border: 1px solid #d8d8d8;
+    border-radius: 4px 4px 0 0;
+    padding: 0px 10px 10px 10px;
+}
+
+.team-simplelist.tiles > li {
+    margin-top: 15px;
+    border: 1px solid #c9c9c9;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

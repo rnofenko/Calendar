@@ -1,10 +1,9 @@
-﻿function BookHistory(source)
+﻿function BookHistoryItem(source)
 {
     var _self = this;
 
-    _self.userId = source.UserId;
+    _self.userId = source.UserId;    
     _self.userFullName = ko.observable();
-
     ko.computed(function ()
     {
         $.getJSON("/Users/GetUserFullName", { id: _self.userId }, _self.userFullName);
@@ -13,21 +12,10 @@
     _self.takeDate = new Date(parseInt(source.TakeDate.substr(6))).toISOString().substr(0, 10);
     _self.returnDate = new Date(parseInt(source.ReturnDate.substr(6))).toISOString().substr(0, 10);
 
-    _self.orderDirection = source.OrderDirection;
-
-    ko.computed(function ()
-    {
-        if (_self.orderDirection == 1)
-        {
-            _self.orderDirection = "Take";
-        } else if (_self.orderDirection == 2)
-        {
-            _self.orderDirection = "Return";
-        }
-    }, this);
+    _self.orderDirection = source.OrderDirection == 1 ? "Take" : "Return";
 }
 
-function People(id, name)
+function User(id, name)
 {
     var self = this;
 
@@ -35,7 +23,7 @@ function People(id, name)
     self.peopleName = name;
 }
 
-function BookHistoryVm(param)
+function BookHistoryList(param)
 {
     var self = this;
 
@@ -50,7 +38,7 @@ function BookHistoryVm(param)
             {
                 $.each(data, function (index, item)
                 {
-                    self.peoples.push(new People(index, item));
+                    self.peoples.push(new User(index, item));
                 });
             });
     }, this);
@@ -71,14 +59,8 @@ function BookHistoryVm(param)
     self.takeDate = ko.observable(new Date().toJSON());
     self.returnDate = ko.observable(new Date().toJSON());
     self.orderDirection = ko.observable();
-    self.userId = ko.observable();
-    self.bookId = 0;
-
-    ko.computed(function ()
-    {
-        var address = window.location.href;
-        self.bookId = address.substring(address.lastIndexOf("/") + 1, address.length);
-    }, this);
+    self.userId = ko.observable();    
+    self.bookId = window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length);
 
     self.save = function ()
     {
@@ -103,7 +85,7 @@ function BookHistoryVm(param)
 
     self.addBookHistory = function (data)
     {
-        self.bookHistory.push(new BookHistory(data));
+        self.bookHistory.push(new BookHistoryItem(data));
     };
 
     $.each(param, function (key, value)
