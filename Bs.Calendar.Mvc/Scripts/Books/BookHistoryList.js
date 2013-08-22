@@ -85,7 +85,7 @@ function BookHistoryList(param)
             contentType: "application/json",
             success: function (data)
             {
-                window.location.href = data.redirectToUrl + "/" + window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length);
+                window.location.href = data.redirectToUrl + "/" + data.id;
             }
         });
     };

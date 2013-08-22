@@ -10,24 +10,46 @@ namespace Bs.Calendar.Mvc.Services
 {
     public class BookService
     {
-        private readonly RepoUnit _repoUnit;
-        private readonly BookHistoryService _service;
+        private readonly RepoUnit _unit;
 
-        public BookService(RepoUnit repository, BookHistoryService service)
+        public BookService(RepoUnit repository)
         {
-            _repoUnit = repository;
-            _service = service;
+            _unit = repository;
         }
 
         public Book Get(int id)
         {
-            var book = _repoUnit.Book.Get(id);
+            var book = _unit.Book.Get(id);
             return book;
+        }
+        
+        public Book Get(string code)
+        {
+            return _unit.Book.Get(b => b.Code == code);
+        }
+
+        public BookHistoryVm GetBookHistories(int bookId)
+        {
+            var book = _unit.Book.Get(bookId);
+            if (book.Id == 0)
+            {
+                throw new WarningException();
+            }
+            var bookHistories = _unit.BookHistory.Load(h => h.BookId == bookId).OrderByDescending(h => h.OrderDate).ThenByDescending(h => h.Action);//.ToList();
+            var result = new BookHistoryVm(book)
+            {
+                BookHistoryList = new List<BookHistoryItemVm>()
+            };
+            foreach (var bookHistory in bookHistories)
+            {
+                result.BookHistoryList.Add(new BookHistoryItemVm(bookHistory));
+            }
+            return result;
         }
 
         public IEnumerable<Book> Load(string orderby, string searchStr)
         {
-            IEnumerable<Book> books = _repoUnit.Book.Load();
+            IEnumerable<Book> books = _unit.Book.Load();
             books = _search(books, searchStr);
             books = _orderBy(books, orderby);
             return books;
@@ -87,7 +109,7 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException(string.Format("Author should be specified"));
             }
-            if (_repoUnit.Book.Load(b => b.Code == book.Code && b.Id != book.BookId).Any())
+            if (_unit.Book.Load(b => b.Code == book.Code && b.Id != book.BookId).Any())
             {
                 throw new WarningException(string.Format("Code should be unique"));
             }
@@ -95,7 +117,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public void Delete(int id)
         {
-            _repoUnit.Book.Delete(_repoUnit.Book.Get(id));
+            _unit.Book.Delete(_unit.Book.Get(id));
         }
 
         public void Save(BookHistoryVm model)
@@ -110,7 +132,7 @@ namespace Bs.Calendar.Mvc.Services
             {
                 UpdateHistory(model);
             }
-            _repoUnit.Book.Save(book);
+            _unit.Book.Save(book);
         }
 
         private void UpdateHistory(BookHistoryVm model)
@@ -119,12 +141,12 @@ namespace Bs.Calendar.Mvc.Services
             {
                 if (historyRecord.Deleted)
                 {
-                    var historyToDelete = _repoUnit.BookHistory.Get(historyRecord.Id);
-                    _repoUnit.BookHistory.Delete(historyToDelete);
+                    var historyToDelete = _unit.BookHistory.Get(historyRecord.Id);
+                    _unit.BookHistory.Delete(historyToDelete);
                 }
                 else
                 {
-                    _repoUnit.BookHistory.Save(new BookHistoryItem
+                    _unit.BookHistory.Save(new BookHistoryItem
                     {
                         Id = historyRecord.Id,
                         BookId = historyRecord.BookId,
