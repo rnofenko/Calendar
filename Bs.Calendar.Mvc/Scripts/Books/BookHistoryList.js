@@ -21,36 +21,27 @@ function User(id, name)
     self.peopleName = name;
 }
 
-function BookItem()              
+function BookItem()
 {
     var self = this;
 
     self.BookCode = ko.observable();
-    self.bookTitle = ko.observable();
-    self.bookAuthor = ko.observable();
-    self.bookDescription = ko.observable();    
+    self.BookTitle = ko.observable();
+    self.BookAuthor = ko.observable();
+    self.BookDescription = ko.observable();
 }
 
 function BookHistoryList(param)
 {
     var self = this;
-    
-    self.bookItem = {
-        BookCode: "",
-        BookTitle: "",
-        BookAuthor: "",
-        BookDescription: ""
-    };
 
+    self.bookItem = new BookItem();
     self.oldBookHistory = ko.observableArray();
     self.newBookHistory = ko.observableArray();
     self.historyToDelete = Array();
 
     self.peoples = ko.observableArray();
-
-    ko.computed(function ()
-    {
-        $.getJSON("/Users/GetAllUsers", {},
+    $.getJSON("/Users/GetAllUsers", {},
             function (data)
             {
                 $.each(data, function (index, item)
@@ -58,7 +49,6 @@ function BookHistoryList(param)
                     self.peoples.push(new User(index, item));
                 });
             });
-    }, this);
 
     self.showAdd = ko.observable(false);
 
@@ -75,7 +65,7 @@ function BookHistoryList(param)
             data: ko.toJSON(
             {
                 BookHistoryList: $.merge(self.historyToDelete, self.newBookHistory()),
-                BookId: window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length),                
+                BookId: window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length),
                 BookCode: self.bookItem.BookCode,
                 BookTitle: self.bookItem.BookTitle,
                 BookAuthor: self.bookItem.BookAuthor,
@@ -92,7 +82,7 @@ function BookHistoryList(param)
 
     self.removeOldRecord = function (history)
     {
-        self.oldBookHistory.remove(history);        
+        self.oldBookHistory.remove(history);
         history.deleted = true;
         self.historyToDelete.push(history);
     };
@@ -109,7 +99,8 @@ function BookHistoryList(param)
 
     self.addNewRecord = function (data)
     {
-        if (typeof data === "undefined") {
+        if (typeof data === "undefined")
+        {
             data =
             {
                 UserId: 0,
@@ -120,14 +111,13 @@ function BookHistoryList(param)
                         (self.oldBookHistory()[0].action == "Take" ? 2 : 1) :
                         (self.newBookHistory()[0].action == "Take" ? 2 : 1),
                 Deleted: false
-        };
+            };
         }
         self.newBookHistory.unshift(new BookHistoryItem(data));
     };
 
     $.each(param, function (key, value)
     {
-
         self.bookItem = {
             BookCode: param.BookCode,
             BookTitle: param.BookTitle,

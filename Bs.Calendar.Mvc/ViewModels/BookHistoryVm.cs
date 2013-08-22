@@ -31,20 +31,19 @@ namespace Bs.Calendar.Mvc.ViewModels
 
         public BookHistoryVm(Book book)
         {
-            var repoUnit = Ioc.Resolve<RepoUnit>();
+            //var repoUnit = Ioc.Resolve<RepoUnit>();
 
             BookId = book.Id;
             BookCode = book.Code;
             BookTitle = book.Title;
             BookAuthor = book.Author;
             BookDescription = book.Description;
-
             BookHistoryList = new List<BookHistoryItemVm>();
-            var bookHistories = repoUnit.BookHistory.Load(h => h.BookId == book.Id);
-            foreach (var bookHistory in bookHistories)
-            {
-                BookHistoryList.Add(new BookHistoryItemVm(bookHistory));
-            }
+            //var bookHistories = repoUnit.BookHistory.Load(h => h.BookId == book.Id);
+            //foreach (var bookHistory in bookHistories)
+            //{
+            //    BookHistoryList.Add(new BookHistoryItemVm(bookHistory));
+            //}
         }
 
         public BookHistoryVm()
