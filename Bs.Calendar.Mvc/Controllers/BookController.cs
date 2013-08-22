@@ -85,19 +85,6 @@ namespace Bs.Calendar.Mvc.Controllers
             }
         }
 
-        [HttpPost,
-         ValidateAntiForgeryToken]
-        public ActionResult Edit(BookHistoryVm book)
-        {
-            if (ModelState.IsValid)
-            {
-                _service.Save(book);
-                return RedirectToAction("Index");
-            }
-
-            return View("Edit", _service.GetBookHistories(book.BookId));
-        }
-
         public ActionResult Save(BookHistoryVm book)
         {
             _service.Save(book);

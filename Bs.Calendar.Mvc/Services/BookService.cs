@@ -35,12 +35,11 @@ namespace Bs.Calendar.Mvc.Services
             {
                 throw new WarningException();
             }
-            //var bookHistories = _unit.BookHistory.Load(h => h.BookId == bookId).OrderByDescending(h => h.OrderDate).ThenByDescending(h => h.Action);//.ToList();
             var result = new BookHistoryVm(book)
             {
                 BookHistoryList = new List<BookHistoryItemVm>()
             };
-            foreach (var bookHistory in book.BookHistories.OrderByDescending(h => h.OrderDate).ThenByDescending(h => h.Action))
+            foreach (var bookHistory in book.BookHistories.OrderByDescending(h => h.OrderDate).ThenBy(h => h.UserId).ThenByDescending(h => h.Action))
             {
                 result.BookHistoryList.Add(new BookHistoryItemVm(bookHistory));
             }
