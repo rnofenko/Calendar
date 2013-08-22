@@ -7,7 +7,7 @@
     _self.bookId = window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length);
 
     _self.userFullName = ko.observable(source.FullName);
-    _self.orderDate = new Date(moment(source.OrderDate).format('L'));
+    _self.orderDate = moment(source.OrderDate).format("YYYY-MM-DD");
     _self.action = source.Action == 1 ? "Take" : "Return";
 
     _self.deleted = source.Deleted;
@@ -109,8 +109,7 @@ function BookHistoryList(param)
 
     self.addNewRecord = function (data)
     {
-        if (typeof data === "undefined")
-        {
+        if (typeof data === "undefined") {
             data =
             {
                 UserId: 0,
