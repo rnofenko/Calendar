@@ -10,12 +10,10 @@ namespace Bs.Calendar.Mvc.Controllers
     public class BookController : Controller
     {
         private readonly BookService _service;
-        private readonly BookHistoryService _bookHistoryService;
 
-        public BookController(BookService service, BookHistoryService bookHistoryService)
+        public BookController(BookService service)
         {
             _service = service;
-            _bookHistoryService = bookHistoryService;
         }
 
         public ActionResult Get(int id)
@@ -79,7 +77,7 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             try
             {
-                return View("Edit", _bookHistoryService.GetBookHistories(id));
+                return View("Edit", _service.GetBookHistories(id));
             }
             catch (WarningException)
             {
@@ -87,23 +85,10 @@ namespace Bs.Calendar.Mvc.Controllers
             }
         }
 
-        [HttpPost,
-         ValidateAntiForgeryToken]
-        public ActionResult Edit(BookHistoryVm book)
+        public ActionResult Save(BookHistoryVm book)
         {
-            if (ModelState.IsValid)
-            {
-                _service.Save(book);
-                return RedirectToAction("Index");
-            }
-
-            return View("Edit", _bookHistoryService.GetBookHistories(book.BookId));
-        }
-
-        public ActionResult Save(BookHistoryVm history)
-        {
-            _service.AddRecord(history);
-            return Json(new { redirectToUrl = Url.Action("Edit") });
+            _service.Save(book);
+            return Json(new { redirectToUrl = Url.Action("Edit"), id = _service.Get(book.BookCode).Id});
         }
 
         public ActionResult Delete(int id)

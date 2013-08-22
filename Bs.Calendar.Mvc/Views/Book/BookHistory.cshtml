@@ -1,44 +1,48 @@
-﻿<input type="hidden" data-bind="value: bookId" />
-<table data-bind="visible: ($root.bookHistory().length > 0 || $root.showAdd) ">
+﻿<div data-bind="visible: $root.oldBookHistory().length == 0" class="medium warning btn pull_right">
+    <strong>Book history is empty </strong>
+</div>
+<table data-bind="visible: ($root.oldBookHistory().length > 0 || $root.showAdd) ">
     <thead>
         <th>User</th>
-        <th>Take date</th>
-        <th>Return date</th>
-        <th>Order</th>
+        <th>Order Date</th>
+        <th>Action</th>
+        <th></th>
     </thead>
-    <tbody data-bind="visible: $root.showAdd">
+    <tbody data-bind="foreach: newBookHistory">
         <tr>
             <td>
-                <select data-bind="options: peoples, optionsValue: 'peopleId', value: userId, optionsText: 'peopleName'"></select>
+                <select data-bind="options: $root.peoples, optionsValue: 'peopleId', optionsText: 'peopleName', value: userId"></select>
             </td>
             <td>
-                <input type="date" data-bind="value: takeDate"/>
+                <input type="date" data-bind="value: orderDate" />
             </td>
             <td>
-                <input type="date" data-bind="value: returnDate"/>
+                <p data-bind="text: action"></p>
+                <input type="hidden" data-bind="value: actionId" />
             </td>
             <td>
-                <select data-bind="options: orderDirections, value: orderDirection"></select>
+                <div data-bind="click: $root.removeNewRecord" class="one columns" style="cursor: pointer">
+                    <i class="icon-cancel"></i>
+                </div>
             </td>
         </tr>
     </tbody>
-    <tbody data-bind="foreach: bookHistory">
+    <tbody data-bind="foreach: oldBookHistory">
         <tr>
             <td>
-                <p data-bind="text: userFullName"/>
+                <p data-bind="text: userFullName"></p>
+            </td>
+            <td>                
+                <p data-bind="text: moment(orderDate).format('DD.MM.YYYY'), value: orderDate"></p>
             </td>
             <td>
-                <input type="date" data-bind="value: takeDate">
+                <p data-bind="text: action" />
             </td>
             <td>
-                <input type="date" data-bind="value: returnDate">
-            </td>
-            <td>
-                <p data-bind="text: orderDirection" />
+                <div data-bind="click: $root.removeOldRecord" class="one columns" style="cursor: pointer">
+                    <i class="icon-cancel"></i>
+                </div>
             </td>
         </tr>
     </tbody>
 </table>
-<div data-bind="visible: $root.showAdd" class="medium info btn icon-left icon-book three columns pull_right" id="SaveHistoryButton">
-    <input type="button" data-bind="click: save" value="Save" />
-</div>

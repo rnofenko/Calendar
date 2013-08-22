@@ -3,12 +3,15 @@ using Bs.Calendar.Models.Bases;
 
 namespace Bs.Calendar.Models
 {
-    public class BookHistory : BaseEntity
+    public class BookHistoryItem : BaseEntity
     {
         public int BookId { get; set; }
+        public virtual Book Book { get; set; }
+
         public int UserId { get; set; }
-        public DateTime TakeDate { get; set; }
-        public DateTime ReturnDate { get; set; }
-        public DirectionEnums OrderDirection { get; set; }
+        public virtual User User { get; set; }
+
+        public DateTime OrderDate { get; set; }
+        public DirectionEnums Action { get; set; }
     }
 }

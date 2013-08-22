@@ -33,7 +33,7 @@ namespace Bs.Calendar.DataAccess.Bases
             return _context.Set<T>().FirstOrDefault(predicate);
         }
 
-        public T Get(int id)
+        public virtual T Get(int id)
         {
             return _context.Set<T>().Find(id);
         }
