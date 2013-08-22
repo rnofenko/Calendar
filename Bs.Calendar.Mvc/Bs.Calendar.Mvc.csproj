@@ -271,7 +271,7 @@
     <Compile Include="Services\MvcConfig.cs" />
     <Compile Include="Services\ValidateAjaxAttribute.cs" />
     <Compile Include="ViewModels\BookEditVm.cs" />
-    <Compile Include="ViewModels\BookHisoryItemVm.cs" />
+    <Compile Include="ViewModels\BookHistoryItemVm.cs" />
     <Compile Include="ViewModels\EventVm.cs" />
     <Compile Include="ViewModels\GenericPagingVm.cs" />
     <Compile Include="ViewModels\BookHistoryVm.cs" />

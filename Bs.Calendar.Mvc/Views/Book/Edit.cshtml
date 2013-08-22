@@ -31,32 +31,35 @@
                     <legend>
                         <strong>@bookTitle</strong>
                     </legend>
-                <div class="centered seven columns danger alert">
-                    @Html.ValidationSummary()
-                </div>
-                <div class="field">
-                    @Html.LabelFor(model => model.BookCode, new { @class = "inline three columns" })
-                    @Html.TextBoxFor(model => model.BookCode, new { @class = "wide text input" })
-                </div>
+                    <div class="centered seven columns danger alert">
+                        @Html.ValidationSummary()
+                    </div>
+                    <div data-bind="with: $root.bookItem">
+                        <div class="field">
+                            @Html.LabelFor(model => model.BookCode, new { @class = "inline three columns" })
+                            <input type="text" data-bind="value: BookCode" class="wide text input"/>
+                        </div>
 
-                <div class="field">
-                    @Html.LabelFor(model => model.BookTitle, new { @class = "inline three columns" })
-                    @Html.TextBoxFor(model => model.BookTitle, new { @class = "wide text input" })
-                </div>
-                <div class="field">
-                    @Html.LabelFor(model => model.BookAuthor, new { @class = "inline three columns" })
-                    @Html.TextBoxFor(model => model.BookAuthor, new { @class = "wide text input" })
-                </div>
-                <div class="field">
-                    @Html.LabelFor(model => model.BookDescription, new { @class = "inline three columns" })
-                    @Html.TextAreaFor(model => model.BookDescription, new { @class = "wide input textarea" })
-                </div>
+                        <div class="field">
+                            @Html.LabelFor(model => model.BookTitle, new { @class = "inline three columns" })
+                            <input type="text" data-bind="value: BookTitle" class="wide text input"/>
+                        
+                        </div>
+                        <div class="field">
+                            @Html.LabelFor(model => model.BookAuthor, new { @class = "inline three columns" })
+                            <input type="text" data-bind="value: BookAuthor" class="wide text input"/>                        
+                        </div>
+                            <div class="field">
+                                @Html.LabelFor(model => model.BookDescription, new { @class = "inline three columns" })
+                                <input type="text" data-bind="value: BookDescription" class="wide text input"/>                        
+                            </div>
+                        </div>
 
                 <div class="medium secondary btn three columns">
-                    <input type="submit" value="@btnName"/>
+                    <input type="button" value="@btnName" data-bind="click: $root.saveRecords"/>
                 </div>
 
-                <div class="medium default btn push_one three columns">
+                    <div class="medium default btn push_one three columns">
                     @Html.ActionLink("Back", "Index")
                 </div>
 
@@ -82,21 +85,18 @@
         </div>
     }
 
-@if (id != 0)
+@section scripts
 {
-    @section scripts
-    {
-        <script src="/Scripts/jquery-2.0.2.js"></script>
-        <script src="~/Scripts/jquery.validate.min.js"></script>
-        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-        <script src="../../Scripts/Books/BookHistoryList.js"></script>
-        <script src="../../Scripts/Shared/moment.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function ()
-            {
-                var model = new BookHistoryList(@Html.RawJson(@Model.BookHistoryList));
-                ko.applyBindings(model);
-            });
-        </script>
-    }
+    <script src="/Scripts/jquery-2.0.2.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="../../Scripts/Books/BookHistoryList.js"></script>
+    <script src="../../Scripts/Shared/moment.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            var model = new BookHistoryList(@Html.RawJson(@Model));
+            ko.applyBindings(model);
+        });
+    </script>
 }

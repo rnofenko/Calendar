@@ -3,7 +3,7 @@ using Bs.Calendar.Models;
 
 namespace Bs.Calendar.DataAccess
 {
-    public class BookHistoryRepository : BaseRepository<BookHistory>, IBookHistoryRepository
+    public class BookHistoryRepository : BaseRepository<BookHistoryItem>, IBookHistoryRepository
     {        
     }
 }

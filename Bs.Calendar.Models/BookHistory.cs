@@ -3,7 +3,7 @@ using Bs.Calendar.Models.Bases;
 
 namespace Bs.Calendar.Models
 {
-    public class BookHistory : BaseEntity
+    public class BookHistoryItem : BaseEntity
     {
         public int BookId { get; set; }
         public virtual Book Book { get; set; }

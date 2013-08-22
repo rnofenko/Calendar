@@ -39,13 +39,25 @@ namespace Bs.Calendar.Mvc.Services
         {
             foreach (var bookHistoryItem in bookHistoryItemsList)
             {
-                _unit.BookHistory.Save(new BookHistory
+                _unit.BookHistory.Save(new BookHistoryItem
                 {
+                    Id = bookHistoryItem.Id,
                     BookId = bookHistoryItem.BookId,
                     UserId = bookHistoryItem.UserId,
                     OrderDate = bookHistoryItem.OrderDate,
                     Action = bookHistoryItem.Action
                 });
+            }
+        }
+
+        public void ClearHistory(int bookId)
+        {
+            _unit.Book.Get(bookId).BookHistories.Clear();
+
+            var bookHistory  = _unit.BookHistory.Load(h => h.BookId == bookId);
+            foreach (var history in bookHistory)
+            {
+                _unit.BookHistory.Delete(history);
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bs.Calendar.Models
 {
@@ -14,5 +16,7 @@ namespace Bs.Calendar.Models
         public string Author { get; set; }
 
         public string Description { get; set; }
+
+        public ICollection<BookHistoryItem> BookHistories { get; set; }
     }
 }

@@ -1,7 +1,7 @@
-﻿<div data-bind="visible: $root.bookHistory().length == 0" class="medium warning btn pull_right">
-    <strong> Book history is empty </strong>
+﻿<div data-bind="visible: $root.oldBookHistory().length == 0" class="medium warning btn pull_right">
+    <strong>Book history is empty </strong>
 </div>
-<table data-bind="visible: ($root.bookHistory().length > 0 || $root.showAdd) ">
+<table data-bind="visible: ($root.oldBookHistory().length > 0 || $root.showAdd) ">
     <thead>
         <th>User</th>
         <th>Order Date</th>
@@ -11,35 +11,38 @@
     <tbody data-bind="foreach: newBookHistory">
         <tr>
             <td>
-                <select data-bind="options: $root.peoples, optionsValue: 'peopleId', optionsText: 'peopleName', attr: { name: $root.indexedName($index(), 'UserId') }"></select>
-                <input type="hidden" data-bind="value: $root.bookId, attr: { name: $root.indexedName($index(), 'BookId') }" />
+                <select data-bind="options: $root.peoples, optionsValue: 'peopleId', optionsText: 'peopleName', value: userId"></select>
             </td>
             <td>
-                <input type="date" data-bind="value: orderDate, attr: { name: $root.indexedName($index(), 'OrderDate') }"/>
+                <input type="date" data-bind="value: orderDate" />
             </td>
             <td>
                 <p data-bind="text: action"></p>
-                <input type="hidden" data-bind="value: actionId, attr: { name: $root.indexedName($index(), 'Action') }" />           
+                <input type="hidden" data-bind="value: actionId" />
             </td>
             <td>
-                <div data-bind="visible: $index() + 1 == $root.newBookHistory().length, click: $root.removeRecord" class="one columns" style="cursor: pointer">
+                <div data-bind="click: $root.removeNewRecord" class="one columns" style="cursor: pointer">
                     <i class="icon-cancel"></i>
                 </div>
             </td>
         </tr>
     </tbody>
-    <tbody data-bind="foreach: bookHistory">
+    <tbody data-bind="foreach: oldBookHistory">
         <tr>
             <td>
-                <p data-bind="text: userFullName"/>
+                <p data-bind="text: userFullName"></p>
             </td>
-            <td>
-                <p data-bind="text: orderDate"></p>
+            <td>                
+                <p data-bind="text: moment(orderDate).format('Do MMMM, YYYY'), value: orderDate"></p>
             </td>
             <td>
                 <p data-bind="text: action" />
             </td>
-            <td></td>
+            <td>
+                <div data-bind="click: $root.removeOldRecord" class="one columns" style="cursor: pointer">
+                    <i class="icon-cancel"></i>
+                </div>
+            </td>
         </tr>
     </tbody>
 </table>

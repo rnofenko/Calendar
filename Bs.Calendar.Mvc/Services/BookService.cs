@@ -108,9 +108,32 @@ namespace Bs.Calendar.Mvc.Services
             book.Description = model.BookDescription;
             if (model.BookHistoryList != null)
             {
-                _service.AddRecord(model.BookHistoryList);
+                UpdateHistory(model);
             }
             _repoUnit.Book.Save(book);
-        }        
+        }
+
+        private void UpdateHistory(BookHistoryVm model)
+        {
+            foreach (var historyRecord in model.BookHistoryList)
+            {
+                if (historyRecord.Deleted)
+                {
+                    var historyToDelete = _repoUnit.BookHistory.Get(historyRecord.Id);
+                    _repoUnit.BookHistory.Delete(historyToDelete);
+                }
+                else
+                {
+                    _repoUnit.BookHistory.Save(new BookHistoryItem
+                    {
+                        Id = historyRecord.Id,
+                        BookId = historyRecord.BookId,
+                        UserId = historyRecord.UserId,
+                        OrderDate = historyRecord.OrderDate,
+                        Action = historyRecord.Action
+                    });
+                }
+            }
+        }
     }
 }
