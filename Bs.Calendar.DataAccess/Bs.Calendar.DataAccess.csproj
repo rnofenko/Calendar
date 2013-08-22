@@ -52,10 +52,12 @@
     <Compile Include="Bases\IContexable.cs" />
     <Compile Include="Bases\IRepository.cs" />
     <Compile Include="BookHistoryRepository.cs" />
+    <Compile Include="CalendarLogRepository.cs" />
     <Compile Include="IBookHistoryRepository.cs" />
     <Compile Include="IBookRepository.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="DiDataAccess.cs" />
+    <Compile Include="ICalendarLogRepository.cs" />
     <Compile Include="IPersonalEventRepository.cs" />
     <Compile Include="IRoomRepository.cs" />
     <Compile Include="ITeamEventRepository.cs" />

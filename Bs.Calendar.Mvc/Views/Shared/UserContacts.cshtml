@@ -8,11 +8,11 @@
             <li class="field">
                 <div class="row">
                     <div class="push_one two columns"><i data-bind="attr: { class: Icon }"></i></div>
-                    <input data-bind="value: ContactType, attr: { name: $root.indexedName($index(), 'ContactType') }" type="hidden">
-                    <input class="wide text input eight columns" type="text" data-bind="value: Value, valueUpdate: 'afterkeydown', attr: { name: $root.indexedName($index(), 'Value') }">
-                    <div data-bind="click: $root.removeContact" class="one columns" style="cursor: pointer"><i class="icon-cancel"></i></div>       
+                    <input data-bind="value: ContactType, attr: { name: $root.getIndexedName($index(), 'ContactType') }" type="hidden">
+                    <input class="wide text input eight columns" type="text" data-bind="value: Value, valueUpdate: 'afterkeydown', attr: { name: $root.getIndexedName($index(), 'Value') }">
+                    <div data-bind="click: removeContact" class="one columns" style="cursor: pointer"><i class="icon-cancel"></i></div>
                 </div>
-            </li>   
+            </li>
         </ul>
         <div class="row">
             <div class="medium info btn icon-left icon-user-add push_nine three columns" data-bind="click: addContact"><a href="#">Add</a></div>

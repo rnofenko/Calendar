@@ -15,6 +15,12 @@ namespace Bs.Calendar.DataAccess
         private IBookHistoryRepository _bookHistory;
         private IPersonalEventRepository _personalEvent;
         private ITeamEventRepository _teamEvent;
+        private ICalendarLogRepository _calendarLog;
+
+        public ICalendarLogRepository CalendarLog
+        {
+            get { return _calendarLog ?? (_calendarLog = getRepository<ICalendarLogRepository>()); }
+        }
 
         public IUserRepository User
         {

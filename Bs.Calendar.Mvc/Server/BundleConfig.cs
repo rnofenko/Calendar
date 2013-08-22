@@ -23,11 +23,15 @@ namespace Bs.Calendar.Mvc.Server
             bundles.Add(new ScriptBundle("~/bundles/Moment").Include(
                 "~/Scripts/Moment/moment.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/Mediator").Include(
+                "~/Scripts/Mediator/Mediator.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/Knockout").Include(
                 "~/Scripts/Knockout/knockout-2.3.0.js",
                 "~/Scripts/Knockout/knockout.mapping-latest.js"));
                 
             var scripts = new Bundle("~/Scripts/all", new JsMinify());
+            scripts.Include("~/Scripts/Shared/MediatorSetup.js");
             scripts.Include("~/Scripts/Shared/UserColumnList.js");
             scripts.Include("~/Scripts/Shared/SimpleTeamList.js");
             scripts.Include("~/Scripts/Layout/list-view.js");

@@ -7,8 +7,8 @@ namespace Bs.Calendar.Models
     public enum EventType
     {
         Personal = 1, 
-        Meeting,
-        Company,
+        Meeting = 2,
+        Company = 4,
         All = Personal | Meeting | Company
     }
 }

@@ -6,8 +6,12 @@ function Contact(data) {
     self.Value = ko.observable(data.Value);
     self.ContactType = ko.observable(data.ContactType);
     self.Icon = ko.observable("");
-    
-    ko.computed(function () {    
+
+    self.removeContact = function (contact) {
+        mediator.trigger("UserContacts:removeContact", contact);
+    };
+
+    ko.computed(function () {
         $.getJSON("/Users/GetContactType", { contact: self.Value() }, self.ContactType);
     }, this).extend({ throttle: 400 });
 
@@ -34,24 +38,29 @@ function Contact(data) {
 //ViewModel
 function UserContactsVm(newContacts) {
     var self = this;
+
     self.Contacts = ko.observableArray();
 
-    self.addContact = function(data) {
+    self.addContact = function (data) {
+        
         if (typeof data === "undefined" || data == self) {
             data = { Id: 0, Value: "", ContactType: 0 };
         }
         self.Contacts.push(new Contact(data));
     };
 
-    $.each(newContacts, function(key,value) {
-        self.addContact(value);
+    $.each(newContacts, function (key, data) {
+        self.addContact(data);
     });
 
-    self.removeContact = function(contact) {
+    self.removeContact = function (contact) {
         self.Contacts.remove(contact);
     };
 
-    self.indexedName = function (index, parameter) {
-        return "Contacts[" + index + "]." + parameter;
+    self.getIndexedName = function (index, property) {
+        return "Contacts[" + index + "]." + property;
     };
+    
+    //Setup bindings
+    mediator.bind("UserContacts:removeContact", self.removeContact);
 };

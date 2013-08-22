@@ -21,7 +21,10 @@ namespace Bs.Calendar.Mvc.Services
         {
             using (var unit = new RepoUnit())
             {
-                return new[] { unit.User.Get(u => u.Email == email).Role.ToString() };
+                var user = unit.User.Get(u => u.Email == email);
+                var role = user == null ? Models.Roles.Simple : user.Role;
+
+                return new[] { role.ToString() };
             }
         }
 
