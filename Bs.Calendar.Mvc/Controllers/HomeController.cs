@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels.Home;
 using Bs.Calendar.Mvc.ViewModels.Users;
+using Bs.Calendar.Rules.Logs;
 
 namespace Bs.Calendar.Mvc.Controllers
 {

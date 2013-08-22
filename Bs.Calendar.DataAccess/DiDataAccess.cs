@@ -13,6 +13,7 @@ namespace Bs.Calendar.DataAccess
             Ioc.RegisterType<IBookHistoryRepository, BookHistoryRepository>();
             Ioc.RegisterType<IPersonalEventRepository, PersonalEventRepository>();
             Ioc.RegisterType<ITeamEventRepository, TeamEventRepository>();
+            Ioc.RegisterType<ICalendarLogRepository, CalendarLogRepository>();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Bs.Calendar.DataAccess
 
             var query = Load()
                 .Where(x => x.Live == LiveStatuses.Active)
-                .WhereIf(filter.Name.IsNotEmpty(), x => x.Name.Contains(filter.Name, stringComparisonOption));
+                .WhereIf(filter.Name.IsNotEmpty(), x => x.Name.Contains(filter.Name));
             query = query
                 .OrderByExpression(filter.SortByField)
                 .Skip((filter.Page - 1) * filter.PageSize)

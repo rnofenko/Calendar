@@ -6,7 +6,7 @@ using Bs.Calendar.Models;
 
 namespace Bs.Calendar.DataAccess
 {
-    class CalendarLogRepository : BaseRepository<CalendarLog>, ICalendarLogRepository
+    public class CalendarLogRepository : BaseRepository<CalendarLog>, ICalendarLogRepository
     {
 
     }

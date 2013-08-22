@@ -16,15 +16,13 @@ namespace Bs.Calendar.DataAccess
 
         public IQueryable<User> Load(UserFilter filter)
         {
-            var stringComparisonOption = StringComparison.OrdinalIgnoreCase;
-
             var query = Load();
 
             if (filter.EmailOrFullName != null)
             {
                 foreach (var name in filter.EmailOrFullName)
                 {
-                    query = query.Where(x => x.Email.Contains(name, stringComparisonOption) || x.FullName.Contains(name, stringComparisonOption));
+                    query = query.Where(x => x.Email.Contains(name) || x.FullName.Contains(name));
                 }
             }
 

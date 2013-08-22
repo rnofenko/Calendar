@@ -12,7 +12,8 @@ namespace Bs.Calendar.DataAccess.Bases
         public IDbSet<Team> Teams { get; set; }
         public IDbSet<BookHistory> BookHistories { get; set; }
         public IDbSet<PersonalEventLink> PersonalEvents { get; set; }
-        public IDbSet<TeamEventLink> TeamEvents { get; set; } 
+        public IDbSet<TeamEventLink> TeamEvents { get; set; }
+        public IDbSet<CalendarLog> CalendarLog { get; set; }
         
         public CalendarContext()
             : base(getConnectionName())
