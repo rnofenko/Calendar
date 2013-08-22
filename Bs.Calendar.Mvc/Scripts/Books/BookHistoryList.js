@@ -1,95 +1,136 @@
 ﻿function BookHistoryItem(source)
 {
-    var _self = this;
+    var self_ = this;
+    self_.id = source.Id;
+    self_.userId = source.UserId;
+    self_.actionId = source.Action;
+    self_.bookId = window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length);
+        
+    self_.userFullName = ko.observable(source.FullName);
+    self_.orderDate = moment(source.OrderDate).format("YYYY-MM-DD");
+    self_.action = source.Action == 1 ? "Take" : "Return";
 
-    _self.userId = source.UserId;    
-    _self.userFullName = ko.observable();
-    ko.computed(function ()
-    {
-        $.getJSON("/Users/GetUserFullName", { id: _self.userId }, _self.userFullName);
-    }, this);
-
-    _self.takeDate = new Date(parseInt(source.TakeDate.substr(6))).toISOString().substr(0, 10);
-    _self.returnDate = new Date(parseInt(source.ReturnDate.substr(6))).toISOString().substr(0, 10);
-
-    _self.orderDirection = source.OrderDirection == 1 ? "Take" : "Return";
+    self_.deleted = source.Deleted;
 }
 
 function User(id, name)
 {
-    var self = this;
+    var self_ = this;
 
-    self.peopleId = id;
-    self.peopleName = name;
+    self_.peopleId = id;
+    self_.peopleName = name;
+}
+
+function BookItem()
+{
+    var self_ = this;
+
+    self_.BookCode = ko.observable();
+    self_.BookTitle = ko.observable();
+    self_.BookAuthor = ko.observable();
+    self_.BookDescription = ko.observable();
 }
 
 function BookHistoryList(param)
 {
-    var self = this;
+    var self_ = this;
 
-    self.bookHistory = ko.observableArray();
-    self.peoples = ko.observableArray();
-    self.orderDirections = ko.observableArray(['Take', 'Return']);
+    self_.bookItem = new BookItem();
+    self_.oldBookHistory = ko.observableArray();
+    self_.newBookHistory = ko.observableArray();
+    self_.historyToDelete = Array();
 
-    ko.computed(function ()
-    {
-        $.getJSON("/Users/GetAllUsers", {},
+    self_.peoples = ko.observableArray();
+    $.getJSON("/Users/GetAllUsers", {},
             function (data)
             {
                 $.each(data, function (index, item)
                 {
-                    self.peoples.push(new User(index, item));
+                    self_.peoples.push(new User(index, item));
                 });
             });
-    }, this);
 
-    self.showAdd = ko.observable(false);
-    self.showList = ko.observable(true);
+    self_.showAdd = ko.observable(false);
 
-    self.show = function ()
+    self_.show = function ()
     {
-        self.showAdd(true);
+        self_.addNewRecord();
+        self_.showAdd(true);
     };
-    $("#SaveHistoryButton").on("click", function ()
-    {
-        self.showAdd(false);
-        self.showList(true);
-    });
 
-    self.takeDate = ko.observable(new Date().toJSON());
-    self.returnDate = ko.observable(new Date().toJSON());
-    self.orderDirection = ko.observable();
-    self.userId = ko.observable();    
-    self.bookId = window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length);
-
-    self.save = function ()
+    self_.saveRecords = function ()
     {
         $.ajax("/Book/Save",
+        {
+            data: ko.toJSON(
             {
-                data: ko.toJSON(
-                    {
-                        TakeDate: self.takeDate,
-                        ReturnDate: self.returnDate,
-                        OrderDirection: self.orderDirection,
-                        UserId: self.userId,
-                        BookId: self.bookId
-                    }),
-                type: "post",
-                contentType: "application/json",
-                success: function (data)
-                {
-                    window.location.href = data.redirectToUrl + "/" + self.bookId;
-                }
-            });
+                BookHistoryList: $.merge(self_.historyToDelete, self_.newBookHistory()),
+                BookId: window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length),
+                BookCode: self_.bookItem.BookCode,
+                BookTitle: self_.bookItem.BookTitle,
+                BookAuthor: self_.bookItem.BookAuthor,
+                BookDescription: self_.bookItem.BookDescription,
+            }),
+            type: "post",
+            contentType: "application/json",
+            success: function (data)
+            {
+                window.location.href = data.redirectToUrl + "/" + data.id;
+            }
+        });
     };
 
-    self.addBookHistory = function (data)
+    self_.removeOldRecord = function (history)
     {
-        self.bookHistory.push(new BookHistoryItem(data));
+        self_.oldBookHistory.remove(history);
+        history.deleted = true;
+        self_.historyToDelete.push(history);
+    };
+
+    self_.removeNewRecord = function (history)
+    {
+        self_.newBookHistory.remove(history);
+    };
+
+    self_.addOldRecord = function (data)
+    {
+        self_.oldBookHistory.push(new BookHistoryItem(data));
+    };
+
+    self_.addNewRecord = function (data)
+    {
+        if (typeof data === "undefined")
+        {
+            data =
+            {
+                UserId: 0,
+                FullName: "",
+                OrderDate: new Date(),
+                Action: self_.newBookHistory().length == 0 ?
+                        self_.oldBookHistory().length == 0 ? 1 :
+                        (self_.oldBookHistory()[0].action == "Take" ? 2 : 1) :
+                        (self_.newBookHistory()[0].action == "Take" ? 2 : 1),
+                Deleted: false
+            };
+        }
+        self_.newBookHistory.unshift(new BookHistoryItem(data));
     };
 
     $.each(param, function (key, value)
     {
-        self.addBookHistory(value);
+        self_.bookItem = {
+            BookCode: param.BookCode,
+            BookTitle: param.BookTitle,
+            BookAuthor: param.BookAuthor,
+            BookDescription: param.BookDescription
+        };
+
+        if (key == "BookHistoryList")
+        {
+            $.each(value, function (k, v)
+            {
+                self_.addOldRecord(v);
+            });
+        }
     });
 }

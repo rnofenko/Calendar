@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
@@ -10,14 +9,8 @@ namespace Bs.Calendar.Mvc.ViewModels
 {
     public class BookHistoryVm
     {
-        public List<BookHistory> BookHistoryList { get; set; }
-
-        public int UserId { get; set; }
-
-        public DateTime TakeDate { get; set; }
-        public DateTime ReturnDate { get; set; }
-
-        public int BookId { get; set; }
+        public List<BookHistoryItemVm> BookHistoryList { get; set; }
+        public int BookId { get; set; }        
 
         [Display(Name = "Description")]
         public string BookDescription { get; set; }
@@ -36,24 +29,21 @@ namespace Bs.Calendar.Mvc.ViewModels
         StringLength(BaseEntity.LENGTH_NAME)]
         public string BookAuthor { get; set; }
 
-        public DirectionEnums OrderDirection { get; set; }
-
         public BookHistoryVm(Book book)
         {
-            var repoUnit = Ioc.Resolve<RepoUnit>();
+            //var repoUnit = Ioc.Resolve<RepoUnit>();
 
             BookId = book.Id;
             BookCode = book.Code;
             BookTitle = book.Title;
             BookAuthor = book.Author;
             BookDescription = book.Description;
-
-            BookHistoryList = new List<BookHistory>();
-            var bookHistories = repoUnit.BookHistory.Load(h => h.BookId == book.Id);
-            foreach (var bookHistory in bookHistories)
-            {
-                BookHistoryList.Add(bookHistory);
-            }
+            BookHistoryList = new List<BookHistoryItemVm>();
+            //var bookHistories = repoUnit.BookHistory.Load(h => h.BookId == book.Id);
+            //foreach (var bookHistory in bookHistories)
+            //{
+            //    BookHistoryList.Add(new BookHistoryItemVm(bookHistory));
+            //}
         }
 
         public BookHistoryVm()
