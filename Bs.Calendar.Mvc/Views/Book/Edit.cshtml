@@ -33,7 +33,15 @@
                 </legend>
                 <div class="centered seven columns danger alert">
                     @Html.ValidationSummary()
-                </div>
+                </div>                
+
+                @*<div class="field" data-bind="visible: oldBookHistory().length > 0">
+                    <label for="readerLabel" class = "inline three columns">Reader</label>
+                    <li class="success label" id="readerLabel">
+                        <strong data-bind="text: reader"></strong>
+                    </li>
+                </div>*@                
+
                 <div data-bind="with: $root.bookItem">
                     <div class="field">
                         @Html.LabelFor(model => model.BookCode, new { @class = "inline three columns" })

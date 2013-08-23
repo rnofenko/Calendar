@@ -1,5 +1,4 @@
-﻿@using Microsoft.Ajax.Utilities
-@{
+﻿@{
     ViewBag.Title = "Books";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -40,6 +39,9 @@
                         <span class="hide" id="order_Author" ><i class="icon-up"></i></span>
                         Author
                     </th>
+                    <th>
+                        Reader
+                    </th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -75,6 +77,7 @@
         <td data-bind="text: code"> </td>
         <td data-bind="text: title"> </td>
         <td data-bind="text: author"> </td>
+        <td>READER</td>
         <td>
             <div class="medium default btn icon-right icon-pencil">
                 <a data-bind="attr: { href: getEditLink() }">Edit</a>

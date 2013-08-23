@@ -97,6 +97,8 @@ window.BooksVm = function ()
     {
         self.books.removeAll();
         self.TotalPages(data['TotalPages']);
+        console.log(data);
+        console.log(data['Data']);
         data = data['Data'];
         for (var i = 0; i < data.length; ++i)
         {

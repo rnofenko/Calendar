@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -53,6 +54,18 @@ namespace Bs.Calendar.Mvc.Services
             books = _orderBy(books, orderby);
             return books;
         }
+
+        //public IEnumerable<Book> Load(string orderby, string searchStr)
+        //{
+        //    IEnumerable<Book> books = _unit.Book.Load();
+        //    books = _search(books, searchStr);
+        //    books = _orderBy(books, orderby);
+        //    foreach (var book in books)
+        //    {
+        //        book.BookHistories = _unit.Book.Get(book.Id).BookHistories;
+        //    }
+        //    return books;
+        //}
 
         private static IEnumerable<Book> _orderBy(IEnumerable<Book> books, string @orderby)
         {

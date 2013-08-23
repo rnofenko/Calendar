@@ -5,7 +5,7 @@
     self_.userId = source.UserId;
     self_.actionId = source.Action;
     self_.bookId = window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length);
-        
+
     self_.userFullName = ko.observable(source.FullName);
     self_.orderDate = moment(source.OrderDate).format("YYYY-MM-DD");
     self_.action = source.Action == 1 ? "Take" : "Return";
@@ -34,11 +34,12 @@ function BookItem()
 function BookHistoryList(param)
 {
     var self_ = this;
-
+    
     self_.bookItem = new BookItem();
     self_.oldBookHistory = ko.observableArray();
     self_.newBookHistory = ko.observableArray();
     self_.historyToDelete = Array();
+    self_.reader = self_.oldBookHistory()[self_.oldBookHistory().length - 1].action == "Take" ? self_.oldBookHistory()[self_.oldBookHistory().length - 1].userFullName : "";
 
     self_.peoples = ko.observableArray();
     $.getJSON("/Users/GetAllUsers", {},
@@ -133,4 +134,25 @@ function BookHistoryList(param)
             });
         }
     });
+
+    //ko.computed(function ()
+    //{
+    //$.each(self_.oldBookHistory(), function (key, value)
+    //{
+        
+        //var now = new Date(moment().format("YYYY-MM-DD"));
+        //if (now > new Date(value.orderDate))
+        //{
+        //    if (value.action == "Take") {
+        //        self._reader = value.userFullName;
+        //    } else if (value.action == "Return") {
+        //        if (now == value.orderDate) {
+        //            self_.reader = value.userFullName;
+        //        } else {
+        //            self_.reader = "";
+        //        }
+        //    }
+        //}
+    //});
+    //});
 }
