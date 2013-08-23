@@ -111,6 +111,7 @@ namespace Bs.Calendar.Mvc.Services
             var teams = _unit.Team.Load()
                              .WhereIf(filter.SearchString.IsNotEmpty(), x => x.Name.Contains(filter.SearchString))
                              .Where(x => x.Live == LiveStatuses.Active);
+
             filter.TotalPages = PageCounter.GetTotalPages(teams.Count(), Config.Instance.PageSize);
             filter.Page = PageCounter.GetRangedPage(filter.Page, filter.TotalPages);
         }

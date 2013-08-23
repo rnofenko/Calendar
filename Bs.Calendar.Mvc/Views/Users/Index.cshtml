@@ -59,21 +59,12 @@
 </div>
 
 <div class="row" data-bind="visible: TotalPages() > 0">
-    <div class="two columns">
-        <div class="field">
-            <input class="text input" type="text" name="PagingVm.Page" data-bind="value: filter.Page, event: { change: changeHandler }">
-        </div>
-    </div>
-            
-    <div class="two columns default alert" data-bind="text: 'of ' + TotalPages()">
-       
-    </div>
-
-    <div class="primary label push_four two columns">
+    <div class="two columns default alert" data-bind="text: filter.Page() + 'of ' + TotalPages()"></div>
+    <div class="btn primary label push_four two columns">
         <a href="~" data-bind="click: previousPage">Previous</a>
     </div>
 
-    <div class="primary label two columns">
+    <div class="btn primary label two columns">
         <a href="~" data-bind="click : nextPage">Next</a>
     </div>
 </div>

@@ -146,22 +146,20 @@ namespace Bs.Calendar.Mvc.Services
         public UsersVm RetreiveList(UserFilterVm filterVm)
         {
             var filter = filterVm.Map();
+
+            _unit.User.OnBeforePaging += userList =>
+                                             {
+                                                 filterVm.TotalPages = PageCounter.GetTotalPages(userList.Count(), filter.PageSize);
+                                                 filterVm.Page = PageCounter.GetRangedPage(filterVm.Page, filterVm.TotalPages);
+                                             };
+
             var users = _unit.User.Load(filter);
-            updatePagingData(filterVm, users);
 
             return new UsersVm
             {
                 Users = users,
                 Filter = filterVm
             };
-        }
-
-        private void updatePagingData(UserFilterVm filter, IQueryable<User> users)
-        {
-            var pageSize = Config.Instance.PageSize;
-
-            filter.TotalPages = PageCounter.GetTotalPages(users.Count(), pageSize);
-            filter.Page = PageCounter.GetRangedPage(filter.Page, filter.TotalPages);
         }
 
         public void RecoverUser(string email)

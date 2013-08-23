@@ -25,7 +25,7 @@
     self.nextPage = function () {
         var page = Number(self.filter.Page()) + 1;
         if (page <= self.TotalPages()) {
-            self.model.Page(page);
+            self.filter.Page(page);
             self.updateList();
         }
     };

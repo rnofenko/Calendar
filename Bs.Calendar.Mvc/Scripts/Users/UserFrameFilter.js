@@ -70,6 +70,7 @@
         self.OnlyAdmins(newFilter.OnlyAdmins);
         self.NotApproved(newFilter.NotApproved);
         self.Deleted(newFilter.Deleted);
+        self.Page(newFilter.Page);
 
         frame.updateList();
     };

@@ -38,11 +38,20 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
                          x => (x.ApproveState & filter.ApproveStates) > 0);
 
             query = query
-                .OrderByExpression(filter.SortByField)
+                .OrderByExpression(filter.SortByField);
+
+            if(OnBeforePaging != null)
+            {
+                OnBeforePaging.Invoke(query);
+            }
+
+            query = query
                 .Skip((filter.Page - 1) * filter.PageSize)
                 .Take(filter.PageSize);
 
             return query;
         }
+
+        public event Action<IQueryable<User>> OnBeforePaging;
     }
 }

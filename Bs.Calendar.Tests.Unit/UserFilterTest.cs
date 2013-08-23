@@ -102,7 +102,7 @@ namespace Bs.Calendar.Tests.Unit
             var users = _userService.RetreiveList(new UserFilterVm { SearchString = nameOrSurname }).Users;
 
             //assert
-            users.Should().OnlyContain(user => user.FullName.Contains(nameOrSurname));
+            users.Should().OnlyContain(user => user.FullName.Contains(nameOrSurname, StringComparison.OrdinalIgnoreCase));
         }
 
         [Test,
