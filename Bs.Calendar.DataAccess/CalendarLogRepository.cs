@@ -8,6 +8,5 @@ namespace Bs.Calendar.DataAccess
 {
     public class CalendarLogRepository : BaseRepository<CalendarLog>, ICalendarLogRepository
     {
-
     }
 }

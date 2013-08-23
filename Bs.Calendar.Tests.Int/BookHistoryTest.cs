@@ -9,6 +9,7 @@ using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 using FluentAssertions;
 using NUnit.Framework;
+using Bs.Calendar.Mvc.Services;
 
 namespace Bs.Calendar.Tests.Int
 {

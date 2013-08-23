@@ -33,6 +33,7 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
             Ioc.RegisterType<IBookHistoryRepository, BookHistoryRepository>();
             Ioc.RegisterType<IPersonalEventRepository, PersonalEventRepository>();
             Ioc.RegisterType<ITeamEventRepository, TeamEventRepository>();
+            Ioc.RegisterType<ICalendarLogRepository, FakeCalendarLogRepository>();
         }
 
         private static void registerCryptography()

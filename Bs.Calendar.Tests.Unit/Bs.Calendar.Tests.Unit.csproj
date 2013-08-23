@@ -68,6 +68,7 @@
     <Compile Include="AccountServiceTest.cs" />
     <Compile Include="BirthdayLoaderTest.cs" />
     <Compile Include="ContactTypeParserTest.cs" />
+    <Compile Include="FakeObjects\FakeCalendarLogRepository.cs" />
     <Compile Include="FakeObjects\FakeConfig.cs" />
     <Compile Include="FakeObjects\FakeDi.cs" />
     <Compile Include="GetAgeTest.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="FakeObjects\FakeBaseRepository.cs" />
     <Compile Include="FakeObjects\FakeTeamRepository.cs" />
     <Compile Include="FakeObjects\FakeUserRepository.cs" />
+    <Compile Include="LoggerTest.cs" />
     <Compile Include="PageCalculatorTest.cs" />
     <Compile Include="PasswordRecoveryTest.cs" />
     <Compile Include="TeamPagingTest.cs" />

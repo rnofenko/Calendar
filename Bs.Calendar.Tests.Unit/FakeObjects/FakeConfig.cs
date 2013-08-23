@@ -12,6 +12,7 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
         private int? _pageSize;
         private bool? _sendMail;
         private string _teamHeaderPattern;
+        private DateTime? _now;
 
         public bool SendEmail
         {
@@ -31,6 +32,11 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
             set { _pageSize = value; }
         }
 
-        public DateTime Now { get { return DateTime.Now; } }
+        public DateTime Now
+        {
+            get { return _now ?? DateTime.Now; }
+            set { _now = value; }
+        }
+
     }
 }
