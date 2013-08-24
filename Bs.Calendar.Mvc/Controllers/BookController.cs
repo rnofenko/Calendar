@@ -18,14 +18,19 @@ namespace Bs.Calendar.Mvc.Controllers
             _service = service;
         }
 
-        public ActionResult FileUpload(string bookCode, HttpPostedFileBase image)
+        public ActionResult FileUpload(BookHistoryVm model, HttpPostedFileBase image)
         {
+            if (model.BookId == 0)
+            {
+                ModelState.Remove("BookId");
+                _service.Save(model);
+            }
             if (image != null)
             {
-                var path = Path.Combine(Server.MapPath("~/Images/Books"), string.Format("{0}.{1}",bookCode, "jpg"));
+                var path = Path.Combine(Server.MapPath("~/Images/Books"), string.Format("{0}.{1}", model.BookCode, "jpg"));
                 image.SaveAs(path);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new {@id = _service.Get(model.BookCode).Id});
         }
 
         public ActionResult Get(int id)

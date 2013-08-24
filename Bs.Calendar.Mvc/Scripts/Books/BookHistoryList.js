@@ -31,6 +31,9 @@ function BookItem()
     self_.BookDescription = ko.observable();
     self_.BookReader = ko.observable();
     self_.BookImage = ko.observable();
+    
+    self_.BookFileName = ko.observable();
+    self_.url = ko.observable();
 }
 
 function BookHistoryList(param)
@@ -62,14 +65,6 @@ function BookHistoryList(param)
 
     self_.saveRecords = function ()
     {
-        $.ajax("Book/FileUpload", {
-            data: ko.toJSON(
-                {
-                    file: self_.bookItem.BookImage
-                }),
-            type: "post",
-        });
-
         var readerId = 0;
         var newBookHistoryCopy = jQuery.extend([], self_.newBookHistory());
         var histories = $.merge(newBookHistoryCopy, self_.oldBookHistory());
@@ -147,7 +142,10 @@ function BookHistoryList(param)
             BookAuthor: param.BookAuthor,
             BookDescription: param.BookDescription,
             BookReader: param.Reader,
-            BookImage: param.BookImage
+            BookImage: param.BookImage,
+            
+            BookFileName: param.BookImage,
+            url: param.url
         };
 
         if (key == "BookHistoryList")
