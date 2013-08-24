@@ -215,6 +215,7 @@
     <Content Include="Content\jquery.timepicker\jquery.timepicker.css" />
     <Content Include="Content\Layout\fonts.css" />
     <Content Include="Content\Rooms\ColorPicker.css" />
+    <Content Include="Content\Shared\UserContacts.css" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BookController.cs" />
     <Compile Include="Controllers\RoomController.cs" />

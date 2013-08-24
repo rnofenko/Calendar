@@ -52,6 +52,7 @@ namespace Bs.Calendar.Mvc.Server
             css.Include("~/Content/");
             css.Include("~/Content/gumby/gumby.css");
             css.Include("~/Content/jquery.timepicker/jquery.timepicker.css");
+            css.Include("~/Content/Shared/UserContacts.css");
             css.Include("~/Content/Shared/UserColumnList.css");
             css.Include("~/Content/Shared/SimpleTeamList.css");
             css.Include("~/Content/Rooms/ColorPicker.css");
