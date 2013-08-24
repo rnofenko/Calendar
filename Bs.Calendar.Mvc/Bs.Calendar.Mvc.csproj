@@ -242,6 +242,8 @@
     <Content Include="Scripts\Gumby\ui\gumby.tabs.js" />
     <Content Include="Scripts\Gumby\ui\gumby.toggleswitch.js" />
     <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
+    <Content Include="Scripts\Home\MeetingEvent.js" />
+    <Content Include="Scripts\Home\PersonalEvent.js" />
     <Content Include="Scripts\jquery.timepicker\lib\base.js" />
     <Content Include="Scripts\jquery.timepicker\lib\datepair.js" />
     <Content Include="Scripts\jquery.timepicker\jquery.timepicker.min.js" />
@@ -253,6 +255,7 @@
     <Content Include="Scripts\Mediator\mediator.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.min.js" />
     <Content Include="Scripts\Moment\moment.min.js" />
+    <Content Include="Scripts\Moment\MomentExtensions.js" />
     <Content Include="Scripts\Rooms\ColorPicker.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
     <Compile Include="Controllers\TeamController.cs" />

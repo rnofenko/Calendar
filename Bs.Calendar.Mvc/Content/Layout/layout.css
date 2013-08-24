@@ -29,6 +29,6 @@
 /* not required yet */
 }
 
-form label, legend, .page-title, .sub-title {
-    cursor: default; 
+form label:not(.checkbox), legend, .page-title, .sub-title {
+    cursor: default;
 }

@@ -85,41 +85,39 @@ function EventSubscribersHandler(eventModel) {
 
 function DateTimeHandler(eventModel) {
     var self = this;
+    
+    self.isAllDay = eventModel.IsAllDay;
 
+    var formatSettings = { date: "YYYY-MM-DD", time: "hh:mm a" };
+    var timeRangeSettings = {
+        minTime: moment().setTime(moment("8:00 am", formatSettings.time)),
+        maxTime: moment().setTime(moment("6:00 pm", formatSettings.time)),
+        step: 60
+    };
+    
     var dateTimeControl = {
         fromTime: $("#fromTime"),
         toTime: $("#toTime"),
-        date: $("#date")
+        date: $("#date"),
     }; //Setup time range control html elements
 
-    var formatSettings = { date: "YYYY-MM-DD", time: "hh:mm a" };
-    var dateDefaults = { initialValue: moment().startOf('day'), initialDifference: { minutes: dateTimeControl.fromTime.timepicker('option', 'step') } };
+    $(dateTimeControl.fromTime).add(dateTimeControl.toTime).timepicker({
+        timeFormat: "g:i a",
+        step: timeRangeSettings.step,
+        minTime: timeRangeSettings.minTime.format(formatSettings.time),
+        maxTime: timeRangeSettings.maxTime.format(formatSettings.time)
+    });
 
-    var setTime = function (updateMoment, withMoment) {
-
-        return updateMoment
-            .hour(withMoment.hour())
-            .minute(withMoment.minute())
-            .second(withMoment.second());
-    };
-    var setDate = function (updateMoment, withMoment) {
-
-        return updateMoment
-            .year(withMoment.year())
-            .month(withMoment.month())
-            .date(withMoment.date());
-    };
-
+    var dateDefaults = { initialValue: timeRangeSettings.minTime.clone(), initialDifference: { minutes: timeRangeSettings.step } };
+    
     self.fromDateTime = ko.observable(dateDefaults.initialValue);
     self.toDateTime = ko.observable(dateDefaults.initialValue.clone().add(dateDefaults.initialDifference));
-
-    self.isAllDay = eventModel.IsAllDay;
 
     self.dateInput = {
         value: ko.computed(function () {
             return self.fromDateTime().format(formatSettings.date);
         }, self),
-        min: moment().format(formatSettings.date),
+        min: timeRangeSettings.minTime.format(formatSettings.date),
         dateChanged: function (context, event) {
 
             var dateString = $(event.target).val();
@@ -128,18 +126,14 @@ function DateTimeHandler(eventModel) {
                 return;
             }
 
-            var newDate = moment(dateString).startOf('day'),
-                currentDate = self.fromDateTime(),
-                minDate = moment(self.dateInput.min).startOf('day');
+            var newDate = moment(dateString).startOf('day');
 
-            if (newDate < minDate) {
+            if (newDate < timeRangeSettings.minTime.clone().startOf('day')) {
                 $(event.target).val(self.dateInput.value());
             }
             else {
-                setDate(currentDate, newDate);
-
-                self.fromDateTime(currentDate);
-                self.toDateTime(currentDate.clone());
+                self.fromDateTime(newDate.clone().setTime(self.fromDateTime()));
+                self.toDateTime(newDate.clone().setTime(self.toDateTime()));
             }
         }
     };
@@ -149,18 +143,23 @@ function DateTimeHandler(eventModel) {
             return self.fromDateTime().format(formatSettings.time);
         }, self),
         timeChanged: function (context, event) {
-            var fromTime = moment($(event.target).val(), formatSettings.time),
-                currentFromTime = self.fromDateTime();
-            
+            var currentFromTime = self.fromDateTime(),
+                fromTime = moment($(event.target).val(), formatSettings.time);
+
+            console.log(timeRangeSettings.minTime);
+            timeRangeSettings.minTime.clone().setDate(fromTime);
+            console.log(timeRangeSettings.minTime);
+
             if (!moment.isMoment(fromTime) ||
                 !fromTime.isValid() ||
+                fromTime < timeRangeSettings.minTime.clone().setDate(fromTime) ||
+                fromTime > timeRangeSettings.maxTime.clone().setDate(fromTime) ||
                 event.type === "timeFormatError") {
                 self.fromDateTime(currentFromTime);
                 return;
             }
 
-            setTime(currentFromTime, fromTime);
-            self.fromDateTime(currentFromTime);
+            self.fromDateTime(currentFromTime.setTime(fromTime));
 
             //Update "from" time and "to" time if needed
             var toTime = moment(self.toDateTime().format(formatSettings.time), formatSettings.time);
@@ -176,11 +175,13 @@ function DateTimeHandler(eventModel) {
             return self.toDateTime().format(formatSettings.time);
         }, self),
         timeChanged: function (context, event) {
-            var toTime = moment($(event.target).val(), formatSettings.time),
-                currentToTime = self.toDateTime();
-            
+            var currentToTime = self.toDateTime(),
+                toTime = moment($(event.target).val(), formatSettings.time);
+
             if (!moment.isMoment(toTime) ||
                 !toTime.isValid() ||
+                toTime < timeRangeSettings.minTime.clone().setDate(toTime) ||
+                toTime > timeRangeSettings.maxTime.clone().setDate(toTime) ||
                 event.type === "timeFormatError") {
                 self.toDateTime(currentToTime);
                 return;
@@ -189,8 +190,7 @@ function DateTimeHandler(eventModel) {
             //Update "to" time and "from" time if needed
             var fromTime = moment(self.fromDateTime().format(formatSettings.time), formatSettings.time);
 
-            setTime(currentToTime, toTime);
-            self.toDateTime(currentToTime);
+            self.toDateTime(currentToTime.setTime(toTime));
 
             if (toTime < fromTime) {
                 self.fromDateTime(currentToTime.clone());

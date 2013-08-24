@@ -21,7 +21,8 @@ namespace Bs.Calendar.Mvc.Server
                 "~/Scripts/Gumby/gumby.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Moment").Include(
-                "~/Scripts/Moment/moment.min.js"));
+                "~/Scripts/Moment/moment.min.js",
+                "~/Scripts/Moment/MomentExtensions.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Mediator").Include(
                 "~/Scripts/Mediator/Mediator.min.js"));
