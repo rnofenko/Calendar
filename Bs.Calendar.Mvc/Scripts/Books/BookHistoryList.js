@@ -29,17 +29,18 @@ function BookItem()
     self_.BookTitle = ko.observable();
     self_.BookAuthor = ko.observable();
     self_.BookDescription = ko.observable();
+    self_.BookReader = ko.observable();
+    self_.BookImage = ko.observable();
 }
 
 function BookHistoryList(param)
 {
     var self_ = this;
-    
+
     self_.bookItem = new BookItem();
     self_.oldBookHistory = ko.observableArray();
     self_.newBookHistory = ko.observableArray();
     self_.historyToDelete = Array();
-    self_.reader = self_.oldBookHistory()[self_.oldBookHistory().length - 1].action == "Take" ? self_.oldBookHistory()[self_.oldBookHistory().length - 1].userFullName : "";
 
     self_.peoples = ko.observableArray();
     $.getJSON("/Users/GetAllUsers", {},
@@ -61,6 +62,26 @@ function BookHistoryList(param)
 
     self_.saveRecords = function ()
     {
+        $.ajax("Book/FileUpload", {
+            data: ko.toJSON(
+                {
+                    file: self_.bookItem.BookImage
+                }),
+            type: "post",
+        });
+
+        var readerId = 0;
+        var newBookHistoryCopy = jQuery.extend([], self_.newBookHistory());
+        var histories = $.merge(newBookHistoryCopy, self_.oldBookHistory());
+
+        if (histories.length != 0)
+        {
+            if (histories[0].action == "Take")
+            {
+                readerId = histories[0].userId;
+            }
+        }
+
         $.ajax("/Book/Save",
         {
             data: ko.toJSON(
@@ -71,6 +92,7 @@ function BookHistoryList(param)
                 BookTitle: self_.bookItem.BookTitle,
                 BookAuthor: self_.bookItem.BookAuthor,
                 BookDescription: self_.bookItem.BookDescription,
+                ReaderId: readerId
             }),
             type: "post",
             contentType: "application/json",
@@ -123,7 +145,9 @@ function BookHistoryList(param)
             BookCode: param.BookCode,
             BookTitle: param.BookTitle,
             BookAuthor: param.BookAuthor,
-            BookDescription: param.BookDescription
+            BookDescription: param.BookDescription,
+            BookReader: param.Reader,
+            BookImage: param.BookImage
         };
 
         if (key == "BookHistoryList")
@@ -134,25 +158,4 @@ function BookHistoryList(param)
             });
         }
     });
-
-    //ko.computed(function ()
-    //{
-    //$.each(self_.oldBookHistory(), function (key, value)
-    //{
-        
-        //var now = new Date(moment().format("YYYY-MM-DD"));
-        //if (now > new Date(value.orderDate))
-        //{
-        //    if (value.action == "Take") {
-        //        self._reader = value.userFullName;
-        //    } else if (value.action == "Return") {
-        //        if (now == value.orderDate) {
-        //            self_.reader = value.userFullName;
-        //        } else {
-        //            self_.reader = "";
-        //        }
-        //    }
-        //}
-    //});
-    //});
 }

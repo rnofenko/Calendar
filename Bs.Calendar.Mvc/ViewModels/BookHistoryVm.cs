@@ -8,7 +8,10 @@ namespace Bs.Calendar.Mvc.ViewModels
     public class BookHistoryVm
     {
         public List<BookHistoryItemVm> BookHistoryList { get; set; }
-        public int BookId { get; set; }        
+        public int BookId { get; set; }
+
+        public int ReaderId { get; set; }
+        public string ReaderName { get; set; }
 
         [Display(Name = "Description")]
         public string BookDescription { get; set; }

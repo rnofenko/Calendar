@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -55,18 +54,6 @@ namespace Bs.Calendar.Mvc.Services
             return books;
         }
 
-        //public IEnumerable<Book> Load(string orderby, string searchStr)
-        //{
-        //    IEnumerable<Book> books = _unit.Book.Load();
-        //    books = _search(books, searchStr);
-        //    books = _orderBy(books, orderby);
-        //    foreach (var book in books)
-        //    {
-        //        book.BookHistories = _unit.Book.Get(book.Id).BookHistories;
-        //    }
-        //    return books;
-        //}
-
         private static IEnumerable<Book> _orderBy(IEnumerable<Book> books, string @orderby)
         {
             bool asc = true;
@@ -90,6 +77,10 @@ namespace Bs.Calendar.Mvc.Services
             if (orderby == "author")
             {
                 return asc ? books.OrderBy(book => book.Author) : books.OrderByDescending(book => book.Author);
+            }
+            if (orderby == "reader")
+            {
+                return asc ? books.OrderBy(book => book.ReaderName) : books.OrderByDescending(book => book.ReaderName);
             }
             return asc ? books.OrderBy(book => book.Id) : books.OrderByDescending(book => book.Id);
         }
@@ -140,6 +131,7 @@ namespace Bs.Calendar.Mvc.Services
             book.Title = model.BookTitle;
             book.Author = model.BookAuthor;
             book.Description = model.BookDescription;
+            book.ReaderName = model.ReaderId == 0 ? "None" : _unit.User.Get(model.ReaderId).FullName;
             if (model.BookHistoryList != null)
             {
                 UpdateHistory(model);
