@@ -5,7 +5,7 @@
     self_.userId = source.UserId;
     self_.actionId = source.Action;
     self_.bookId = window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length);
-        
+
     self_.userFullName = ko.observable(source.FullName);
     self_.orderDate = moment(source.OrderDate).format("YYYY-MM-DD");
     self_.action = source.Action == 1 ? "Take" : "Return";
@@ -29,6 +29,8 @@ function BookItem()
     self_.BookTitle = ko.observable();
     self_.BookAuthor = ko.observable();
     self_.BookDescription = ko.observable();
+    self_.BookReader = ko.observable();
+    self_.BookImage = ko.observable();
 }
 
 function BookHistoryList(param)
@@ -60,6 +62,26 @@ function BookHistoryList(param)
 
     self_.saveRecords = function ()
     {
+        $.ajax("Book/FileUpload", {
+            data: ko.toJSON(
+                {
+                    file: self_.bookItem.BookImage
+                }),
+            type: "post",
+        });
+
+        var readerId = 0;
+        var newBookHistoryCopy = jQuery.extend([], self_.newBookHistory());
+        var histories = $.merge(newBookHistoryCopy, self_.oldBookHistory());
+
+        if (histories.length != 0)
+        {
+            if (histories[0].action == "Take")
+            {
+                readerId = histories[0].userId;
+            }
+        }
+
         $.ajax("/Book/Save",
         {
             data: ko.toJSON(
@@ -70,6 +92,7 @@ function BookHistoryList(param)
                 BookTitle: self_.bookItem.BookTitle,
                 BookAuthor: self_.bookItem.BookAuthor,
                 BookDescription: self_.bookItem.BookDescription,
+                ReaderId: readerId
             }),
             type: "post",
             contentType: "application/json",
@@ -122,7 +145,9 @@ function BookHistoryList(param)
             BookCode: param.BookCode,
             BookTitle: param.BookTitle,
             BookAuthor: param.BookAuthor,
-            BookDescription: param.BookDescription
+            BookDescription: param.BookDescription,
+            BookReader: param.Reader,
+            BookImage: param.BookImage
         };
 
         if (key == "BookHistoryList")

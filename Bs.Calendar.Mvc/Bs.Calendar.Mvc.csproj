@@ -399,6 +399,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\themes\" />
+    <Folder Include="Images\Books\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

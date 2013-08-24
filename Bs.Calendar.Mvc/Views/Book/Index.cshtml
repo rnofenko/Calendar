@@ -1,5 +1,4 @@
-﻿@using Microsoft.Ajax.Utilities
-@{
+﻿@{
     ViewBag.Title = "Books";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -10,52 +9,57 @@
 </div>
 
 <div class="row">
-    <div class = "three columns">
+    <div class="three columns">
         <div class="medium primary btn">
             <a href="/Book/Create">Create</a>
         </div>
     </div>
     <div class="field three columns push_six">
-        <input class="search input" type="text" data-bind="value: searchStr" placeholder="Find book"/>
+        <input class="search input" type="text" data-bind="value: searchStr" placeholder="Find book" />
     </div>
 </div>
 
 <div class="row">
-    <div class ="twelve columns centered">
+    <div class="twelve columns centered">
         <table>
             <thead>
                 <tr>
+                    <th></th>
                     <th data-bind="click: toggle_orderby" id="th_Code">
                         <span class="hide" id="order_-Code"><i class="icon-down"></i></span>
-                        <span class="hide" id="order_Code" ><i class="icon-up"></i></span>
+                        <span class="hide" id="order_Code"><i class="icon-up"></i></span>
                         Code
                     </th>
                     <th data-bind="click: toggle_orderby" id="th_Title">
                         <span class="hide" id="order_-Title"><i class="icon-down"></i></span>
-                        <span class="hide" id="order_Title" ><i class="icon-up"></i></span>
+                        <span class="hide" id="order_Title"><i class="icon-up"></i></span>
                         Book title
                     </th>
                     <th data-bind="click: toggle_orderby" id="th_Author">
                         <span class="hide" id="order_-Author"><i class="icon-down"></i></span>
-                        <span class="hide" id="order_Author" ><i class="icon-up"></i></span>
+                        <span class="hide" id="order_Author"><i class="icon-up"></i></span>
                         Author
+                    </th>
+                    <th data-bind="click: toggle_orderby" id="th_Reader">
+                        <span class="hide" id="order_-Reader"><i class="icon-down"></i></span>
+                        <span class="hide" id="order_Reader"><i class="icon-up"></i></span>
+                        Reader
                     </th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody data-bind="template: { name: 'book-template', foreach: books }">
-                
             </tbody>
         </table>
     </div>
     <div class="row" data-bind="visible: shouldShowPager">
-        
+
         <div class="append field two columns">
-            <input class="text input" type="number" data-bind="value: page"/>
-            <span class="adjoined"> page of <span data-bind="text: TotalPages"></span> </span>
+            <input class="text input" type="number" data-bind="value: page" />
+            <span class="adjoined">page of <span data-bind="text: TotalPages"></span></span>
         </div>
-        
-        
+
+
         <div class="two columns pull_right" data-bind="visible: shouldShowNextPage">
             <div class="primary btn twelve columns">
                 <a href="#" data-bind="click: nextPage">Next</a>
@@ -70,16 +74,20 @@
     </div>
 </div>
 
-<script type="text/html" id="book-template">    
+<script type="text/html" id="book-template">
     <tr>
-        <td data-bind="text: code"> </td>
-        <td data-bind="text: title"> </td>
-        <td data-bind="text: author"> </td>
+        <td>
+            <img height="50" width="50" data-bind="attr: { src: imageUrl }" alt="?" />
+        </td>
+        <td data-bind="text: code"></td>
+        <td data-bind="text: title"></td>
+        <td data-bind="text: author"></td>
+        <td data-bind="text: reader"></td>
         <td>
             <div class="medium default btn icon-right icon-pencil">
                 <a data-bind="attr: { href: getEditLink() }">Edit</a>
             </div>
-        </td>                          
+        </td>
     </tr>
 </script>
 

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Controllers
-{
+{    
     public class BookController : Controller
     {
         private readonly BookService _service;
@@ -14,6 +16,16 @@ namespace Bs.Calendar.Mvc.Controllers
         public BookController(BookService service)
         {
             _service = service;
+        }
+
+        public ActionResult FileUpload(string bookCode, HttpPostedFileBase image)
+        {
+            if (image != null)
+            {
+                var path = Path.Combine(Server.MapPath("~/Images/Books"), string.Format("{0}.{1}",bookCode, "jpg"));
+                image.SaveAs(path);
+            }
+            return RedirectToAction("Index");
         }
 
         public ActionResult Get(int id)
@@ -73,6 +85,8 @@ namespace Bs.Calendar.Mvc.Controllers
             return View("Edit", new BookHistoryVm());
         }
 
+        [HttpGet]
+        [OutputCache(VaryByParam = "*", NoStore = true, Duration = 0)]
         public ActionResult Edit(int id)
         {
             try
@@ -84,7 +98,7 @@ namespace Bs.Calendar.Mvc.Controllers
                 return HttpNotFound();
             }
         }
-
+        
         public ActionResult Save(BookHistoryVm book)
         {
             _service.Save(book);
