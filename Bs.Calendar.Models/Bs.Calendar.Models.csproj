@@ -46,10 +46,12 @@
     <Compile Include="Bases\IEntityId.cs" />
     <Compile Include="BookHistoryItem.cs" />
     <Compile Include="CalendarLog.cs" />
+    <Compile Include="LogTypes.cs" />
+    <Compile Include="EmailOnEventStatus.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContactType.cs" />
     <Compile Include="Book.cs" />
-    <Compile Include="LogTypes.cs" />
+    <Compile Include="EmailOnEventHistory.cs" />
     <Compile Include="PersonalEventLink.cs" />
     <Compile Include="EventType.cs" />
     <Compile Include="LiveStatuses.cs" />

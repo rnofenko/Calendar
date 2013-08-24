@@ -3,6 +3,7 @@ using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Rules;
+using Bs.Calendar.Rules.Backgrounds;
 using Bs.Calendar.Rules.Emails;
 
 namespace Bs.Calendar.Mvc.Server
@@ -20,6 +21,7 @@ namespace Bs.Calendar.Mvc.Server
             Ioc.RegisterType<ISaltProvider, RandomSaltProvider>();
             
             Ioc.RegisterType<IEmailProvider, StandardEmailProvider>();
+            Ioc.RegisterType<IBackgroundProcess, EmailEventReminder>("EmailEventReminder");
         }
     }
 }

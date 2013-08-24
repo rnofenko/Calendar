@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Mvc.Server;
-using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Rules.Emails;
 
@@ -34,6 +28,10 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
             Ioc.RegisterType<IPersonalEventRepository, PersonalEventRepository>();
             Ioc.RegisterType<ITeamEventRepository, TeamEventRepository>();
             Ioc.RegisterType<ICalendarLogRepository, FakeCalendarLogRepository>();
+
+            Ioc.RegisterType<IEmailOnEventHistoryRepository, FakeEmailOnEventHistoryRepository>();
+            Ioc.RegisterType<ITeamEventRepository, FakeTeamEventRepository>();
+            Ioc.RegisterType<IPersonalEventRepository, FakePersonalEventRepository>();
         }
 
         private static void registerCryptography()

@@ -38,19 +38,20 @@ function TeamUsersVm(editModel) {
         return "/Team/Create";
     };
 
-    self.onSubmit = function(formElement) {
-        if ($(formElement).valid()) {
-            $.ajax({
-                url: self.actionUrl(),
-                data: JSON.stringify(ko.toJS(self.teamModel)),
-                success: function (data) { window.location.href = data.redirectToUrl; },
-                error: self.onError,
-                type: 'POST',
-                contentType: 'application/json, charset=utf-8',
-                dataType: 'json'
-            });
-        }
-    };
+    $("#team-edit-form").on("submit", function (e) {
+        e.preventDefault();
+        if ($("#team-edit-form").valid() == false) return;
+        
+        $.ajax({
+            url: self.actionUrl(),
+            data: JSON.stringify(ko.toJS(self.teamModel)),
+            success: function(data) { window.location.href = data.redirectToUrl; },
+            error: self.onError,
+            type: 'POST',
+            contentType: 'application/json, charset=utf-8',
+            dataType: 'json'
+        });
+    });
 
     self.onDelete = function() {
         self.teamModel.IsDeleted = true;
