@@ -20,6 +20,7 @@ namespace Bs.Calendar.DataAccess
         public ICalendarLogRepository CalendarLog
         {
             get { return _calendarLog ?? (_calendarLog = getRepository<ICalendarLogRepository>()); }
+        }
 
         private IEmailOnEventHistoryRepository _emailOnEventHistory;
 
