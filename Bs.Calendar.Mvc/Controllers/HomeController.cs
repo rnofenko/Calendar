@@ -32,6 +32,7 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpPost]
         public ActionResult CreateEvent(CalendarEventVm calendarEvent)
         {
+            _service.SaveEvent(calendarEvent, User.Identity.Name);
             return null;
         }
 

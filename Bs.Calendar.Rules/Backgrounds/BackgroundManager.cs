@@ -13,7 +13,7 @@ namespace Bs.Calendar.Rules.Backgrounds
 
         public void Start()
         {
-            if (_processes == null)
+            if (_processes == null || _processes.Count == 0)
             {
                 _processes = Ioc.ResolveAll<IBackgroundProcess>().ToList();
             }
@@ -33,7 +33,7 @@ namespace Bs.Calendar.Rules.Backgrounds
 
             try
             {
-                new Task(process.Start).RunSynchronously();
+                new Task(process.Start).Start();
             }
             catch(Exception ex)
             {

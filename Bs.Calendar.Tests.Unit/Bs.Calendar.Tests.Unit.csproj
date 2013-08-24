@@ -69,8 +69,12 @@
     <Compile Include="BirthdayLoaderTest.cs" />
     <Compile Include="ContactTypeParserTest.cs" />
     <Compile Include="FakeObjects\FakeCalendarLogRepository.cs" />
+    <Compile Include="EmailEventReminderTest.cs" />
     <Compile Include="FakeObjects\FakeConfig.cs" />
     <Compile Include="FakeObjects\FakeDi.cs" />
+    <Compile Include="FakeObjects\FakeEmailOnEventHistoryRepository.cs" />
+    <Compile Include="FakeObjects\FakePersonalEventRepository.cs" />
+    <Compile Include="FakeObjects\FakeTeamEventRepository.cs" />
     <Compile Include="GetAgeTest.cs" />
     <Compile Include="CryptoProviderTest.cs" />
     <Compile Include="FakeObjects\FakeBaseRepository.cs" />

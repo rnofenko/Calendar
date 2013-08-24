@@ -11,30 +11,32 @@
 </div>
 
 <div class="row">
-    <form id="team-edit-form" data-bind="submit : onSubmit">
-        @Html.AntiForgeryToken()
-        <div class="centered seven columns">
-            @Html.ValidationSummary()
-        </div>
-
-        <div class="row">
-            <div class="prepend field four columns">
-                @Html.LabelFor(team => team.Name, new {@class = "adjoined"})
-                @Html.TextBoxFor(team => team.Name, new {@class = "xwide text input", data_bind = "value : teamModel.Name"})
+    <form id="team-edit-form">
+        <div id="team-edit-frame">
+            @Html.AntiForgeryToken()
+            <div class="centered seven columns">
+                @Html.ValidationSummary()
             </div>
+
+            <div class="row">
+                <div class="prepend field four columns">
+                    @Html.LabelFor(team => team.Name, new {@class = "adjoined"})
+                    @Html.TextBoxFor(team => team.Name, new {@class = "xwide text input", data_bind = "value : teamModel.Name"})
+                </div>
             
-            <div class="medium metro rounded btn warning  two columns icon-right icon-user-add pull_right" data-bind="click: clickAllUsers, visible: !userColumnVm.showColumnUserList()"><a href="#">Add Users</a></div>
-            <div class="medium metro rounded btn default two columns pull_right" data-bind="click: clickTeamUsers, visible: userColumnVm.showColumnUserList()"><a href="#">Team Users</a></div>
-        </div>
+                <div class="medium metro rounded btn warning  two columns icon-right icon-user-add pull_right" data-bind="click: clickAllUsers, visible: !userColumnVm.showColumnUserList()"><a href="#">Add Users</a></div>
+                <div class="medium metro rounded btn default two columns pull_right" data-bind="click: clickTeamUsers, visible: userColumnVm.showColumnUserList()"><a href="#">Team Users</a></div>
+            </div>
         
         
-        <div class="row">
-            <ul class="four_up tiles team-edit" data-bind="foreach : teamModel.Users">
-                <li data-bind="click: function () { UserClick('/Users/Edit', UserId())}">
-                    <span data-bind="text : FullName"></span> 
-                    <i class="icon-cancel-squared pull_right" data-bind="click: $root.userColumnVm.addUser"></i>
-                </li>
-            </ul>
+            <div class="row">
+                <ul class="four_up tiles team-edit" data-bind="foreach : teamModel.Users">
+                    <li data-bind="click: function () { UserClick('/Users/Edit', UserId())}">
+                        <span data-bind="text : FullName"></span> 
+                        <i class="icon-cancel-squared pull_right" data-bind="click: $root.userColumnVm.addUser"></i>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         @Html.Partial("UserColumnList")
@@ -58,8 +60,9 @@
 @section Scripts {
     <script type="text/javascript">
         $(document).ready(function () {
-            var model = new TeamUsersVm(@Html.RawJson(@Model));
-            ko.applyBindings(model);
+            var teamUsersVm = new TeamUsersVm(@Html.RawJson(@Model));
+            ko.applyBindings(teamUsersVm, document.getElementById("team-edit-frame"));
+            ko.applyBindings(teamUsersVm.userColumnVm, document.getElementById("user-column-list"));
             $(".invisible-onstart").removeClass("invisible-onstart");
         });
     </script>

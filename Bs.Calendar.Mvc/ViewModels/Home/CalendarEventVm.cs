@@ -12,16 +12,8 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
     {
         public CalendarEvent Map()
         {
-            return new CalendarEvent
-            {
-                Id = Id,
-                Title = Title,
-                Text = Text,
-                DateStart = DateStart,
-                DateEnd = DateEnd,
-                EventType = EventType,
-                Room = Room
-            };
+            return new CalendarEvent { Id = Id, Title = Title, Text = Text, DateStart = DateStart,
+                DateEnd = DateEnd, EventType = EventType, Room = Room, IsAllDay = IsAllDay};
         }
 
         public CalendarEventVm()
