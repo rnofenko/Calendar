@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Bs.Calendar.Models;
@@ -6,7 +6,7 @@ using Bs.Calendar.Models.Bases;
 using Bs.Calendar.Mvc.ViewModels.Teams;
 using Bs.Calendar.Mvc.ViewModels.Users;
 
-namespace Bs.Calendar.Mvc.ViewModels.Home
+namespace Bs.Calendar.Mvc.ViewModels.Events
 {
     public class CalendarEventVm
     {

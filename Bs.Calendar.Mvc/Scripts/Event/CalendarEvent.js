@@ -1,4 +1,4 @@
-﻿function CalendarEvent() {
+function CalendarEvent() {
     var self = this;
 
     self.Id = 0;
@@ -44,13 +44,13 @@ function EventSubscribersHandler(eventModel) {
     self.isTeamsLoaded = false;
 
     self.getAllTeams = function () {
-        $.getJSON("/Home/GetTeams", null, function (teams) {
+        $.getJSON("/Event/GetTeams", null, function (teams) {
             ko.mapping.fromJS(teams, {}, self.simpleTeamListVm.teamList);
         });
     };
 
     self.getAllUsers = function () {
-        $.getJSON("/Home/GetAllUsers", null, function (users) {
+        $.getJSON("/Event/GetAllUsers", null, function (users) {
             self.userColumnVm.pushToColumns(users);
             self.userColumnVm.columnUsersCount(self.userColumnVm.columnUsersCount() + users.length);
         });
@@ -225,7 +225,7 @@ function CalendarEventVm(eventModel) {
         self.eventModel.DateEnd(self.dateTime.toDateTime().toJSON());
 
         $.ajax({
-            url: self.eventModel.Id != 0 ? "/Home/Edit" : "/Home/CreateEvent",
+            url: self.eventModel.Id != 0 ? "/Event/Edit" : "/Event/Create",
             data: JSON.stringify(ko.toJS(self.eventModel)),
             success: function (data) { window.location.href = data.redirectToUrl; },
             error: self.onError,
