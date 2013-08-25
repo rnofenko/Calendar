@@ -211,10 +211,12 @@
     <Content Include="Content\gumby\gumby.css" />
     <Content Include="Content\Home\CalendarEvent.css" />
     <Content Include="Content\Home\CreateEvent.css" />
+    <Content Include="Content\jquery.scrollbar\jquery.scrollbar.css" />
     <Content Include="Content\jquery.timepicker\lib\base.css" />
     <Content Include="Content\jquery.timepicker\jquery.timepicker.css" />
     <Content Include="Content\Layout\fonts.css" />
     <Content Include="Content\Rooms\ColorPicker.css" />
+    <Content Include="Content\Shared\SimpleTeamList.css" />
     <Content Include="Content\Shared\UserContacts.css" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BookController.cs" />
@@ -245,6 +247,7 @@
     <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
     <Content Include="Scripts\Home\MeetingEvent.js" />
     <Content Include="Scripts\Home\PersonalEvent.js" />
+    <Content Include="Scripts\jquery.scrollbar\jquery.scrollbar.min.js" />
     <Content Include="Scripts\jquery.timepicker\lib\base.js" />
     <Content Include="Scripts\jquery.timepicker\lib\datepair.js" />
     <Content Include="Scripts\jquery.timepicker\jquery.timepicker.min.js" />

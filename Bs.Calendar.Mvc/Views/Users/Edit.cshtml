@@ -30,6 +30,7 @@
         <h4>@ViewBag.Title</h4>
     </div>
 </div>
+
     @using (Html.BeginForm())
     {
         <div class="row">
@@ -40,73 +41,70 @@
                 @Html.ValidationSummary()
             </div>
         </div>
-                
-      <div class="row">  
-        <section class="seven columns">
-            <fieldset class="row">
-                <legend>
-                    <h4>@ViewBag.User</h4>
-                </legend>
-
-                <ul>
-                    <li class="field">
-                        @Html.LabelFor(user => user.FirstName, new {@class = "inline three columns"})
-                        @Html.TextBoxFor(user => user.FirstName, new {@class = "wide text input"})
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(user => user.LastName, new {@class = "inline three columns"})
-                        @Html.TextBoxFor(user => user.LastName, new {@class = "wide text input"})
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(user => user.Email, new {@class = "inline three columns"})
-                        @Html.TextBoxFor(user => user.Email, new {@class = "wide text input"})
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(user => user.BirthDate, new {@class = "inline three columns"})
-                        @Html.CustomDateEditor(user => user.BirthDate)
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(user => user.Role, new {@class = "inline three columns"})
-                        <div class="picker">
-                            @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
-                        </div>
-                    </li>
-                    @if (userId != 0)
-                    {
-                        <li>
-                            <label class="inline  three columns">Deleted</label>
-                            @Html.CheckBox("deleted", isDeleted)
+        <div class="row">
+            <section class="seven columns scroll_sizing">
+                <fieldset>s
+                    <legend>
+                        <h4>@ViewBag.User</h4>
+                    </legend>
+                    <ul>
+                        <li class="field">
+                            @Html.LabelFor(user => user.FirstName, new {@class = "inline three columns"})
+                            @Html.TextBoxFor(user => user.FirstName, new {@class = "wide text input"})
                         </li>
-                    }
-                </ul>
-            </fieldset>
-            <div class="row">
-                <br />
-                <div class="medium secondary btn three columns">
-                    <input type="submit" value="@btnName"/>
-                </div>
 
-                <div class="medium default btn push_one three columns">
-                    @Html.ActionLink("Back", "Index")
-                </div>
-                
-                @if (@Model.ApproveState == ApproveStates.NotApproved)
-                {
-                    <div class="medium warning btn push_one three columns">
-                        @Html.ActionLink("Approve", "ApproveUser", Model)
+                        <li class="field">
+                            @Html.LabelFor(user => user.LastName, new {@class = "inline three columns"})
+                            @Html.TextBoxFor(user => user.LastName, new {@class = "wide text input"})
+                        </li>
+
+                        <li class="field">
+                            @Html.LabelFor(user => user.Email, new {@class = "inline three columns"})
+                            @Html.TextBoxFor(user => user.Email, new {@class = "wide text input"})
+                        </li>
+
+                        <li class="field">
+                            @Html.LabelFor(user => user.BirthDate, new {@class = "inline three columns"})
+                            @Html.CustomDateEditor(user => user.BirthDate)
+                        </li>
+
+                        <li class="field">
+                            @Html.LabelFor(user => user.Role, new {@class = "inline three columns"})
+                            <div class="picker">
+                                @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
+                            </div>
+                        </li>
+                        @if (userId != 0)
+                        {
+                            <li>
+                                <label class="inline  three columns">Deleted</label>
+                                @Html.CheckBox("deleted", isDeleted)
+                            </li>
+                        }
+                    </ul>
+                </fieldset>
+                <div class="row">
+                    <br />
+                    <div class="medium secondary btn three columns">
+                        <input type="submit" value="@btnName"/>
                     </div>
-                }
+
+                    <div class="medium default btn push_one three columns">
+                        @Html.ActionLink("Back", "Index")
+                    </div>
+                
+                    @if (@Model.ApproveState == ApproveStates.NotApproved)
+                    {
+                        <div class="medium warning btn push_one three columns">
+                            @Html.ActionLink("Approve", "ApproveUser", Model)
+                        </div>
+                    }
+                </div>
+            </section>
+            <div class="five columns">
+                @Html.Partial("UserContacts")
             </div>
-        </section>
-        <section class="row five columns">
-            <br />
-            @Html.Partial("UserContacts")
-        </section>
-     </div>   
+        </div>
     }
 @section Scripts {
     <script src="~/Scripts/jquery.validate.min.js"></script>
@@ -116,6 +114,10 @@
 
     <script type="text/javascript"> 
         $(document).ready(function () {
+            
+            $('.scroll-simple').scrollbar({ type: "simple" });
+            $('.content').height($('.scroll_sizing').outerHeight());
+
             ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts)));
         });
     </script>
