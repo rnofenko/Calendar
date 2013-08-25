@@ -25,7 +25,7 @@
             </div>
             <div class="field three columns">
                 <div class="btn default medium" title="Filter settings">
-                    <a href="#" data-bind="click: filter.showFilterWindow" gumby-trigger="#filter_settings">
+                    <a href="#" data-bind="click: filter.showFilterWindow">
                         <i class="icon-menu"></i>
                     </a>
                 </div>
@@ -43,18 +43,16 @@
 </div>
       
 <div class="row">
-    <table>
+    <table class="fixed_columns">
         <thead>
             <tr>
-                <th></th>                
-                <th><div data-field="FullName" id="th-name" data-bind="click: headerClick">Name</div></th>
-                <th><div data-field="Email" id="th-email" data-bind="click: headerClick">E-mail</div></th>
+                <th>Status</th>
+                <th class="clickable" data-field="FullName" id="th-name" data-bind="click: headerClick">Name</th>
+                <th class="clickable" data-field="Email" id="th-email" data-bind="click: headerClick">E-mail</th>
                 <th>Action</th>
             </tr>
         </thead>
-    
-        <tbody id="list-body">
-        </tbody>
+        <tbody id="list-body"></tbody>
     </table>
 </div>
 

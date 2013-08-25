@@ -42,8 +42,8 @@
             </div>
         </div>
         <div class="row">
-            <section class="seven columns scroll_sizing">
-                <fieldset>s
+            <section class="seven columns">
+                <fieldset class="scroll_sizing">
                     <legend>
                         <h4>@ViewBag.User</h4>
                     </legend>
@@ -116,7 +116,7 @@
         $(document).ready(function () {
             
             $('.scroll-simple').scrollbar({ type: "simple" });
-            $('.content').height($('.scroll_sizing').outerHeight());
+            $('.content').height($('.scroll_sizing').outerHeight() - $('.scroll_sizing legend').outerHeight() / 2);
 
             ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts)));
         });

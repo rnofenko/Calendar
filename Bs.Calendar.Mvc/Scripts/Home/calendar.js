@@ -1,5 +1,4 @@
-﻿
-function EventVm(eventContent, date) {
+﻿function EventVm(eventContent, date) {
     var self = this;
     self.eventContent = eventContent;
     self.eventDate = date;
@@ -22,11 +21,11 @@ function MonthVm() {
     var self = this;
 
     self.weeks = ko.observableArray([]);
-    self.monthStart = moment().startOf('month');
+    self.monthStart = ko.observable(moment().startOf('month'));
     self.title = ko.observable();
 
     self.monthInit = function () {
-        var month = moment(self.monthStart);
+        var month = moment(self.monthStart());
         self.title(month.format("MMMM") + " " + month.format("YYYY"));
         
         var date = month.day("Sunday");
@@ -43,7 +42,7 @@ function MonthVm() {
     };
     
     self.defineClass = function (date) {
-        if (date < self.monthStart || date > moment(self.monthStart).endOf('month'))
+        if (date < self.monthStart() || date > moment(self.monthStart()).endOf('month'))
             return "bc-month-day other-month";
         if (date.isSame(moment().startOf('day')))
             return "bc-month-day current-day";
@@ -53,7 +52,7 @@ function MonthVm() {
     //Event handlers
     self.getEvents = function () {
         var events = [];
-        var from = moment(self.monthStart).day("Sunday");
+        var from = moment(self.monthStart()).day("Sunday");
         var timeRange = { from: from.toJSON(), to: from.add('weeks', 6).toJSON() };
 
         $.ajax({
@@ -84,16 +83,16 @@ function MonthVm() {
     };
     
     self.nextMonth = function() {
-        self.monthStart.add("month", 1);
+        self.monthStart(self.monthStart().add("month", 1));
         self.updateMonth();
     };  
     self.prevMonth = function () {
-        self.monthStart.subtract("month", 1);
+        self.monthStart(self.monthStart().subtract("month", 1));
         self.updateMonth();
     };
 
     self.today = function() {
-        self.monthStart = moment().startOf('month');
+        self.monthStart(moment().startOf('month'));
         self.updateMonth();
     };
 };

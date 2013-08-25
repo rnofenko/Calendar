@@ -32,3 +32,19 @@
 form label:not(.checkbox), legend, .page-title, .sub-title {
     cursor: default;
 }
+
+/* TABLE EXTENSIONS */
+
+table thead {
+    cursor: default;
+}
+
+table.fixed_columns {
+    table-layout: fixed;
+}
+
+/* BUTTON EXTENSIONS */
+
+.clickable, .clickable * {
+    cursor: pointer;
+}

@@ -6,7 +6,7 @@
 
 @foreach (var user in Model.Users)
 {
-    var labelText = "";
+    var labelText = "Active";
     if(user.Live == LiveStatuses.Deleted)
     {
         labelText = "Deleted";
@@ -19,13 +19,9 @@
     var notApprovedStyle = user.ApproveState==ApproveStates.NotApproved ? "background-color: Yellow" : null;
     
     <tr ondblclick="RowDblClick('@Url.Action("Edit", "Users", new { id = user.Id })')" style="@notApprovedStyle">
-        <td>
-            <label for="name">@labelText</label>
-        </td>
+        <td><label for="name">@labelText</label></td>
         <td id="name">@user.FirstName @user.LastName</td>
         <td>@user.Email</td>
-        <td>
-            <div class="default btn">@Html.ActionLink("Edit", "Edit", new { id = user.Id })</div>
-        </td>
+        <td><div class="default btn">@Html.ActionLink("Edit", "Edit", new { id = user.Id })</div></td>
     </tr>
 }

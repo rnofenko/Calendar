@@ -6,14 +6,13 @@
     </div>
 </div>
 
-<div class="row content scroll-simple scroll-simple_inner">
+<div class="list_body row content scroll-simple scroll-simple_inner">
     <ul data-bind="foreach: Contacts">
         <li class="field prepend append">
             <input data-bind="value: ContactType, attr: { name: $root.getIndexedName($index(), 'ContactType') }" type="hidden">
             <input class="wide text input eight columns" type="text" data-bind="value: Value, valueUpdate: 'afterkeydown', attr: { name: $root.getIndexedName($index(), 'Value') }">
             <div class="adjoined two columns"><i data-bind="attr: { class: Icon }"></i></div>
-            <div class="adjoined btn medium two columns" data-bind="click: removeContact"><i class="icon-cancel"></i></div>
-            <div></div>
+            <div class="adjoined btn medium two columns clickable" data-bind="click: removeContact"><i class="icon-cancel"></i></div>
         </li>
     </ul>
 </div>
