@@ -14,6 +14,7 @@ namespace Bs.Calendar.DataAccess.Bases
         public IDbSet<PersonalEventLink> PersonalEvents { get; set; }
         public IDbSet<TeamEventLink> TeamEvents { get; set; }
         public IDbSet<CalendarLog> CalendarLog { get; set; }
+        public IDbSet<EmailOnEventHistory> EmailOnEventHistories { get; set; }
         
         public CalendarContext()
             : base(getConnectionName())

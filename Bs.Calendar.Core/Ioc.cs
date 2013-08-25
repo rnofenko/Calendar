@@ -33,6 +33,11 @@ namespace Bs.Calendar.Core
             _container.RegisterType(typeof(TInterface), typeof(TClass));
         }
 
+        public static void RegisterType<TInterface, TClass>(string name)
+        {
+            _container.RegisterType(typeof (TInterface), typeof (TClass), name);
+        }
+
         public static void RegisterInstance<TInterface>(object instance)
         {
             _container.RegisterInstance(typeof(TInterface), instance);

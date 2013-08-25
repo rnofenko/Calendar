@@ -22,6 +22,23 @@ namespace Bs.Calendar.DataAccess
             get { return _calendarLog ?? (_calendarLog = getRepository<ICalendarLogRepository>()); }
         }
 
+        private IEmailOnEventHistoryRepository _emailOnEventHistory;
+
+        public IEmailOnEventHistoryRepository EmailOnEventHistory 
+        {
+            get { return _emailOnEventHistory ?? (_emailOnEventHistory = getRepository<IEmailOnEventHistoryRepository>()); }
+        }
+
+        public ITeamEventRepository TeamEvent
+        {
+            get { return _teamEvent ?? (_teamEvent = getRepository<ITeamEventRepository>()); }
+        }
+
+        public IPersonalEventRepository PersonalEvent
+        {
+            get { return _personalEvent ?? (_personalEvent = getRepository<IPersonalEventRepository>()); }
+        }
+
         public IUserRepository User
         {
             get { return _user ?? (_user = getRepository<IUserRepository>()); }

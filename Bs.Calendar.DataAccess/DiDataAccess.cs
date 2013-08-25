@@ -14,6 +14,8 @@ namespace Bs.Calendar.DataAccess
             Ioc.RegisterType<IPersonalEventRepository, PersonalEventRepository>();
             Ioc.RegisterType<ITeamEventRepository, TeamEventRepository>();
             Ioc.RegisterType<ICalendarLogRepository, CalendarLogRepository>();
+
+            Ioc.RegisterType<IEmailOnEventHistoryRepository, EmailOnEventHistoryRepository>();
         }
     }
 }

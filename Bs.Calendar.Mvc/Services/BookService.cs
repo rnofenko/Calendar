@@ -78,6 +78,10 @@ namespace Bs.Calendar.Mvc.Services
             {
                 return asc ? books.OrderBy(book => book.Author) : books.OrderByDescending(book => book.Author);
             }
+            if (orderby == "reader")
+            {
+                return asc ? books.OrderBy(book => book.ReaderName) : books.OrderByDescending(book => book.ReaderName);
+            }
             return asc ? books.OrderBy(book => book.Id) : books.OrderByDescending(book => book.Id);
         }
 
@@ -127,6 +131,7 @@ namespace Bs.Calendar.Mvc.Services
             book.Title = model.BookTitle;
             book.Author = model.BookAuthor;
             book.Description = model.BookDescription;
+            book.ReaderName = model.ReaderId == 0 ? "None" : _unit.User.Get(model.ReaderId).FullName;
             if (model.BookHistoryList != null)
             {
                 UpdateHistory(model);

@@ -3,15 +3,20 @@
     ViewBag.Title = "Create Book";
     var btnName = "Create";
     var id = 0;
+    var pathToImage = "binaryLogo.png";
     var bookTitle = "New book";
 
     if (Model != null && Model.BookId != 0)
     {
+        if (File.Exists(Request.MapPath("~/Images/Books/" + Model.BookCode + ".jpg")))
+        {
+            pathToImage = "Books/" + Model.BookCode + ".jpg";
+        }
         btnName = "Update";
         id = Model.BookId;
         bookTitle = Model.BookTitle;
         ViewBag.Title = "Edit Book";
-    }
+    }      
 }
 
 <div class="row">
@@ -20,7 +25,7 @@
     </div>
 </div>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("FileUpload", "Book", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(book => book.BookId)                
@@ -34,24 +39,38 @@
                 <div class="centered seven columns danger alert">
                     @Html.ValidationSummary()
                 </div>
+
                 <div data-bind="with: $root.bookItem">
+
                     <div class="field">
                         @Html.LabelFor(model => model.BookCode, new { @class = "inline three columns" })
-                        <input type="text" data-bind="value: BookCode" class="wide text input" />
+                        <input type="text" name="BookCode" data-bind="value: BookCode" class="wide text input" />
                     </div>
 
                     <div class="field">
                         @Html.LabelFor(model => model.BookTitle, new { @class = "inline three columns" })
-                        <input type="text" data-bind="value: BookTitle" class="wide text input" />
+                        <input type="text" name="BookTitle" data-bind="value: BookTitle" class="wide text input" />
 
                     </div>
                     <div class="field">
                         @Html.LabelFor(model => model.BookAuthor, new { @class = "inline three columns" })
-                        <input type="text" data-bind="value: BookAuthor" class="wide text input" />
+                        <input type="text" name="BookAuthor" data-bind="value: BookAuthor" class="wide text input" />
                     </div>
                     <div class="field">
                         @Html.LabelFor(model => model.BookDescription, new { @class = "inline three columns" })
-                        <textarea rows="7" style="font-size: 9pt; line-height: 1.5" data-bind="value: BookDescription" class="wide textarea input"></textarea>
+                        <textarea rows="7" name="BookDescription" style="font-size: 9pt; line-height: 1.5" data-bind="value: BookDescription" class="wide textarea input"></textarea>
+                    </div>
+
+                    <div class="field">
+                        <div class="row">
+                            <label class="inline three columns">Image</label>
+                            <img height="150" width="150" src="~/Images/@pathToImage" alt="None"/>
+                            <input class="eight columns" type="file" name="image" />
+                        </div>
+                        <div class="small default btn icon-right icon-upload" onclick="submit.click()">
+                            <a href="#">upload</a>
+                            <input style="visibility: hidden" type="submit" id="submit"/>
+                        </div>
                     </div>
                 </div>
 
