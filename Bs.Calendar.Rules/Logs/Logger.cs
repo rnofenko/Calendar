@@ -100,7 +100,7 @@ namespace Bs.Calendar.Rules.Logs
 
         private async static void saveRecord(CalendarLog logEntity)
         {
-            await Task.Factory.StartNew(() => _repoUnit.CalendarLog.Save(logEntity));
+            //await Task.Factory.StartNew(() => _repoUnit.CalendarLog.Save(logEntity));
         }
     }
 }

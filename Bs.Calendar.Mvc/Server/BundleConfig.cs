@@ -44,7 +44,7 @@ namespace Bs.Calendar.Mvc.Server
             scripts.Include("~/Scripts/Users/UserList.js");
             scripts.Include("~/Scripts/Users/UserFrameFilter.js");
             scripts.Include("~/Scripts/Home/Calendar.js");
-            scripts.Include("~/Scripts/Home/CalendarEvent.js");
+            scripts.Include("~/Scripts/Event/CalendarEvent.js");
             BundleTable.Bundles.Add(scripts);
 
             var css = new Bundle("~/Content/css", new CssMinify());
@@ -57,8 +57,8 @@ namespace Bs.Calendar.Mvc.Server
             css.Include("~/Content/Users/RoleStateFilterWindow.css");
             css.Include("~/Content/Layout/layout.css");
             css.Include("~/Content/Teams/TeamEdit.css");
-            css.Include("~/Content/Home/CreateEvent.css");
-            css.Include("~/Content/Home/CalendarEvent.css");
+            css.Include("~/Content/Event/CreateEvent.css");
+            css.Include("~/Content/Event/CalendarEvent.css");
             BundleTable.Bundles.Add(css);
         }
     }
