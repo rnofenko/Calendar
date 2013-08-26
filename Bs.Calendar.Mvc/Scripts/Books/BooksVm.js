@@ -107,7 +107,7 @@ window.BooksVm = function ()
             return "/Book/Edit/" + _self.id;
         };
         
-        _self.imageUrl = ko.observable("/Images/binaryLogo.png");
+        _self.imageUrl = ko.observable();
         
         $.ajax({
             url: "/Images/Books/" + source.Code + ".jpg",
@@ -140,6 +140,7 @@ window.BooksVm = function ()
         {
             data['search'] = self._searchStr;
         }
+        console.log(data);
         $.ajax(
             {
                 url: "/Book/List",

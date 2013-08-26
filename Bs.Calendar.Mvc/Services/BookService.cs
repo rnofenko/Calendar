@@ -48,8 +48,7 @@ namespace Bs.Calendar.Mvc.Services
 
         public IEnumerable<Book> Load(string orderby, string searchStr)
         {
-            IEnumerable<Book> books = _unit.Book.Load();
-            books = _search(books, searchStr);
+            var books = _search(searchStr);
             books = _orderBy(books, orderby);
             return books;
         }
@@ -85,17 +84,20 @@ namespace Bs.Calendar.Mvc.Services
             return asc ? books.OrderBy(book => book.Id) : books.OrderByDescending(book => book.Id);
         }
 
-        private static IEnumerable<Book> _search(IEnumerable<Book> books, string @searchStr)
+        private IEnumerable<Book> _search(string @searchStr)
         {
             if (String.IsNullOrEmpty(searchStr))
             {
-                return books;
+                return _unit.Book.Load();
             }
-            return books.Where(book =>
-                               book.Code.ToLower().Contains(searchStr)
-                               || book.Author.ToLower().Contains(searchStr)
-                               || book.Title.ToLower().Contains(searchStr)
-                               || book.Description.ToLower().Contains(searchStr));
+
+            var res = _unit.Book.Load().Where(book => book.Description != null && book.Description.ToLower().Contains(searchStr)).ToList();
+
+            res.AddRange(_unit.Book.Load().Where(book => book.Code.ToLower().Contains(searchStr)
+                || book.Author.ToLower().Contains(searchStr) 
+                || book.Title.ToLower().Contains(searchStr)));
+
+            return res;
         }
 
         public void Validate(BookEditVm book)

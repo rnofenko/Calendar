@@ -17,6 +17,7 @@ namespace Bs.Calendar.Mvc.ViewModels
         public string BookDescription { get; set; }
 
         [Required(ErrorMessage = "The code of the book must be specified"),
+        RegularExpression(@"^[a-zA-Zа-яА-Я0-9\-]+$", ErrorMessage = "Code should contain only letters or digits, or dash"),
         Display(Name = "Code")]
         public string BookCode { get; set; }
 

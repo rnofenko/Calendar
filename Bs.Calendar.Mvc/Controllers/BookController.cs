@@ -8,7 +8,7 @@ using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
 
 namespace Bs.Calendar.Mvc.Controllers
-{    
+{
     public class BookController : Controller
     {
         private readonly BookService _service;
@@ -18,19 +18,22 @@ namespace Bs.Calendar.Mvc.Controllers
             _service = service;
         }
 
-        public ActionResult FileUpload(BookHistoryVm model, HttpPostedFileBase image)
+        public ActionResult Edit(BookHistoryVm model, HttpPostedFileBase image)
         {
             if (model.BookId == 0)
             {
                 ModelState.Remove("BookId");
-                _service.Save(model);
+                if (!ModelState.IsValid)
+                {
+                    return View("Edit", model);
+                }
             }
             if (image != null)
             {
                 var path = Path.Combine(Server.MapPath("~/Images/Books"), string.Format("{0}.{1}", model.BookCode, "jpg"));
                 image.SaveAs(path);
             }
-            return RedirectToAction("Edit", new {@id = _service.Get(model.BookCode).Id});
+            return model.BookId == 0 ? RedirectToAction("Index") : RedirectToAction("Edit", new { @id = _service.Get(model.BookCode).Id });
         }
 
         public ActionResult Get(int id)
@@ -49,7 +52,7 @@ namespace Bs.Calendar.Mvc.Controllers
             var searchStr = Request["search"];
             var books = _service.Load(orderby, searchStr);
             var page = Request["page"];
-            var pageNumber = 0;
+            int pageNumber;
             try
             {
                 pageNumber = Convert.ToInt32(page);
@@ -87,7 +90,7 @@ namespace Bs.Calendar.Mvc.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View("Edit", new BookHistoryVm());
+            return View("Edit", book);
         }
 
         [HttpGet]
@@ -103,11 +106,11 @@ namespace Bs.Calendar.Mvc.Controllers
                 return HttpNotFound();
             }
         }
-        
+
         public ActionResult Save(BookHistoryVm book)
         {
             _service.Save(book);
-            return Json(new { redirectToUrl = Url.Action("Edit"), id = _service.Get(book.BookCode).Id});
+            return Json(new { redirectToUrl = Url.Action("Edit"), id = _service.Get(book.BookCode).Id });
         }
 
         public ActionResult Delete(int id)
