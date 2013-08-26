@@ -27,6 +27,7 @@ namespace Bs.Calendar.Mvc.Controllers
                 {
                     return View("Edit", model);
                 }
+                _service.Save(model);
             }
             if (image != null)
             {
