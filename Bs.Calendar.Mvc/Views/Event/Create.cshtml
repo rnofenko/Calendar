@@ -34,9 +34,9 @@
             <label>Time Period</label>
             <input id="date" class="text input date four columns" type="date" data-bind="event: { input: dateTime.dateInput.dateChanged }, attr: { value: dateTime.dateInput.value(), min: dateTime.dateInput.min }" />
             <div class="four columns">
-                <div class="prepend append double field">
+                <div data-bind="attr: {class: eventModel.EventType() != 1 ? 'prepend append double field' : 'field' }">
                     <input id="fromTime" class="text input timeInput" type="text" placeholder="from" data-bind="value: dateTime.fromInput.value, event: { change: dateTime.fromInput.timeChanged, timeFormatError: dateTime.fromInput.timeChanged, changeTime: dateTime.fromInput.timeChanged }" />
-                    <input id="toTime" class="text input timeInput" type="text" placeholder="to" data-bind="value: dateTime.toInput.value, event: { change: dateTime.toInput.timeChanged, timeFormatError: dateTime.toInput.timeChanged, changeTime: dateTime.toInput.timeChanged }" />
+                    <input id="toTime" class="text input timeInput" type="text" placeholder="to" data-bind="visible: eventModel.EventType() != 1, value: dateTime.toInput.value, event: { change: dateTime.toInput.timeChanged, timeFormatError: dateTime.toInput.timeChanged, changeTime: dateTime.toInput.timeChanged }" />
                 </div>
             </div>
         </div>
