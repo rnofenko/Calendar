@@ -106,13 +106,14 @@ window.BooksVm = function ()
         {
             return "/Book/Edit/" + _self.id;
         };
-        
+
         _self.imageUrl = ko.observable();
-        
+
         $.ajax({
             url: "/Images/Books/" + source.Code + ".jpg",
             type: 'HEAD',
-            success: function () {
+            success: function ()
+            {
                 _self.imageUrl("/Images/Books/" + source.Code + ".jpg");
             }
         });

@@ -23,18 +23,29 @@ namespace Bs.Calendar.Mvc.Controllers
             if (model.BookId == 0)
             {
                 ModelState.Remove("BookId");
-                if (!ModelState.IsValid)
-                {
-                    return View("Edit", model);
-                }
+            }
+            if (!ModelState.IsValid)
+            {
+                return View("Edit", model);
+            }
+            try
+            {
                 _service.Save(model);
+            }
+            catch (WarningException exception)
+            {
+                ModelState.AddModelError("", exception.Message);
+                return View("Edit", model);
             }
             if (image != null)
             {
-                var path = Path.Combine(Server.MapPath("~/Images/Books"), string.Format("{0}.{1}", model.BookCode, "jpg"));
+                var path = Path.Combine(Server.MapPath("~/Images/Books"),
+                    string.Format("{0}.{1}", model.BookCode, "jpg"));                
                 image.SaveAs(path);
             }
-            return model.BookId == 0 ? RedirectToAction("Index") : RedirectToAction("Edit", new { @id = _service.Get(model.BookCode).Id });
+            return model.BookId == 0
+                ? RedirectToAction("Index")
+                : RedirectToAction("Edit", new { @id = _service.Get(model.BookCode).Id });
         }
 
         public ActionResult Get(int id)
@@ -87,10 +98,17 @@ namespace Bs.Calendar.Mvc.Controllers
             ModelState.Remove("BookId");
             if (ModelState.IsValid)
             {
-                _service.Save(book);
-                return RedirectToAction("Index");
+                try
+                {
+                    _service.Save(book);
+                    return RedirectToAction("Index");
+                }
+                catch (WarningException exception)
+                {
+                    ModelState.AddModelError("", exception.Message);
+                    return View("Edit", book);
+                }
             }
-
             return View("Edit", book);
         }
 
@@ -110,7 +128,18 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Save(BookHistoryVm book)
         {
-            _service.Save(book);
+            if (!ModelState.IsValid)
+            {
+                return View("Edit", book);            
+            }
+            try
+            {
+                _service.Save(book);
+            }
+            catch (WarningException exception)
+            {
+                ModelState.AddModelError("", exception.Message);
+            }
             return Json(new { redirectToUrl = Url.Action("Edit"), id = _service.Get(book.BookCode).Id });
         }
 

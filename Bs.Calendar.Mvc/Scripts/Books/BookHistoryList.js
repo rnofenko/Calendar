@@ -49,7 +49,7 @@ function BookHistoryList(param) {
     };
 
     self_.saveRecords = function () {
-        if (window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length) != "Create") {
+        if (window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length) != "Create" && !isNaN(parseInt(window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length)))) {
             var readerId = 0;
             var newBookHistoryCopy = jQuery.extend([], self_.newBookHistory());
             var histories = $.merge(newBookHistoryCopy, self_.oldBookHistory());
@@ -112,6 +112,15 @@ function BookHistoryList(param) {
         }
         self_.newBookHistory.unshift(new BookHistoryItem(data));
     };
+    
+    $('#BookCode').on('blur', function () {
+        var data = ko.dataFor(this);
+        var regExpr = new RegExp("^[a-zA-Zа-яА-Я0-9\-]+$");
+        $("div[class|='validation-summary']").empty();
+        if (!regExpr.test(data.BookCode)) {
+            $("div[class|='validation-summary']").append("Code should contain only letters or digits, or dash");
+        }
+    });
 
     $.each(param, function (key, value) {
         self_.bookItem = {
@@ -121,15 +130,12 @@ function BookHistoryList(param) {
             BookDescription: param.BookDescription,
             BookReader: param.Reader,
             BookImage: param.BookImage,
-
-            BookFileName: param.BookImage,
-            url: param.url
-        };
-
+        };   
+        
         if (key == "BookHistoryList" && value != null) {
             $.each(value, function(k, v) {
                 self_.addOldRecord(v);
             });
         }
-    });
+    }); 
 }
