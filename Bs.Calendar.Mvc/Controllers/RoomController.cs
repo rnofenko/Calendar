@@ -6,7 +6,7 @@ using System;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
-    [Authorize(Roles = "Admin, Simple")]
+    [Authorize(Roles = "Admin")]
     public class RoomController : Controller
     {
         private readonly RoomService _service;
@@ -14,12 +14,6 @@ namespace Bs.Calendar.Mvc.Controllers
         public RoomController(RoomService service)
         {
             _service = service;
-        }
-
-        private ActionResult PassRoomIntoTheView(string view, int id)
-        {
-            var room = _service.Get(id);
-            return room != null ? (ActionResult)View(view, new RoomEditVm(room)) : HttpNotFound();
         }
 
         public ActionResult Index()
@@ -77,7 +71,7 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            return PassRoomIntoTheView("Edit", id);
+            return passRoomIntoTheView("Edit", id);
         }
 
         [HttpGet]
@@ -90,6 +84,12 @@ namespace Bs.Calendar.Mvc.Controllers
         public JsonResult GetAllRooms()
         {
             return Json(_service.GetAllRooms(), JsonRequestBehavior.AllowGet);
+        }
+
+        private ActionResult passRoomIntoTheView(string view, int id)
+        {
+            var room = _service.Get(id);
+            return room != null ? (ActionResult)View(view, new RoomEditVm(room)) : HttpNotFound();
         }
     }
 }

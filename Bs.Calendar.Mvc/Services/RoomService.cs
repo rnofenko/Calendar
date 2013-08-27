@@ -5,6 +5,7 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Models.Bases;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Mvc.ViewModels.Rooms;
 
 namespace Bs.Calendar.Mvc.Services
 {

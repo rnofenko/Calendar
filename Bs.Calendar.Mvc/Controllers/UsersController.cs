@@ -75,7 +75,7 @@ namespace Bs.Calendar.Mvc.Controllers
         {
             ModelState.Remove("userId");
             if (!ModelState.IsValid)
-            {                
+            {
                 return View("Edit", model);
             }
 

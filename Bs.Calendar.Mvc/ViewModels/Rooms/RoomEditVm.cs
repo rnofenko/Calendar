@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Bs.Calendar.Models;
 using Bs.Calendar.Models.Bases;
 
@@ -6,8 +6,6 @@ namespace Bs.Calendar.Mvc.ViewModels
 {
     public class RoomEditVm
     {
-        public int RoomId { get; set; }
-
         public RoomEditVm()
         {
         }
@@ -20,9 +18,22 @@ namespace Bs.Calendar.Mvc.ViewModels
             Color = room.Color;
         }
 
-        [StringLength(BaseEntity.LENGTH_NAME),
-        Required(ErrorMessage = "The name of the room must be specified"),
-        Display(Name = "Name")]
+        public Room Map()
+        {
+            return new Room
+                       {
+                           Id = RoomId,
+                           Color = Color,
+                           Name = Name,
+                           NumberOfPlaces = NumberOfPlaces
+                       };
+        }
+
+        public int RoomId { get; set; }
+
+        [Display(Name = "Name"),
+        StringLength(BaseEntity.LENGTH_NAME),
+        Required(ErrorMessage = "The name of the room must be specified")]
         public string Name { get; set; }
 
         [Display(Name = "Number of places"),
@@ -34,6 +45,5 @@ namespace Bs.Calendar.Mvc.ViewModels
         Required(ErrorMessage = "Color should be selected"),
         Range(BaseEntity.MIN_COLOR_VALUE, BaseEntity.MAX_COLOR_VALUE, ErrorMessage = "This color is not available")]
         public int Color { get; set; }
-
     }
 }
