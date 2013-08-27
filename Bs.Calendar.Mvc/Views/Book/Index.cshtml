@@ -3,8 +3,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row">
-    <div class="centered seven columns text-center">
-        <h4 class="page-title">@ViewBag.Title</h4>
+    <div class="centered seven columns text-center page-title">
+        <h4>@ViewBag.Title</h4>
     </div>
 </div>
 
@@ -21,29 +21,29 @@
 
 <div class="row invisible-onstart">
     <div class="twelve columns centered">
-        <table>
+        <table class="fixed_columns">
             <thead>
                 <tr>
                     <th></th>
-                    <th data-bind="click: toggle_orderby" id="th_Code">
+                    <th class="clickable" data-bind="click: toggle_orderby" id="th_Code">
+                        Code
                         <span class="hide" id="order_-Code"><i class="icon-down"></i></span>
                         <span class="hide" id="order_Code"><i class="icon-up"></i></span>
-                        Code
                     </th>
-                    <th data-bind="click: toggle_orderby" id="th_Title">
+                    <th class="clickable" data-bind="click: toggle_orderby" id="th_Title">
+                        Book title
                         <span class="hide" id="order_-Title"><i class="icon-down"></i></span>
                         <span class="hide" id="order_Title"><i class="icon-up"></i></span>
-                        Book title
                     </th>
-                    <th data-bind="click: toggle_orderby" id="th_Author">
+                    <th class="clickable" data-bind="click: toggle_orderby" id="th_Author">
+                        Author
                         <span class="hide" id="order_-Author"><i class="icon-down"></i></span>
                         <span class="hide" id="order_Author"><i class="icon-up"></i></span>
-                        Author
                     </th>
-                    <th data-bind="click: toggle_orderby" id="th_Reader">
+                    <th class="clickable" data-bind="click: toggle_orderby" id="th_Reader">
+                        Reader
                         <span class="hide" id="order_-Reader"><i class="icon-down"></i></span>
                         <span class="hide" id="order_Reader"><i class="icon-up"></i></span>
-                        Reader
                     </th>
                     <th>Actions</th>
                 </tr>

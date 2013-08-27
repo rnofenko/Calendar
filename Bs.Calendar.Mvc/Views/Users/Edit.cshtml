@@ -3,9 +3,9 @@
 @model Bs.Calendar.Mvc.ViewModels.Users.UserEditVm
 @{
     var btnName = "Create";
-    var userRoles = Enum.GetValues(typeof(Roles))
-                        .Cast<Roles>()
-                        .Where(role => role < Roles.All);
+    var userRoles = Enum.GetValues(typeof (Roles))
+        .Cast<Roles>()
+        .Where(role => role < Roles.All);
     var userId = 0;
     var isDeleted = false;
 
@@ -15,7 +15,7 @@
         userId = Model.UserId;
         ViewBag.Title = "Edit User";
         ViewBag.User = Model.FirstName + " " + Model.LastName;
-        
+
         isDeleted = Model.Live == LiveStatuses.Deleted;
     }
     else
@@ -26,88 +26,86 @@
 }
 
 <div class="row">
-    <div class="centered seven columns text-center">
-        <h4 class="sub-title">@ViewBag.Title</h4>
+    <div class="centered seven columns text-center sub-title">
+        <h4>@ViewBag.Title</h4>
     </div>
 </div>
 
-<div class="row">
     @using (Html.BeginForm())
     {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(user => user.UserId)
-
-        <div class="centered seven columns danger alert">
-            @Html.ValidationSummary()
-        </div>
-
         <div class="row">
-            <fieldset class="centered seven columns">
-                <legend>
-                    <h4>@ViewBag.User</h4>
-                </legend>
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(user => user.UserId)
 
-                <ul>
-                    <li class="field">
-                        @Html.LabelFor(user => user.FirstName, new { @class = "inline three columns" })
-                        @Html.TextBoxFor(user => user.FirstName, new { @class = "wide text input" })
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(user => user.LastName, new { @class = "inline three columns" })
-                        @Html.TextBoxFor(user => user.LastName, new { @class = "wide text input" })
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(user => user.Email, new { @class = "inline three columns" })
-                        @Html.TextBoxFor(user => user.Email, new { @class = "wide text input" })
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(user => user.BirthDate, new { @class = "inline three columns" })
-                        @Html.CustomDateEditor(user => user.BirthDate)
-                    </li>
-
-                    <li class="field">
-                        @Html.LabelFor(user => user.Role, new { @class = "inline three columns" })
-                        <div class="picker">
-                            @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
-                        </div>
-                    </li>
-                    @if (userId != 0)
-                    {                        
-                        <li>
-                            <label class="inline  three columns">Deleted</label>
-                            @Html.CheckBox("deleted", isDeleted)
+            <div class="centered seven columns danger alert">
+                @Html.ValidationSummary()
+            </div>
+        </div>
+        <div class="row">
+            <section class="seven columns">
+                <fieldset class="scroll_sizing">
+                    <legend>
+                        <h4>@ViewBag.User</h4>
+                    </legend>
+                    <ul>
+                        <li class="field">
+                            @Html.LabelFor(user => user.FirstName, new {@class = "inline three columns"})
+                            @Html.TextBoxFor(user => user.FirstName, new {@class = "wide text input"})
                         </li>
-                    }
-                </ul>
-            </fieldset>
-        </div>
-        
-        @Html.Partial("UserContacts")
 
-        <div class="row">
-            <div class="centered seven columns">
-                <div class="medium secondary btn three columns">
-                    <input type="submit" value="@btnName"/>
-                </div>
+                        <li class="field">
+                            @Html.LabelFor(user => user.LastName, new {@class = "inline three columns"})
+                            @Html.TextBoxFor(user => user.LastName, new {@class = "wide text input"})
+                        </li>
 
-                <div class="medium default btn push_one three columns">
-                    @Html.ActionLink("Back", "Index")
-                </div>
-                
-                @if (Model.ApproveState == ApproveStates.NotApproved)
-                {
-                    <div class="medium warning btn push_one three columns">
-                        @Html.ActionLink("Approve", "ApproveUser", Model)
+                        <li class="field">
+                            @Html.LabelFor(user => user.Email, new {@class = "inline three columns"})
+                            @Html.TextBoxFor(user => user.Email, new {@class = "wide text input"})
+                        </li>
+
+                        <li class="field">
+                            @Html.LabelFor(user => user.BirthDate, new {@class = "inline three columns"})
+                            @Html.CustomDateEditor(user => user.BirthDate)
+                        </li>
+
+                        <li class="field">
+                            @Html.LabelFor(user => user.Role, new {@class = "inline three columns"})
+                            <div class="picker">
+                                @Html.DropDownListFor(user => user.Role, new SelectList(userRoles))
+                            </div>
+                        </li>
+                        @if (userId != 0)
+                        {
+                            <li>
+                                <label class="inline  three columns">Deleted</label>
+                                @Html.CheckBox("deleted", isDeleted)
+                            </li>
+                        }
+                    </ul>
+                </fieldset>
+                <div class="row">
+                    <br />
+                    <div class="medium secondary btn three columns">
+                        <input type="submit" value="@btnName"/>
                     </div>
-                }
+
+                    <div class="medium default btn push_one three columns">
+                        @Html.ActionLink("Back", "Index")
+                    </div>
+                
+                    @if (@Model.ApproveState == ApproveStates.NotApproved)
+                    {
+                        <div class="medium warning btn push_one three columns">
+                            @Html.ActionLink("Approve", "ApproveUser", Model)
+                        </div>
+                    }
+                </div>
+            </section>
+            <div class="five columns">
+                @Html.Partial("UserContacts")
             </div>
         </div>
     }
-</div>
-
 @section Scripts {
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
@@ -116,6 +114,10 @@
 
     <script type="text/javascript"> 
         $(document).ready(function () {
+            
+            $('.scroll-simple').scrollbar({ type: "simple" });
+            $('.content').height($('.scroll_sizing').outerHeight() - $('.scroll_sizing legend').outerHeight() / 2);
+
             ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts)));
         });
     </script>

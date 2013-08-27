@@ -68,6 +68,7 @@
     <Compile Include="AccountServiceTest.cs" />
     <Compile Include="BirthdayLoaderTest.cs" />
     <Compile Include="ContactTypeParserTest.cs" />
+    <Compile Include="EventSavingServiceTest.cs" />
     <Compile Include="FakeObjects\FakeCalendarLogRepository.cs" />
     <Compile Include="EmailEventReminderTest.cs" />
     <Compile Include="FakeObjects\FakeConfig.cs" />

@@ -8,3 +8,7 @@
 
     height: 680px;
 }
+
+.list_body * {
+    border-top-width: 0px !important;
+}

@@ -1,6 +1,19 @@
 ﻿function UserFrameFilter(frame) {
     var self = this;
 
+    var modalWindowHandlers = {
+        keyup: function (event) {
+            if (event.keyCode == 27) { //$.ui.keyCode.ESCAPE
+                self.closeWindow();
+            }
+        },
+        click: function (event) {
+            if ($(event.target).is("#filter_settings")) {
+                self.closeWindow();
+            }
+        }
+    };
+
     self.SearchString = ko.observable("");
     self.SortByField = ko.observable("");
     self.Page = ko.observable();
@@ -39,6 +52,7 @@
     };
 
     self.closeWindow = function () {
+        $(document).unbind(modalWindowHandlers);
         $("#filter_settings").toggleClass("active");
     };
 
@@ -46,7 +60,9 @@
         self.OnlyAdminsSetCheck(self.OnlyAdmins());
         self.NotApprovedSetCheck(self.NotApproved());
         self.DeletedSetCheck(self.Deleted());
+
         $("#filter_settings").toggleClass("active");
+        $(document).bind(modalWindowHandlers);
     };
 
     self.displayFilter = ko.computed(function () {

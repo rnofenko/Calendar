@@ -1,0 +1,7 @@
+﻿.contacts {
+    cursor: default;
+}
+
+.contacts ul li *{
+    border-width: 0px;
+}

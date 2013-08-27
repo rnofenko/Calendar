@@ -1,21 +1,18 @@
 ﻿<div class="row">
-    <fieldset class="centered seven columns">
-        <legend>
-            <h4>Contacts</h4>
-        </legend>
+    <div class="field append">
+        <div class="btn medium default eight columns">Contacts</div>
+        <div class="medium info btn icon-left icon-user-add four columns" data-bind="click: addContact"><a href="#">Add</a></div>
+        <div></div>
+    </div>
+</div>
 
-        <ul data-bind="foreach: Contacts">
-            <li class="field">
-                <div class="row">
-                    <div class="push_one two columns"><i data-bind="attr: { class: Icon }"></i></div>
-                    <input data-bind="value: ContactType, attr: { name: $root.getIndexedName($index(), 'ContactType') }" type="hidden">
-                    <input class="wide text input eight columns" type="text" data-bind="value: Value, valueUpdate: 'afterkeydown', attr: { name: $root.getIndexedName($index(), 'Value') }">
-                    <div data-bind="click: removeContact" class="one columns" style="cursor: pointer"><i class="icon-cancel"></i></div>
-                </div>
-            </li>
-        </ul>
-        <div class="row">
-            <div class="medium info btn icon-left icon-user-add push_nine three columns" data-bind="click: addContact"><a href="#">Add</a></div>
-        </div>
-    </fieldset>
+<div class="list_body row content scroll-simple scroll-simple_inner">
+    <ul data-bind="foreach: Contacts">
+        <li class="field prepend append">
+            <input data-bind="value: ContactType, attr: { name: $root.getIndexedName($index(), 'ContactType') }" type="hidden">
+            <input class="wide text input eight columns" type="text" data-bind="value: Value, valueUpdate: 'afterkeydown', attr: { name: $root.getIndexedName($index(), 'Value') }">
+            <div class="adjoined two columns"><i data-bind="attr: { class: Icon }"></i></div>
+            <div class="adjoined btn medium two columns clickable" data-bind="click: removeContact"><i class="icon-cancel"></i></div>
+        </li>
+    </ul>
 </div>
