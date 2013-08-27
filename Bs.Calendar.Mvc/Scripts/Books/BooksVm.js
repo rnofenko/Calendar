@@ -106,21 +106,17 @@ window.BooksVm = function ()
         {
             return "/Book/Edit/" + _self.id;
         };
-
-        _self.imageUrl = ko.observable();
-
-        $.ajax({
-            url: "/Images/Books/" + source.Code + ".jpg",
-            type: 'HEAD',
-            success: function ()
-            {
-                _self.imageUrl("/Images/Books/" + source.Code + ".jpg");
+        _self.hasCover = source.HasCover;
+        _self.imageUrl = function () {
+            if (_self.hasCover) {
+                return "/Images/Books/" + source.Code + ".jpg";
+            } else {
+                return "/Images/binaryLogo.png";
             }
-        });
+        };
     };
 
-    self.recieveData = function (data)
-    {
+    self.recieveData = function (data) {
         self.books.removeAll();
         self.TotalPages(data['TotalPages']);
         data = data['Data'];
@@ -130,8 +126,7 @@ window.BooksVm = function ()
         }
     };
 
-    self.LoadData = function ()
-    {
+    self.LoadData = function () {
         var data = {
             orderby: self._orderby,
             page: self.page()

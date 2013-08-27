@@ -31,6 +31,8 @@ namespace Bs.Calendar.Mvc.ViewModels
         StringLength(BaseEntity.LENGTH_NAME)]
         public string BookAuthor { get; set; }
 
+        public bool HasCover { get; set; }
+
         public BookHistoryVm(Book book)
         {
             BookId = book.Id;

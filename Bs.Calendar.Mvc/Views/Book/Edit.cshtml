@@ -1,10 +1,9 @@
 ﻿@model Bs.Calendar.Mvc.ViewModels.BookHistoryVm
-@{    
+@{        
     ViewBag.Title = "Create Book";
     var btnName = "Create";
     var id = 0;
-    //var pathToImage = "binaryLogo.png";
-    var pathToImage = "";
+    var pathToImage = "binaryLogo.png";
     var bookTitle = "New book";
 
     if (Model != null && Model.BookId != 0)
