@@ -116,7 +116,7 @@ function BookHistoryList(param) {
         var data = ko.dataFor(this);
         var regExpr = new RegExp("^[a-zA-Zа-яА-Я0-9\-]+$");
         $("div[class|='validation-summary']").empty();
-        if (!regExpr.test(data.BookCode)) {
+        if (!regExpr.test(data.BookCode())) {
             $("div[class|='validation-summary']").append("Code should contain only letters or digits, or dash");
         }
     });
