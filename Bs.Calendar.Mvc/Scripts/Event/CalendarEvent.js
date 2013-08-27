@@ -85,13 +85,11 @@ function EventSubscribersHandler(eventModel) {
 
 function DateTimeHandler(eventModel) {
     var self = this;
-    
-    self.isAllDay = eventModel.IsAllDay;
 
-    var formatSettings = { date: "YYYY-MM-DD", time: "hh:mm a" };
+    var formatSettings = { date: "YYYY-MM-DD", time: "H:mm" };
     var timeRangeSettings = {
-        minTime: moment().setTime(moment("8:00 am", formatSettings.time)),
-        maxTime: moment().setTime(moment("6:00 pm", formatSettings.time)),
+        minTime: moment().setTime(moment("8:00", formatSettings.time)),
+        maxTime: moment().setTime(moment("18:00", formatSettings.time)),
         step: 60
     };
     
@@ -99,10 +97,11 @@ function DateTimeHandler(eventModel) {
         fromTime: $("#fromTime"),
         toTime: $("#toTime"),
         date: $("#date"),
+        isAllDay: $("#isAllDay")
     }; //Setup time range control html elements
 
     $(dateTimeControl.fromTime).add(dateTimeControl.toTime).timepicker({
-        timeFormat: "g:i a",
+        timeFormat: "H:i",
         step: timeRangeSettings.step,
         minTime: timeRangeSettings.minTime.format(formatSettings.time),
         maxTime: timeRangeSettings.maxTime.format(formatSettings.time)
@@ -110,8 +109,11 @@ function DateTimeHandler(eventModel) {
 
     var dateDefaults = { initialValue: timeRangeSettings.minTime.clone(), initialDifference: { minutes: timeRangeSettings.step } };
     
-    self.fromDateTime = ko.observable(dateDefaults.initialValue);
-    self.toDateTime = ko.observable(dateDefaults.initialValue.clone().add(dateDefaults.initialDifference));
+    self.IsAllDay = ko.observable(eventModel.IsAllDay());
+    dateTimeControl.isAllDay.trigger("gumby." + (self.IsAllDay() ? "check" : "uncheck"));
+
+    self.fromDateTime = ko.observable(eventModel.Id != 0 ? eventModel.DateStart() : dateDefaults.initialValue);
+    self.toDateTime = ko.observable(eventModel.Id != 0 ? eventModel.EndDate() : dateDefaults.initialValue.clone().add(dateDefaults.initialDifference));
 
     self.dateInput = {
         value: ko.computed(function () {
@@ -146,10 +148,8 @@ function DateTimeHandler(eventModel) {
             var currentFromTime = self.fromDateTime(),
                 fromTime = moment($(event.target).val(), formatSettings.time);
 
-            console.log(timeRangeSettings.minTime);
             timeRangeSettings.minTime.clone().setDate(fromTime);
-            console.log(timeRangeSettings.minTime);
-
+            
             if (!moment.isMoment(fromTime) ||
                 !fromTime.isValid() ||
                 fromTime < timeRangeSettings.minTime.clone().setDate(fromTime) ||
@@ -223,6 +223,7 @@ function CalendarEventVm(eventModel) {
     self.sendModel = function () {
         self.eventModel.DateStart(self.dateTime.fromDateTime().toJSON());
         self.eventModel.DateEnd(self.dateTime.toDateTime().toJSON());
+        self.eventModel.IsAllDay(self.dateTime.IsAllDay());
 
         $.ajax({
             url: self.eventModel.Id != 0 ? "/Event/Edit" : "/Event/Create",

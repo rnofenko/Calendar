@@ -35,10 +35,13 @@
             <input id="date" class="text input date four columns" type="date" data-bind="event: { input: dateTime.dateInput.dateChanged }, attr: { value: dateTime.dateInput.value(), min: dateTime.dateInput.min }" />
             <div class="four columns">
                 <div data-bind="attr: {class: eventModel.EventType() != 1 ? 'prepend append double field' : 'field' }">
-                    <input id="fromTime" class="text input timeInput" type="text" placeholder="from" data-bind="value: dateTime.fromInput.value, event: { change: dateTime.fromInput.timeChanged, timeFormatError: dateTime.fromInput.timeChanged, changeTime: dateTime.fromInput.timeChanged }" />
-                    <input id="toTime" class="text input timeInput" type="text" placeholder="to" data-bind="visible: eventModel.EventType() != 1, value: dateTime.toInput.value, event: { change: dateTime.toInput.timeChanged, timeFormatError: dateTime.toInput.timeChanged, changeTime: dateTime.toInput.timeChanged }" />
+                    <input id="fromTime" class="text input timeInput" type="text" placeholder="from" data-bind="value: dateTime.fromInput.value, attr: { disabled: eventModel.EventType() != 1 && dateTime.IsAllDay() }, event: { change: dateTime.fromInput.timeChanged, timeFormatError: dateTime.fromInput.timeChanged, changeTime: dateTime.fromInput.timeChanged }" />
+                    <input id="toTime" class="text input timeInput" type="text" placeholder="to" data-bind="visible: eventModel.EventType() != 1, value: dateTime.toInput.value, attr: { disabled: dateTime.IsAllDay() }, event: { change: dateTime.toInput.timeChanged, timeFormatError: dateTime.toInput.timeChanged, changeTime: dateTime.toInput.timeChanged }" />
                 </div>
             </div>
+            <label id="isAllDay" class="checkbox three columns" data-bind="visible: eventModel.EventType() != 1, event: {'gumby.onChange': function(context, event){dateTime.IsAllDay($(event.target).hasClass('checked'));}}">
+                <span></span> All day
+            </label>
         </div>
     
         <div class="row">
