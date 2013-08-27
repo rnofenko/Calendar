@@ -53,7 +53,6 @@ function BookHistoryList(param) {
             var readerId = 0;
             var newBookHistoryCopy = jQuery.extend([], self_.newBookHistory());
             var histories = $.merge(newBookHistoryCopy, self_.oldBookHistory());
-
             if (histories.length != 0) {
                 if (histories[0].action == "Take") {
                     readerId = histories[0].userId;

@@ -23,18 +23,21 @@ namespace Bs.Calendar.Mvc.Controllers
             if (model.BookId == 0)
             {
                 ModelState.Remove("BookId");
+                if (ModelState.IsValid)
+                {                    
+                    try
+                    {
+                        _service.Save(model);
+                    }
+                    catch (WarningException exception)
+                    {
+                        ModelState.AddModelError("", exception.Message);
+                        return View("Edit", model);
+                    }
+                }
             }
             if (!ModelState.IsValid)
             {
-                return View("Edit", model);
-            }
-            try
-            {
-                _service.Save(model);
-            }
-            catch (WarningException exception)
-            {
-                ModelState.AddModelError("", exception.Message);
                 return View("Edit", model);
             }
             if (image != null)
