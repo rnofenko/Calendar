@@ -36,7 +36,7 @@
                 <legend>
                     <strong>@bookTitle</strong>
                 </legend>
-                <div class="centered seven columns danger alert">
+                <div id="validationSummary" class="centered seven columns danger alert invisible-onstart">
                     @Html.ValidationSummary()
                 </div>
 
@@ -112,6 +112,14 @@
         $(document).ready(function () {
             var model = new BookHistoryList(@Html.RawJson(@Model));
             ko.applyBindings(model);
+            
+            if ($(".validation-summary-errors li").length == 0)
+            {
+                $("#validationSummary").hide();
+            } else {
+                $("#validationSummary").show();
+            }
+            
         });
     </script>
 }

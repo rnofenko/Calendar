@@ -123,7 +123,10 @@ function BookHistoryList(param) {
             code = data.BookCode;
         }        
         if (!regExpr.test(code)) {
+            $("#validationSummary").show();
             $("div[class|='validation-summary']").append("Code should contain only letters or digits, or dash");
+        } else {
+            $("#validationSummary").hide();
         }
     });
 
