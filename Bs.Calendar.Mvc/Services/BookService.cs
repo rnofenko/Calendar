@@ -17,6 +17,11 @@ namespace Bs.Calendar.Mvc.Services
             _unit = repository;
         }
 
+        public List<Book> GetAllBooks()
+        {
+            return _unit.Book.Load().ToList();
+        }
+
         public Book Get(int id)
         {
             var book = _unit.Book.Get(id);

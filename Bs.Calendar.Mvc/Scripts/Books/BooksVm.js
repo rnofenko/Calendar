@@ -5,7 +5,7 @@
 
 window.BooksVm = function ()
 {
-    var self = this;
+    var self = this;    
 
     self.TotalPages = ko.observable(1);
     self._page = ko.observable(1);
@@ -93,6 +93,7 @@ window.BooksVm = function ()
     };
 
     self.books = ko.observableArray();
+    self.allBooks = ko.observableArray();
 
     self.BookVm = function (source)
     {
@@ -122,23 +123,8 @@ window.BooksVm = function ()
     };
 
     self.shelfRows = ko.observableArray();
-    self.bookQuantaty = 4;
-    
-    //alert(self.books.length);
-    //alert(parseInt(self.books.length / 3));
-    //alert(parseInt(self.books.length / 3) + 1);
-    //for (var i = 0; i < parseInt(self.books.length / 3) + 1; ++i)
-    //{
-    //    var shelfRow = new self.BookShelfRow();
-    //    for (var j = 0; j < 3; ++j)
-    //    {
-    //        if (j + 3 * i < self.books.length)
-    //        {
-    //            shelfRow.booksRow.push(books[j + 3 * i]);
-    //        }
-    //    }
-    //    self.shelfRows.push(shelfRow);
-    //}
+    self.bookQuantaty = 5;
+    self.withCover = ko.observable(true);
 
     self.recieveData = function (data) {
         self.books.removeAll();
@@ -148,19 +134,58 @@ window.BooksVm = function ()
         {
             self.books.push(new self.BookVm(data[i]));
         }
-        
-        for (var i = 0; i < parseInt(self.books().length / self.bookQuantaty) + 1; ++i) {
+    };
+    
+    self.getAllBooks = function (data)
+    {
+        self.allBooks.removeAll();
+        for (var i = 0; i < data.length; ++i)
+        {
+            self.allBooks.push(new self.BookVm(data[i]));
+        }
+
+        for (var i = 0; i < parseInt(self.allBooks().length / self.bookQuantaty) + 1; ++i) {
             var shelfRow = new self.BookShelfRow();
             for (var j = 0; j < self.bookQuantaty; ++j)
             {
-                if (j + self.bookQuantaty * i < self.books().length)
+                if (j + self.bookQuantaty * i < self.allBooks().length)
                 {
-                    shelfRow.booksRow.push(self.books()[j + self.bookQuantaty * i]);
+                    shelfRow.booksRow.push(self.allBooks()[j + self.bookQuantaty * i]);
                 }
             }
             self.shelfRows.push(shelfRow);
         }
     };
+
+    self.loadAllBooks = function() {
+        $.ajax(
+            {
+                url: "Book/ListAllBooks",
+                type: "GET",
+                dataType: "json",
+                success: self.getAllBooks
+            });
+    };
+
+    self.loadAllBooks();
+    
+    self.booksView = ko.observable("List");
+
+    $("#booksViewBtn").on("click", function () {        
+        if (self.booksView() == "List") {
+            self.booksView("Shelf");
+            $("#bookShelf").hide();
+            $("#coverCheck").hide();
+            $("#bookList").show();
+            $("#booksSearch").show();
+        } else {
+            self.booksView("List");
+            $("#bookShelf").show();
+            $("#bookList").hide();
+            $("#booksSearch").hide();
+            $("#coverCheck").show();
+        }
+    });
 
     self.LoadData = function () {
         var data = {

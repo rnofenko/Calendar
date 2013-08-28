@@ -62,6 +62,12 @@ namespace Bs.Calendar.Mvc.Controllers
             return HttpNotFound();
         }
 
+        public JsonResult ListAllBooks()
+        {
+            var books = _service.GetAllBooks();
+            return Json(books, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult List()
         {
             var orderby = Request["orderby"];
