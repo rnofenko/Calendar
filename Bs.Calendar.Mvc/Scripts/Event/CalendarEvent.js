@@ -61,6 +61,7 @@ function EventSubscribersHandler(eventModel) {
             self.isTeamsLoaded = true;
             self.getAllTeams();
         }
+        mediator.trigger("RoomOrderListVm:hideRoomOrderList");
         self.userColumnVm.showColumnUserList(false);
         self.simpleTeamListVm.showTeamList(!self.simpleTeamListVm.showTeamList());
     };
@@ -70,8 +71,15 @@ function EventSubscribersHandler(eventModel) {
             self.isUsersLoaded = true;
             self.getAllUsers();
         }
+        mediator.trigger("RoomOrderListVm:hideRoomOrderList");
         self.simpleTeamListVm.showTeamList(false);
         self.userColumnVm.showColumnUserList(!self.userColumnVm.showColumnUserList());
+    };
+
+    self.displayRoomOrderList = function() {
+        self.userColumnVm.showColumnUserList(false);
+        self.simpleTeamListVm.showTeamList(false);
+        mediator.trigger("RoomOrderListVm:invertRoomOrderListView");
     };
 
     self.removeUser = function (user) {
@@ -197,6 +205,13 @@ function DateTimeHandler(eventModel) {
             }
         }
     };
+
+    self.setFromDateTime = function (time) { self.fromDateTime(time); };
+    self.setToDateTime = function (time) { self.toDateTime(time); };
+    
+    //Setup bindings
+    mediator.bind("DateTimeHandler:setFromTime", self.setFromDateTime);
+    mediator.bind("DateTimeHandler:setToTime", self.setToDateTime);
 }
 
 function CalendarEventVm(eventModel) {

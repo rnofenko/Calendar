@@ -41,5 +41,6 @@ namespace Bs.Calendar.Mvc.ViewModels.Events
 
         public List<UserVm> Users { get; set; }
         public List<TeamVm> Teams { get; set; }
+        public List<RoomEventVm> RoomEvents { get; set; }  
     }
 }

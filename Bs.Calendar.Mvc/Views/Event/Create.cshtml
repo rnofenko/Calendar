@@ -6,9 +6,8 @@
 <form>
     <div class="row" id="calendar-event">
         <div class="row">
-            <div class="medium info btn four columns event-btn1"><a href="#">Personal Event</a></div>
-            <div class="medium default btn four columns event-btn3"><a href="#">Company Event</a></div>
-            <div class="medium default btn four columns event-btn2"><a href="#">Meeting Event</a></div>
+            <div class="medium info btn six columns event-btn1"><a href="#">Personal Event</a></div>
+            <div class="medium default btn six columns event-btn2"><a href="#">Meeting Event</a></div>
         </div>
         <br/>
         
@@ -21,12 +20,9 @@
                 @Html.LabelFor(eventModel => eventModel.Title)
                 @Html.TextBoxFor(eventModel => eventModel.Title, new { @class = "text input columns", data_bind = "value : eventModel.Title", placeholder = "Event Title" })
             </div>
-            <div class="four columns invisible-onstart" data-bind="visible: eventModel.EventType() != 1">
+            <div class="four columns field invisible-onstart" data-bind="visible: eventModel.EventType() != 1">
                 <label>Event Place</label>
-                <div class="picker nine columns">
-                    <select data-bind="options: roomOptions.roomList, optionsText: roomOptions.optionText, value: eventModel.Room, optionsCaption: 'Choose Room...'"></select>
-                </div>
-                <div data-bind="attr: { class: roomOptions.roomOptionColor }" class="one columns"></div>
+                <input class="text input" type="text" value="None" disabled>
             </div>
         </div>
         
@@ -56,8 +52,9 @@
         <div class="row invisible-onstart" data-bind="visible: eventModel.EventType() == 2">
             <div class="row" >
                 <div class="nine columns">
-                    <div class="medium default btn metro rounded icon-right icon-user-add three columns" data-bind="click: subscribers.showUserList"><a href="#">Add Users</a></div>
-                    <div class="medium warning btn metro rounded icon-right icon-users three columns calendar-addteam-btn" data-bind="click: subscribers.showTeamList"><a href="#">Add Teams</a></div>
+                    <div class="medium default btn metro rounded icon-right icon-user-add four columns" data-bind="click: subscribers.showUserList"><a href="#">Add Users</a></div>
+                    <div class="medium warning btn metro rounded icon-right icon-users four columns calendar-addteam-btn" data-bind="click: subscribers.showTeamList"><a href="#">Add Teams</a></div>
+                    <div class="medium default btn metro rounded icon-right icon-home four columns calendar-chooseroom-btn" data-bind="click: subscribers.displayRoomOrderList"><a href="#">Choose Room</a></div>
                 </div>
             </div>
             <br/>
@@ -107,7 +104,7 @@
             ko.applyBindings(calendarEventVm.subscribers.userColumnVm, document.getElementById("user-column-list"));
             ko.applyBindings(calendarEventVm.subscribers.simpleTeamListVm, document.getElementById("simple-team-list"));
             ko.applyBindings(calendarEventVm, document.getElementById("calendar-event"));
-            ko.applyBindings(new RoomOrderListVm(), document.getElementById("room-order"));
+            ko.applyBindings(new RoomOrderListVm(), document.getElementById("room-order-list"));
 
             $("[class*=event-btn]").click(function () { calendarEventVm.setEventType(this); });
             $(".invisible-onstart").removeClass("invisible-onstart");
