@@ -222,8 +222,10 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Content\Layout\layout.css" />
     <Content Include="Content\Layout\list-view.css" />
+    <Content Include="Content\Shared\RoomOrderList.css" />
     <Content Include="Content\Shared\UserColumnList.css" />
     <Content Include="Content\Teams\TeamEdit.css" />
+    <Content Include="Content\themes\jquery-ui-1.10.3.custom.min.css" />
     <Content Include="Content\Users\RoleStateFilterWindow.css" />
     <Content Include="Images\birthday_icon.png" />
     <Content Include="Images\binaryLogo.png" />
@@ -255,6 +257,7 @@
     <Content Include="Scripts\modernizr-2.6.2.min.js" />
     <Content Include="Scripts\Moment\moment.min.js" />
     <Content Include="Scripts\Rooms\ColorPicker.js" />
+    <Content Include="Scripts\Rooms\RoomListVm.js" />
     <Content Include="Scripts\Rooms\SetupEvents.js" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Server\BackgroundTimer.cs" />
@@ -284,14 +287,16 @@
     <Compile Include="ViewModels\BookEditVm.cs" />
     <Compile Include="ViewModels\BookHistoryItemVm.cs" />
     <Compile Include="ViewModels\Events\CalendarEventVm.cs" />
+    <Compile Include="ViewModels\Events\RoomEventVm.cs" />
     <Compile Include="ViewModels\EventVm.cs" />
     <Compile Include="ViewModels\GenericPagingVm.cs" />
     <Compile Include="ViewModels\BookHistoryVm.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\AccountVm.cs" />
     <Compile Include="ViewModels\RegisterVm.cs" />
-    <Compile Include="ViewModels\RoomEditVm.cs" />
-    <Compile Include="ViewModels\RoomsVm.cs" />
+    <Compile Include="ViewModels\Rooms\RoomEditVm.cs" />
+    <Compile Include="ViewModels\Rooms\RoomsVm.cs" />
+    <Compile Include="ViewModels\Rooms\RoomFilterVm.cs" />
     <Compile Include="ViewModels\Teams\TeamEditVm.cs" />
     <Compile Include="ViewModels\Teams\TeamFilterVm.cs" />
     <Compile Include="ViewModels\Teams\TeamsVm.cs" />
@@ -328,6 +333,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Shared\MediatorSetup.js" />
+    <Content Include="Scripts\Shared\RoomOrderList.js" />
     <Content Include="Scripts\Shared\SimpleTeamList.js" />
     <Content Include="Scripts\Shared\UserColumnList.js" />
     <Content Include="Scripts\Teams\TeamEdit.js" />
@@ -399,11 +405,11 @@
     <Content Include="Views\Shared\SimpleTeamList.cshtml" />
     <Content Include="Views\Event\Create.cshtml" />
     <Content Include="Views\Book\BookShelf.cshtml" />
-  </ItemGroup>
+    <Content Include="Views\Shared\RoomOrderList.cshtml" />
+</ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Home\" />
-    <Folder Include="Content\themes\" />
     <Folder Include="Images\Books\" />
     <Folder Include="ViewModels\Home\" />
   </ItemGroup>

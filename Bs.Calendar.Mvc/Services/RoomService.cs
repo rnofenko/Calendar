@@ -5,6 +5,8 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Models.Bases;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Mvc.ViewModels.Rooms;
+using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -68,6 +70,23 @@ namespace Bs.Calendar.Mvc.Services
         public IEnumerable<Room> GetAllRooms()
         {
             return _repoUnit.Room.Load().ToList();
+        }
+
+        public RoomsVm RetreiveList(RoomFilterVm filterVm)
+        {
+            var filter = filterVm.Map();
+
+            _repoUnit.Room.OnBeforePaging += roomList =>
+            {
+                filterVm.TotalPages = PageCounter.GetTotalPages(roomList.Count(), filter.PageSize);
+                filterVm.Page = PageCounter.GetRangedPage(filterVm.Page, filterVm.TotalPages);
+            };
+
+            return new RoomsVm
+                       {
+                           Rooms = _repoUnit.Room.Load(filter),
+                           Filter = filterVm
+                       };
         }
     }
 }

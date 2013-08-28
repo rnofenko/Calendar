@@ -3,10 +3,11 @@ using Bs.Calendar.Mvc.Services;
 
 using Bs.Calendar.Mvc.ViewModels;
 using System;
+using Bs.Calendar.Mvc.ViewModels.Rooms;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
-    [Authorize(Roles = "Admin, Simple")]
+    [Authorize(Roles = "Admin")]
     public class RoomController : Controller
     {
         private readonly RoomService _service;
@@ -16,21 +17,15 @@ namespace Bs.Calendar.Mvc.Controllers
             _service = service;
         }
 
-        private ActionResult PassRoomIntoTheView(string view, int id)
-        {
-            var room = _service.Get(id);
-            return room != null ? (ActionResult)View(view, new RoomEditVm(room)) : HttpNotFound();
-        }
-
         public ActionResult Index()
         {
-            return View();
+            return View(new RoomFilterVm());
         }
 
         [HttpGet]
-        public ActionResult List(string searchStr)
+        public ActionResult List(RoomFilterVm filter)
         {
-            return PartialView(_service.Find(searchStr));
+            return PartialView(_service.RetreiveList(filter));
         }
 
         public ActionResult Delete(int id)
@@ -77,7 +72,7 @@ namespace Bs.Calendar.Mvc.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            return PassRoomIntoTheView("Edit", id);
+            return passRoomIntoTheView("Edit", id);
         }
 
         [HttpGet]
@@ -90,6 +85,12 @@ namespace Bs.Calendar.Mvc.Controllers
         public JsonResult GetAllRooms()
         {
             return Json(_service.GetAllRooms(), JsonRequestBehavior.AllowGet);
+        }
+
+        private ActionResult passRoomIntoTheView(string view, int id)
+        {
+            var room = _service.Get(id);
+            return room != null ? (ActionResult)View(view, new RoomEditVm(room)) : HttpNotFound();
         }
     }
 }

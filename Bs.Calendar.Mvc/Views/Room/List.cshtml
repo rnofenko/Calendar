@@ -1,19 +1,20 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.RoomsVm
+﻿@model Bs.Calendar.Mvc.ViewModels.Rooms.RoomsVm
 
-@{
-    const string colorClassTemplate = "roomColor_{0}";    
-}
+<input id="listPage" hidden="true" value="@Model.Filter.Page">
+<input id="listTotalPages" hidden="true" value="@Model.Filter.TotalPages">
 
 @foreach (var room in Model.Rooms)
 {
-<tr>
-    <td> @room.Name </td>
-    <td> @room.NumberOfPlaces </td>
-    <td> <div class="@string.Format(colorClassTemplate, room.Color) roomColor"></div> </td>
-    <td>
-        <div class="medium default btn icon-right icon-pencil">
-            @Html.ActionLink("Edit", "Edit", new { id = room.Id})
-        </div>
-    </td>
-</tr>
+    <tr>
+        <td>@room.Name </td>
+        <td>@room.NumberOfPlaces </td>
+        <td>
+            <div class="roomColor_@room.Color roomColor"></div>
+        </td>
+        <td>
+            <div class="medium default btn icon-right icon-pencil">
+                @Html.ActionLink("Edit", "Edit", new { id = room.Id })
+            </div>
+        </td>
+    </tr>
 }

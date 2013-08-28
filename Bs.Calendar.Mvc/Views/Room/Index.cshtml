@@ -1,12 +1,9 @@
+@model Bs.Calendar.Mvc.ViewModels.Rooms.RoomFilterVm
+
 @{
     ViewBag.Title = "Rooms";
-    var ajaxOptions = new AjaxOptions
-    {
-        UpdateTargetId = "rooms-table",
-        HttpMethod = "Get"
-    };
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="row">
     <div class="centered seven columns text-center page-title">
         <h4>@ViewBag.Title</h4>
@@ -19,29 +16,53 @@
             @Html.ActionLink("Create", "Create")
         </div>
     </div>
-
-    @using (Ajax.BeginForm("List", ajaxOptions))
-    {
-        <div class="field three columns push_six">
-            <input class="search input" type="text" name="searchStr" placeholder="Find room by name"/>
-        </div>
-    }
+    <div class="field three columns push_six">
+        <input class="search input" type="text" data-bind="value: filter.searchString, event: { change: changeHandle }" placeholder="Find room by name"/>
+    </div>
 </div>
 
+<!-- table output -->
 <div class="row">
     <div class ="twelve columns centered fixed_columns">
-        <table>
+        <table class="fixed_columns">
             <thead>
                 <tr>
-                    <th>Room name</th>
-                    <th>Number of places</th>
-                    <th>Color</th>
-                    <th>Actions</th>
+                    <th class="clickable" data-field="Name" data-bind="click: headerClickHandle" id="th-name">Room name</th>
+                    <th class="clickable" data-field="NumberOfPlaces" data-bind="click: headerClickHandle" id="th-number">Number of places</th>
+                    <th class="clickable" data-field="Color" data-bind="click: headerClickHandle" id="th-color">Color</th>
+                    <th>Action</th>
                 </tr>
             </thead>
-            <tbody id="rooms-table">
-                @Html.Action("List")
-            </tbody>
+            <tbody id="rooms-table"></tbody>
         </table>
     </div>
 </div>
+<!---->
+
+<!-- paging controls -->
+<div class="row" data-bind="visible: totalPages() > 0">
+    <div class="two columns default alert" data-bind="text: filter.page() + 'of ' + totalPages()"></div>
+    <div class="btn primary label push_four two columns">
+        <a href="~" data-bind="click: previousPage">Previous</a>
+    </div>
+
+    <div class="btn primary label two columns">
+        <a href="~" data-bind="click : nextPage">Next</a>
+    </div>
+</div>
+<!---->
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var jsonFilter = @Html.Raw(Json.Encode(Model));
+            window.roomFrame = new RoomListVm();
+
+            ko.applyBindings(window.roomFrame);
+            
+            window.roomFrame.filter.setFilter(jsonFilter);
+            window.roomFrame.updateList();
+        });
+    </script>
+}

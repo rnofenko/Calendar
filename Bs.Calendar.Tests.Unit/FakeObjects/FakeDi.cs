@@ -21,7 +21,7 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
         private static void registerDataAccess()
         {
             Ioc.RegisterType<IUserRepository, FakeUserRepository>();
-            Ioc.RegisterType<IRoomRepository, RoomRepository>();
+            Ioc.RegisterType<IRoomRepository, FakeRoomRepository>();
             Ioc.RegisterType<ITeamRepository, FakeTeamRepository>();
             Ioc.RegisterType<IBookRepository, BookRepository>();
             Ioc.RegisterType<IBookHistoryRepository, BookHistoryRepository>();

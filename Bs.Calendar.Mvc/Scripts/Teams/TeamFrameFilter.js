@@ -12,6 +12,4 @@
             Page: self.Page()
         };
     };
-    
-    
 }

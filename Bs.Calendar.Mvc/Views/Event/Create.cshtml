@@ -6,9 +6,8 @@
 <form>
     <div class="row" id="calendar-event">
         <div class="row">
-            <div class="medium info btn four columns event-btn1"><a href="#">Personal Event</a></div>
-            <div class="medium default btn four columns event-btn3"><a href="#">Company Event</a></div>
-            <div class="medium default btn four columns event-btn2"><a href="#">Meeting Event</a></div>
+            <div class="medium info btn six columns event-btn1"><a href="#">Personal Event</a></div>
+            <div class="medium default btn six columns event-btn2"><a href="#">Meeting Event</a></div>
         </div>
         <br/>
         
@@ -21,12 +20,9 @@
                 @Html.LabelFor(eventModel => eventModel.Title)
                 @Html.TextBoxFor(eventModel => eventModel.Title, new { @class = "text input columns", data_bind = "value : eventModel.Title", placeholder = "Event Title" })
             </div>
-            <div class="four columns invisible-onstart" data-bind="visible: eventModel.EventType() != 1">
+            <div class="four columns field invisible-onstart" data-bind="visible: eventModel.EventType() != 1">
                 <label>Event Place</label>
-                <div class="picker nine columns">
-                    <select data-bind="options: roomOptions.roomList, optionsText: roomOptions.optionText, value: eventModel.Room, optionsCaption: 'Choose Room...'"></select>
-                </div>
-                <div data-bind="attr: { class: roomOptions.roomOptionColor }" class="one columns"></div>
+                <input class="text input" type="text" value="None" disabled>
             </div>
         </div>
         
@@ -35,10 +31,13 @@
             <input id="date" class="text input date four columns" type="date" data-bind="event: { input: dateTime.dateInput.dateChanged }, attr: { value: dateTime.dateInput.value(), min: dateTime.dateInput.min }" />
             <div class="four columns">
                 <div data-bind="attr: {class: eventModel.EventType() != 1 ? 'prepend append double field' : 'field' }">
-                    <input id="fromTime" class="text input timeInput" type="text" placeholder="from" data-bind="value: dateTime.fromInput.value, event: { change: dateTime.fromInput.timeChanged, timeFormatError: dateTime.fromInput.timeChanged, changeTime: dateTime.fromInput.timeChanged }" />
-                    <input id="toTime" class="text input timeInput" type="text" placeholder="to" data-bind="visible: eventModel.EventType() != 1, value: dateTime.toInput.value, event: { change: dateTime.toInput.timeChanged, timeFormatError: dateTime.toInput.timeChanged, changeTime: dateTime.toInput.timeChanged }" />
+                    <input id="fromTime" class="text input timeInput" type="text" placeholder="from" data-bind="value: dateTime.fromInput.value, attr: { disabled: eventModel.EventType() != 1 && dateTime.IsAllDay() }, event: { change: dateTime.fromInput.timeChanged, timeFormatError: dateTime.fromInput.timeChanged, changeTime: dateTime.fromInput.timeChanged }" />
+                    <input id="toTime" class="text input timeInput" type="text" placeholder="to" data-bind="visible: eventModel.EventType() != 1, value: dateTime.toInput.value, attr: { disabled: dateTime.IsAllDay() }, event: { change: dateTime.toInput.timeChanged, timeFormatError: dateTime.toInput.timeChanged, changeTime: dateTime.toInput.timeChanged }" />
                 </div>
             </div>
+            <label id="isAllDay" class="checkbox three columns" data-bind="visible: eventModel.EventType() != 1, event: {'gumby.onChange': function(context, event){dateTime.IsAllDay($(event.target).hasClass('checked'));}}">
+                <span></span> All day
+            </label>
         </div>
     
         <div class="row">
@@ -53,8 +52,9 @@
         <div class="row invisible-onstart" data-bind="visible: eventModel.EventType() == 2">
             <div class="row" >
                 <div class="nine columns">
-                    <div class="medium default btn metro rounded icon-right icon-user-add three columns" data-bind="click: subscribers.showUserList"><a href="#">Add Users</a></div>
-                    <div class="medium warning btn metro rounded icon-right icon-users three columns calendar-addteam-btn" data-bind="click: subscribers.showTeamList"><a href="#">Add Teams</a></div>
+                    <div class="medium default btn metro rounded icon-right icon-user-add four columns" data-bind="click: subscribers.showUserList"><a href="#">Add Users</a></div>
+                    <div class="medium warning btn metro rounded icon-right icon-users four columns calendar-addteam-btn" data-bind="click: subscribers.showTeamList"><a href="#">Add Teams</a></div>
+                    <div class="medium default btn metro rounded icon-right icon-home four columns calendar-chooseroom-btn" data-bind="click: subscribers.displayRoomOrderList"><a href="#">Choose Room</a></div>
                 </div>
             </div>
             <br/>
@@ -80,9 +80,9 @@
     </div>
     
     @Html.Partial("UserColumnList")
-    
     @Html.Partial("SimpleTeamList")
-        
+    @Html.Partial("RoomOrderList")
+
     <br/>
     <div class="row">
         <div class=" push_three medium secondary btn two columns">
@@ -104,7 +104,8 @@
             ko.applyBindings(calendarEventVm.subscribers.userColumnVm, document.getElementById("user-column-list"));
             ko.applyBindings(calendarEventVm.subscribers.simpleTeamListVm, document.getElementById("simple-team-list"));
             ko.applyBindings(calendarEventVm, document.getElementById("calendar-event"));
-            
+            ko.applyBindings(new RoomOrderListVm(), document.getElementById("room-order-list"));
+
             $("[class*=event-btn]").click(function () { calendarEventVm.setEventType(this); });
             $(".invisible-onstart").removeClass("invisible-onstart");
         });

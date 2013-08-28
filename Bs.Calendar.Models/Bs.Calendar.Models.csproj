@@ -60,6 +60,7 @@
     <Compile Include="PasswordRecovery.cs" />
     <Compile Include="Roles.cs" />
     <Compile Include="Room.cs" />
+    <Compile Include="RoomFilter.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="TeamEventLink.cs" />
     <Compile Include="TeamFilter.cs" />
@@ -68,9 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
