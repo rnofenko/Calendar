@@ -17,19 +17,19 @@
         </div>
     </div>
     <div class="field three columns push_six">
-        <input class="search input" type="text" name="searchStr" placeholder="Find room by name"/>
+        <input class="search input" type="text" data-bind="value: filter.searchString, event: { change: changeHandle }" placeholder="Find room by name"/>
     </div>
 </div>
 
 <!-- table output -->
 <div class="row">
     <div class ="twelve columns centered fixed_columns">
-        <table>
+        <table class="fixed_columns">
             <thead>
                 <tr>
-                    <th>Room name</th>
-                    <th>Number of places</th>
-                    <th>Color</th>
+                    <th class="clickable" data-field="Name" data-bind="click: headerClickHandle" id="th-name">Room name</th>
+                    <th class="clickable" data-field="NumberOfPlaces" data-bind="click: headerClickHandle" id="th-number">Number of places</th>
+                    <th class="clickable" data-field="Color" data-bind="click: headerClickHandle" id="th-color">Color</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -55,8 +55,14 @@
 @section Scripts
 {
     <script type="text/javascript">
-        $(document).ready(function() {
-            console.log(@Json.Encode(Model));
+        $(document).ready(function () {
+            var jsonFilter = @Html.Raw(Json.Encode(Model));
+            window.roomFrame = new RoomListVm();
+
+            ko.applyBindings(window.roomFrame);
+            
+            window.roomFrame.filter.setFilter(jsonFilter);
+            window.roomFrame.updateList();
         });
     </script>
 }

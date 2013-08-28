@@ -10,13 +10,18 @@ namespace Bs.Calendar.DataAccess
     {
         public IQueryable<Room> Load(RoomFilter filter)
         {
-            var query = Load()
-                .WhereIf(filter.SearchString.IsNotEmpty(), room => room.Name.Contains(filter.SearchString));
+            IQueryable<Room> query = Load()
+                .WhereIf(filter.SearchString.IsNotEmpty(), room => room.Name.Contains(filter.SearchString))
+                .OrderByExpression(filter.SortByField);
 
             if(OnBeforePaging != null)
             {
                 OnBeforePaging.Invoke(query);
             }
+
+            query = query
+                .Skip((filter.Page - 1) * filter.PageSize)
+                .Take(filter.PageSize);
 
             return query;
         }
