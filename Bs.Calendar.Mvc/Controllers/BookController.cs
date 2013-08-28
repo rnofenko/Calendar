@@ -45,6 +45,7 @@ namespace Bs.Calendar.Mvc.Controllers
                 var path = Path.Combine(Server.MapPath("~/Images/Books"),
                     string.Format("{0}.{1}", model.BookCode, "jpg"));                
                 image.SaveAs(path);
+                _service.AddCover(model.BookCode);
             }
             return model.BookId == 0
                 ? RedirectToAction("Index")
