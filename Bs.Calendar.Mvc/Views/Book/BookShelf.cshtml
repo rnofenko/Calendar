@@ -1,0 +1,11 @@
+﻿<div class="row invisible-onstart">
+    <div class="twelve columns centered" data-bind="foreach: shelfRows">
+        <div class="row" style="background: url(/Images/bs3.jpg); background-repeat: no-repeat" data-bind="foreach: booksRow">
+            <div class="column push_one" style="width: 90px; height: 120px;">
+                <a data-bind="attr: { href: getEditLink() }" >
+                    <img data-bind="attr: { src: imageUrl() }" style="width: 70px; height: 100px; margin: 10px" />
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -116,6 +116,30 @@ window.BooksVm = function ()
         };
     };
 
+    self.BookShelfRow = function () {
+        var self_ = this;
+        self_.booksRow = ko.observableArray();
+    };
+
+    self.shelfRows = ko.observableArray();
+    self.bookQuantaty = 4;
+    
+    //alert(self.books.length);
+    //alert(parseInt(self.books.length / 3));
+    //alert(parseInt(self.books.length / 3) + 1);
+    //for (var i = 0; i < parseInt(self.books.length / 3) + 1; ++i)
+    //{
+    //    var shelfRow = new self.BookShelfRow();
+    //    for (var j = 0; j < 3; ++j)
+    //    {
+    //        if (j + 3 * i < self.books.length)
+    //        {
+    //            shelfRow.booksRow.push(books[j + 3 * i]);
+    //        }
+    //    }
+    //    self.shelfRows.push(shelfRow);
+    //}
+
     self.recieveData = function (data) {
         self.books.removeAll();
         self.TotalPages(data['TotalPages']);
@@ -123,6 +147,18 @@ window.BooksVm = function ()
         for (var i = 0; i < data.length; ++i)
         {
             self.books.push(new self.BookVm(data[i]));
+        }
+        
+        for (var i = 0; i < parseInt(self.books().length / self.bookQuantaty) + 1; ++i) {
+            var shelfRow = new self.BookShelfRow();
+            for (var j = 0; j < self.bookQuantaty; ++j)
+            {
+                if (j + self.bookQuantaty * i < self.books().length)
+                {
+                    shelfRow.booksRow.push(self.books()[j + self.bookQuantaty * i]);
+                }
+            }
+            self.shelfRows.push(shelfRow);
         }
     };
 
