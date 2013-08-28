@@ -75,6 +75,7 @@
     <Compile Include="FakeObjects\FakeDi.cs" />
     <Compile Include="FakeObjects\FakeEmailOnEventHistoryRepository.cs" />
     <Compile Include="FakeObjects\FakePersonalEventRepository.cs" />
+    <Compile Include="FakeObjects\FakeRoomRepository.cs" />
     <Compile Include="FakeObjects\FakeTeamEventRepository.cs" />
     <Compile Include="GetAgeTest.cs" />
     <Compile Include="CryptoProviderTest.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="LoggerTest.cs" />
     <Compile Include="PageCalculatorTest.cs" />
     <Compile Include="PasswordRecoveryTest.cs" />
+    <Compile Include="RoomFilterTest.cs" />
     <Compile Include="TeamPagingTest.cs" />
     <Compile Include="TeamUserTest.cs" />
     <Compile Include="UserPagingTest.cs" />
