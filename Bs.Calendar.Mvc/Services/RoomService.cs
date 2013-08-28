@@ -70,5 +70,15 @@ namespace Bs.Calendar.Mvc.Services
         {
             return _repoUnit.Room.Load().ToList();
         }
+
+        public RoomsVm RetreiveList(RoomFilterVm filter)
+        {
+            _repoUnit.Room.Load(filter.Map());
+
+            return new RoomsVm
+                {
+                    
+                };
+        }
     }
 }

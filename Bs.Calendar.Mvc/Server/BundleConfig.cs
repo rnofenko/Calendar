@@ -38,6 +38,7 @@ namespace Bs.Calendar.Mvc.Server
             scripts.Include("~/Scripts/Layout/list-view.js");
             scripts.Include("~/Scripts/Rooms/SetupEvents.js");
             scripts.Include("~/Scripts/Rooms/ColorPicker.js");
+            scripts.Include("~/Scripts/Rooms/RoomListVm.js");
             scripts.Include("~/Scripts/Teams/TeamFrameFilter.js");
             scripts.Include("~/Scripts/Teams/TeamEdit.js");
             scripts.Include("~/Scripts/Teams/TeamList.js");

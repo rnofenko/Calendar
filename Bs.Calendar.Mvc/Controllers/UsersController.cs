@@ -59,6 +59,7 @@ namespace Bs.Calendar.Mvc.Controllers
                     OnlyAdmins = false,
                     Deleted = false
                 };
+
             return View(filter);
         }
 

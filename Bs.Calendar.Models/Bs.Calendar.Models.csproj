@@ -60,6 +60,7 @@
     <Compile Include="PasswordRecovery.cs" />
     <Compile Include="Roles.cs" />
     <Compile Include="Room.cs" />
+    <Compile Include="RoomFilter.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="TeamEventLink.cs" />
     <Compile Include="TeamFilter.cs" />

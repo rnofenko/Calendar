@@ -3,6 +3,7 @@ using Bs.Calendar.Mvc.Services;
 
 using Bs.Calendar.Mvc.ViewModels;
 using System;
+using Bs.Calendar.Mvc.ViewModels.Rooms;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -18,13 +19,13 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return View(new RoomFilterVm());
         }
 
         [HttpGet]
-        public ActionResult List(string searchStr)
+        public ActionResult List(RoomFilterVm filter)
         {
-            return PartialView(_service.Find(searchStr));
+            return PartialView(_service.RetreiveList(filter));
         }
 
         public ActionResult Delete(int id)

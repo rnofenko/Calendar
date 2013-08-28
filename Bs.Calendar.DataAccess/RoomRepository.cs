@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess.Bases;
 using Bs.Calendar.Models;
@@ -12,7 +13,14 @@ namespace Bs.Calendar.DataAccess
             var query = Load()
                 .WhereIf(filter.SearchString.IsNotEmpty(), room => room.Name.Contains(filter.SearchString));
 
+            if(OnBeforePaging != null)
+            {
+                OnBeforePaging.Invoke(query);
+            }
+
             return query;
         }
+
+        public event Action<IQueryable<Room>> OnBeforePaging;
     }
 }
