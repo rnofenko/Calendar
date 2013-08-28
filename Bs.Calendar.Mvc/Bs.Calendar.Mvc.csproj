@@ -222,8 +222,10 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Content Include="Content\Layout\layout.css" />
     <Content Include="Content\Layout\list-view.css" />
+    <Content Include="Content\Shared\RoomOrderList.css" />
     <Content Include="Content\Shared\UserColumnList.css" />
     <Content Include="Content\Teams\TeamEdit.css" />
+    <Content Include="Content\themes\jquery-ui-1.10.3.custom.min.css" />
     <Content Include="Content\Users\RoleStateFilterWindow.css" />
     <Content Include="Images\birthday_icon.png" />
     <Content Include="Images\binaryLogo.png" />
@@ -330,6 +332,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Shared\MediatorSetup.js" />
+    <Content Include="Scripts\Shared\RoomOrderList.js" />
     <Content Include="Scripts\Shared\SimpleTeamList.js" />
     <Content Include="Scripts\Shared\UserColumnList.js" />
     <Content Include="Scripts\Teams\TeamEdit.js" />
@@ -400,11 +403,11 @@
     <Content Include="Views\Book\AddBookHistory.cshtml" />
     <Content Include="Views\Shared\SimpleTeamList.cshtml" />
     <Content Include="Views\Event\Create.cshtml" />
+    <Content Include="Views\Shared\RoomOrderList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Home\" />
-    <Folder Include="Content\themes\" />
     <Folder Include="Images\Books\" />
     <Folder Include="ViewModels\Home\" />
   </ItemGroup>

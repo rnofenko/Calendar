@@ -83,9 +83,9 @@
     </div>
     
     @Html.Partial("UserColumnList")
-    
     @Html.Partial("SimpleTeamList")
-        
+    @Html.Partial("RoomOrderList")
+
     <br/>
     <div class="row">
         <div class=" push_three medium secondary btn two columns">
@@ -107,7 +107,8 @@
             ko.applyBindings(calendarEventVm.subscribers.userColumnVm, document.getElementById("user-column-list"));
             ko.applyBindings(calendarEventVm.subscribers.simpleTeamListVm, document.getElementById("simple-team-list"));
             ko.applyBindings(calendarEventVm, document.getElementById("calendar-event"));
-            
+            ko.applyBindings(new RoomOrderListVm(), document.getElementById("room-order"));
+
             $("[class*=event-btn]").click(function () { calendarEventVm.setEventType(this); });
             $(".invisible-onstart").removeClass("invisible-onstart");
         });

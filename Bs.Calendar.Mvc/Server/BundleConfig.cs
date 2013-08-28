@@ -8,6 +8,7 @@ namespace Bs.Calendar.Mvc.Server
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Scripts/jquery-{version}.js",
+                "~/Scripts/jquery-ui-1.10.3.min.js",
                 "~/Scripts/modernizr-2.6.2.js",
                 "~/Scripts/modernizr-2.6.2.min.js",
                 "~/Scripts/jquery.validate.min.js",
@@ -35,6 +36,7 @@ namespace Bs.Calendar.Mvc.Server
             scripts.Include("~/Scripts/Shared/MediatorSetup.js");
             scripts.Include("~/Scripts/Shared/UserColumnList.js");
             scripts.Include("~/Scripts/Shared/SimpleTeamList.js");
+            scripts.Include("~/Scripts/Shared/RoomOrderList.js");
             scripts.Include("~/Scripts/Layout/list-view.js");
             scripts.Include("~/Scripts/Rooms/SetupEvents.js");
             scripts.Include("~/Scripts/Rooms/ColorPicker.js");
@@ -56,6 +58,7 @@ namespace Bs.Calendar.Mvc.Server
             css.Include("~/Content/Shared/UserContacts.css");
             css.Include("~/Content/Shared/UserColumnList.css");
             css.Include("~/Content/Shared/SimpleTeamList.css");
+            css.Include("~/Content/Shared/RoomOrderList.css");
             css.Include("~/Content/Rooms/ColorPicker.css");
             css.Include("~/Content/Users/RoleStateFilterWindow.css");
             css.Include("~/Content/Layout/layout.css");
@@ -63,6 +66,7 @@ namespace Bs.Calendar.Mvc.Server
             css.Include("~/Content/Event/CreateEvent.css");
             css.Include("~/Content/Event/CalendarEvent.css");
             css.Include("~/Content/jquery.scrollbar/jquery.scrollbar.css");
+            css.Include("~/Content/themes/jquery-ui-1.10.3.custom.min.css");
             BundleTable.Bundles.Add(css);
         }
     }
