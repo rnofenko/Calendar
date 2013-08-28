@@ -19,5 +19,7 @@ namespace Bs.Calendar.Models
         public ICollection<BookHistoryItem> BookHistories { get; set; }
 
         public string ReaderName { get; set; }
+
+        public bool HasCover { get; set; }
     }
 }

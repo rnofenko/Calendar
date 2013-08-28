@@ -91,13 +91,12 @@ namespace Bs.Calendar.Mvc.Services
                 return _unit.Book.Load();
             }
 
-            var res = _unit.Book.Load().Where(book => book.Description != null && book.Description.ToLower().Contains(searchStr)).ToList();
+            var booksWithoutDescription = _unit.Book.Load().Where(book => book.Description != null && book.Description.ToLower().Contains(searchStr)).ToList();
+            var booksWithDescription = _unit.Book.Load().Where(book => book.Code.ToLower().Contains(searchStr)
+                                                       || book.Author.ToLower().Contains(searchStr)
+                                                       || book.Title.ToLower().Contains(searchStr));
 
-            res.AddRange(_unit.Book.Load().Where(book => book.Code.ToLower().Contains(searchStr)
-                || book.Author.ToLower().Contains(searchStr) 
-                || book.Title.ToLower().Contains(searchStr)));
-
-            return res;
+            return booksWithoutDescription.Union(booksWithDescription);
         }
 
         public void Validate(BookEditVm book)
@@ -162,6 +161,13 @@ namespace Bs.Calendar.Mvc.Services
                     });
                 }
             }
+        }
+
+        public void AddCover(string bookCode)
+        {
+            var book = Get(bookCode);
+            book.HasCover = true;
+            _unit.Book.Save(book);
         }
     }
 }
