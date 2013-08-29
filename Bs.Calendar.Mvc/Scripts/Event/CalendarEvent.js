@@ -14,24 +14,33 @@ function CalendarEvent() {
     self.IsAllDay = ko.observable();
 }
 
-function EventRoomOptionHandler(selectedRoom) {
+function EventRoomOptionHandler(room) {
     var self = this;
 
-    self.roomList = ko.observableArray();
-    self.selectedRoom = selectedRoom;
+    self.selectedRoom = room;
 
-    $.getJSON("/Room/GetAllRooms", null, function (rooms) {
-        ko.mapping.fromJS(rooms, {}, self.roomList);
+    self.isRoomDefined = ko.computed(function() {
+        return self.selectedRoom() != undefined && self.selectedRoom() != null;
     });
 
-    self.optionText = function (room) {
-        return $.validator.format("{0} [{1}]", room.Name(), room.NumberOfPlaces());
+    self.roomText = ko.computed(function () {
+        if (self.isRoomDefined())
+            return $.validator.format("{0} [{1}]", self.selectedRoom().Name(), self.selectedRoom().NumberOfPlaces());
+        else
+            return "None";
+    });
+
+    self.setRoom = function(roomToSet) {
+        self.selectedRoom(roomToSet);
     };
 
-    self.roomOptionColor = ko.computed(function () {
-        if (self.selectedRoom() == undefined) return "";
-        return $.validator.format("roomColor roomColor_{0}", self.selectedRoom().Color());
-    });
+    self.clearRoom = function() {
+        self.selectedRoom(null);
+    };
+    
+    //Setup bindings
+    mediator.bind("EventRoomHandler:setRoom", self.setRoom);
+    mediator.bind("EventRoomHandler:clearRoom", self.clearRoom);
 }
 
 function EventSubscribersHandler(eventModel) {
@@ -137,6 +146,7 @@ function DateTimeHandler(eventModel) {
             }
 
             var newDate = moment(dateString).startOf('day');
+            mediator.trigger("EventDateTime:dateUpdate", newDate);
 
             if (newDate < timeRangeSettings.minTime.clone().startOf('day')) {
                 $(event.target).val(self.dateInput.value());
@@ -206,8 +216,14 @@ function DateTimeHandler(eventModel) {
         }
     };
 
-    self.setFromDateTime = function (time) { self.fromDateTime(time); };
-    self.setToDateTime = function (time) { self.toDateTime(time); };
+    self.setFromDateTime = function(time) {
+        self.fromDateTime().hours(time.hours()).minutes(time.minutes());
+        self.fromDateTime(self.fromDateTime());
+    };
+    self.setToDateTime = function(time) {
+        self.toDateTime().hours(time.hours()).minutes(time.minutes());
+        self.toDateTime(self.toDateTime());
+    };
     
     //Setup bindings
     mediator.bind("DateTimeHandler:setFromTime", self.setFromDateTime);

@@ -4,6 +4,7 @@
    -webkit-user-select: none;
    -ms-user-select: none;
    user-select: none;
+    position: relative;
 }
 
 .room-order-header {
@@ -53,13 +54,27 @@
 .room-order-name.room-last-name { border-bottom: none; }
 
 #timeblock {
-    background: cornflowerblue; 
     height: 31px;
     width: 0;
     position: absolute;
     border-radius: 6px;
     margin: 4px 0 0 0;
     float: none;
+}
+
+.event-timeblock {
+    height: 31px;
+    width: 0;
+    position: absolute;
+    border-radius: 6px;
+    margin: 4px 0 0 0;
+    float: none;
+    color: black;
+    border: none;
+    overflow: hidden;
+    text-align: center;
+    line-height: 31px;
+    font-size: 13px;
 }
 
 #timeblock > div {

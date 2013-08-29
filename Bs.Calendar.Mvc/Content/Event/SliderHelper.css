@@ -1,0 +1,59 @@
+﻿#help-wrap {
+    position: absolute;
+    width: 300px; margin: 0 auto;
+    top: 63px;
+    left: 40%;
+    pointer-events: none;
+}
+
+#well {
+    padding: 10px 10px 10px 10px;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+
+    /*background: rgba(88, 118, 137, 0.4);
+    background: rgba(88, 118, 137, 0.4);
+	border: 2px solid #c2e1f5;*/
+	overflow: hidden; 
+	
+	-webkit-user-select: none;
+}
+
+#well > div {
+  background: -moz-linear-gradient(left, #4d4d4d, 0.4, #4d4d4d, 0.5, white, 0.6, #4d4d4d, #4d4d4d); 
+  background: -webkit-gradient(linear,left top,right top,color-stop(0, #4d4d4d),color-stop(0.45, #4d4d4d),color-stop(0.5, white),color-stop(0.55, #4d4d4d),color-stop(1, #4d4d4d)); 
+  
+  -moz-background-clip: text;
+  -webkit-background-clip: text;
+  
+  -moz-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+  
+  -webkit-animation: slidetounlock 4s infinite;
+  
+  font-size: 23px;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  padding: 0;
+  width: 200%;
+  -webkit-text-size-adjust: none;
+}
+
+#slider {
+	background: url(../../Images/Slider/arrow.png) no-repeat;
+	width: 146px;
+	height: 40px;
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 1;
+}
+
+@-webkit-keyframes slidetounlock {
+	0% {
+		background-position: -350px 0;
+	}
+	100%{
+		background-position: 10px 0;
+	}
+}

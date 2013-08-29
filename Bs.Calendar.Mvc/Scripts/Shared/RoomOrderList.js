@@ -5,6 +5,7 @@
     self.hoursCount = 11;
     self.startHour = 8;
     self.gridStep = 6;
+    self.roomEvents = {};
     
     self.isCreated = false;
     self.clickPrevPosition = 0;
@@ -14,14 +15,16 @@
     self.rightEnd = 0;
     self.leftEnd = 0;
 
-    self.createBlock = function (event) {
+    self.createBlock = function (event, roomEvents) {
         $("#timeblock").remove();
         self.block = $('<div id="timeblock"><div></div><div></div></div>');
+        self.block.addClass("roomColor_" + roomEvents.room.Color());
+        self.roomEvents = roomEvents;
         self.parent = $(event.currentTarget);
         self.parent.append(self.block);
 
         self.block.css('left', self.relativeColumn(self.parent, event.pageX));
-        self.setRightLeftEnds();
+        self.setRightLeftBounds();
         self.block.mousemove(self.showEdgeCursor);
         self.block.mousedown(self.mouseDown);
         
@@ -29,9 +32,18 @@
         $(document).mousemove(self.blockShiftRight);
     };
 
-    self.setRightLeftEnds = function() {
+    self.setRightLeftBounds = function () {
         self.leftEnd = 0;
+        for (var i = 0; i < self.roomEvents.pixelTimeEnd.length; i++) {
+            if (self.roomEvents.pixelTimeEnd[i] < self.block[0].offsetLeft)
+                self.leftEnd = Math.max(self.leftEnd, self.roomEvents.pixelTimeEnd[i]);
+        }
+        
         self.rightEnd = self.parent.width();
+        for (var j = 0; j < self.roomEvents.pixelTimeBegin.length; j++) {
+            if (self.roomEvents.pixelTimeBegin[j] > self.block[0].offsetLeft)
+                self.rightEnd = Math.min(self.rightEnd, self.roomEvents.pixelTimeBegin[j]);
+        }
     };
 
     self.inBounds = function(coordinate) {
@@ -72,8 +84,11 @@
     self.mouseUp = function () {
         $(document).unbind("mousemove");
         $(document).unbind("mouseup");
-        if (self.block.width() < self.gridStep) self.block.remove();
-        else self.isCreated = true;
+        if (self.block.width() < self.gridStep) {
+            self.block.remove();
+            mediator.trigger("EventRoomHandler:clearRoom");
+        } else
+            self.isCreated = true;
     };
 
     self.mouseDown = function (event) {
@@ -140,12 +155,41 @@
     };
 }
 
-function RoomOrderElementVm() {
+function RoomOrderElement(roomEventVm) {
     var self = this;
 
-    var model = ko.observable();
-    
+    self.room = ko.mapping.fromJS(roomEventVm.Room);
+    self.events = roomEventVm.Events;
+    self.pixelTimeBegin = [];
+    self.pixelTimeEnd = [];
+    self.divContainer = {};
 
+    self.update = function (divContainer) {
+        self.divContainer = divContainer;
+        if (self.events == null || self.events == undefined) return;
+        $.each(self.events, function (key, value) {
+            self.pixelTimeBegin[key] = self.timeToPixel(value.DateStart);
+            self.pixelTimeEnd[key] = self.timeToPixel(value.DateEnd);
+
+            self.drawEventBlock(key);
+        });
+    };
+
+    self.drawEventBlock = function (key) {
+        var block = $('<div class="event-timeblock"></div>');
+        block.css('left', self.pixelTimeBegin[key]);
+        block.addClass("roomColor_" + self.room.Color());
+        block.text(self.events[key].Title);
+        block.attr("title", block.text());
+        block.width(self.pixelTimeEnd[key] - self.pixelTimeBegin[key]);
+        self.divContainer.append(block);
+    };
+    
+    self.timeToPixel = function (dateTime) {
+        var time = moment(dateTime);
+        var totalMinutes = (time.hours() - 8) * 60 + time.minutes();
+        return Math.floor(totalMinutes / 5) * 6;
+    };
 }
 
 function RoomOrderListVm() {
@@ -153,29 +197,52 @@ function RoomOrderListVm() {
 
     self.timeBlock = new TimeBlock();
     self.showRoomOrderList = ko.observable(false);
-    self.dateTime = ko.observable();
+    self.dateTime = ko.observable(moment());
     self.roomList = ko.observableArray();
-
-    $(".room-order-time").mousedown(function (event) {
-        if (event.which != 1) return;       //not left mouse button
-        if (self.timeBlock.isCreated && event.target == self.timeBlock.block.get(0)) return;
-        self.timeBlock.createBlock(event);
-    });
-    
-    $(".room-order-time > div").addClass("room-order-separator");
-    $(".room-order-name:last").addClass("room-last-name");
-
-    self.hideRoomOrderList = function () { self.showRoomOrderList(false); };
-    self.invertRoomOrderListView = function () { self.showRoomOrderList(!self.showRoomOrderList()); };
+    self.chosenRoom = ko.observable();
 
     self.getRooms = ko.computed(function() {
-
+        $.getJSON("/Event/GetRooms", { dateTime: self.dateTime().toJSON() }, function (rooms) {
+            self.roomList.removeAll();
+            $.each(rooms, function (key, value) {
+                var orderElement = new RoomOrderElement(value);
+                self.roomList.push(orderElement);
+                orderElement.update($(".room-order-time").last());
+            });
+            self.initialize();
+        });
     });
 
-    self.updateDateTime = function (dateTime) { self.dateTime(dateTime); };
+    self.initialize = function () {
+        $(".room-order-time").mousedown(self.mouseDown);
+        $(".room-order-time > div").addClass("room-order-separator");
+        $(".room-order-name:last").addClass("room-last-name");
+    };
+
+    self.mouseDown = function (event) {
+        if (event.which != 1) return;       //not left mouse button
+        if (self.timeBlock.isCreated && event.target == self.timeBlock.block.get(0)) return;
+        $("#help-wrap").remove();
+
+        var roomName = $(event.currentTarget).closest("div").prev().text();
+        var roomListElement = $.grep(self.roomList(), function(element) { return element.room.Name() == roomName; })[0];
+        self.chosenRoom(roomListElement.room);
+        self.timeBlock.createBlock(event, roomListElement);
+    };
+
+    self.onRommChange = ko.computed(function() {
+        if (self.chosenRoom() != undefined) mediator.trigger("EventRoomHandler:setRoom", self.chosenRoom());
+    });
+
+    self.hideRoomOrderList = function () { self.showRoomOrderList(false); };
+    
+    self.invertRoomOrderListView = function () { self.showRoomOrderList(!self.showRoomOrderList()); };
+    
+    self.updateDateTime = function (dateTime) { self.dateTime(dateTime.clone()); };
     
 
     //Setup bindings
     mediator.bind("RoomOrderListVm:hideRoomOrderList", self.hideRoomOrderList);
     mediator.bind("RoomOrderListVm:invertRoomOrderListView", self.invertRoomOrderListView);
+    mediator.bind("EventDateTime:dateUpdate", self.updateDateTime);
 }

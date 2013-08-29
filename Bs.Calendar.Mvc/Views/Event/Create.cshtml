@@ -11,7 +11,7 @@
         </div>
         <br/>
         
-        <div class="centered five columns text-center">
+        <div class="centered five columns text-center invisible-onstart">
             @Html.ValidationSummary("", new {@class = "warning alert", data_bind = "visible : isError()"})
         </div>
 
@@ -20,9 +20,9 @@
                 @Html.LabelFor(eventModel => eventModel.Title)
                 @Html.TextBoxFor(eventModel => eventModel.Title, new { @class = "text input columns", data_bind = "value : eventModel.Title", placeholder = "Event Title" })
             </div>
-            <div class="four columns field invisible-onstart" data-bind="visible: eventModel.EventType() != 1">
-                <label>Event Place</label>
-                <input class="text input" type="text" value="None" disabled>
+            <div class="four columns field invisible-onstart" data-bind="visible: eventModel.EventType() != 1 && roomOptions.isRoomDefined">
+                <label>Room</label>
+                <input class="text input" type="text" data-bind="value: roomOptions.roomText" disabled>
             </div>
         </div>
         

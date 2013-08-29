@@ -44,16 +44,22 @@ namespace Bs.Calendar.Mvc.Services.Events
             var rooms = new List<RoomEventVm>();
             _unit.Room.Load().OrderBy(r => r.Name).ToList().ForEach(r => rooms.Add(new RoomEventVm(r)));
 
-            var groupedEvents = _unit.PersonalEvent.Load(p => p.Event.EventType == EventType.Meeting && p.Event.DateStart.Date == date)
+            var dateStart = date.Date;
+            var dateEnd = dateStart + new TimeSpan(24, 0, 0);
+
+            var groupedEvents = _unit.PersonalEvent.Load(p => p.Event.EventType == EventType.Meeting)
+                                .Where(p => p.Event.DateStart >= dateStart && p.Event.DateStart < dateEnd)
                                 .Select(p => p.Event)
-                                .Union(_unit.TeamEvent.Load(t => t.Event.EventType == EventType.Meeting && t.Event.DateStart.Date == date)
-                                .Select(t => t.Event))
-                                .GroupBy(e => e.Room).ToList();
+                                .Union(_unit.TeamEvent.Load(t => t.Event.EventType == EventType.Meeting)
+                                        .Where(p => p.Event.DateStart >= dateStart && p.Event.DateStart < dateEnd)
+                                        .Select(t => t.Event))
+                                        .GroupBy(e => e.Room).ToList();
 
             foreach (var room in rooms)
             {
                 var group = groupedEvents.Find(g => g.Key == room.Room);
-                room.TimePeriod = group.Select(e => new Tuple<DateTime, DateTime>(e.DateStart, e.DateEnd)).ToList();
+                if (group == null) continue;
+                room.Events = group.ToList();
             }
 
             return rooms;

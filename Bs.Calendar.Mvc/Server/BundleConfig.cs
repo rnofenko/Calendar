@@ -65,6 +65,7 @@ namespace Bs.Calendar.Mvc.Server
             css.Include("~/Content/Teams/TeamEdit.css");
             css.Include("~/Content/Event/CreateEvent.css");
             css.Include("~/Content/Event/CalendarEvent.css");
+            css.Include("~/Content/Event/SliderHelper.css");
             css.Include("~/Content/jquery.scrollbar/jquery.scrollbar.css");
             css.Include("~/Content/themes/jquery-ui-1.10.3.custom.min.css");
             BundleTable.Bundles.Add(css);

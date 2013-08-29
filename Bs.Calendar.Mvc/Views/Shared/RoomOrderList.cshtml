@@ -1,4 +1,4 @@
-﻿<div class="row" id="room-order-list" data-bind="visible: showRoomOrderList()">
+﻿<div class="row invisible-onstart" id="room-order-list" data-bind="visible: showRoomOrderList()">
     <div class="row">
         <div class="room-order-header">
             <div><strong>8 am</strong></div><div>9 am</div><div>10 am</div><div>11 am</div><div>12 pm</div>
@@ -6,20 +6,15 @@
         </div>
     </div>
 
-    <div class="row room-order-container">
-        <div class="room-order-name">
-            Small Conference
-        </div>
+    <div class="row room-order-container" data-bind="foreach: roomList">
+        <div class="room-order-name" data-bind="text: room.Name"></div>
         <div class="room-order-time" draggable="false">
             <div></div><div></div><div></div><div></div><div></div>
             <div></div><div></div><div></div><div></div><div></div><div></div>
         </div>
-        <div class="room-order-name">
-            Big Conference
-        </div>
-        <div class="room-order-time" draggable="false">
-            <div></div><div></div><div></div><div></div><div></div>
-            <div></div><div></div><div></div><div></div><div></div><div></div>
-        </div>  
+    </div>
+    
+    <div id="help-wrap">
+        <div id="well"><div><span>Slide Right to pick time</span></div></div>
     </div>
 </div>

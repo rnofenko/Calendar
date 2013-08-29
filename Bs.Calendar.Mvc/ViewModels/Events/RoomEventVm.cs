@@ -17,6 +17,6 @@ namespace Bs.Calendar.Mvc.ViewModels.Events
 
         public Room Room { get; set; }
 
-        public List<Tuple<DateTime, DateTime>> TimePeriod { get; set; }
+        public List<CalendarEvent> Events { get; set; }
     }
 }

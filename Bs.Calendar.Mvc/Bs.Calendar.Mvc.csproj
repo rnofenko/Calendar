@@ -210,6 +210,7 @@
     <Content Include="Content\Calendar\Calendar.css" />
     <Content Include="Content\Event\CalendarEvent.css" />
     <Content Include="Content\Event\CreateEvent.css" />
+    <Content Include="Content\Event\SliderHelper.css" />
     <Content Include="Content\gumby\gumby.css" />
     <Content Include="Content\jquery.timepicker\lib\base.css" />
     <Content Include="Content\jquery.timepicker\jquery.timepicker.css" />
@@ -229,6 +230,8 @@
     <Content Include="Content\Users\RoleStateFilterWindow.css" />
     <Content Include="Images\birthday_icon.png" />
     <Content Include="Images\binaryLogo.png" />
+    <Content Include="Images\Slider\arrow.png" />
+    <Content Include="Images\Slider\highlight.png" />
     <Content Include="Scripts\Books\BookHistoryList.js" />
     <Content Include="Scripts\Books\BooksVm.js" />
     <Content Include="Scripts\Event\CalendarEvent.js" />
