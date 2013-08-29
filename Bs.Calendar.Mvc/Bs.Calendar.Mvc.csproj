@@ -249,6 +249,8 @@
     <Content Include="Scripts\Gumby\ui\gumby.tabs.js" />
     <Content Include="Scripts\Gumby\ui\gumby.toggleswitch.js" />
     <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
+    <Content Include="Scripts\Home\Month.js" />
+    <Content Include="Scripts\Home\Week.js" />
     <Content Include="Scripts\jquery.timepicker\lib\base.js" />
     <Content Include="Scripts\jquery.timepicker\lib\datepair.js" />
     <Content Include="Scripts\jquery.timepicker\jquery.timepicker.min.js" />
@@ -400,7 +402,6 @@
     <Content Include="Views\Book\EditorTemplates\BookEditVm.cshtml" />
     <Content Include="Views\Users\FilterSettings.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
-    <Content Include="Views\Home\Calendar.cshtml" />
     <Content Include="Views\Shared\UserColumnList.cshtml" />
     <Content Include="Views\Book\BookHistory.cshtml" />
     <Content Include="Views\Book\Details.cshtml" />
@@ -409,7 +410,9 @@
     <Content Include="Views\Event\Create.cshtml" />
     <Content Include="Views\Book\BookShelf.cshtml" />
     <Content Include="Views\Shared\RoomOrderList.cshtml" />
-</ItemGroup>
+    <Content Include="Views\Home\Month.cshtml" />
+    <Content Include="Views\Home\Week.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Home\" />

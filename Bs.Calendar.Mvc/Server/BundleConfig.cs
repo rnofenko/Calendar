@@ -48,6 +48,8 @@ namespace Bs.Calendar.Mvc.Server
             scripts.Include("~/Scripts/Users/UserList.js");
             scripts.Include("~/Scripts/Users/UserFrameFilter.js");
             scripts.Include("~/Scripts/Home/Calendar.js");
+            scripts.Include("~/Scripts/Home/Month.js");
+            scripts.Include("~/Scripts/Home/Week.js");
             scripts.Include("~/Scripts/Event/CalendarEvent.js");
             BundleTable.Bundles.Add(scripts);
 
@@ -66,6 +68,7 @@ namespace Bs.Calendar.Mvc.Server
             css.Include("~/Content/Event/CreateEvent.css");
             css.Include("~/Content/Event/CalendarEvent.css");
             css.Include("~/Content/Event/SliderHelper.css");
+            css.Include("~/Content/Calendar/Calendar.css");
             css.Include("~/Content/jquery.scrollbar/jquery.scrollbar.css");
             css.Include("~/Content/themes/jquery-ui-1.10.3.custom.min.css");
             BundleTable.Bundles.Add(css);
