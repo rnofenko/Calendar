@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Bs.Calendar.Models.Bases;
 
 namespace Bs.Calendar.Models
@@ -12,7 +13,8 @@ namespace Bs.Calendar.Models
         public DateTime DateEnd { get; set; }
         public bool IsAllDay { get; set; }
 
-        public int RoomId { get; set; }
+        [ForeignKey("Room")]
+        public int? RoomId { get; set; }
         public Room Room { get; set; }
         public EventType EventType { get; set; }
     }

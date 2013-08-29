@@ -13,7 +13,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Events
         public CalendarEvent Map()
         {
             return new CalendarEvent { Id = Id, Title = Title, Text = Text, DateStart = DateStart,
-                DateEnd = DateEnd, EventType = EventType, RoomId = Room.Id, IsAllDay = IsAllDay};
+                DateEnd = DateEnd, EventType = EventType, RoomId = Room == null ? null : (int?)Room.Id, IsAllDay = IsAllDay};
         }
 
         public CalendarEventVm()
