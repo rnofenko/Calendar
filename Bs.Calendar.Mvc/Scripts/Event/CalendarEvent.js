@@ -106,7 +106,7 @@ function DateTimeHandler(eventModel) {
     var formatSettings = { date: "YYYY-MM-DD", time: "H:mm" };
     var timeRangeSettings = {
         minTime: moment().setTime(moment("8:00", formatSettings.time)),
-        maxTime: moment().setTime(moment("18:00", formatSettings.time)),
+        maxTime: moment().setTime(moment("19:00", formatSettings.time)),
         step: 60
     };
     
@@ -180,6 +180,7 @@ function DateTimeHandler(eventModel) {
             }
 
             self.fromDateTime(currentFromTime.setTime(fromTime));
+            mediator.trigger("RoomTimeSlider:setInputTime", self.fromDateTime(), self.toDateTime());
 
             //Update "from" time and "to" time if needed
             var toTime = moment(self.toDateTime().format(formatSettings.time), formatSettings.time);
@@ -211,6 +212,7 @@ function DateTimeHandler(eventModel) {
             var fromTime = moment(self.fromDateTime().format(formatSettings.time), formatSettings.time);
 
             self.toDateTime(currentToTime.setTime(toTime));
+            mediator.trigger("RoomTimeSlider:setInputTime", self.fromDateTime(), self.toDateTime());
 
             if (toTime < fromTime) {
                 self.fromDateTime(currentToTime.clone());
