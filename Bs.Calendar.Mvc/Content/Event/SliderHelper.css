@@ -1,7 +1,7 @@
 ﻿#help-wrap {
     position: absolute;
     width: 300px; margin: 0 auto;
-    top: 63px;
+    top: 40%;
     left: 40%;
     pointer-events: none;
 }
@@ -30,7 +30,7 @@
   -moz-text-fill-color: transparent;
   -webkit-text-fill-color: transparent;
   
-  -webkit-animation: slidetounlock 4s infinite;
+  -webkit-animation: slidetounlock 5s infinite;
   
   font-size: 23px;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;

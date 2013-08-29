@@ -146,6 +146,8 @@ function DateTimeHandler(eventModel) {
             }
 
             var newDate = moment(dateString).startOf('day');
+            
+            mediator.trigger("EventRoomHandler:clearRoom", self.clearRoom);
             mediator.trigger("EventDateTime:dateUpdate", newDate);
 
             if (newDate < timeRangeSettings.minTime.clone().startOf('day')) {

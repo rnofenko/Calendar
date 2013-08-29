@@ -5,7 +5,6 @@
     self.hoursCount = 11;
     self.startHour = 8;
     self.gridStep = 6;
-    self.roomEvents = {};
     
     self.isCreated = false;
     self.clickPrevPosition = 0;
@@ -16,15 +15,16 @@
     self.leftEnd = 0;
 
     self.createBlock = function (event, roomEvents) {
+        self.parent = $(event.currentTarget);
+        if (self.eventOverlap(roomEvents)) return;
+
         $("#timeblock").remove();
         self.block = $('<div id="timeblock"><div></div><div></div></div>');
         self.block.addClass("roomColor_" + roomEvents.room.Color());
-        self.roomEvents = roomEvents;
-        self.parent = $(event.currentTarget);
         self.parent.append(self.block);
 
         self.block.css('left', self.relativeColumn(self.parent, event.pageX));
-        self.setRightLeftBounds();
+        self.setRightLeftBounds(roomEvents);
         self.block.mousemove(self.showEdgeCursor);
         self.block.mousedown(self.mouseDown);
         
@@ -32,17 +32,25 @@
         $(document).mousemove(self.blockShiftRight);
     };
 
-    self.setRightLeftBounds = function () {
+    self.eventOverlap = function (roomEvents) {
+        var click = self.relativeColumn(self.parent, event.pageX);
+        for (var i = 0; i < roomEvents.pixelTimeBegin.length; i++)
+            if (click >= roomEvents.pixelTimeBegin[i] && click < roomEvents.pixelTimeEnd[i])
+                return true;
+        return false;
+    };
+
+    self.setRightLeftBounds = function (roomEvents) {
         self.leftEnd = 0;
-        for (var i = 0; i < self.roomEvents.pixelTimeEnd.length; i++) {
-            if (self.roomEvents.pixelTimeEnd[i] < self.block[0].offsetLeft)
-                self.leftEnd = Math.max(self.leftEnd, self.roomEvents.pixelTimeEnd[i]);
+        for (var i = 0; i < roomEvents.pixelTimeEnd.length; i++) {
+            if (roomEvents.pixelTimeEnd[i] <= self.block[0].offsetLeft)
+                self.leftEnd = Math.max(self.leftEnd, roomEvents.pixelTimeEnd[i]);
         }
         
         self.rightEnd = self.parent.width();
-        for (var j = 0; j < self.roomEvents.pixelTimeBegin.length; j++) {
-            if (self.roomEvents.pixelTimeBegin[j] > self.block[0].offsetLeft)
-                self.rightEnd = Math.min(self.rightEnd, self.roomEvents.pixelTimeBegin[j]);
+        for (var j = 0; j < roomEvents.pixelTimeBegin.length; j++) {
+            if (roomEvents.pixelTimeBegin[j] > self.block[0].offsetLeft)
+                self.rightEnd = Math.min(self.rightEnd, roomEvents.pixelTimeBegin[j]);
         }
     };
 
