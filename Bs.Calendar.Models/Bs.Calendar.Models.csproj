@@ -46,6 +46,8 @@
     <Compile Include="Bases\IEntityId.cs" />
     <Compile Include="BookHistoryItem.cs" />
     <Compile Include="CalendarLog.cs" />
+    <Compile Include="MeetingEventFilter.cs" />
+    <Compile Include="PersonalEventFilter.cs" />
     <Compile Include="LogTypes.cs" />
     <Compile Include="EmailOnEventStatus.cs" />
     <Compile Include="Contact.cs" />

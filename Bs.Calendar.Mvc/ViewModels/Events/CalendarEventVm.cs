@@ -16,6 +16,20 @@ namespace Bs.Calendar.Mvc.ViewModels.Events
                 DateEnd = DateEnd, EventType = EventType, RoomId = Room.Id, IsAllDay = IsAllDay};
         }
 
+        public CalendarEventVm(CalendarEvent calendarEvent)
+        {
+            calendarEvent.DateStart = DateStart;
+            calendarEvent.DateEnd = DateEnd;
+
+            calendarEvent.IsAllDay = IsAllDay;
+            calendarEvent.EventType = EventType;
+            calendarEvent.Id = Id;
+            calendarEvent.Text = Text;
+            calendarEvent.Title = Title;
+
+            calendarEvent.Room = Room;
+        }
+
         public CalendarEventVm()
         {
             EventType = EventType.Personal;
@@ -41,6 +55,6 @@ namespace Bs.Calendar.Mvc.ViewModels.Events
 
         public List<UserVm> Users { get; set; }
         public List<TeamVm> Teams { get; set; }
-        public List<RoomEventVm> RoomEvents { get; set; }  
+        public List<RoomEventVm> RoomEvents { get; set; }
     }
 }

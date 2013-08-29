@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Web.Mvc;
+using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.Services.Events;
 using Bs.Calendar.Mvc.ViewModels.Events;
@@ -22,9 +23,11 @@ namespace Bs.Calendar.Mvc.Controllers
             return View(new CalendarEventVm());
         }
 
+
+
         [HttpPost]
         [ValidateAjax]
-        public ActionResult Create(CalendarEventVm calendarEvent) 
+        public ActionResult Create(CalendarEventVm calendarEvent)
         {
             try 
             {
@@ -34,6 +37,7 @@ namespace Bs.Calendar.Mvc.Controllers
             {
                 ModelState.AddModelError("", exception.Message);
             }
+
             return Json(new { redirectToUrl = Url.Action("Index", "Home") });
         }
 
@@ -53,6 +57,12 @@ namespace Bs.Calendar.Mvc.Controllers
         public JsonResult GetRooms(DateTime dateTime)
         {
             return Json(_service.GetRooms(dateTime), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id, EventType type)
+        {
+            throw new NotImplementedException();
         }
     }
 }

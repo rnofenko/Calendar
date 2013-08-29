@@ -293,11 +293,14 @@
     <Compile Include="ViewModels\BookHistoryItemVm.cs" />
     <Compile Include="ViewModels\Events\CalendarEventVm.cs" />
     <Compile Include="ViewModels\Events\RoomEventVm.cs" />
-    <Compile Include="ViewModels\EventVm.cs" />
     <Compile Include="ViewModels\GenericPagingVm.cs" />
     <Compile Include="ViewModels\BookHistoryVm.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="ViewModels\AccountVm.cs" />
+    <Compile Include="ViewModels\Home\BirthdayEventVm.cs" />
+    <Compile Include="ViewModels\Home\CalendarCellEventVm.cs" />
+    <Compile Include="ViewModels\Home\CalendarVm.cs" />
+    <Compile Include="ViewModels\Home\EventFilterVm.cs" />
     <Compile Include="ViewModels\RegisterVm.cs" />
     <Compile Include="ViewModels\Rooms\RoomEditVm.cs" />
     <Compile Include="ViewModels\Rooms\RoomsVm.cs" />
@@ -417,7 +420,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\Home\" />
     <Folder Include="Images\Books\" />
-    <Folder Include="ViewModels\Home\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -1,6 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Web.Mvc;
+using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
+using Bs.Calendar.Mvc.ViewModels.Events;
+using Bs.Calendar.Mvc.ViewModels.Home;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -15,14 +19,44 @@ namespace Bs.Calendar.Mvc.Controllers
 
         public ActionResult Index()
         {
-            var users = _service.LoadUsers();
-            return View(users);
+            return View();
         }
 
         [HttpGet]
-        public JsonResult GetEvents(DateTime from, DateTime to) 
+        [ValidateAjax]
+        public ActionResult Edit(int id, EventType type)
         {
-            return Json(_service.GetEvents(from, to), JsonRequestBehavior.AllowGet);
+            var calendarEvent = _service.GetEvent(id, type);
+            return calendarEvent != null ? (ActionResult)RedirectToAction("Edit", "Event", new {id = id, type = calendarEvent.EventType }) : HttpNotFound();
+        }
+
+        [HttpPost]
+        [ValidateAjax]
+        public ActionResult Edit(CalendarCellEventVm calendarEvent)
+        {
+            if(calendarEvent.Id == 0)
+            {
+                try
+                {
+                    _service.Save(calendarEvent, User.Identity.Name);
+                    //Присобачить в репозиторий событие OnSave, получить сохраннную запись и вернуть отсюда Id-шник
+                }
+                catch (WarningException exception)
+                {
+                    ModelState.AddModelError("", exception.Message);
+                }
+
+                return Json(new { Id = "" });
+            }
+            else
+            {
+                return Json(new { redirectToUrl = Url.Action("Index", "Home") });
+            }
+        }
+
+        public ActionResult List(EventFilterVm filter)
+        {
+            return Json(_service.RetreiveList(filter), JsonRequestBehavior.AllowGet);
         }
     }
 }

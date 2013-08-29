@@ -21,7 +21,7 @@ namespace Bs.Calendar.Mvc.Services.Events
             _savingService = eventSavingService;
         }
 
-        public void Save(CalendarEventVm calendarEventVm, string currentUserEmail) 
+        public void Save(CalendarEventVm calendarEventVm, string currentUserEmail)
         {
             var currentUserId = _unit.User.Load(user => user.Email == currentUserEmail).First().Id;
             _savingService.Save(calendarEventVm, currentUserId);
@@ -35,7 +35,7 @@ namespace Bs.Calendar.Mvc.Services.Events
 
         public IEnumerable<UserVm> GetAllUsers() 
         {
-            var users = _unit.User.Load(u => u.Live == LiveStatuses.Active).ToList();
+            var users = _unit.User.Load(u => u.Live == LiveStatuses.Active && u.ApproveState == ApproveStates.Approved).ToList();
             return users.Select(u => new UserVm(u)).ToList();
         }
 

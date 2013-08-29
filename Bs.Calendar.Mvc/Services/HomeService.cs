@@ -5,6 +5,8 @@ using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services.Events;
 using Bs.Calendar.Mvc.ViewModels;
+using Bs.Calendar.Mvc.ViewModels.Events;
+using Bs.Calendar.Mvc.ViewModels.Home;
 using Bs.Calendar.Mvc.ViewModels.Teams;
 using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Rules;
@@ -15,11 +17,11 @@ namespace Bs.Calendar.Mvc.Services
     {
         private readonly UsersRules _rules;
         private readonly RepoUnit _unit;
-        private readonly EventSavingService _calendarEventService;
+        private readonly EventSavingService _savingService;
 
         public HomeService(UsersRules rules, RepoUnit unit, EventSavingService calendarEventService)
         {
-            _calendarEventService = calendarEventService;
+            _savingService = calendarEventService;
             _rules = rules;
             _unit = unit;
             var users = unit.User.Load();
@@ -42,21 +44,52 @@ namespace Bs.Calendar.Mvc.Services
             }
         }
 
-        public IEnumerable<User> LoadUsers()
+        public CalendarVm RetreiveList(EventFilterVm filter)
         {
-            var today = DateTime.Now;
-            return _rules.LoadUsersByBirthday(today, new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month)));
+            MeetingEventFilter meetingEventFilter;
+            PersonalEventFilter personalEventFilter;
+
+            filter.Map(out meetingEventFilter);
+            filter.Map(out personalEventFilter);
+
+            var calendarEvents = _unit.PersonalEvent
+                .Load(personalEventFilter)
+                .Select(e => new CalendarCellEventVm(e.Event))
+                .Concat(_unit.TeamEvent
+                    .Load(meetingEventFilter)
+                    .Select(e => new CalendarCellEventVm(e.Event)));
+
+            var birthdays = _rules
+                .LoadUsersByBirthday(filter.FromDate, filter.ToDate)
+                .Select(u => new BirthdayEventVm {Date = u.BirthDate.Value, Text = u.LastName});
+
+            return new CalendarVm
+                       {
+                           BirthdayEvents = birthdays,
+                           CalendarEvents = calendarEvents
+                       };
+        }
+        public void Save(CalendarCellEventVm calendarEvent, string currentUserEmail)
+        {
+            var currentUser = _unit.User.Get(user => user.Email == currentUserEmail);
+            if(currentUser != null)
+            {
+                _savingService.Save(new CalendarEventVm(calendarEvent.Map()), currentUser.Id);
+            }
         }
 
-        public List<EventVm> GetEvents(DateTime from, DateTime to) 
+        public CalendarEvent GetEvent(int id, EventType type)
         {
-            return getBirthdayEvents(from, to);
-        }
-
-        private List<EventVm> getBirthdayEvents(DateTime from, DateTime to) 
-        {
-            var users = _rules.LoadUsersByBirthday(from, to);
-            return users.Select(u => new EventVm { Date = u.BirthDate.Value, Text = u.LastName }).ToList();
+            if(type == EventType.Personal)
+            {
+                var link = _unit.PersonalEvent.Get(id);
+                return link == null ? link.Event : null;
+            }
+            else
+            {
+                var link = _unit.TeamEvent.Get(id);
+                return link == null ? link.Event : null;
+            }
         }
     }
 }
