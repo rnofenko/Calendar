@@ -30,6 +30,9 @@
         $(document).ready(function () {
             ko.applyBindings(new CalendarVm(), document.getElementById("calendar-panel"));
             ko.applyBindings(new MonthVm(), document.getElementById("calendar-month"));
+            ko.applyBindings(new CalendarWeekVm(), document.getElementById("calendar-week"));
+            
+            $(".invisible-onstart").removeClass("invisible-onstart");
         });
     </script>
 }
