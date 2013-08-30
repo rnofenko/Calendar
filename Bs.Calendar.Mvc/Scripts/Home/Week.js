@@ -4,6 +4,7 @@
     self.date = date;
     self.blocks = [];
     self.domElement = {};
+    self.createdBlock = {};
 
     self.dayTitle = ko.computed(function () {
         if (date == null) return " ";
@@ -21,9 +22,10 @@
 
     self.initialize = function () {
         if (self.date == null) return;
-        self.loadEvents();
         $('#week-' + self.date.format('ddd')).mousedown(self.mouseDown);
         self.domElement = $('#week-' + self.date.format('ddd'));
+        self.loadEvents();
+        
     };
 
     self.getEvents = function() {
@@ -37,9 +39,7 @@
             data: timeRange,
             contentType: "application/json; charset=utf-8",
             dataType: "json"
-        }).done(function (data) {
-            events = data;
-        });
+        }).done(function (data) { events = data; });
         return events;
     };
 
@@ -47,13 +47,28 @@
         var events = self.getEvents();
         if (events == null) return;
 
-        $.each(events.CalendarEvents, function(key, value) {
-            //var block = new DayTimeBlock($())
+        $.each(events.CalendarEvents, function(key, eventModel) {
+            var block = new DayTimeBlock(self.domElement, self.blocks);
+            self.blocks.push(block);
+            block.addBlock(eventModel);
         });
+    };
+
+    self.onEventCreate = function(domElement) {
+        if (domElement != self.domElement) return;
+
+        $("#week-dialog-form.btn").mouseUp(self.dialogClick);
+    };
+
+    self.dialogClick = function(event) {
+
     };
     
     //Initialize
     self.initialize();
+    
+    //SetUp Bindings
+    mediator.bind("CalendarWeekMode:onEventCreate", self.onEventCreate);
 }
 
 
@@ -84,6 +99,7 @@ function CalendarWeekVm() {
     self.initialize = function() {
         $(".week-container-day > div").addClass("week-time-line");
         $(".week-time-panel > div").addClass("week-time-line");
+        $("#week-dialog-form").hide();
     };
 
     self.setTitle = function (date) {
