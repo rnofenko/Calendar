@@ -1,18 +1,52 @@
-﻿function DayTimeBlock(parent, blocks) {
+﻿function BlockTimeHandler() {
+    var self = this;
+    self.gridStep = 30;
+    
+    self.timeFromDate = function(dateFrom, dateTo) {
+        var from = moment(dateFrom).format("LT");
+        var to = moment(dateTo).format("LT");
+        return from + ' - ' + to;
+    };
+        
+    self.pixelToTime = function (pixelStart, pixelEnd) {
+        pixelEnd += 2;
+        var hoursStart = Math.floor(pixelStart / (self.gridStep * 2));
+        var minutesStart = pixelStart % (self.gridStep * 2) == 0 ? "00" : "30";
+        var startTime = moment().hours(hoursStart).minutes(minutesStart);
+        
+        var hoursEnd = Math.floor(pixelEnd / (self.gridStep * 2));
+        var minutesEnd = pixelEnd % (self.gridStep * 2) == 0 ? "00" : "30";
+        var endTime = moment().hours(hoursEnd).minutes(minutesEnd);
+
+        return startTime.format("LT") + ' - ' + endTime.format("LT");
+    };
+
+    self.timeToPixel = function (dateTime) {
+        var time = moment(dateTime);
+        var totalMinutes = time.hours() * 60 + time.minutes();
+        return Math.floor(totalMinutes / 30) * self.gridStep;
+    };
+}
+
+function DayTimeBlock(parent, blocks) {
     var self = this;
 
     self.parent = parent;
     self.gridStep = 30;
     self.block = null;
     self.allBlocks = blocks;
-
+    self.timeHandler = new BlockTimeHandler();
     self.clickPrevPosition = 0;
     self.topBound = 0;
     self.bottomBound = 0;
+    self.title = "";
 
+    //Block Creating
     self.createBlock = function(event) {
         self.block = $('<div class="day-time-block"><div></div><div></div></div>');
         self.block.css('top', self.relativeRow(event.pageY));
+        self.block.css('background', '#4197c2');
+        self.block.css('border', '1px solid #2f6f8e');
         self.block.mousemove(self.showEdgeCursor);
         self.block.mousedown(self.mouseDown);
 
@@ -20,12 +54,37 @@
         self.setTopBottomBounds();
         self.parent.mouseup(self.mouseUp);
         self.parent.mousemove(self.mouseEdgeDown);
+        self.updateTime();
     };
 
     self.addBlock = function(eventModel) {
+        self.block = $('<div class="day-time-block"></div>');
+        self.block.css('top', self.timeHandler.timeToPixel(eventModel.DateStart));
+        self.block.height(self.timeHandler.timeToPixel(eventModel.DateEnd) - self.timeHandler.timeToPixel(eventModel.DateStart));
+        
+        if (eventModel.EventType == 1 || (eventModel.EventType != 1 && eventModel.Room == null)) {
+            self.block.css('background', '#4197c2');
+            self.block.css('border', '1px solid #2f6f8e');
+        }
+        if (eventModel.EventType != 1 && eventModel.Room != null) {
+            self.block.addClass("roomColor_" + eventModel.Room.Color);
+            self.block.addClass("roomColorBorder_" + eventModel.Room.Color);
+        }
+        
+        self.block.append(self.timeHandler.timeFromDate(eventModel.DateStart, eventModel.DateEnd));
+        self.block.append(' ' + eventModel.Title);
+        self.title = eventModel.Title;
+        self.block.attr('title', eventModel.Title);
+
+        self.parent.append(self.block);
+        self.setTopBottomBounds();
+    };
+
+    self.addBirthdayBlock = function(eventModel) {
 
     };
 
+    //Block moving
     self.setTopBottomBounds = function () {
         self.topBound = 0;
         for (var i = 0; i < self.allBlocks.length; i++) {
@@ -59,6 +118,7 @@
 
         if (blockBegin >= mousePosition) return;
         self.setBlockHeight(mousePosition - blockBegin);
+        self.updateTime();
     };
 
     self.mouseEdgeUp = function(event) {
@@ -71,6 +131,7 @@
         self.clickPrevPosition = mousePosition;
         self.block.css('top', mousePosition);
         self.block.height(self.block.height() + shift);
+        self.updateTime();
     };
 
     self.blockMove = function(event) {
@@ -81,6 +142,7 @@
         var leftIndent = self.blockBegin() - shift;
         if (!self.isInBounds(leftIndent) || (!self.isInBounds(leftIndent + self.block.height()))) return;
         self.block.css('top', leftIndent);
+        self.updateTime();
     };
     
     self.mouseDown = function (event) {
@@ -100,6 +162,7 @@
             $(parent).mousemove(self.mouseEdgeUp);
     };
     
+    //Other methods
     self.showEdgeCursor = function (event) {
         event.target.style.cursor = self.mouseOnEdge(event) != 0 ? 's-resize' : 'default';
     };
@@ -134,11 +197,10 @@
     self.relativePosition = function (coordinateY) {
         return coordinateY - self.parent.offset().top;
     };
-    
-    self.pixelToTime = function (coordinate) {
-        var hours = Math.floor(coordinate / self.gridStep * 2);
-        var minutes = coordinate % (self.gridStep * 2) == 0 ? "00" : "30";
-        return hours + ":" + minutes;
+
+    self.updateTime = function () {
+        self.block.contents().filter(function() { return this.nodeType === 3; }).remove();
+        self.block.append(self.timeHandler.pixelToTime(self.blockBegin(), self.blockEnd()) + ' ' + self.title);
     };
     
     //Setup Bindings
