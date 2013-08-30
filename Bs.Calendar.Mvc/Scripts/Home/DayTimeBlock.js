@@ -15,11 +15,11 @@
         self.block.css('top', self.relativeRow(event.pageY));
         self.block.mousemove(self.showEdgeCursor);
         self.block.mousedown(self.mouseDown);
-        self.setTopBottomBounds();
 
+        self.parent.append(self.block);
+        self.setTopBottomBounds();
         self.parent.mouseup(self.mouseUp);
         self.parent.mousemove(self.mouseEdgeDown);
-        self.parent.append(self.block);
     };
 
     self.setTopBottomBounds = function () {
