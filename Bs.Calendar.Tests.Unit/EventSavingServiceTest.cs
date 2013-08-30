@@ -151,7 +151,7 @@ namespace Bs.Calendar.Tests.Unit
             _service.Save(personalEvent, user.Id);
 
             //act
-            _service.Update();
+            //_service.Update();
 
             //assert
             _repoUnit.TeamEvent.Load().Should().HaveCount(0);

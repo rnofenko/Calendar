@@ -13,7 +13,6 @@ namespace Bs.Calendar.Models
         public DateTime DateEnd { get; set; }
         public bool IsAllDay { get; set; }
 
-        [ForeignKey("Room")]
         public int? RoomId { get; set; }
         public Room Room { get; set; }
         public EventType EventType { get; set; }

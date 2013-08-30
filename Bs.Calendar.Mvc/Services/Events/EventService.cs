@@ -51,7 +51,7 @@ namespace Bs.Calendar.Mvc.Services.Events
             return users.Select(u => new UserVm(u)).ToList();
         }
 
-        public List<RoomEventVm> GetRooms(DateTime from, DateTime to)
+        public List<RoomEventVm> GetRooms(DateTime date)
         {
             var rooms = new List<RoomEventVm>();
             _unit.Room
@@ -60,11 +60,13 @@ namespace Bs.Calendar.Mvc.Services.Events
                 .ToList()
                 .ForEach(r => rooms.Add(new RoomEventVm(r)));
 
+            var dateStart = date.Date;
+            var dateEnd = (date + new TimeSpan(24, 0, 0)).Date;
             var eventRoomGroup = _unit.PersonalEvent.Load(p => p.Event.EventType == EventType.Meeting)
-                                .Where(p => p.Event.DateStart >= from && p.Event.DateStart < to)
+                                .Where(p => p.Event.DateStart >= dateStart && p.Event.DateStart < dateEnd)
                                 .Select(p => p.Event)
                                 .Union(_unit.TeamEvent.Load(t => t.Event.EventType == EventType.Meeting)
-                                        .Where(p => p.Event.DateStart >= from && p.Event.DateStart < to)
+                                        .Where(p => p.Event.DateStart >= dateStart && p.Event.DateStart < dateEnd)
                                         .Select(t => t.Event))
                                         .GroupBy(e => e.Room).ToList();
 
@@ -77,11 +79,6 @@ namespace Bs.Calendar.Mvc.Services.Events
             }
 
             return rooms;
-        }
-
-        public List<RoomEventVm> GetRooms(DateTime date)
-        {
-            return GetRooms(date, date + new TimeSpan(24, 0, 0));
         }
 
         public CalendarEvent GetEvent(int id)

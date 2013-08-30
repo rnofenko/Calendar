@@ -54,14 +54,24 @@ namespace Bs.Calendar.Mvc.Services
             filter.Map(out meetingEventFilter);
             filter.Map(out personalEventFilter);
 
-            var calendarEvents = _unit.PersonalEvent
+            //Dirty hack to make rooms abailable when loaded from db
+            _unit.Room.Load().OrderBy(r => r.Name).ToList();
+
+            var dateEvents = _unit.PersonalEvent
                 .Load(personalEventFilter)
                 .Where(link => link.User.Id == userEntity.Id)
-                .Select(e => new CalendarCellEventVm(e.Event))
+                .Select(e => e.Event)
                 .Union(_unit.TeamEvent
                     .Load(meetingEventFilter)
                     .Where(link => link.Team.Live == LiveStatuses.Active && link.Team.Users.Select(u=>u.Id).Contains(userEntity.Id))
-                    .Select(e => new CalendarCellEventVm(e.Event)));
+                    .Select(e => e.Event)).ToList();
+
+            var calendarEvents = new List<CalendarCellEventVm>();
+            dateEvents.ForEach(e =>
+            {
+                e.Room = e.Room;
+                calendarEvents.Add(new CalendarCellEventVm(e));
+            });
 
             var birthdays = _rules
                 .LoadUsersByBirthday(filter.FromDate, filter.ToDate)
