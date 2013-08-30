@@ -10,16 +10,20 @@
     self.topBound = 0;
     self.bottomBound = 0;
 
-    self.initialize = function(event) {
+    self.createBlock = function(event) {
         self.block = $('<div class="day-time-block"><div></div><div></div></div>');
         self.block.css('top', self.relativeRow(event.pageY));
         self.block.mousemove(self.showEdgeCursor);
         self.block.mousedown(self.mouseDown);
-        self.setTopBottomBounds();
 
+        self.parent.append(self.block);
+        self.setTopBottomBounds();
         self.parent.mouseup(self.mouseUp);
         self.parent.mousemove(self.mouseEdgeDown);
-        self.parent.append(self.block);
+    };
+
+    self.addBlock = function(eventModel) {
+
     };
 
     self.setTopBottomBounds = function () {
