@@ -23,8 +23,20 @@ namespace Bs.Calendar.Mvc.Services.Events
 
         public void Save(CalendarEventVm calendarEventVm, string currentUserEmail)
         {
-            var currentUserId = _unit.User.Load(user => user.Email == currentUserEmail).First().Id;
-            _savingService.Save(calendarEventVm, currentUserId);
+            var currentUser = _unit.User.Get(user => user.Email == currentUserEmail);
+
+            if (currentUser != null)
+            {
+                _savingService.Save(calendarEventVm, currentUser.Id);
+            }
+        }
+
+        public void Update(CalendarEventVm calendarEventVm)
+        {
+            if (calendarEventVm.Id > 0)
+            {
+                _savingService.Update(calendarEventVm);
+            }
         }
 
         public IEnumerable<TeamVm> GetTeams() 
@@ -39,30 +51,37 @@ namespace Bs.Calendar.Mvc.Services.Events
             return users.Select(u => new UserVm(u)).ToList();
         }
 
-        public List<RoomEventVm> GetRooms(DateTime date)
+        public List<RoomEventVm> GetRooms(DateTime from, DateTime to)
         {
             var rooms = new List<RoomEventVm>();
-            _unit.Room.Load().OrderBy(r => r.Name).ToList().ForEach(r => rooms.Add(new RoomEventVm(r)));
+            _unit.Room
+                .Load()
+                .OrderBy(r => r.Name)
+                .ToList()
+                .ForEach(r => rooms.Add(new RoomEventVm(r)));
 
-            var dateStart = date.Date;
-            var dateEnd = dateStart + new TimeSpan(24, 0, 0);
-
-            var groupedEvents = _unit.PersonalEvent.Load(p => p.Event.EventType == EventType.Meeting)
-                                .Where(p => p.Event.DateStart >= dateStart && p.Event.DateStart < dateEnd)
+            var eventRoomGroup = _unit.PersonalEvent.Load(p => p.Event.EventType == EventType.Meeting)
+                                .Where(p => p.Event.DateStart >= from && p.Event.DateStart < to)
                                 .Select(p => p.Event)
                                 .Union(_unit.TeamEvent.Load(t => t.Event.EventType == EventType.Meeting)
-                                        .Where(p => p.Event.DateStart >= dateStart && p.Event.DateStart < dateEnd)
+                                        .Where(p => p.Event.DateStart >= from && p.Event.DateStart < to)
                                         .Select(t => t.Event))
                                         .GroupBy(e => e.Room).ToList();
 
             foreach (var room in rooms)
             {
-                var group = groupedEvents.Find(g => g.Key == room.Room);
+                var group = eventRoomGroup.Find(g => g.Key == room.Room);
                 if (group == null) continue;
+
                 room.Events = group.ToList();
             }
 
             return rooms;
+        }
+
+        public List<RoomEventVm> GetRooms(DateTime date)
+        {
+            return GetRooms(date, date + new TimeSpan(24, 0, 0));
         }
 
         public CalendarEvent GetEvent(int id)

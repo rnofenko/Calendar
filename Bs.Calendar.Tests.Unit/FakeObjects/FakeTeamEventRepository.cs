@@ -10,5 +10,10 @@ namespace Bs.Calendar.Tests.Unit.FakeObjects
 {
     class FakeTeamEventRepository : FakeBaseRepository<TeamEventLink>, ITeamEventRepository
     {
+        public IQueryable<TeamEventLink> Load(MeetingEventFilter filter)
+        {
+            return Load()
+                .Where(link => link.Event.DateStart >= filter.FromDate && link.Event.DateEnd <= filter.ToDate);
+        }
     }
 }

@@ -41,15 +41,6 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int id)
-        {
-            var calendarEvent = _service.GetEvent(id);
-            return calendarEvent != null
-                       ? (ActionResult) View("Create", new CalendarEventVm(calendarEvent))
-                       : HttpNotFound();
-        }
-
-        [HttpGet]
         public JsonResult GetTeams() 
         {
             return Json(_service.GetTeams(), JsonRequestBehavior.AllowGet);
@@ -67,20 +58,35 @@ namespace Bs.Calendar.Mvc.Controllers
             return Json(_service.GetRooms(dateTime), JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult GetRooms(DateTime from, DateTime to)
+        {
+            return Json(_service.GetRooms(from, to), JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         [ValidateAjax]
         public ActionResult Edit(CalendarEventVm calendarEvent)
         {
             try 
             {
-                _service.Save(calendarEvent, User.Identity.Name);
-            } 
-            catch (WarningException exception) 
+                _service.Update(calendarEvent);
+            }
+            catch (WarningException exception)
             {
                 ModelState.AddModelError("", exception.Message);
             }
             
             return Json(new {redirectToUrl = Url.Action("Index", "Home")});
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            var calendarEvent = _service.GetEvent(id);
+            return calendarEvent != null
+                       ? (ActionResult)View("Create", new CalendarEventVm(calendarEvent))
+                       : HttpNotFound();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Net;
 using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
@@ -29,9 +30,8 @@ namespace Bs.Calendar.Mvc.Controllers
             var calendarEvent = _service.GetEvent(id);
             if(calendarEvent == null)
             {
-                Response.StatusCode = 404;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
-
             return Json(new {redirectToUrl = Url.Action("Edit", "Event", new {id = id})}, JsonRequestBehavior.AllowGet);
         }
 
@@ -67,9 +67,9 @@ namespace Bs.Calendar.Mvc.Controllers
             return Json(new { id = id});
         }
 
-        public ActionResult List(EventFilterVm filter)
+        public ActionResult List(DateTime from, DateTime to)
         {
-            return Json(_service.RetreiveList(filter, User.Identity.Name), JsonRequestBehavior.AllowGet);
+            return Json(_service.RetreiveList(new EventFilterVm{FromDate = from, ToDate = to}, User.Identity.Name), JsonRequestBehavior.AllowGet);
         }
     }
 }

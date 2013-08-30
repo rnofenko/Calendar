@@ -138,5 +138,23 @@ namespace Bs.Calendar.Tests.Unit
         }
 
         #endregion
+
+        [Test,
+        TestCase("Stanne")]
+        public void Should_update_personal_event(string userName)
+        {
+            //arrange
+            var user = _repoUnit.User.Get(u => u.Email == _users[userName].Email);
+            var personalEvent = new CalendarEventVm { EventType = EventType.Personal };
+
+            var eventLink = new[] { new PersonalEventLink { EventStatus = 0, Event = personalEvent.Map(), User = user } };
+            _service.Save(personalEvent, user.Id);
+
+            //act
+            _service.Update();
+
+            //assert
+            _repoUnit.TeamEvent.Load().Should().HaveCount(0);
+        }
     }
 }

@@ -16,7 +16,6 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
                            DateStart = DateStart,
                            DateEnd = DateEnd,
                            EventType = EventType,
-                           Room = Room,
                            RoomId = Room == null ? null : (int?)Room.Id,
                            IsAllDay = IsAllDay
                        };
