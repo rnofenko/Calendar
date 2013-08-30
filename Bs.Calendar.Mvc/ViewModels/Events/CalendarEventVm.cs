@@ -12,22 +12,31 @@ namespace Bs.Calendar.Mvc.ViewModels.Events
     {
         public CalendarEvent Map()
         {
-            return new CalendarEvent { Id = Id, Title = Title, Text = Text, DateStart = DateStart,
-                DateEnd = DateEnd, EventType = EventType, RoomId = Room.Id, IsAllDay = IsAllDay};
+            return new CalendarEvent
+                       {
+                           Id = Id,
+                           Title = Title,
+                           Text = Text,
+                           DateStart = DateStart,
+                           DateEnd = DateEnd,
+                           EventType = EventType,
+                           RoomId = Room == null ? null : (int?)Room.Id,
+                           IsAllDay = IsAllDay
+                       };
         }
 
         public CalendarEventVm(CalendarEvent calendarEvent)
         {
-            calendarEvent.DateStart = DateStart;
-            calendarEvent.DateEnd = DateEnd;
+            DateStart = calendarEvent.DateStart;
+            DateEnd = calendarEvent.DateEnd;
 
-            calendarEvent.IsAllDay = IsAllDay;
-            calendarEvent.EventType = EventType;
-            calendarEvent.Id = Id;
-            calendarEvent.Text = Text;
-            calendarEvent.Title = Title;
+            IsAllDay = calendarEvent.IsAllDay;
+            EventType = calendarEvent.EventType;
+            Id = calendarEvent.Id;
+            Text = calendarEvent.Text;
+            Title = calendarEvent.Title;
 
-            calendarEvent.Room = Room;
+            Room = calendarEvent.Room;
         }
 
         public CalendarEventVm()

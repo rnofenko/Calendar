@@ -5,6 +5,7 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.Services.Events;
 using Bs.Calendar.Mvc.ViewModels.Events;
+using Bs.Calendar.Mvc.ViewModels.Users;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -23,22 +24,29 @@ namespace Bs.Calendar.Mvc.Controllers
             return View(new CalendarEventVm());
         }
 
-
-
         [HttpPost]
         [ValidateAjax]
         public ActionResult Create(CalendarEventVm calendarEvent)
         {
-            try 
+            try
             {
                 _service.Save(calendarEvent, User.Identity.Name);
-            } 
-            catch (WarningException exception) 
+            }
+            catch (WarningException exception)
             {
                 ModelState.AddModelError("", exception.Message);
             }
 
             return Json(new { redirectToUrl = Url.Action("Index", "Home") });
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            var calendarEvent = _service.GetEvent(id);
+            return calendarEvent != null
+                       ? (ActionResult) View("Create", new CalendarEventVm(calendarEvent))
+                       : HttpNotFound();
         }
 
         [HttpGet]
@@ -59,10 +67,20 @@ namespace Bs.Calendar.Mvc.Controllers
             return Json(_service.GetRooms(dateTime), JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public ActionResult Edit(int id, EventType type)
+        [HttpPost]
+        [ValidateAjax]
+        public ActionResult Edit(CalendarEventVm calendarEvent)
         {
-            throw new NotImplementedException();
+            try 
+            {
+                _service.Save(calendarEvent, User.Identity.Name);
+            } 
+            catch (WarningException exception) 
+            {
+                ModelState.AddModelError("", exception.Message);
+            }
+            
+            return Json(new {redirectToUrl = Url.Action("Index", "Home")});
         }
     }
 }

@@ -15,29 +15,31 @@ namespace Bs.Calendar.Mvc.Services.Events
             _unit = repoUnit;
         }
 
-        public void Save(CalendarEventVm calendarEventVm, int userId)
+        public int Save(CalendarEventVm calendarEventVm, int userId)
         {
-            if (calendarEventVm.EventType == EventType.Personal) savePersonalEvent(calendarEventVm, userId);
-            if (calendarEventVm.EventType == EventType.Meeting) saveMeetingEvent(calendarEventVm);
+            if (calendarEventVm.EventType == EventType.Personal) return savePersonalEvent(calendarEventVm, userId);
+            if (calendarEventVm.EventType == EventType.Meeting) return saveMeetingEvent(calendarEventVm);
+            return 0;
         }
 
-        private void savePersonalEvent(CalendarEventVm calendarEventVm, int userId)
+        private int savePersonalEvent(CalendarEventVm calendarEventVm, int userId)
         {
             var calendarEvent = calendarEventVm.Map();
 
             _unit.PersonalEvent.Save( new PersonalEventLink {Event = calendarEvent, User = _unit.User.Get(userId)});
 
             saveToEmailHistory(calendarEventVm, calendarEvent, userId);
+
+            return calendarEvent.Id;
         }
 
-        private void saveMeetingEvent(CalendarEventVm calendarEventVm)
+        private int saveMeetingEvent(CalendarEventVm calendarEventVm)
         {
             var calendarEvent = calendarEventVm.Map();
 
             if (calendarEventVm.Users != null)
             {
-                calendarEventVm.Users.ForEach(user =>
-                    _unit.PersonalEvent.Save(new PersonalEventLink { Event = calendarEvent, User = _unit.User.Get(user.UserId) }));
+                calendarEventVm.Users.ForEach(user => _unit.PersonalEvent.Save(new PersonalEventLink { Event = calendarEvent, User = _unit.User.Get(user.UserId) }));
             }
 
             if (calendarEventVm.Teams != null)
@@ -47,6 +49,8 @@ namespace Bs.Calendar.Mvc.Services.Events
             }
 
             saveToEmailHistory(calendarEventVm, calendarEvent, 0);
+
+            return calendarEvent.Id;
         }
 
         private void saveToEmailHistory(CalendarEventVm calendarEventVm, CalendarEvent calendarEvent, int userId)

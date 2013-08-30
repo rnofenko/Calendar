@@ -1,6 +1,6 @@
 @model Bs.Calendar.Mvc.ViewModels.Events.CalendarEventVm
 @{
-    ViewBag.Title = "Create Event";
+    ViewBag.Action = Model.Id == 0 ? "Create" : "Update";
 }
 
 <form>
@@ -86,7 +86,7 @@
     <br/>
     <div class="row">
         <div class=" push_three medium secondary btn two columns">
-            <input type="submit" value="Create">
+            <input type="submit" value="@ViewBag.Action">
         </div>
         
         <div class="medium default btn push_one two columns">
@@ -99,7 +99,6 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
-            
             window.calendarEventVm = new CalendarEventVm(@Html.RawJson(@Model));
             ko.applyBindings(calendarEventVm.subscribers.userColumnVm, document.getElementById("user-column-list"));
             ko.applyBindings(calendarEventVm.subscribers.simpleTeamListVm, document.getElementById("simple-team-list"));

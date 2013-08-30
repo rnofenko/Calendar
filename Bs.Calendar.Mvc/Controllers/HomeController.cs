@@ -5,6 +5,7 @@ using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels.Events;
 using Bs.Calendar.Mvc.ViewModels.Home;
+using Bs.Calendar.Rules;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -23,40 +24,52 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
-        [ValidateAjax]
-        public ActionResult Edit(int id, EventType type)
+        public ActionResult Edit(int id)
         {
-            var calendarEvent = _service.GetEvent(id, type);
-            return calendarEvent != null ? (ActionResult)RedirectToAction("Edit", "Event", new {id = id, type = calendarEvent.EventType }) : HttpNotFound();
+            var calendarEvent = _service.GetEvent(id);
+            if(calendarEvent == null)
+            {
+                Response.StatusCode = 404;
+            }
+
+            return Json(new {redirectToUrl = Url.Action("Edit", "Event", new {id = id})}, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        [ValidateAjax]
-        public ActionResult Edit(CalendarCellEventVm calendarEvent)
+        public ActionResult Delete(CalendarCellEventVm calendarEvent)
         {
-            if(calendarEvent.Id == 0)
+            try
             {
-                try
-                {
-                    _service.Save(calendarEvent, User.Identity.Name);
-                    //Присобачить в репозиторий событие OnSave, получить сохраннную запись и вернуть отсюда Id-шник
-                }
-                catch (WarningException exception)
-                {
-                    ModelState.AddModelError("", exception.Message);
-                }
+                _service.Delete(calendarEvent);
+            }
+            catch (WarningException exception)
+            {
+                ModelState.AddModelError("", exception.Message);
+            }
 
-                return Json(new { Id = "" });
-            }
-            else
+            return Json(new {});
+        }
+
+        [HttpPost]
+        public ActionResult Create(CalendarCellEventVm calendarEvent)
+        {
+            int id = 0;
+
+            try
             {
-                return Json(new { redirectToUrl = Url.Action("Index", "Home") });
+                id = _service.Save(calendarEvent, User.Identity.Name);
             }
+            catch (WarningException exception)
+            {
+                ModelState.AddModelError("", exception.Message);
+            }
+
+            return Json(new { id = id});
         }
 
         public ActionResult List(EventFilterVm filter)
         {
-            return Json(_service.RetreiveList(filter), JsonRequestBehavior.AllowGet);
+            return Json(_service.RetreiveList(filter, User.Identity.Name), JsonRequestBehavior.AllowGet);
         }
     }
 }

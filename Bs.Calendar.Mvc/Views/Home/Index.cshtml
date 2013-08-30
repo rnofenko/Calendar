@@ -19,16 +19,34 @@
         <div class="four columns medium default btn pull_right" style="border: 1px solid gainsboro; border-radius: 0" data-bind="click: showDay">day</div>
     </div>
 </div>
-
 @Html.Partial("Month")
 @Html.Partial("Week")
 
 @section scripts
 {
     <script type="text/javascript">
+
         $(document).ready(function () {
-            ko.applyBindings(new CalendarVm(), document.getElementById("calendar-panel"));
-            ko.applyBindings(new MonthVm(), document.getElementById("calendar-month"));
+
+            var hlp = new CalendarCellEventVm();
+            hlp.EventType(1);
+            hlp.DateStart(moment().toDate());
+            hlp.DateEnd(moment().toDate());
+            hlp.IsAllDay(true);
+
+            hlp = ko.toJS(hlp);
+            hlp.DateStart = moment().toJSON();
+            hlp.DateEnd = moment().toJSON();
+            hlp.Title = "Fight";
+
+            $.getJSON("/Home/Edit", { id: 7 }, function (data, textStatus, jqXHR) {
+                window.location.href = data.redirectToUrl;
+            });
+            
+
+
+            //ko.applyBindings(new CalendarVm(), document.getElementById("calendar-panel"));
+            //ko.applyBindings(new MonthVm(), document.getElementById("calendar-month"));
         });
     </script>
 }

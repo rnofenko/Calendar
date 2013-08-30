@@ -1,3 +1,8 @@
+var eventTypes = {
+    personal: 1,
+    meeting: 2
+};
+
 function CalendarEvent() {
     var self = this;
 
@@ -102,7 +107,7 @@ function EventSubscribersHandler(eventModel) {
 
 function DateTimeHandler(eventModel) {
     var self = this;
-
+    console.log(eventModel);
     var formatSettings = { date: "YYYY-MM-DD", time: "H:mm" };
     var timeRangeSettings = {
         minTime: moment().setTime(moment("8:00", formatSettings.time)),
@@ -123,14 +128,14 @@ function DateTimeHandler(eventModel) {
         minTime: timeRangeSettings.minTime.format(formatSettings.time),
         maxTime: timeRangeSettings.maxTime.format(formatSettings.time)
     });
-
+    
     var dateDefaults = { initialValue: timeRangeSettings.minTime.clone(), initialDifference: { minutes: timeRangeSettings.step } };
     
     self.IsAllDay = ko.observable(eventModel.IsAllDay());
     dateTimeControl.isAllDay.trigger("gumby." + (self.IsAllDay() ? "check" : "uncheck"));
 
-    self.fromDateTime = ko.observable(eventModel.Id != 0 ? eventModel.DateStart() : dateDefaults.initialValue);
-    self.toDateTime = ko.observable(eventModel.Id != 0 ? eventModel.EndDate() : dateDefaults.initialValue.clone().add(dateDefaults.initialDifference));
+    self.fromDateTime = ko.observable(eventModel.Id != 0 ? moment(eventModel.DateStart()) : dateDefaults.initialValue);
+    self.toDateTime = ko.observable(eventModel.Id != 0 ? moment(eventModel.DateEnd()) : dateDefaults.initialValue.clone().add(dateDefaults.initialDifference));
 
     self.dateInput = {
         value: ko.computed(function () {
@@ -238,7 +243,7 @@ function CalendarEventVm(eventModel) {
     self.eventModel = ko.mapping.fromJS(eventModel, {}, new CalendarEvent());
     if (self.eventModel.Users() == null) self.eventModel.Users([]);
     if (self.eventModel.Teams() == null) self.eventModel.Teams([]);
-
+    
     self.dateTime = new DateTimeHandler(self.eventModel);
     self.subscribers = new EventSubscribersHandler(self.eventModel);
     self.roomOptions = new EventRoomOptionHandler(self.eventModel.Room);
@@ -252,6 +257,12 @@ function CalendarEventVm(eventModel) {
         if ($(event).hasClass('event-btn2')) self.eventModel.EventType(2);
         if ($(event).hasClass('event-btn3')) self.eventModel.EventType(3);
     };
+    
+    if (eventModel.EventType == eventTypes.personal) {
+        self.setEventType($(".event-btn1"));
+    } else {
+        self.setEventType($(".event-btn2"));
+    }
 
     self.sendModel = function () {
         self.eventModel.DateStart(self.dateTime.fromDateTime().toJSON());

@@ -44,8 +44,10 @@ namespace Bs.Calendar.Mvc.Services
             }
         }
 
-        public CalendarVm RetreiveList(EventFilterVm filter)
+        public CalendarVm RetreiveList(EventFilterVm filter, string user)
         {
+            var  userEntity = _unit.User.Get(u => u.Email == user);
+
             MeetingEventFilter meetingEventFilter;
             PersonalEventFilter personalEventFilter;
 
@@ -54,9 +56,11 @@ namespace Bs.Calendar.Mvc.Services
 
             var calendarEvents = _unit.PersonalEvent
                 .Load(personalEventFilter)
+                .Where(link => link.User.Id == userEntity.Id)
                 .Select(e => new CalendarCellEventVm(e.Event))
-                .Concat(_unit.TeamEvent
+                .Union(_unit.TeamEvent
                     .Load(meetingEventFilter)
+                    .Where(link => link.Team.Live == LiveStatuses.Active && link.Team.Users.Select(u=>u.Id).Contains(userEntity.Id))
                     .Select(e => new CalendarCellEventVm(e.Event)));
 
             var birthdays = _rules
@@ -69,26 +73,48 @@ namespace Bs.Calendar.Mvc.Services
                            CalendarEvents = calendarEvents
                        };
         }
-        public void Save(CalendarCellEventVm calendarEvent, string currentUserEmail)
+
+        public int Save(CalendarCellEventVm calendarEvent, string currentUserEmail)
         {
             var currentUser = _unit.User.Get(user => user.Email == currentUserEmail);
             if(currentUser != null)
             {
-                _savingService.Save(new CalendarEventVm(calendarEvent.Map()), currentUser.Id);
+                return _savingService.Save(new CalendarEventVm(calendarEvent.Map()), currentUser.Id);
             }
+
+            return 0;
         }
 
-        public CalendarEvent GetEvent(int id, EventType type)
+        public CalendarEvent GetEvent(int id)
         {
-            if(type == EventType.Personal)
+            var personalEventLink = _unit.PersonalEvent.Get(link => link.Event.Id == id);
+            var teamEventLink = _unit.TeamEvent.Get(link => link.Event.Id == id);
+
+            var calendarEvent = personalEventLink == null ? null : personalEventLink.Event;
+            calendarEvent = calendarEvent ?? teamEventLink.Event;
+
+            return calendarEvent;
+        }
+
+        public void Delete(CalendarCellEventVm calendarEvent)
+        {
+            if(calendarEvent.EventType == EventType.Personal)
             {
-                var link = _unit.PersonalEvent.Get(id);
-                return link == null ? link.Event : null;
+                var toDelete = _unit.PersonalEvent.Get(l => l.Event.Id == calendarEvent.Id);
+
+                if(toDelete != null)
+                {
+                    _unit.PersonalEvent.Delete(toDelete);
+                }
             }
             else
             {
-                var link = _unit.TeamEvent.Get(id);
-                return link == null ? link.Event : null;
+                var toDelete = _unit.TeamEvent.Get(l => l.Event.Id == calendarEvent.Id);
+
+                if (toDelete != null)
+                {
+                    _unit.TeamEvent.Delete(toDelete);
+                }
             }
         }
     }

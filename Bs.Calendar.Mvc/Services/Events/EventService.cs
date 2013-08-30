@@ -64,5 +64,16 @@ namespace Bs.Calendar.Mvc.Services.Events
 
             return rooms;
         }
+
+        public CalendarEvent GetEvent(int id)
+        {
+            var personalEventLink = _unit.PersonalEvent.Get(link => link.Event.Id == id);
+            var teamEventLink = _unit.TeamEvent.Get(link => link.Event.Id == id);
+
+            var calendarEvent = personalEventLink == null ? null : personalEventLink.Event;
+            calendarEvent = calendarEvent ?? teamEventLink.Event;
+
+            return calendarEvent;
+        }
     }
 }
