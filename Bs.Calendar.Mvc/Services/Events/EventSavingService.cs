@@ -26,7 +26,18 @@ namespace Bs.Calendar.Mvc.Services.Events
         {
             var calendarEvent = calendarEventVm.Map();
 
-            _unit.PersonalEvent.Save( new PersonalEventLink {Event = calendarEvent, User = _unit.User.Get(userId)});
+            if(calendarEvent.Id == 0)
+            {
+                _unit.PersonalEvent.Save(new PersonalEventLink { Event = calendarEvent, User = _unit.User.Get(userId) });
+            }
+            else
+            {
+                var link = _unit.PersonalEvent.Get(l => l.Event.Id == calendarEvent.Id);
+                link.Event = calendarEvent;
+
+                _unit.PersonalEvent.Save(link);
+            }
+            
 
             saveToEmailHistory(calendarEventVm, calendarEvent, userId);
 

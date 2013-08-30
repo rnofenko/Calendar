@@ -39,7 +39,7 @@
             hlp.DateEnd = moment().toJSON();
             hlp.Title = "Fight";
 
-            $.getJSON("/Home/Edit", { id: 7 }, function (data, textStatus, jqXHR) {
+            $.getJSON("/Home/Edit", { id: 5 }, function (data, textStatus, jqXHR) {
                 window.location.href = data.redirectToUrl;
             });
             

@@ -91,7 +91,7 @@ namespace Bs.Calendar.Mvc.Services
             var teamEventLink = _unit.TeamEvent.Get(link => link.Event.Id == id);
 
             var calendarEvent = personalEventLink == null ? null : personalEventLink.Event;
-            calendarEvent = calendarEvent ?? teamEventLink.Event;
+            calendarEvent = calendarEvent ?? (teamEventLink == null ? null : teamEventLink.Event);
 
             return calendarEvent;
         }
