@@ -4,7 +4,7 @@
     self.date = date;
     self.blocks = [];
     self.domElement = {};
-    self.createdBlock = {};
+    self.blockModel = null;
 
     self.dayTitle = ko.computed(function () {
         if (date == null) return " ";
@@ -13,9 +13,10 @@
 
     self.mouseDown = function (event) {
         if (event.which != 1) return;
-        if ($.grep(self.blocks, function(element) { return event.target == element.block[0]; }).length != 0) return;
+        if ($.grep(self.blocks, function(element) { return event.target === element.block[0]; }).length != 0) return;
 
-        var block = new DayTimeBlock(self.domElement, self.blocks);
+        self.removeElement(self.blockModel);
+        var block = new DayTimeBlock(self.domElement, self.blocks, self);
         self.blocks.push(block);
         block.createBlock(event);
     };
@@ -53,15 +54,54 @@
             block.addBlock(eventModel);
         });
     };
+    
 
-    self.onEventCreate = function(domElement) {
-        if (domElement != self.domElement) return;
-
-        $("#week-dialog-form.btn").mouseUp(self.dialogClick);
+    self.onEventCreate = function(blockModel) {
+        if (blockModel.parent != self.domElement) return;
+        self.blockModel = blockModel;
+        
+        blockModel.block.addClass("block-created");
+        if ($("#week-dialog-form").is(":visible") == false) {
+            $("#week-dialog-form .btn").mouseup(self.dialogClick);
+            $("#week-dialog-form").show();
+        }
     };
 
     self.dialogClick = function(event) {
+        if ($(event.target).text() == "Cancel") {
+            self.removeElement(self.blockModel);
+            self.blockModel = null;
+            $("#week-dialog-form").hide();
+            return;
+        }
 
+        var eventModel = new CalendarEvent();
+        eventModel.EventType(1);
+        eventModel.Title($(".week-dialog-title-input").val());
+        eventModel.Text($(".week-dialog-text").val());
+        console.log("Dialog Click");
+        var start = self.blockModel.timeHandler.getMomentStart(self.blockModel);
+        eventModel.DateStart(self.date.clone().hours(start.hours()).minutes(start.minutes()));
+        var end = self.blockModel.timeHandler.getMomentEnd(self.blockModel);
+        eventModel.DateEnd(self.date.clone().hours(end.hours()).minutes(end.minutes()));
+        
+        $.ajax({
+            url: "/Event/Create",
+            data: JSON.stringify(ko.toJS(eventModel)),
+            type: 'POST',
+            contentType: 'application/json, charset=utf-8',
+            dataType: 'json'
+        });
+        
+        $("#week-dialog-form").hide();
+        $(".block-created > div").remove();
+        $(".block-created").removeClass("block-created");
+    };
+
+    self.removeElement = function (blockModel) {
+        $(".block-created").remove();
+        if (blockModel == null) return;
+        self.blocks.splice(self.blocks.indexOf(blockModel));
     };
     
     //Initialize

@@ -8,15 +8,9 @@
         return from + ' - ' + to;
     };
         
-    self.pixelToTime = function (pixelStart, pixelEnd) {
-        pixelEnd += 2;
-        var hoursStart = Math.floor(pixelStart / (self.gridStep * 2));
-        var minutesStart = pixelStart % (self.gridStep * 2) == 0 ? "00" : "30";
-        var startTime = moment().hours(hoursStart).minutes(minutesStart);
-        
-        var hoursEnd = Math.floor(pixelEnd / (self.gridStep * 2));
-        var minutesEnd = pixelEnd % (self.gridStep * 2) == 0 ? "00" : "30";
-        var endTime = moment().hours(hoursEnd).minutes(minutesEnd);
+    self.pixelToTime = function (block) {
+        var startTime = self.getMomentStart(block);
+        var endTime = self.getMomentEnd(block);
 
         return startTime.format("LT") + ' - ' + endTime.format("LT");
     };
@@ -26,9 +20,22 @@
         var totalMinutes = time.hours() * 60 + time.minutes();
         return Math.floor(totalMinutes / 30) * self.gridStep;
     };
+
+    self.getMomentStart = function(block) {
+        var hoursStart = Math.floor(block.blockBegin() / (self.gridStep * 2));
+        var minutesStart = block.blockBegin() % (self.gridStep * 2) == 0 ? "00" : "30";
+        return moment().hours(hoursStart).minutes(minutesStart);
+    };
+    
+    self.getMomentEnd = function (block) {
+        var end = block.blockEnd() + 2;
+        var hoursStart = Math.floor(end / (self.gridStep * 2));
+        var minutesStart = end % (self.gridStep * 2) == 0 ? "00" : "30";
+        return moment().hours(hoursStart).minutes(minutesStart);
+    };
 }
 
-function DayTimeBlock(parent, blocks) {
+function DayTimeBlock(parent, blocks, parentModel) {
     var self = this;
 
     self.parent = parent;
@@ -40,6 +47,8 @@ function DayTimeBlock(parent, blocks) {
     self.topBound = 0;
     self.bottomBound = 0;
     self.title = "";
+    self.isCreated = false;
+    self.parentModel = parentModel;
 
     //Block Creating
     self.createBlock = function(event) {
@@ -109,6 +118,10 @@ function DayTimeBlock(parent, blocks) {
         self.parent.unbind("mousemove");
         self.parent.unbind("mouseup");
         mediator.trigger("WeekTimeBlock:setBounds");
+        if (self.isCreated == false) {
+            self.isCreated = true;
+            self.parentModel.onEventCreate(self);
+        }
     };
 
     self.mouseEdgeDown = function(event) {
@@ -200,7 +213,7 @@ function DayTimeBlock(parent, blocks) {
 
     self.updateTime = function () {
         self.block.contents().filter(function() { return this.nodeType === 3; }).remove();
-        self.block.append(self.timeHandler.pixelToTime(self.blockBegin(), self.blockEnd()) + ' ' + self.title);
+        self.block.append(self.timeHandler.pixelToTime(self) + ' ' + self.title);
     };
     
     //Setup Bindings
