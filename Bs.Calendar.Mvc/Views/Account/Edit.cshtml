@@ -1,4 +1,5 @@
-﻿@model Bs.Calendar.Mvc.ViewModels.Users.UserEditVm
+﻿@using Bs.Calendar.Models
+@model Bs.Calendar.Mvc.ViewModels.Users.UserEditVm
 
 @{
     ViewBag.Title = "Account details";
@@ -10,52 +11,49 @@
     </div>
 </div>
 
-<div class="row">
-    @using (Html.BeginForm())
-    {
+@using (Html.BeginForm())
+{
+    <div class="row">
         @Html.AntiForgeryToken()
         @Html.HiddenFor(user => user.UserId)
 
-        
         <div class="centered seven columns danger alert">
             @Html.ValidationSummary()
         </div>
-
-        <div class="row">
-            <fieldset class="centered seven columns">
+    </div>
+    <div class="row">
+        <section class="seven columns">
+            <fieldset class="scroll_sizing">
                 <legend>
                     <h4>@Model.FirstName @Model.LastName</h4>
                 </legend>
                               
                 <ul>
                     <li class="field">
-                        @Html.LabelFor(user => Model.FirstName, new {@class = "inline three columns"})
+                        @Html.LabelFor(user => Model.FirstName, new { @class = "inline three columns" })
                         @Html.TextBoxFor(user => Model.FirstName, new { @class = "wide text input" })
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => Model.LastName, new {@class = "inline three columns"})
-                        @Html.TextBoxFor(user => Model.LastName, new {@class = "wide text input"})
+                        @Html.LabelFor(user => Model.LastName, new { @class = "inline three columns" })
+                        @Html.TextBoxFor(user => Model.LastName, new { @class = "wide text input" })
                     </li>
 
                     <li class="field">
-                        @Html.LabelFor(user => Model.Email, new {@class = "inline three columns"})
-                        @Html.TextBoxFor(user => Model.Email, new {@class = "wide text input"})
+                        @Html.LabelFor(user => Model.Email, new { @class = "inline three columns" })
+                        @Html.TextBoxFor(user => Model.Email, new { @class = "wide text input" })
                     </li>
                     
                     <li class="field">
-                        @Html.LabelFor(user => user.BirthDate, new {@class = "inline three columns"})
+                        @Html.LabelFor(user => user.BirthDate, new { @class = "inline three columns" })
                         @Html.CustomDateEditor(user => user.BirthDate)
                     </li>
                 </ul>
                 
             </fieldset>
-        </div>
-
-        @Html.Partial("UserContacts");
-
-        <div class="row">
-            <div class="centered seven columns">
+        
+            <div class="row">
+                <br />
                 <div class="medium secondary btn three columns">
                     <input type="submit" value="Update"/>
                 </div>
@@ -63,13 +61,14 @@
                 <div class="medium default btn push_one three columns">
                     @Html.ActionLink("Back", "Index", "Home")
                 </div>
-            </div>
+            </div>        
+        </section>
+        
+        <div class="five columns">
+            @Html.Partial("UserContacts")
         </div>
-    }
-</div>
-
-
-
+    </div>
+}
 
 @section Scripts {
     <script src="~/Scripts/jquery.validate.min.js"></script>
@@ -77,7 +76,11 @@
     
     <script src="../../Scripts/Users/UserContacts.js"></script>
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
+            
+            $('.scroll-simple').scrollbar({ type: "simple" });
+            $('.content').height($('.scroll_sizing').outerHeight() - $('.scroll_sizing legend').outerHeight() / 2);
+
             ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts)));
         });
     </script>
