@@ -102,6 +102,7 @@ function MonthVm() {
 
     self.setMode = function(mode) {
         self.isChosen(mode == 'month');
+        if (self.isChosen()) self.updateMonth();
     };
     
     //Initialize

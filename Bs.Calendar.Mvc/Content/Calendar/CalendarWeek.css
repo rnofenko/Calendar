@@ -1,0 +1,102 @@
+﻿.calendar-week-header > div {
+    float: left;
+    width: 123px;
+    height: 46px;
+    line-height: 43px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-left: 0;
+    border-bottom: 0;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.calendar-week-header > div:first-child { width: 61px; border-left: 1px solid #ddd}
+.calendar-week-header > div:last-child { width: 17px;}
+
+.calendar-week-container {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: relative;
+
+    width: 100%;
+    height: 698px;
+    border: 1px solid #ddd;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+/*-------------------------------------------------------*/
+
+/*Time Line*/
+.week-time-line {
+    height: 30px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.week-time-line:nth-child(even) {
+    border-bottom: 1px solid #ddd;
+}
+
+.week-time-line:nth-child(odd) {
+    border-bottom: 1px dashed #ddd;
+}
+
+.week-time-line:last-child { border-bottom: none}
+/*-------------------------------------------------------*/
+
+/*Time Panel*/
+.week-time-panel {
+    float: left;
+    width: 60px;
+    border-right: 1px solid #ddd
+}
+
+.week-time-panel > div {
+    height: 30px;
+    font-size: 15px;
+    text-align: center;
+}
+
+.week-time-panel > div:last-child { border-bottom: none}
+/*-------------------------------------------------------*/
+
+/*Week Container Day*/
+.week-container-day {
+    position: relative;
+    float: left;
+    width: 123px;
+    border-right: 1px solid #ddd;
+}
+
+.week-container-day:last-child { border-right: none; }
+/*-------------------------------------------------------*/
+
+/*Day Time Block*/
+.day-time-block {
+    position: absolute;
+    height: 30px;
+    width: 114px;
+    background: #4197c2;
+    color: white;
+    border-radius: 4px;
+    margin-left: 4px;
+    border: 1px solid #2f6f8e;
+}
+
+.day-time-block > div {
+    position: absolute;
+    background: white;
+    margin: 2px 0 0 45%;
+    height: 1px;
+    width: 15px;
+    pointer-events: none;
+}
+
+.day-time-block > div:last-child {
+    bottom: 2px;
+}
+/*-------------------------------------------------------*/

@@ -5,6 +5,15 @@
     border-width: 0 0 0 1px;
 }
 
+.bc-header {
+    background-color: white;
+    color: rgb(80, 80, 80);
+}
+
+.bc-header th {
+    font-size: 15.5px;
+}
+
 .bc-header th:first-child {
     border-left: 0;
 }

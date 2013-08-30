@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Bs.Calendar.Models.User>
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -19,32 +20,19 @@
         <div class="four columns medium default btn pull_right" style="border: 1px solid gainsboro; border-radius: 0" data-bind="click: showDay">day</div>
     </div>
 </div>
+
 @Html.Partial("Month")
 @Html.Partial("Week")
 
 @section scripts
 {
     <script type="text/javascript">
-
         $(document).ready(function () {
-
-            //var hlp = new CalendarCellEventVm();
-            //hlp.EventType(1);
-            //hlp.DateStart(moment().toDate());
-            //hlp.DateEnd(moment().toDate());
-            //hlp.IsAllDay(true);
-
-            //hlp = ko.toJS(hlp);
-            //hlp.DateStart = moment().toJSON();
-            //hlp.DateEnd = moment().toJSON();
-            //hlp.Title = "Fight";
-
-            //$.getJSON("/Home/Edit", { id: 5 }, function (data, textStatus, jqXHR) {
-            //    window.location.href = data.redirectToUrl;
-            //});
-
-            //ko.applyBindings(new CalendarVm(), document.getElementById("calendar-panel"));
-            //ko.applyBindings(new MonthVm(), document.getElementById("calendar-month"));
+            ko.applyBindings(new CalendarVm(), document.getElementById("calendar-panel"));
+            ko.applyBindings(new MonthVm(), document.getElementById("calendar-month"));
+            ko.applyBindings(new CalendarWeekVm(), document.getElementById("calendar-week"));
+            
+            $(".invisible-onstart").removeClass("invisible-onstart");
         });
     </script>
 }

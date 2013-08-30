@@ -9,7 +9,7 @@
     self.isCreated = false;
     self.clickPrevPosition = 0;
 
-    self.block = {};
+    self.block = null;
     self.parent = {};
     self.rightEnd = 0;
     self.leftEnd = 0;
@@ -161,6 +161,25 @@
     self.relativePosition = function (parent, coordinateX) {
         return coordinateX - parent.offset().left;
     };
+    
+    self.setInputTime = function (start, end) {
+        if (self.block == null || self.block.width() < 6) return;
+        var endPixel = Math.min(self.timeToPixel(end), self.rightEnd);
+        var beginPixel = Math.max(self.timeToPixel(start), self.leftEnd);
+        
+        self.block.css('left', beginPixel);
+        self.block.width(endPixel - beginPixel);
+        self.updateTimePicker();
+    };
+    
+    self.timeToPixel = function (dateTime) {
+        var time = moment(dateTime);
+        var totalMinutes = (time.hours() - 8) * 60 + time.minutes();
+        return Math.floor(totalMinutes / 5) * 6;
+    };
+
+    //Setup Bindings
+    mediator.bind("RoomTimeSlider:setInputTime", self.setInputTime);
 }
 
 function RoomOrderElement(roomEventVm) {
