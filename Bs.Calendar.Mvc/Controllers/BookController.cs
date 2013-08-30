@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.Services;
 using Bs.Calendar.Mvc.ViewModels;
+using Microsoft.Ajax.Utilities;
 
 namespace Bs.Calendar.Mvc.Controllers
 {
@@ -67,6 +69,12 @@ namespace Bs.Calendar.Mvc.Controllers
             var books = _service.GetAllBooks();
             return Json(books, JsonRequestBehavior.AllowGet);
         }
+
+        //public JsonResult GetBookTags(int bookId)
+        //{
+        //    var res = _service.GetBookTags(bookId);
+        //    return Json(res, JsonRequestBehavior.AllowGet);
+        //}
 
         public JsonResult List()
         {

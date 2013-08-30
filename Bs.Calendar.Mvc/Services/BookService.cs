@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
+using DotNetOpenAuth.Messaging;
 
 namespace Bs.Calendar.Mvc.Services
 {
@@ -19,7 +21,28 @@ namespace Bs.Calendar.Mvc.Services
 
         public List<Book> GetAllBooks()
         {
-            return _unit.Book.Load().ToList();
+            //return _unit.Book.Load().ToList();
+
+
+            //var books = _unit.Book.Load().ToList();
+
+            //foreach (var book in books)
+            //{
+            //    book.Tags.AddRange(new Collection<Tag>((IList<Tag>)GetBookTags(book.Id)));
+            //}
+
+            //return books;
+
+            var books = _unit.Book.Load().ToList();
+            foreach (var book in books)
+            {
+                var tags = _unit.TagRepository.Load(t => t.BookId == book.Id).ToList();
+                if (tags.Count != 0)
+                {
+                    book.Tags.AddRange(tags);
+                }
+            }
+            return books;
         }
 
         public Book Get(int id)
@@ -31,6 +54,14 @@ namespace Bs.Calendar.Mvc.Services
         public Book Get(string code)
         {
             return _unit.Book.Get(b => b.Code == code);
+        }
+
+        public List<Tag> GetBookTags(int bookId)
+        {
+            //var book = _unit.Book.Get(bookId);
+            //var res =  book.Tags.ToList();
+            var res = _unit.TagRepository.Load(t => t.BookId == bookId).ToList();
+            return res;
         }
 
         public BookHistoryVm GetBookHistories(int bookId)
@@ -138,6 +169,37 @@ namespace Bs.Calendar.Mvc.Services
             book.Author = model.BookAuthor;
             book.Description = model.BookDescription;
             book.ReaderName = model.ReaderId == 0 ? "None" : _unit.User.Get(model.ReaderId).FullName;
+
+            var tagsId = book.Tags.Select(tag => tag.Id).ToList();
+            foreach (var tagToDelete in tagsId.Select(id => _unit.TagRepository.Get(id)))
+            {
+                _unit.TagRepository.Delete(tagToDelete);
+            }
+
+
+            //foreach (var tag in book.Tags)
+            //{
+            //    var tagId = tag.Id;
+            //    var tagToDelete = _unit.TagRepository.Get(tag.Id);
+            //    _unit.TagRepository.Delete(tagToDelete);
+            //}
+
+
+
+            //var tagsToDelete = book.Tags;
+            
+            //foreach (var tag in tagsToDelete)
+            //{
+            //    var tagToDelete = _unit.TagRepository.Get(tag.Id);
+            //    _unit.TagRepository.Delete(tagToDelete);
+            //    //book.Tags.Remove(tag);
+            //}
+
+            foreach (var tag in model.BookTags)
+            {
+                book.Tags.Add(new Tag{Name = tag});
+            }
+
             if (model.BookHistoryList != null)
             {
                 UpdateHistory(model);

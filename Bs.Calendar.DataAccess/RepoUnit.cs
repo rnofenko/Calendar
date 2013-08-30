@@ -13,6 +13,7 @@ namespace Bs.Calendar.DataAccess
         private ITeamRepository _team;
         private IBookRepository _book;
         private IBookHistoryRepository _bookHistory;
+        private ITagRepository _tag;
         private IPersonalEventRepository _personalEvent;
         private ITeamEventRepository _teamEvent;
         private ICalendarLogRepository _calendarLog;
@@ -62,6 +63,11 @@ namespace Bs.Calendar.DataAccess
         public IBookHistoryRepository BookHistory
         {
             get { return _bookHistory ?? (_bookHistory = getRepository<IBookHistoryRepository>()); }
+        }
+
+        public ITagRepository TagRepository
+        {
+            get { return _tag ?? (_tag = getRepository<ITagRepository>()); }
         }
 
         private CalendarContext getContext()

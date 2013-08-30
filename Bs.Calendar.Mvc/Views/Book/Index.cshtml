@@ -17,7 +17,8 @@
             <a href="#" data-bind="text: booksView"></a>
         </div>
         <div id="coverCheck">
-            With cover?<input type="checkbox" data-bind="checked: withCover" />
+            With cover only
+            <input type="checkbox" id="coverCheckbox" data-bind="checked: withCover" />
         </div>
     </div>
     <div id="booksSearch" class="field three columns push_five" style="display: none">
@@ -48,7 +49,8 @@
                         <span class="hide" id="order_-Author"><i class="icon-down"></i></span>
                         <span class="hide" id="order_Author"><i class="icon-up"></i></span>
                     </th>
-                    <th class="clickable" data-bind="click: toggle_orderby" id="th_Reader">Reader
+                    @*<th>Tags</th>*@
+                    <th class="clickable" data-bind="click: toggle_orderby" id="th_Reader">Status
                         <span class="hide" id="order_-Reader"><i class="icon-down"></i></span>
                         <span class="hide" id="order_Reader"><i class="icon-up"></i></span>
                     </th>
@@ -89,7 +91,11 @@
         <td data-bind="text: code"></td>
         <td data-bind="text: title"></td>
         <td data-bind="text: author"></td>
-        <td data-bind="text: reader"></td>
+        @*<td data-bind="text: tags"></td>*@
+        <td data-bind="event: { mouseover: $root.enableDetails, mouseout: $root.disableDetails }">
+            <span data-bind="visible: !$root.detailsEnabled(), text: status"></span>
+            <span data-bind="visible: $root.detailsEnabled(), text: reader == 'None' ? 'In stock' : 'Ordered by ' + reader"></span>
+        </td>
         <td>
             <div class="medium default btn icon-right icon-pencil">
                 <a data-bind="attr: { href: getEditLink() }">Edit</a>

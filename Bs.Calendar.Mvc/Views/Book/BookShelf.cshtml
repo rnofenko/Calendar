@@ -6,30 +6,21 @@
             </div>
         </div>
     </div>
+    <!-- ko if: shelfRows().length != 0 -->
     <div class="row">
         <div class="twelve columns centered" data-bind="foreach: shelfRows">
             <div class="row" style="background: url(/Images/bs4.jpg); background-repeat: no-repeat" data-bind="foreach: booksRow">
-                <!-- ko if: hasCover == $root.withCover() -->
                 <div class="column push_one" style="width: 80px; height: 120px;">
                     <a data-bind="attr: { href: getEditLink() }">
-                        <img data-bind="attr: { src: imageUrl() }" style="width: 70px; height: 100px; margin: 10px; -webkit-box-shadow: 5px 2px 10px black;" />
+                        <img data-bind="visible: hasCover == true || hasCover == $root.withCover(), attr: { src: imageUrl() }" style="width: 70px; height: 100px; margin: 10px; -webkit-box-shadow: 5px 2px 10px black;" />
                     </a>
                 </div>
-                <!-- /ko -->                
             </div>
         </div>
     </div>
+    <!-- /ko -->
     <div id="bookShelfBottom" class="row">
-        <div class="twelve columns centered">
-            <div class="row" style="background: url(/Images/bs4.jpg); background-repeat: no-repeat">
-                <div class="column" style="width: 90px; height: 120px;"></div>
-            </div>
-            <div class="row" style="background: url(/Images/bs4.jpg); background-repeat: no-repeat">
-                <div class="column" style="width: 90px; height: 120px;"></div>
-            </div>
-            <div class="row" style="background: url(/Images/bs4.jpg); background-repeat: no-repeat">
-                <div class="column" style="width: 90px; height: 120px;"></div>
-            </div>
+        <div class="twelve columns centered" id ="bookShelfBottom1">
         </div>
     </div>
 </div>

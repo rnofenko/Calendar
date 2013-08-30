@@ -10,7 +10,7 @@ namespace Bs.Calendar.DataAccess
     {
         public override Book Get(int id)
         {
-            return Load().Where(x => x.Id == id).Include(x => x.BookHistories).FirstOrDefault();
+            return Load().Where(x => x.Id == id).Include(x => x.BookHistories).Include(x => x.Tags).FirstOrDefault();
         }
     }
 }

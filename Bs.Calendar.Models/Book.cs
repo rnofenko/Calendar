@@ -21,5 +21,7 @@ namespace Bs.Calendar.Models
         public string ReaderName { get; set; }
 
         public bool HasCover { get; set; }
+
+        public ICollection<Tag> Tags { get; set; } 
     }
 }
