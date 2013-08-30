@@ -1,4 +1,8 @@
-﻿.calendar-week-header > div {
+﻿#calendar-week {
+    padding-bottom: 20px;
+}
+
+.calendar-week-header > div {
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
@@ -144,5 +148,52 @@
     margin-left: 50px;
     border: 1px solid gray;
     font-size: 14px;
+}
+/*-------------------------------------------------------*/
+
+/*All Day*/
+.calendar-week-allday {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: relative;
+
+    width: 100%;
+}
+
+.calendar-week-allday-cell {
+    position: relative;
+    float: left;
+    width: 123px;
+    height: 100%;
+    line-height: 43px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-left: 0;
+    border-bottom: 0;
+    font-weight: bold;
+    font-size: 15px;
+    overflow: hidden;
+}
+
+.calendar-week-allday-cell:first-child { width: 61px; border-left: 1px solid #ddd; font-size: 14px; font-weight: normal;line-height: 200%;}
+
+.week-allday-block {
+    position: absolute;
+    height: 30px;
+    width: 114px;
+    color: white;
+    line-height: 30px;
+    padding-left: 5px;
+    text-align: left;
+    overflow: hidden;
+    word-wrap: break-word;
+    font-size: 11px;
+    border-radius: 4px;
+    margin-left: 4px;
+    background: #CC6666;
+    border: 1px solid #a35252;
 }
 /*-------------------------------------------------------*/

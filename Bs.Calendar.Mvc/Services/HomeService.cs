@@ -75,7 +75,7 @@ namespace Bs.Calendar.Mvc.Services
 
             var birthdays = _rules
                 .LoadUsersByBirthday(filter.FromDate, filter.ToDate)
-                .Select(u => new BirthdayEventVm {Date = u.BirthDate.Value, Text = u.LastName});
+                .Select(u => new BirthdayEventVm {Date = u.BirthDate.Value, Text = "Birthday of " + u.LastName + " " + u.FirstName});
 
             return new CalendarVm
                        {

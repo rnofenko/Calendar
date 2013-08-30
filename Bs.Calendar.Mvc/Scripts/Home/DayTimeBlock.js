@@ -124,6 +124,11 @@ function DayTimeBlock(parent, blocks, parentModel) {
         }
     };
 
+    self.totalUnbind = function() {
+        self.block.unbind("mousemove");
+        self.block.unbind("mousedown");
+    };
+
     self.mouseEdgeDown = function(event) {
         var mousePosition = self.relativeRow(event.pageY);
         var blockBegin = self.blockBegin();
