@@ -4,8 +4,11 @@ using System.Linq;
 using Bs.Calendar.Core;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
+using Bs.Calendar.Mvc.Server;
 using Bs.Calendar.Mvc.Services.Events;
 using Bs.Calendar.Mvc.ViewModels.Events;
+using Bs.Calendar.Mvc.ViewModels.Teams;
+using Bs.Calendar.Mvc.ViewModels.Users;
 using Bs.Calendar.Rules;
 using Bs.Calendar.Rules.Backgrounds;
 using Bs.Calendar.Rules.Emails;
@@ -148,13 +151,16 @@ namespace Bs.Calendar.Tests.Unit
             var personalEvent = new CalendarEventVm { EventType = EventType.Personal };
 
             var eventLink = new[] { new PersonalEventLink { EventStatus = 0, Event = personalEvent.Map(), User = user } };
-            _service.Save(personalEvent, user.Id);
+            personalEvent.Id = _service.Save(personalEvent, user.Id);
+
+            personalEvent.Text = "new Event";
+            personalEvent.Title = "Title";
 
             //act
-            _service.Update();
+            _service.Update(personalEvent);
 
             //assert
-            _repoUnit.TeamEvent.Load().Should().HaveCount(0);
+            _repoUnit.PersonalEvent.Load().Select(link => link.Event).ShouldAllBeEquivalentTo(new[]{personalEvent});
         }
     }
 }

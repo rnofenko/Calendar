@@ -31,12 +31,14 @@ namespace Bs.Calendar.Mvc.Services.Events
             }
         }
 
-        public void Update(CalendarEventVm calendarEventVm)
+        public int Update(CalendarEventVm calendarEventVm)
         {
             if (calendarEventVm.Id > 0)
             {
-                _savingService.Update(calendarEventVm);
+                return _savingService.Update(calendarEventVm);
             }
+
+            return 0;
         }
 
         public IEnumerable<TeamVm> GetTeams() 
@@ -90,7 +92,7 @@ namespace Bs.Calendar.Mvc.Services.Events
             var teamEventLink = _unit.TeamEvent.Get(link => link.Event.Id == id);
 
             var calendarEvent = personalEventLink == null ? null : personalEventLink.Event;
-            calendarEvent = calendarEvent ?? teamEventLink.Event;
+            calendarEvent = teamEventLink == null ? calendarEvent : teamEventLink.Event;
 
             return calendarEvent;
         }

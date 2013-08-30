@@ -24,73 +24,38 @@ namespace Bs.Calendar.Mvc.Services.Events
             return 0;
         }
 
-        public void Update(CalendarEventVm calendarEventVm)
+        public int Update(CalendarEventVm calendarEventVm)
         {
             var calendarEvent = calendarEventVm.Map();
 
-
-            if (calendarEvent.EventType == EventType.Personal)
+            if (calendarEventVm.EventType == EventType.Personal)
             {
-                var link = _unit.PersonalEvent.Get(l => l.Event.Id == calendarEvent.Id);
+                var history = _unit.EmailOnEventHistory.Get(e => e.Event.Id == calendarEvent.Id);
+                var user = history.User;
+                _unit.EmailOnEventHistory.Delete(history);
+                _unit.PersonalEvent.Delete(_unit.PersonalEvent.Get(l => l.Event.Id == calendarEvent.Id));
 
-                if (link.Event.EventType == calendarEvent.EventType)
-                {
-                    link.Event = calendarEvent;
-                    _unit.PersonalEvent.Save(link);
-                }
+                calendarEventVm.Id = 0;
+                return savePersonalEvent(calendarEventVm, user.Id);
             }
-            else
-            {
-                _unit.PersonalEvent
-                    .Load(link => link.Event.Id == calendarEvent.Id)
-                    .ToList()
-                    .ForEach(link =>
-                                 {
-                                     if (calendarEventVm.Users.FirstOrDefault(user => user.UserId == link.User.Id) == null)
-                                     {
-                                         //Delete excluded user
-                                         _unit.PersonalEvent.Delete(link);
+            
+            var oldPersonalLinks = _unit.PersonalEvent.Load(link => link.Event.Id == calendarEvent.Id).ToList();
+            var oldTeamLinks = _unit.TeamEvent.Load(link => link.Event.Id == calendarEvent.Id).ToList();
 
-                                         var history = _unit.EmailOnEventHistory.Get(h => h.User.Id == link.User.Id);
-                                         if (history != null) _unit.EmailOnEventHistory.Delete(history);
-                                     }
-                                     else
-                                     {
-                                         //Update user
-                                         link.Event = calendarEvent;
-                                         _unit.PersonalEvent.Save(link);
-                                     }
-                                 });
+            //Clear all deprecated event history records
+            _unit.EmailOnEventHistory
+                .Load(history => history.Event.Id == calendarEvent.Id)
+                .ToList()
+                .ForEach(_unit.EmailOnEventHistory.Delete);
 
-                _unit.TeamEvent
-                    .Load(link => link.Event.Id == calendarEvent.Id)
-                    .ToList()
-                    .ForEach(link =>
-                                 {
-                                     if (calendarEventVm.Teams.FirstOrDefault(team => team.Id == link.Team.Id) == null)
-                                     {
-                                         //Delete excluded team
-                                         _unit.TeamEvent.Delete(link);
+            //Clear all deprecated event records
+            oldPersonalLinks.ForEach(_unit.PersonalEvent.Delete);
+            oldTeamLinks.ForEach(_unit.TeamEvent.Delete);
 
-                                         link.Team.Users.ToList().ForEach(user =>
-                                                                              {
-                                                                                  var history = _unit.EmailOnEventHistory.Get(h => h.User.Id == user.Id);
-                                                                                  if (history != null) _unit.EmailOnEventHistory.Delete(history);
-                                                                              });
-                                     }
-                                     else
-                                     {
-                                         //Update team
-                                         link.Event = calendarEvent;
-                                         _unit.TeamEvent.Save(link);
-                                     }
-                                 });
-
-                //Save new teams and users
-                saveMeetingEvent(calendarEventVm);
-            }
+            //Recreate event
+            calendarEventVm.Id = 0;
+            return saveMeetingEvent(calendarEventVm);
         }
-
 
         private int savePersonalEvent(CalendarEventVm calendarEventVm, int userId)
         {

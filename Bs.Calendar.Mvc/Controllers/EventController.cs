@@ -53,12 +53,6 @@ namespace Bs.Calendar.Mvc.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetRooms(DateTime dateTime)
-        {
-            return Json(_service.GetRooms(dateTime), JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
         public JsonResult GetRooms(DateTime from, DateTime to)
         {
             return Json(_service.GetRooms(from, to), JsonRequestBehavior.AllowGet);
