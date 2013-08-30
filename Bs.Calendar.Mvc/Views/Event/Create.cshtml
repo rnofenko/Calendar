@@ -5,7 +5,7 @@
 
 <form>
     <div class="row" id="calendar-event">
-        <div class="row">
+        <div class="row" data-bind="visible: eventModel.Id == 0">
             <div class="medium info btn six columns event-btn1"><a href="#">Personal Event</a></div>
             <div class="medium default btn six columns event-btn2"><a href="#">Meeting Event</a></div>
         </div>
@@ -84,14 +84,19 @@
     @Html.Partial("RoomOrderList")
 
     <br/>
-    <div class="row">
-        <div class=" push_three medium secondary btn two columns">
+    <div class="row" id="">
+        <div class="medium secondary btn two columns">
             <input type="submit" value="@ViewBag.Action">
         </div>
-        
-        <div class="medium default btn push_one two columns">
+        <div class="medium default btn two columns">
             <a href="#">Back</a>
         </div>
+        @if(Model.Id > 0)
+        {
+            <div class="medium info btn two columns">
+                <a href="@Url.Action("Delete", "Event", new { id = Model.Id})">Delete</a>
+            </div>            
+        }
     </div>
 </form>
 

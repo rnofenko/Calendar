@@ -26,35 +26,38 @@ namespace Bs.Calendar.Mvc.Services.Events
 
         public int Update(CalendarEventVm calendarEventVm)
         {
-            var calendarEvent = calendarEventVm.Map();
-
-            if (calendarEventVm.EventType == EventType.Personal)
-            {
-                var history = _unit.EmailOnEventHistory.Get(e => e.Event.Id == calendarEvent.Id);
-                var user = history.User;
-                _unit.EmailOnEventHistory.Delete(history);
-                _unit.PersonalEvent.Delete(_unit.PersonalEvent.Get(l => l.Event.Id == calendarEvent.Id));
-
-                calendarEventVm.Id = 0;
-                return savePersonalEvent(calendarEventVm, user.Id);
-            }
-            
-            var oldPersonalLinks = _unit.PersonalEvent.Load(link => link.Event.Id == calendarEvent.Id).ToList();
-            var oldTeamLinks = _unit.TeamEvent.Load(link => link.Event.Id == calendarEvent.Id).ToList();
-
-            //Clear all deprecated event history records
-            _unit.EmailOnEventHistory
-                .Load(history => history.Event.Id == calendarEvent.Id)
-                .ToList()
-                .ForEach(_unit.EmailOnEventHistory.Delete);
-
-            //Clear all deprecated event records
-            oldPersonalLinks.ForEach(_unit.PersonalEvent.Delete);
-            oldTeamLinks.ForEach(_unit.TeamEvent.Delete);
+            Delete(calendarEventVm);
 
             //Recreate event
             calendarEventVm.Id = 0;
-            return saveMeetingEvent(calendarEventVm);
+            var user = _unit.EmailOnEventHistory.Get(e => e.Event.Id == calendarEventVm.Id).User;
+            return Save(calendarEventVm, user.Id);
+        }
+
+        public void Delete(CalendarEventVm calendarEventVm)
+        {
+            if (calendarEventVm.EventType == EventType.Personal)
+            {
+                var history = _unit.EmailOnEventHistory.Get(e => e.Event.Id == calendarEventVm.Id);
+
+                _unit.EmailOnEventHistory.Delete(history);
+                _unit.PersonalEvent.Delete(_unit.PersonalEvent.Get(l => l.Event.Id == calendarEventVm.Id));
+            }
+            else
+            {
+                var personalLinks = _unit.PersonalEvent.Load(link => link.Event.Id == calendarEventVm.Id).ToList();
+                var teamLinks = _unit.TeamEvent.Load(link => link.Event.Id == calendarEventVm.Id).ToList();
+
+                //Clear event history records
+                _unit.EmailOnEventHistory
+                    .Load(history => history.Event.Id == calendarEventVm.Id)
+                    .ToList()
+                    .ForEach(_unit.EmailOnEventHistory.Delete);
+
+                //Clear event link records
+                personalLinks.ForEach(_unit.PersonalEvent.Delete);
+                teamLinks.ForEach(_unit.TeamEvent.Delete);
+            }
         }
 
         private int savePersonalEvent(CalendarEventVm calendarEventVm, int userId)

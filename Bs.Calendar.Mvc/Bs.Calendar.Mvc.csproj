@@ -325,9 +325,9 @@
     <Content Include="Content\fonts\icons\entypo.ttf" />
     <Content Include="Content\fonts\icons\entypo.woff" />
     <Content Include="Content\fonts\open_sans\Open Sans Bold.woff" />
-    <Content Include="Content\fonts\open_sans\Open Sans Light.woff" />
     <Content Include="Content\fonts\open_sans\Open Sans Semibold.woff" />
     <Content Include="Content\fonts\open_sans\Open Sans.woff" />
+    <Content Include="Content\fonts\open_sans\Open Sans Light.ttf" />
     <None Include="Scripts\jquery-2.0.2.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.2.js" />
     <Content Include="Scripts\jquery-2.0.2.min.js" />

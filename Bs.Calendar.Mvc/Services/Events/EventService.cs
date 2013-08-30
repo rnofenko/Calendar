@@ -93,5 +93,10 @@ namespace Bs.Calendar.Mvc.Services.Events
 
             return calendarEvent;
         }
+
+        public void Delete(CalendarEventVm calendarEvent)
+        {
+            _savingService.Delete(calendarEvent);
+        }
     }
 }

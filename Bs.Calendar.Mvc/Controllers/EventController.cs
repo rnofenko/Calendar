@@ -82,5 +82,22 @@ namespace Bs.Calendar.Mvc.Controllers
                        ? (ActionResult)View("Create", new CalendarEventVm(calendarEvent))
                        : HttpNotFound();
         }
+
+        [HttpPost]
+        public ActionResult Delete(CalendarEventVm calendarEvent)
+        {
+            _service.Delete(calendarEvent);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            var calendarEvent = _service.GetEvent(id);
+
+            return calendarEvent != null
+                       ? Delete(new CalendarEventVm(calendarEvent))
+                       : HttpNotFound();
+        }
     }
 }
