@@ -1,0 +1,95 @@
+﻿#calendar-day {
+    padding-bottom: 20px;
+}
+
+.calendar-day-header > div {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    float: left;
+    width: 861px;
+    height: 46px;
+    line-height: 43px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-left: 0;
+    border-bottom: 0;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.calendar-day-header > div:first-child { width: 61px; border-left: 1px solid #ddd}
+.calendar-day-header > div:last-child { width: 17px;}
+
+.day-container-day {
+    position: relative;
+    float: left;
+    width: 861px;
+}
+
+.day-container-day .day-time-block {
+    width: 850px;
+}
+
+.calendar-day-allday {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: relative;
+    height: 0;
+    width: 100%;
+}
+
+.calendar-day-allday-cell {
+    position: relative;
+    float: left;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-left: 0;
+    border-bottom: 0;
+}
+
+.calendar-day-allday .middle-allday {
+    width: 861px;
+    line-height: 43px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.calendar-day-allday .first-allday {
+    width: 61px; 
+    border-left: 1px solid #ddd; 
+    font-size: 14px; 
+    font-weight: normal;
+    line-height: 200%;
+    text-align: center;
+}
+
+.calendar-day-allday .last-allday {
+    width: 17px;
+}
+
+.day-allday-block {
+    position: absolute;
+    height: 25px;
+    width: 850px;
+    color: white;
+    line-height: 25px;
+    padding-left: 5px;
+    text-align: left;
+    overflow: hidden;
+    word-wrap: break-word;
+    font-size: 11px;
+    border-radius: 4px;
+    margin-left: 4px;
+    background: #CC6666;
+    border: 1px solid #a35252;
+    font-weight: bold;
+}

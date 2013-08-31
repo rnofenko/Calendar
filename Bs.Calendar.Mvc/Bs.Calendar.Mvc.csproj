@@ -208,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Calendar\Calendar.css" />
+    <Content Include="Content\Calendar\CalendarDay.css" />
     <Content Include="Content\Calendar\CalendarWeek.css" />
     <Content Include="Content\Event\CalendarEvent.css" />
     <Content Include="Content\Event\CreateEvent.css" />
@@ -250,6 +251,7 @@
     <Content Include="Scripts\Gumby\ui\gumby.tabs.js" />
     <Content Include="Scripts\Gumby\ui\gumby.toggleswitch.js" />
     <Content Include="Scripts\Gumby\ui\jquery.validation.js" />
+    <Content Include="Scripts\Home\Day.js" />
     <Content Include="Scripts\Home\Month.js" />
     <Content Include="Scripts\Home\DayTimeBlock.js" />
     <Content Include="Scripts\Home\Week.js" />
@@ -417,6 +419,7 @@
     <Content Include="Views\Shared\RoomOrderList.cshtml" />
     <Content Include="Views\Home\Month.cshtml" />
     <Content Include="Views\Home\Week.cshtml" />
+    <Content Include="Views\Home\Day.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
