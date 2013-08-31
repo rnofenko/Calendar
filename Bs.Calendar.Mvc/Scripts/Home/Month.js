@@ -1,15 +1,91 @@
-﻿function EventVm(eventContent, date) {
+﻿var eventTypes = {
+    personal: 1,
+    meeting: 2
+};
+
+var formatSettings = {
+    timeFormat: "h:mma",
+    dateFormat: "DD MMM YYYY"
+}
+
+function CalendarCellEventVm() {
     var self = this;
-    self.eventContent = eventContent;
-    self.eventDate = date;
-    //self.event_type = event_type;
+
+    self.Id = 0;
+
+    self.Title = "";
+
+    self.DateStart = moment();
+    self.DateEnd = moment();
+    self.IsAllDay = false;
+
+    self.Room = null;
+    self.EventType = eventTypes.personal;
+
+    self.map = function(event) {
+        self.Id = event.Id;
+
+        self.Title = event.Title;
+        self.DateStart = moment(event.DateStart);
+        self.DateEnd = moment(event.DateEnd);
+        self.IsAllDay = event.IsAllDay;
+        self.Room = event.Room;
+        self.EventType = event.EventType;
+    };
+
+    self.getTitle = function () {
+        if (self.EventType == eventTypes.personal) {
+            return self.DateStart.format(formatSettings.timeFormat) + " " + self.Title;
+        } else {
+            return self.DateStart.format(formatSettings.timeFormat) + "-" + self.DateEnd.format(formatSettings.timeFormat) + " "+ self.Title;
+        }
+    };
+    
+    self.setAttributes = function () {
+
+        console.log(self.Room);
+        return {
+            "class": (function () {
+                var mainClass = "bc-event button-like";
+                return self.Room == null ? mainClass + " bc-event-calendar " : mainClass + " roomColor_" + (self.Room.Color);
+            })()
+        };
+    };
+
+    self.clickHandle = function (context, event) {
+        $.getJSON("/Home/Edit", { id: self.Id }, function(data) {
+            window.location.href = data.redirectToUrl;
+        });
+    };
+};
+
+function BirthdayEventVm() {
+    var self = this;
+
+    self.Date = moment();
+    self.Text = "";
+    
+    self.map = function(event) {
+        self.Date = moment(event.Date);
+        self.Text = event.Text;
+    };
+    
+    self.getTitle = function () {
+        return self.Text;
+    };
 };
 
 function DayVm(date, events) {
     var self = this;
+    
     self.day = date.date();
     self.date = moment(date);
-    self.events = ko.observableArray(events || []);
+
+    self.events =
+        {
+            CalendarEvents: ko.observableArray(events.CalendarEvents || []),
+            BirthdayEvents: ko.observableArray(events.BirthdayEvents || [])
+        };
 };
 
 function WeekVm(days) {
@@ -39,43 +115,64 @@ function MonthVm() {
                 days.push(new DayVm(date, self.getDayEvents(events, date)));
                 date = date.add("days", 1);
             }
+            
             self.weeks.push(new WeekVm(days));
         }
     };
 
     self.defineClass = function (date) {
         if (date < self.monthStart() || date > moment(self.monthStart()).endOf('month'))
-            return "bc-month-day other-month";
+            return "bc-month-day other-month button-like-colorful";
         if (date.isSame(moment().startOf('day')))
-            return "bc-month-day current-day";
-        return "bc-month-day";
+            return "bc-month-day current-day button-like-colorful";
+        return "bc-month-day button-like-colorful";
     };
 
     //Event handlers
     self.getEvents = function () {
-        var events = [];
+        var events = {
+            BirthdayEvents: [],
+            CalendarEvents: []
+        };
         var from = moment(self.monthStart()).day("Sunday");
         var timeRange = { from: from.toJSON(), to: from.add('weeks', 6).toJSON() };
-
+        
         $.ajax({
-            url: "/Home/GetEvents",
+            url: "/Home/List",
             async: false,
             type: "GET",
             data: timeRange,
             contentType: "application/json; charset=utf-8",
             dataType: "json"
         }).done(function (data) {
-            $.each(data, function (key, value) {
-                events.push(new EventVm(value.Text, moment(value.Date)));
+            $.each(data.BirthdayEvents, function (key, value) {
+                var event = new BirthdayEventVm();
+                event.map(value);
+                
+                events.BirthdayEvents.push(event);
+            });
+            $.each(data.CalendarEvents, function (key, value) {
+                var event = new CalendarCellEventVm();
+                event.map(value);
+
+                events.CalendarEvents.push(event);
             });
         });
+        
         return events;
     };
-
-    self.getDayEvents = function (events, date) {       //Only birthday events for now
-        return $.grep(events, function (element) {
-            return moment(date).year(element.eventDate.year()).isSame(element.eventDate);
-        });
+    
+    self.getDayEvents = function (events, date) {
+        var filteredEvents = {
+            CalendarEvents: $.grep(events.CalendarEvents, function (event) {
+                return event.DateStart.clone().startOf('day').isSame(date.clone().startOf('day'));
+            }),
+            BirthdayEvents: $.grep(events.BirthdayEvents, function (event) {
+                return moment(date).year(event.Date.year()).isSame(event.Date);
+            })
+        };
+        
+        return filteredEvents;
     };
 
     //Calendar month manipulator

@@ -69,7 +69,11 @@ namespace Bs.Calendar.Mvc.Services
             var calendarEvents = new List<CalendarCellEventVm>();
             dateEvents.ForEach(e =>
             {
-                e.Room = e.Room;
+                if(e.RoomId.HasValue)
+                {
+                    e.Room = _unit.Room.Get(e.RoomId.Value);
+                }
+
                 calendarEvents.Add(new CalendarCellEventVm(e));
             });
 

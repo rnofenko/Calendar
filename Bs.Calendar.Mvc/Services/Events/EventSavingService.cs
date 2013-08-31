@@ -29,8 +29,9 @@ namespace Bs.Calendar.Mvc.Services.Events
             Delete(calendarEventVm);
 
             //Recreate event
-            calendarEventVm.Id = 0;
             var user = _unit.EmailOnEventHistory.Get(e => e.Event.Id == calendarEventVm.Id).User;
+
+            calendarEventVm.Id = 0;
             return Save(calendarEventVm, user.Id);
         }
 

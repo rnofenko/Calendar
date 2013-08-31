@@ -89,7 +89,7 @@
             <input type="submit" value="@ViewBag.Action">
         </div>
         <div class="medium default btn two columns">
-            <a href="#">Back</a>
+            <a href="@Url.Action("Index", "Home", new { id = Model.Id})">Back</a>
         </div>
         @if(Model.Id > 0)
         {

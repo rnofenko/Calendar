@@ -18,23 +18,40 @@
     </div>
 
     <script type="text/html" id="week-template">
-        <tr data-bind="template: { name: 'day-template', foreach: days }" class="bc-week">
-        </tr>
+        <tr data-bind="template: { name: 'day-template', foreach: days }" class="bc-week"></tr>
     </script>
 
     <script type="text/html" id="day-template">
-        <td data-bind="attr: { class: $root.defineClass(date) }">
+        <td data-bind="attr: { class: $root.defineClass(date)}">
             <div>
                 <div class="bc-day-number" data-bind="text: day"></div>
-                <div data-bind="template: { name: 'event-template', foreach: events }"></div>
+                <div class="bc-event-container">
+                    <div data-bind="template: { name: 'birthday-event-template', foreach: events.BirthdayEvents }"></div>
+                    <div data-bind="template: { name: 'calendar-event-template', foreach: events.CalendarEvents }"></div>
+                </div>
             </div>
         </td>
     </script>
 
-    <script type="text/html" id="event-template">
-        <div class="bc-event">
+    <script type="text/html" id="birthday-event-template">
+        <div class="bc-event bc-event-calendar">
             <img src="../../Images/birthday_icon.png" width="19"/>
-            <span data-bind="text: eventContent"></span>
+            <span data-bind="text: getTitle()"></span>
         </div>
     </script>
+
+    <script type="text/html" id="calendar-event-template">
+        <div class="bc-event button-like" data-bind="attr: setAttributes(), click: clickHandle">
+            <span data-bind="text: getTitle()"></span>
+        </div>
+    </script>
+</div>
+
+<div id="week-dialog-form" title="Create new personal event">
+    <div class="week-dialog-title">Title:</div>
+    <input type="text" class="text input week-dialog-title-input">
+    <div class="week-dialog-title">Text</div>
+    <textarea class="text input week-dialog-text"></textarea>
+    <div class="default btn"><a href="#">Ok</a></div>
+    <div class="default btn"><a href="#">Cancel</a></div>
 </div>

@@ -42,7 +42,6 @@
     font-weight: normal;
 }
 
-
 .bc-month-day.current-day {
     background:#fcf8e3;
 }
@@ -52,9 +51,50 @@
 }
 
 .bc-event {
-    background:darkseagreen;
     border-radius: 2px;
     overflow: hidden;
     height: 100%;
     margin-bottom: 1px;
+    font-family: 'Open Sans';
+    font-size: small;
+    cursor: pointer;
+    color: #FFFFFF;
 }
+
+.bc-event-birthday {
+    background:darkseagreen;
+}
+
+.bc-event-calendar {
+    background: rgb(65, 151, 194);
+}
+
+.bc-event-container {
+    overflow-y: hidden;
+}
+
+.button-like {
+    opacity: 1.0;
+}
+
+.button-like:hover {
+    opacity: 0.7;
+     -webkit-transition: opacity 100ms linear;
+     -moz-transition: opacity 100ms linear;
+     -o-transition: opacity 100ms linear;
+     -ms-transition: opacity 100ms linear;
+     transition: opacity 100ms linear;
+}
+
+.button-like-colorful {
+    background-color: inherit;
+}
+
+.button-like-colorful:hover {
+    background: aliceblue;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+} 
