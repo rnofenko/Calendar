@@ -285,6 +285,15 @@ window.BooksVm = function ()
 
         console.log(filteredBooks);
         //self.allBooks.removeAll();        
+        filteredBooks.map(function(it){
+            it.Author = it.author;
+            it.Code = it.code;
+            it.BookTags = it.tags();
+            it.Title = it.title;
+            it.HasCover = it.hasCover;
+            it.Id = it.id;
+            it.ReaderName = it.reader;
+        });
         self.getAllBooks(filteredBooks);
     };
 
