@@ -119,7 +119,7 @@
         $(document).ready(function () {
             
             $('.scroll-simple').scrollbar({ type: "simple" });
-            $('.content').height($('.scroll_sizing').outerHeight() - $('.scroll_sizing legend').outerHeight() / 2);
+            $('.content').height($('.scroll_sizing'));
 
             ko.applyBindings(new UserContactsVm(@Html.RawJson(@Model.Contacts)));
         });

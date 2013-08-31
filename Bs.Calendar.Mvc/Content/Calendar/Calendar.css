@@ -42,6 +42,11 @@
     font-weight: normal;
 }
 
+.bc-week td > div {
+    height: 115px;
+    overflow-y: hidden;
+}
+
 .bc-month-day.current-day {
     background:#fcf8e3;
 }
@@ -98,3 +103,11 @@
     -ms-transition: background-color 100ms linear;
     transition: background-color 100ms linear;
 } 
+
+.button-like-colorful:active {
+    background: lightskyblue;
+}
+
+.bc-month-day.selected-cell {
+    background: lightskyblue;
+}

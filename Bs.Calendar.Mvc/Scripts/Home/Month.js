@@ -34,11 +34,7 @@ function CalendarCellEventVm() {
     };
 
     self.getTitle = function () {
-        if (self.EventType == eventTypes.personal) {
-            return self.DateStart.format(formatSettings.timeFormat) + " " + self.Title;
-        } else {
             return self.DateStart.format(formatSettings.timeFormat) + "-" + self.DateEnd.format(formatSettings.timeFormat) + " "+ self.Title;
-        }
     };
     
     self.setAttributes = function () {
@@ -87,11 +83,54 @@ function DayVm(date, events) {
             BirthdayEvents: ko.observableArray(events.BirthdayEvents || [])
         };
     
-    self.clickHandle = function() {
-        //create event
+    self.clickHandle = function (context, event) {
+        $(".week-dialog-title-input").val("");
+        $(".week-dialog-text").val("");
 
-        $("#month-dialog-form").
-        $("#month-dialog-form").className = $("#month-dialog-form").className.replace(/\bui-.*?\b/g, '');
+        $("#week-dialog-form .btn").unbind("mouseup");
+        $("#week-dialog-form .btn").mouseup(self.dialogClick);
+
+        mediator.trigger("Calendar:setCell", event.currentTarget);
+
+        $("#week-dialog-form").show();
+    };
+
+    self.dialogClick = function (event) {
+        if ($(event.target).text() == "Cancel") {
+            $("#week-dialog-form").hide();
+            mediator.trigger("Calendar:setCell", null);
+            return;
+        }
+        
+        var eventModel = new CalendarEvent();
+        eventModel.EventType(eventTypes.personal);
+        eventModel.Title($(".week-dialog-title-input").val());
+        eventModel.Text($(".week-dialog-text").val());
+
+        if (eventModel.Title() == "" || eventModel.Text() == "") {
+            $("#week-dialog-form").hide();
+            mediator.trigger("Calendar:setCell", null);
+            return;
+        }
+
+        $(".week-dialog-title-input").val("");
+        $(".week-dialog-text").val("");
+
+        eventModel.DateStart(self.date.clone().hour(8));
+        eventModel.DateEnd(self.date.clone().hour(19));
+
+        $.ajax({
+            url: "/Event/Create",
+            data: JSON.stringify(ko.toJS(eventModel)),
+            type: 'POST',
+            contentType: 'application/json, charset=utf-8',
+            dataType: 'json'
+        });
+
+        $("#week-dialog-form").hide();
+
+        mediator.trigger("Calendar:setCell", null);
+        mediator.trigger("Calendar:updateMonth", self.updateMonth);
     };
 };
 
@@ -100,8 +139,6 @@ function CreateEventDialogVm() {
 
     self.title = ko.observable("");
     self.text = ko.observable("");
-    
-    self.acceptHandle
 };
 
 function WeekVm(days) {
@@ -221,9 +258,25 @@ function MonthVm() {
     //Initialize
     self.monthInit();
     
+    self.selectedCell = null;
+    self.setCell = function (cell) {
+
+        if (self.selectedCell != null) {
+            $(self.selectedCell).removeClass("selected-cell");
+        }
+
+        self.selectedCell = cell;
+        
+        if (self.selectedCell != null) {
+            $(self.selectedCell).addClass("selected-cell");
+        }
+    };
+
     //Setup bindings
     mediator.bind("Calendar:nextButton", self.nextMonth);
     mediator.bind("Calendar:prevButton", self.prevMonth);
     mediator.bind("Calendar:setMode", self.setMode);
+    mediator.bind("Calendar:updateMonth", self.updateMonth);
+    mediator.bind("Calendar:setCell", self.setCell);
 };
 
