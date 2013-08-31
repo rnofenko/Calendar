@@ -22,7 +22,7 @@
     </script>
 
     <script type="text/html" id="day-template">
-        <td data-bind="attr: { class: $root.defineClass(date)}">
+        <td data-bind="click: clickHandle, attr: { class: $root.defineClass(date)}">
             <div>
                 <div class="bc-day-number" data-bind="text: day"></div>
                 <div class="bc-event-container">
@@ -34,7 +34,7 @@
     </script>
 
     <script type="text/html" id="birthday-event-template">
-        <div class="bc-event bc-event-calendar">
+        <div class="bc-event bc-event-birthday">
             <img src="../../Images/birthday_icon.png" width="19"/>
             <span data-bind="text: getTitle()"></span>
         </div>
@@ -47,11 +47,11 @@
     </script>
 </div>
 
-<div id="week-dialog-form" title="Create new personal event">
+<div id="month-dialog-form" visible="false" title="Create new personal event">
     <div class="week-dialog-title">Title:</div>
-    <input type="text" class="text input week-dialog-title-input">
-    <div class="week-dialog-title">Text</div>
-    <textarea class="text input week-dialog-text"></textarea>
-    <div class="default btn"><a href="#">Ok</a></div>
-    <div class="default btn"><a href="#">Cancel</a></div>
+    <input type="text" class="text input week-dialog-title-input" data-bind="value: title">
+    <div class="week-dialog-title">Text:</div>
+    <textarea class="text input week-dialog-text" data-bind="value: text"></textarea>
+    <div class="default btn" data-bind="value: acceptHandle"><a href="#">Ok</a></div>
+    <div class="default btn" data-bind="value: cancelHandle"><a href="#">Cancel</a></div>
 </div>

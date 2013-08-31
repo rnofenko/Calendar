@@ -6,7 +6,7 @@
 var formatSettings = {
     timeFormat: "h:mma",
     dateFormat: "DD MMM YYYY"
-}
+};
 
 function CalendarCellEventVm() {
     var self = this;
@@ -46,7 +46,7 @@ function CalendarCellEventVm() {
         console.log(self.Room);
         return {
             "class": (function () {
-                var mainClass = "bc-event button-like";
+                var mainClass = "clickable bc-event button-like";
                 return self.Room == null ? mainClass + " bc-event-calendar " : mainClass + " roomColor_" + (self.Room.Color);
             })()
         };
@@ -86,6 +86,22 @@ function DayVm(date, events) {
             CalendarEvents: ko.observableArray(events.CalendarEvents || []),
             BirthdayEvents: ko.observableArray(events.BirthdayEvents || [])
         };
+    
+    self.clickHandle = function() {
+        //create event
+
+        $("#month-dialog-form").
+        $("#month-dialog-form").className = $("#month-dialog-form").className.replace(/\bui-.*?\b/g, '');
+    };
+};
+
+function CreateEventDialogVm() {
+    var self = this;
+
+    self.title = ko.observable("");
+    self.text = ko.observable("");
+    
+    self.acceptHandle
 };
 
 function WeekVm(days) {

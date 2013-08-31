@@ -57,11 +57,11 @@
     margin-bottom: 1px;
     font-family: 'Open Sans';
     font-size: small;
-    cursor: pointer;
     color: #FFFFFF;
 }
 
 .bc-event-birthday {
+    cursor: default;
     background:darkseagreen;
 }
 
