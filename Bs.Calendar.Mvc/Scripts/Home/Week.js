@@ -74,6 +74,8 @@
         $("#week-dialog-form .btn").unbind("mouseup");
         $("#week-dialog-form .btn").mouseup(self.dialogClick);
         $("#week-dialog-form").show();
+
+        $(".week-dialog-title-input").focus();
     };
 
     self.dialogClick = function(event) {
