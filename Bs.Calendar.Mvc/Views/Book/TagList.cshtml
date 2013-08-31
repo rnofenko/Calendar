@@ -1,0 +1,19 @@
+﻿<div id="tagList" class="field" data-bind="visible: allTags().length > 0 && showTags()" >
+    <div class="row">
+        <div>
+            <ul class="four_up tiles calendar-event-user" style="overflow: inherit; margin-left: 0%;" data-bind="foreach: allTags">
+                <li style="cursor: pointer; max-width: 100px;">
+                    <span style="overflow: hidden; display: block; width: 51px; float: left;" data-bind="text: $data, attr: { title: $data }, click: $root.filterClick"></span>
+                </li>
+            </ul>
+            <span data-bind="click: $root.clearFiltering, visible: allTags().length" id="remove-filtering" style="float: right;
+											margin-bottom: 15px;
+											background: #F2F2F2;
+											height: 38px;
+											cursor: pointer;
+											padding: 0px 10px;
+											border: 1px solid #C9C9C9;
+											line-height: 38px;">clear filtering</span>
+        </div>
+    </div>
+</div>

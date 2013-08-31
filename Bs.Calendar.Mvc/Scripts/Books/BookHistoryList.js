@@ -24,11 +24,13 @@ function BookItem() {
     self_.BookDescription = ko.observable();
     self_.BookReader = ko.observable();
     self_.BookImage = ko.observable();
+    self_.bookTags = ko.observable("");  
 }
 
 function BookHistoryList(param) {
     var self_ = this;
-    self_.bookItem = new BookItem();
+    self_.bookItem = ko.observable(new BookItem());
+    self_.BookTags = ko.observableArray();
     self_.oldBookHistory = ko.observableArray();
     self_.newBookHistory = ko.observableArray();
     self_.historyToDelete = Array();
@@ -48,7 +50,34 @@ function BookHistoryList(param) {
         self_.showAdd(true);
     };
 
-    self_.saveRecords = function () {
+    self_.fillTagArray = function (tags)
+    {
+        if (tags != "") {
+            if (typeof tags === "string") {
+                return (tags.split(','));
+            } else {
+                return null;
+            }
+        }
+    };
+
+    self_.addTag = function() {
+        // get array if there are many tags, separated by coma
+        var tag = typeof self_.bookItem.bookTags === "string" ? self_.bookItem.bookTags : self_.bookItem().bookTags().toString();
+        tag.replace(/\s/g, "");
+        if (tag != "") {
+            self_.BookTags.push(tag);
+        }
+        $("#tagDiv input[type='text']").val("");
+        $("#bookTagsDiv").show();
+    };
+
+    self_.removeBookTag = function (tag) {
+        self_.BookTags.remove(tag);
+    };        
+    
+    self_.saveRecords = function ()
+    {
         if (window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length) != "Create" && !isNaN(parseInt(window.location.href.substring(window.location.href.lastIndexOf("/") + 1, window.location.href.length)))) {
             var readerId = 0;
             var newBookHistoryCopy = jQuery.extend([], self_.newBookHistory());
@@ -67,7 +96,8 @@ function BookHistoryList(param) {
                             BookTitle: self_.bookItem.BookTitle,
                             BookAuthor: self_.bookItem.BookAuthor,
                             BookDescription: self_.bookItem.BookDescription,
-                            ReaderId: readerId
+                            ReaderId: readerId,
+                            BookTags: self_.BookTags
                         }),
                     type: "post",
                     contentType: "application/json",
@@ -138,8 +168,13 @@ function BookHistoryList(param) {
             BookDescription: param.BookDescription,
             BookReader: param.Reader,
             BookImage: param.BookImage,
-        };   
+            bookTags: "",
+        };
         
+        if (key == "BookTags") {
+            self_.BookTags = ko.observableArray(self_.fillTagArray(value.toString()));
+        }
+
         if (key == "BookHistoryList" && value != null) {
             $.each(value, function(k, v) {
                 self_.addOldRecord(v);

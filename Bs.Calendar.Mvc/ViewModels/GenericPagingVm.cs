@@ -10,9 +10,9 @@ namespace Bs.Calendar.Mvc.ViewModels
         public int PageSize { get; set; }
         public IEnumerable<T> Data { get; set; }
 
-        public GenericPagingVm(IEnumerable<T> data, int page)
+        public GenericPagingVm(IEnumerable<T> data, int page, int pageSize = 7)
         {
-            PageSize = 7;
+            PageSize = pageSize;
             CurrentPage = page;
             var count = data.Count();
             TotalPages = Rules.PageCounter.GetTotalPages(count, PageSize);

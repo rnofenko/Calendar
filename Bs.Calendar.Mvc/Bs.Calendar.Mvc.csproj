@@ -297,6 +297,7 @@
     <Compile Include="Services\ValidateAjaxAttribute.cs" />
     <Compile Include="ViewModels\BookEditVm.cs" />
     <Compile Include="ViewModels\BookHistoryItemVm.cs" />
+    <Compile Include="ViewModels\BookTagVm.cs" />
     <Compile Include="ViewModels\Events\CalendarEventVm.cs" />
     <Compile Include="ViewModels\Events\RoomEventVm.cs" />
     <Compile Include="ViewModels\GenericPagingVm.cs" />
@@ -423,6 +424,7 @@
     <Content Include="Views\Home\Week.cshtml" />
     <Content Include="Views\Home\Day.cshtml" />
     <Content Include="Views\Home\Room.cshtml" />
+    <Content Include="Views\Book\TagList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

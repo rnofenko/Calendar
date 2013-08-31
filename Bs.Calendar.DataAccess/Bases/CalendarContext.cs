@@ -10,6 +10,7 @@ namespace Bs.Calendar.DataAccess.Bases
         public IDbSet<Room> Rooms { get; set; }
         public IDbSet<Book> Books { get; set; }
         public IDbSet<Team> Teams { get; set; }
+        public IDbSet<Tag> Tags { get; set; }        
         public IDbSet<BookHistoryItem> BookHistories { get; set; }
         public IDbSet<PersonalEventLink> PersonalEvents { get; set; }
         public IDbSet<TeamEventLink> TeamEvents { get; set; }

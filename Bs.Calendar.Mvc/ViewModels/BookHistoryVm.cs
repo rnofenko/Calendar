@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Bs.Calendar.Models;
 using Bs.Calendar.Models.Bases;
 
@@ -30,8 +31,11 @@ namespace Bs.Calendar.Mvc.ViewModels
         Required(ErrorMessage = "Author should be specified"),
         StringLength(BaseEntity.LENGTH_NAME)]
         public string BookAuthor { get; set; }
-
+        
         public bool HasCover { get; set; }
+
+        [Display(Name="Tags")]
+        public List<string> BookTags { get; set; }        
 
         public BookHistoryVm(Book book)
         {
@@ -41,6 +45,7 @@ namespace Bs.Calendar.Mvc.ViewModels
             BookAuthor = book.Author;
             BookDescription = book.Description;
             BookHistoryList = new List<BookHistoryItemVm>();
+            BookTags = book.Tags == null ? null : book.Tags.Select(x => x.Name).ToList();
         }
 
         public BookHistoryVm()
