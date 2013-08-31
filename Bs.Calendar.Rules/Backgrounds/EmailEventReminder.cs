@@ -13,7 +13,7 @@ namespace Bs.Calendar.Rules.Backgrounds
         private readonly EmailSender _emailSender;
 
         private readonly TimeSpan _repeatPeriod = new TimeSpan(0, 1, 0);
-        private readonly TimeSpan _timeBeforeReminder = new TimeSpan(3, 0, 0); 
+        private readonly TimeSpan _timeBeforeReminder = new TimeSpan(6, 0, 0); 
         private readonly TimeSpan _timeBeforeAllDayReminder = new TimeSpan(24, 0, 0);
 
         public EmailEventReminder(RepoUnit repoUnit, EmailSender emailSender)

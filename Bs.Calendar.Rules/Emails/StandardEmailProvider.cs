@@ -15,7 +15,7 @@ namespace Bs.Calendar.Rules.Emails
 
             try
             {
-                var message = new MailMessage(new MailAddress("binary.calendar@gmail.com", "Binary Calendar"),
+                var message = new MailMessage(new MailAddress("bondinis@gmail.com", "Binary Calendar"),
                                               new MailAddress(email.Addresser, email.Addresser))
                     {
                         Subject = email.Subject,
@@ -24,9 +24,9 @@ namespace Bs.Calendar.Rules.Emails
 
                 var smtp = new SmtpClient
                     {
-                        Port = 587,
+                        Credentials = new NetworkCredential("bondinis@gmail.com", "dfygbc360"),
                         Host = "smtp.gmail.com",
-                        Credentials = new NetworkCredential("binary.calendar", "binarystudio"),
+                        Port = 587,
                         EnableSsl = true
                     };
                 smtp.Send(message);

@@ -14,6 +14,7 @@
     self.showWeek = function () { mediator.trigger("Calendar:setMode", "week"); };
     self.showMonth = function () { mediator.trigger("Calendar:setMode", "month"); };
     self.showDay = function () { mediator.trigger("Calendar:setMode", "day"); };
+    self.showRoom = function () { mediator.trigger("Calendar:setMode", "room"); };
 
     self.setTitle = function(title) {
         self.title(title);
