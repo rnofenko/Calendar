@@ -81,9 +81,9 @@ function DayTimeBlock(parent, blocks, parentModel) {
         }
         
         self.block.append(self.timeHandler.timeFromDate(eventModel.DateStart, eventModel.DateEnd));
-        self.block.append(' ' + eventModel.Title);
+        //self.block.append(' ' + eventModel.Title);
         self.title = eventModel.Title;
-        self.block.attr('title', eventModel.Title);
+        self.block.attr('title', eventModel.Title + " : " + eventModel.Text);
 
         self.parent.append(self.block);
         self.setTopBottomBounds();

@@ -23,6 +23,17 @@
 
 @Html.Partial("Month")
 @Html.Partial("Week")
+@Html.Partial("Day")
+
+
+<div id="week-dialog-form" class="invisible-onstart" title="Create new personal event">
+    <div class="week-dialog-title">Title:</div>
+    <input type="text" class="text input week-dialog-title-input">
+    <div class="week-dialog-title">Text</div>
+    <textarea class="text input week-dialog-text"></textarea>
+    <div class="default btn"><a href="#">Ok</a></div>
+    <div class="default btn"><a href="#">Cancel</a></div>
+</div>
 
 @section scripts
 {
@@ -31,7 +42,8 @@
             ko.applyBindings(new CalendarVm(), document.getElementById("calendar-panel"));
             ko.applyBindings(new MonthVm(), document.getElementById("calendar-month"));
             ko.applyBindings(new CalendarWeekVm(), document.getElementById("calendar-week"));
-            
+            ko.applyBindings(new CalendarDayVm(), document.getElementById("calendar-day"));
+
             $(".invisible-onstart").removeClass("invisible-onstart");
         });
     </script>

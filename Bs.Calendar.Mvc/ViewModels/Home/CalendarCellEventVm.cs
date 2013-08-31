@@ -28,7 +28,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
 
             DateStart = eventInstance.DateStart;
             DateEnd = eventInstance.DateEnd;
-
+            Text = eventInstance.Text;
             IsAllDay = eventInstance.IsAllDay;
             Room = eventInstance.Room;
 
@@ -46,6 +46,7 @@ namespace Bs.Calendar.Mvc.ViewModels.Home
          StringLength(BaseEntity.LENGTH_NAME),
          Display(Name = "Title")]
         public string Title { get; set; }
+        public string Text { get; set; }
 
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
