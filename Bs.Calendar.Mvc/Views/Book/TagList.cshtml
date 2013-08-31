@@ -2,8 +2,8 @@
     <div class="row">
         <div>
             <ul class="four_up tiles calendar-event-user" style="overflow: inherit; margin-left: 0%;" data-bind="foreach: allTags">
-                <li style="cursor: pointer; max-width: 100px;">
-                    <span style="overflow: hidden; display: block; width: 51px; float: left;" data-bind="text: $data, attr: { title: $data }, click: $root.filterClick"></span>
+                <li style="cursor: pointer; max-width: 100px;" data-bind="css: { 'selected-tag': $data.isSelected() === true}">
+                    <span style="overflow: hidden; display: block; width: 51px; float: left;" data-bind="text: $data.title, attr: { title: $data.title }, click: $root.filterClick"></span>
                 </li>
             </ul>
             <span data-bind="click: $root.clearFiltering, visible: allTags().length" id="remove-filtering" style="float: right;
@@ -17,3 +17,8 @@
         </div>
     </div>
 </div>
+<style>
+    .selected-tag{
+        background: #88D688 !important;
+    }
+</style>

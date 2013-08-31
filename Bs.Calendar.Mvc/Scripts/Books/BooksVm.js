@@ -96,7 +96,7 @@ window.BooksVm = function ()
     self.allBooks = ko.observableArray();
     self.serverBooks = ko.observableArray();
     self.allTags = ko.observableArray();
-
+    self._allTags = [];
     self.BookVm = function (source)
     {
         var _self = this;
@@ -226,7 +226,11 @@ window.BooksVm = function ()
             {
                 $.each(self.allBooks()[i].tags(), function (key, value)
                 {
-                    if ($.inArray(value, self.allTags()) === -1) self.allTags.push(value);
+                    if ($.inArray(value, self._allTags) === -1) {
+
+                        self.allTags.push({title: value, isSelected: ko.observable(false)});
+                        self._allTags.push(value);
+                    }
                 });
             }
             console.log("ALL TAGS = " + self.allTags());
@@ -262,7 +266,7 @@ window.BooksVm = function ()
     {
         console.log("filterClick: param =  " + param);
         console.log("filterClick: filters() =  " + self.filters());
-
+        param.isSelected(!param.isSelected());
         if ($.inArray(param, self.filters()) === -1)
         {
             self.filters.push(param);
@@ -277,7 +281,7 @@ window.BooksVm = function ()
         for (var i = 0; i < self.filters().length; i++) {
             for (var j = 0; j < self.serverBooks().length; j++) {
                 for (var k = 0; k < self.serverBooks()[j].tags().length; k++) {
-                    if (self.filters()[i] == self.serverBooks()[j].tags()[k]) {
+                    if (self.filters()[i].title == self.serverBooks()[j].tags()[k]) {
                         var exists = false;
                         $.each(filteredBooks, function (key, v) {
                             if (v.code == self.serverBooks()[j].code) {
