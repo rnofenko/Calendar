@@ -198,6 +198,7 @@ window.BooksVm = function ()
     self.getAllBooks = function (data, options) {
         if (options && options.reset){
             data = self.serverBooksRow;
+            self.filters.removeAll();
         }
         self.allBooks.removeAll();
         self.shelfRows.removeAll();
@@ -314,6 +315,9 @@ window.BooksVm = function ()
 
     self.clearFiltering = function(){
         self.getAllBooks({}, {reset: true});
+        self.allTags().forEach(function(it){
+            it.isSelected(false);
+        });
     }
 
     self.loadAllBooks = function ()
