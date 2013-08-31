@@ -75,6 +75,12 @@
 }
 
 .bc-event-container {
+    height: 115px;
+    overflow-y: hidden;
+}
+
+.bc-event-container-inner {
+    height: 115px;
     overflow-y: hidden;
 }
 

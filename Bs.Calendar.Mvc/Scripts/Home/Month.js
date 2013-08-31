@@ -93,6 +93,7 @@ function DayVm(date, events) {
         mediator.trigger("Calendar:setCell", event.currentTarget);
 
         $("#week-dialog-form").show();
+        $(".week-dialog-title-input").focus();
     };
 
     self.dialogClick = function (event) {

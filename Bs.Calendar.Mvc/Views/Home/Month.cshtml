@@ -24,10 +24,12 @@
     <script type="text/html" id="day-template">
         <td data-bind="click: clickHandle, attr: { class: $root.defineClass(date)}">
             <div>
-                <div class="bc-day-number" data-bind="text: day"></div>
-                <div class="bc-event-container">
-                    <div data-bind="template: { name: 'birthday-event-template', foreach: events.BirthdayEvents }"></div>
-                    <div data-bind="template: { name: 'calendar-event-template', foreach: events.CalendarEvents }"></div>
+            <div class="bc-day-number" data-bind="text: day"></div>
+            <div class="bc-event-container">
+                    <div class="bc-event-container-inner">
+                        <div data-bind="template: { name: 'birthday-event-template', foreach: events.BirthdayEvents }"></div>
+                        <div data-bind="template: { name: 'calendar-event-template', foreach: events.CalendarEvents }"></div>
+                    </div>
                 </div>
             </div>
         </td>
