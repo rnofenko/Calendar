@@ -73,7 +73,8 @@
                             <div>
                                 <ul class="four_up tiles calendar-event-user" style="overflow: inherit; margin-left: 0%;" data-bind="foreach: $root.BookTags">
                                     <li>
-                                        <span data-bind="text: $root.BookTags()[$index()]"></span>
+                                        <input type="hidden" data-bind="value: $root.BookTags()[$index()], attr: { name: 'BookTags[' + $index() + ']' }">
+                                        <span style="overflow: hidden; display: block; width: 51px; float: left;" data-bind="text: $root.BookTags()[$index()], attr: { title: $root.BookTags()[$index()] }"></span>
                                         <i class="icon-cancel-squared pull_right" data-bind="click: $root.removeBookTag"></i>
                                     </li>
                                 </ul>

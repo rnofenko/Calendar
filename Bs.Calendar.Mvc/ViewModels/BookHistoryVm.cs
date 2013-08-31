@@ -34,8 +34,8 @@ namespace Bs.Calendar.Mvc.ViewModels
         
         public bool HasCover { get; set; }
 
-        [Display]
-        public List<string> BookTags { get; set; }
+        [Display(Name="Tags")]
+        public List<string> BookTags { get; set; }        
 
         public BookHistoryVm(Book book)
         {
@@ -45,7 +45,7 @@ namespace Bs.Calendar.Mvc.ViewModels
             BookAuthor = book.Author;
             BookDescription = book.Description;
             BookHistoryList = new List<BookHistoryItemVm>();
-            BookTags = book.Tags.Select(x => x.Name).ToList();
+            BookTags = book.Tags == null ? null : book.Tags.Select(x => x.Name).ToList();
         }
 
         public BookHistoryVm()

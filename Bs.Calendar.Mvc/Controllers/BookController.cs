@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -70,11 +71,39 @@ namespace Bs.Calendar.Mvc.Controllers
             return Json(books, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetBookByTags(string tags)
+        {
+            var books = _service.GetBookByTags(tags);
+            return Json(books, JsonRequestBehavior.AllowGet);
+        }
+
         //public JsonResult GetBookTags(int bookId)
         //{
         //    var res = _service.GetBookTags(bookId);
         //    return Json(res, JsonRequestBehavior.AllowGet);
         //}
+        public JsonResult ListSearch()
+        {
+            var orderby = Request["orderby"];
+            var searchStr = Request["search"];
+            var books = _service.Load(orderby, searchStr);
+            //var page = Request["page"];
+            //int pageNumber;
+            //try
+            //{
+            //    pageNumber = Convert.ToInt32(page);
+            //}
+            //catch
+            //{
+            //    pageNumber = 0;
+            //}
+            //if (pageNumber < 1)
+            //{
+            //    return Json(books, JsonRequestBehavior.AllowGet);
+            //}
+            var pager = new GenericPagingVm<Book>(books, 1, books.Count());
+            return Json(pager, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult List()
         {

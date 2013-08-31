@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Bs.Calendar.DataAccess;
 using Bs.Calendar.Models;
 using Bs.Calendar.Mvc.ViewModels;
@@ -19,7 +20,7 @@ namespace Bs.Calendar.Mvc.Services
             _unit = repository;
         }
 
-        public List<Book> GetAllBooks()
+        public List<BookTagVm> GetAllBooks()
         {
             //return _unit.Book.Load().ToList();
 
@@ -34,6 +35,7 @@ namespace Bs.Calendar.Mvc.Services
             //return books;
 
             var books = _unit.Book.Load().ToList();
+            var bookTagVm = new List<BookTagVm>();
             foreach (var book in books)
             {
                 var tags = _unit.TagRepository.Load(t => t.BookId == book.Id).ToList();
@@ -41,8 +43,10 @@ namespace Bs.Calendar.Mvc.Services
                 {
                     book.Tags.AddRange(tags);
                 }
+                bookTagVm.Add(new BookTagVm(book));
             }
-            return books;
+            return bookTagVm;
+            //return books;
         }
 
         public Book Get(int id)
@@ -170,34 +174,25 @@ namespace Bs.Calendar.Mvc.Services
             book.Description = model.BookDescription;
             book.ReaderName = model.ReaderId == 0 ? "None" : _unit.User.Get(model.ReaderId).FullName;
 
-            var tagsId = book.Tags.Select(tag => tag.Id).ToList();
-            foreach (var tagToDelete in tagsId.Select(id => _unit.TagRepository.Get(id)))
+            if (book.Tags != null)
             {
-                _unit.TagRepository.Delete(tagToDelete);
+                var tagsId = book.Tags.Select(tag => tag.Id).ToList();
+                foreach (var tagToDelete in tagsId.Select(id => _unit.TagRepository.Get(id)))
+                {
+                    _unit.TagRepository.Delete(tagToDelete);
+                }
+            }
+            else
+            {
+                book.Tags = new Collection<Tag>();
             }
 
-
-            //foreach (var tag in book.Tags)
-            //{
-            //    var tagId = tag.Id;
-            //    var tagToDelete = _unit.TagRepository.Get(tag.Id);
-            //    _unit.TagRepository.Delete(tagToDelete);
-            //}
-
-
-
-            //var tagsToDelete = book.Tags;
-            
-            //foreach (var tag in tagsToDelete)
-            //{
-            //    var tagToDelete = _unit.TagRepository.Get(tag.Id);
-            //    _unit.TagRepository.Delete(tagToDelete);
-            //    //book.Tags.Remove(tag);
-            //}
-
-            foreach (var tag in model.BookTags)
+            if (model.BookTags != null)
             {
-                book.Tags.Add(new Tag{Name = tag});
+                foreach (var tag in model.BookTags)
+                {
+                    book.Tags.Add(new Tag {Name = tag});
+                }
             }
 
             if (model.BookHistoryList != null)
@@ -235,6 +230,25 @@ namespace Bs.Calendar.Mvc.Services
             var book = Get(bookCode);
             book.HasCover = true;
             _unit.Book.Save(book);
+        }
+
+        public List<BookTagVm> GetBookByTags(string tags)
+        {
+            // null check
+            var allBooks = _unit.Book.Load();
+            var bookTagVm = new List<BookTagVm>();
+            foreach (var book in allBooks)
+            {
+                foreach (var tag in book.Tags)
+                {
+                    if (tags.Contains(tag.Name))
+                    {
+                        bookTagVm.Add(new BookTagVm(book));
+                        break;
+                    }
+                }                
+            }
+            return bookTagVm;
         }
     }
 }
