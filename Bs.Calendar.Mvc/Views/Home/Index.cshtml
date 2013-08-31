@@ -14,16 +14,18 @@
     <div class="two columns medium warning btn">@Html.ActionLink("add event", "Create", "Event")</div>
     <div class="four columns text-center"><h4 data-bind="text: title"></h4></div>
     
-    <div class="three columns append field pull_right">
-        <div class="four columns medium default btn pull_right clickable" style="border: 1px solid gainsboro" data-bind="click: showMonth">month</div>
-        <div class="four columns medium default btn pull_right clickable" style="border: 1px solid gainsboro" data-bind="click: showWeek">week</div>
-        <div class="four columns medium default btn pull_right clickable" style="border: 1px solid gainsboro; border-radius: 0" data-bind="click: showDay">day</div>
+    <div class="four columns append field pull_right">
+        <div class="three columns medium default btn pull_right clickable" style="border: 1px solid gainsboro" data-bind="click: showMonth">month</div>
+        <div class="three columns medium default btn pull_right clickable" style="border: 1px solid gainsboro" data-bind="click: showWeek">week</div>
+        <div class="three columns medium default btn pull_right clickable" style="border: 1px solid gainsboro;" data-bind="click: showDay">day</div>
+        <div class="three columns medium default btn pull_right clickable" style="border: 1px solid gainsboro; border-radius: 0" data-bind="click: showRoom">room</div>
     </div>
 </div>
 
 @Html.Partial("Month")
 @Html.Partial("Week")
 @Html.Partial("Day")
+@Html.Partial("Room")
 
 
 <div id="week-dialog-form" class="invisible-onstart" title="Create new personal event">
@@ -43,6 +45,7 @@
             ko.applyBindings(new MonthVm(), document.getElementById("calendar-month"));
             ko.applyBindings(new CalendarWeekVm(), document.getElementById("calendar-week"));
             ko.applyBindings(new CalendarDayVm(), document.getElementById("calendar-day"));
+            ko.applyBindings(new CalendarRoomVm(), document.getElementById("calendar-room"));
 
             $(".invisible-onstart").removeClass("invisible-onstart");
         });

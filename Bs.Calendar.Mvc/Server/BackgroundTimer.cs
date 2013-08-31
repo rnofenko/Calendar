@@ -11,7 +11,7 @@ namespace Bs.Calendar.Mvc.Server
 
         public static void Start()
         {
-            _timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(60000));
+            _timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(30000));
         }
 
         private static void onTimerElapsed(object sender)

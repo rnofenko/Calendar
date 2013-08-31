@@ -1,0 +1,39 @@
+﻿
+.calendar-room-dayname {
+    float: left;
+    font-size: 15px;
+    text-align: center;
+    width: 130px;
+    font-weight: bold;
+}
+
+.calendar-room-header {
+    border: 1px solid #b0b0b0;
+    border-bottom: none;
+}
+
+.calendar-room-header .room-order-header > div {
+    border-left: 1px solid #b0b0b0;
+}
+
+.calendar-room-container .room-order-container { border-bottom: 0; }
+.calendar-room-container {border-bottom: 1px solid #b0b0b0;}
+.room-order-container-last-tt { border-bottom: 1px solid #b0b0b0; }
+
+.calendar-room-container {
+    height: 750px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.calendar-room-container .room-order-header {
+    margin-left: 130px;
+}
+
+.calendar-room-container .room-order-time {
+    margin-left: 130px;
+}
+
+.calendar-room-container .room-order-name {
+    width: 130px;
+}
+

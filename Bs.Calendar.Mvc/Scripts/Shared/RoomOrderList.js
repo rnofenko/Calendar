@@ -207,8 +207,11 @@ function RoomOrderElement(roomEventVm) {
         block.css('left', self.pixelTimeBegin[key]);
         block.addClass("roomColor_" + self.room.Color());
         block.text(self.events[key].Title);
-        block.attr("title", block.text());
+        block.attr("title", block.text() + ' : ' + self.events[key].Text);
         block.width(self.pixelTimeEnd[key] - self.pixelTimeBegin[key]);
+        block.dblclick(function (event) {
+            window.location.href = window.location.pathname + "Event/Edit/" + self.events[key].Id;
+        });
         self.divContainer.append(block);
     };
     

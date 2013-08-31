@@ -35,7 +35,7 @@
                     <input id="toTime" class="text input timeInput" type="text" placeholder="to" data-bind="value: dateTime.toInput.value, attr: { disabled: dateTime.IsAllDay() }, event: { change: dateTime.toInput.timeChanged, timeFormatError: dateTime.toInput.timeChanged, changeTime: dateTime.toInput.timeChanged }" />
                 </div>
             </div>
-            <label id="isAllDay" class="checkbox three columns" data-bind="visible: eventModel.EventType() != 1, event: {'gumby.onChange': function(context, event){dateTime.IsAllDay($(event.target).hasClass('checked'));}}">
+            <label id="isAllDay" class="checkbox three columns" data-bind="visible: eventModel.EventType() == 4, event: {'gumby.onChange': function(context, event){dateTime.IsAllDay($(event.target).hasClass('checked'));}}">
                 <span></span> All day
             </label>
         </div>
