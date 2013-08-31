@@ -94,6 +94,7 @@ window.BooksVm = function ()
 
     self.books = ko.observableArray();
     self.allBooks = ko.observableArray();
+    self.serverBooks = ko.observableArray();
     self.allTags = ko.observableArray();
 
     self.BookVm = function (source)
@@ -194,16 +195,26 @@ window.BooksVm = function ()
         }
     };
 
-    self.getAllBooks = function (data) {
+    self.getAllBooks = function (data, options) {
+        if (options && options.reset){
+            data = self.serverBooksRow;
+        }
         self.allBooks.removeAll();
         self.shelfRows.removeAll();
+        $("#bookShelfBottom1").empty();
         for (var i = 0; i < data.length; ++i)
         {
             if (data[i].HasCover == true) {
                 self.booksWithCover(self.booksWithCover() + 1);
             }
             self.allBooks.push(new self.BookTagVm(data[i]));
+            if (options && options.isFromServer){
+                self.serverBooksRow = data;
+                self.serverBooks.push(new self.BookTagVm(data[i]));
+            }
         }
+        
+            
 
         console.log("all books");
         console.log(self.allBooks);
@@ -264,18 +275,18 @@ window.BooksVm = function ()
         var filteredBooks = new Array();
 
         for (var i = 0; i < self.filters().length; i++) {
-            for (var j = 0; j < self.allBooks().length; j++) {
-                for (var k = 0; k < self.allBooks()[j].tags().length; k++) {
-                    if (self.filters()[i] == self.allBooks()[j].tags()[k]) {
+            for (var j = 0; j < self.serverBooks().length; j++) {
+                for (var k = 0; k < self.serverBooks()[j].tags().length; k++) {
+                    if (self.filters()[i] == self.serverBooks()[j].tags()[k]) {
                         var exists = false;
                         $.each(filteredBooks, function (key, v) {
-                            if (v.code == self.allBooks()[j].code) {
+                            if (v.code == self.serverBooks()[j].code) {
                                 exists = true;
                                 return false;
                             }
                         });
                         if (!exists) {
-                            filteredBooks.push(self.allBooks()[j]);
+                            filteredBooks.push(self.serverBooks()[j]);
                         }
                         break;
                     }                    
@@ -297,6 +308,10 @@ window.BooksVm = function ()
         self.getAllBooks(filteredBooks);
     };
 
+    self.clearFiltering = function(){
+        self.getAllBooks({}, {reset: true});
+    }
+
     self.loadAllBooks = function ()
     {
         $.ajax(
@@ -304,7 +319,9 @@ window.BooksVm = function ()
                 url: "/Book/ListAllBooks",
                 type: "GET",
                 dataType: "json",
-                success: self.getAllBooks
+                success: function(data) {
+                    self.getAllBooks(data, {isFromServer: true});
+                }
             });
     };
 
