@@ -114,7 +114,6 @@ function CalendarRoomVm() {
 
     //Setup bindings
     mediator.bind("CalendarRoom:update", self.testMy);
-    mediator.bind("CalendarWeek:update", self.update);
     mediator.bind("Calendar:nextButton", self.nextWeek);
     mediator.bind("Calendar:prevButton", self.prevWeek);
     mediator.bind("Calendar:setMode", self.setMode);
